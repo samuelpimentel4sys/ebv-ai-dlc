@@ -1,49 +1,48 @@
 # Plataforma Global de FX e Movimentação de Divisas — Banco Inter
-> **Framework UpStream Foursys — Metodologia "The Visionary"**
 
-Este repositório armazena a documentação técnica, especificação de arquitetura e modelo de viabilidade financeira consolidado para o projeto de **Plataforma Global de FX (Banco Inter)**.
+Bem-vindo ao repositório centralizado da **Plataforma Global de FX (Banco Inter)**. Este repositório contém os entregáveis e artefatos de engenharia estratégica gerados sob a metodologia **UpStream Foursys (The Visionary — Versão 1.0.0)**.
 
----
-
-## 📂 Estrutura de Documentos Disponíveis
-
-| Arquivo | Descrição |
-|---|---|
-| 📄 [`docs/06_Consolidado_Banco_Inter_FX.html`](06_Consolidado_Banco_Inter_FX.html) | **Relatório Consolidado de Negócios e Engenharia (Completo)**. Contém o mapa do fluxo transacional interativo, tabelas de ROI de 18 meses, e detalhamento técnico de cada épico. |
-| 📄 `01_Descoberta_Banco_Inter.html` | Descoberta do cenário competitivo, desafios regulatórios do Banco Central e as bases técnicas do projeto. |
-| 📄 `02_Epicos_Candidatos_Banco_Inter.html` | Matriz RICE detalhada e justificativa técnica da priorização de escopo. |
-| 📄 `03_Benchmark_Banco_Inter.html` | Análise comparativa profunda das ofertas globais de FX de concorrentes (Nomad, Wise, C6 Global e dLocal). |
-| 📄 `04_ROI_Banco_Inter.html` | Planilha financeira completa contendo Capex, Opex, projeção de crescimento de clientes e payback detalhado. |
+A iniciativa visa estender a atual infraestrutura da Conta Global em Dólares (USD) para suportar custódia e movimentação internacional de múltiplas moedas (multimoedas), iniciando prioritariamente pela **Europa e o Euro (EUR)**.
 
 ---
 
-## 🎯 Portfólio de Épicos Mapeados no Jira
+## 📂 Estrutura de Documentos do Projeto (UpStream)
 
-Toda a estrutura foi criada no Jira do projeto sob os seguintes códigos:
+Toda a documentação estratégica e técnica foi de decomposta e está disponível para navegação e download nos links abaixo:
 
-1. **`SCRUM-1` — `[BINTER-EP-01] FX Orchestrator & State Machine` (P0 - Crítica)**
-   * *Ação:* Criação do motor de estados assíncronos no AWS Step Functions para gerenciar o padrão de Saga transacional entre o Core BR e o Finxact.
-2. **`SCRUM-2` — `[BINTER-EP-02] Integração Core EUA (Finxact)` (P1 - Alta)**
-   * *Ação:* Parametrização e customização da conta de depósito e ledger da Finxact para suportar carteiras multimoeda e hold temporário de saldo.
-3. **`SCRUM-3` — `[BINTER-EP-03] Integração FX & Payout Gateway (Tazapay)` (P1 - Alta)**
-   * *Ação:* Integração das APIs REST v3 da Tazapay para conversão, garantia de taxa spot e liquidação de transferências de divisas na rede SEPA (EUR).
-4. **`SCRUM-4` — `[BINTER-EP-04] Motor de Remessa Interna (Core BR ➔ Core EUA)` (P1 - Alta)**
-   * *Ação:* Fluxo de conciliação cambial doméstico e transferência regulamentada de BRL para conta americana sob as normas do BACEN.
-5. **`SCRUM-5` — `[BINTER-EP-05] Motor de AML & Compliance Transacional` (P2 - Média)**
-   * *Ação:* Triagem real-time de conformidade regulatória (PEP, OFAC, sanções) e controle dos limites cambiais.
-6. **`SCRUM-6` — `[BINTER-EP-06] Autorização de Cartão de Débito Multimoeda` (P2 - Média)**
-   * *Ação:* Adaptação do motor autorizador do cartão (ISO 8583) para efetuar débitos diretos na sub-posição de EUR, economizando spread transacional para o cliente final.
+### 🌟 Fase de Alinhamento e Negócios
+* **[01. Descoberta Estratégica](./01_Descoberta_Banco_Inter.html)**  
+  *Entendimento do mercado, principais dores do cliente, oportunidades competitivas e Personas de Negócios.*
+* **[02. Portfólio de Épicos e Racional RICE](./02_Epicos_Candidatos_Banco_Inter.html)**  
+  *Lista detalhada de candidatos a épicos e matriz de priorização baseada no framework RICE.*
+* **[03. Benchmark Competitivo](./03_Benchmark_Banco_Inter.html)**  
+  *Análise comparativa das principais contas globais brasileiras (Wise, C6, Nomad, Avenue) e posicionamento estratégico do Banco Inter.*
+* **[04. Viabilidade Financeira e ROI](./04_ROI_Banco_Inter.html)**  
+  *Business case detalhado para 18 meses, investimentos (Capex e Opex), projeções de receitas de spread cambial e cálculo de payback, VPL e TIR.*
+
+### 🛠️ Fase de Detalhamento Técnico (Especificações de Épicos)
+* **[05. Épico 01 - FX Orchestrator & State Machine](./05_Epico_01_FX_Orchestrator.html) (Jira: `SCRUM-1`)**  
+  *Orquestração resiliente via AWS Step Functions, controle transacional distributivo (Padrão Saga) e idempotência em Redis.*
+* **[05. Épico 02 - Integração Core EUA Finxact](./05_Epico_02_Integraçao_Core_EUA.html) (Jira: `SCRUM-2`)**  
+  *Controle de sub-posições cambiais multi-ledger, holding temporário de saldo (Mode 4) e liquidação contábil final (Mode 2).*
+* **[05. Épico 03 - Integração FX Gateway Tazapay](./05_Epico_03_Payout_Gateway_Tazapay.html) (Jira: `SCRUM-3`)**  
+  *Cotação cambial em tempo real, fechamento de câmbio na API da Tazapay (v3) e monitoramento de webhooks de transferências locais (Rede SEPA).*
+* **[05. Épico 04 - Motor de Remessa Interna (BR ➔ EUA)](./05_Epico_04_Remessa_Interna.html) (Jira: `SCRUM-4`)**  
+  *Trâmite regulatório do Banco Central do Brasil, cálculo e recolhimento de IOF de saída cambial, e transferência para conta nos EUA.*
+* **[05. Épico 05 - Motor de AML & Compliance Transacional](./05_Epico_05_AML_Compliance.html) (Jira: `SCRUM-5`)**  
+  *Validação em listas de sanções em tempo real (OFAC, PEP), conformidade com a Travel Rule e relatórios regulatórios.*
+* **[05. Épico 06 - Autorização de Cartão Multimoeda](./05_Epico_06_Cartao_Multimoeda.html) (Jira: `SCRUM-6`)**  
+  *Processamento de mensagens ISO 8583 locais de adquirentes internacionais na rede europeia e roteamento de débitos a partir das sub-posições cambiais.*
+
+### 📊 Relatório Geral
+* **[06. Relatório Executivo Consolidado](./06_Consolidado_Banco_Inter_FX.html) (Jira: `SCRUM-7`)**  
+  *O "Caminho do Dinheiro" e o mapa geral de sequência transacional, combinando as premissas de modelagem financeira de suporte, arquitetura unificada e roadmap estratégico de implantação.*
 
 ---
 
-## 📊 Principais Indicadores de Viabilidade (ROI)
+## 🎯 Próximos Passos (Transição para UpStream Compass)
 
-* **Investimento Inicial (Capex):** R$ 4.200.000,00
-* **Payback Estimado:** 7 meses
-* **Taxa Interna de Retorno (TIR):** 148%
-* **Valor Presente Líquido (VPL):** R$ 12.450.000,00 (considerando uma TMA de 12% a.a.)
-
-Para abrir a visualização executiva de alta fidelidade contendo o mapa de sequência técnico em Mermaid e gráficos financeiros, abra o arquivo [`docs/06_Consolidado_Banco_Inter_FX.html`](06_Consolidado_Banco_Inter_FX.html) diretamente em seu navegador.
-
----
-*Gerado pela IA do UpStream Foursys sob o perfil estratégico **The Visionary**.*
+Com a arquitetura conceitual e financeira aprovada e os épicos criados e vinculados no Jira, a iniciativa está pronta para a **Fase de Engenharia e Especificação Ágil**:
+1. Decomposição dos épicos de prioridade `P0` e `P1` em Features de Produto.
+2. Criação das histórias de usuário com seus respectivos critérios de aceitação (Gherkin/BDD).
+3. Mapeamento detalhado dos JSON schemas das APIs de cotação e de sub-ledgers.
