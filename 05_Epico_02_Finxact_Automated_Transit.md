@@ -1,63 +1,71 @@
-# Finxact Automated Transit — BINTER-EP-02
-Etapa 05/06 · v1.02 · 2026-03-30 · Banco Inter
+# Trânsito Automatizado Finxact (Finxact Automated Transit) — BINTER-EP-02
+Etapa 05/06 · v1.0.1 · Julho 2026 · Banco Inter
 
 ## 1. Identificação
-*   **Nome do Épico:** Finxact Automated Transit
+*   **Nome do Épico:** Trânsito Automatizado Finxact (Finxact Automated Transit)
 *   **ID do Épico:** `BINTER-EP-02`
 *   **Produto:** Plataforma Global de FX / Conta Global Multimoeda
-*   **Release:** v1.0
+*   **Release:** v1.0.0
 *   **Responsável Técnico:** Mariana Silveira (Engineering Lead)
 *   **Sponsor de Negócio:** Thiago Mendes (Diretor de Produtos Globais)
 *   **Status:** Aprovado nos Quality Gates
 
 ## 2. Resumo do Épico
-> Desenvolvimento da camada de mapeamento e automação contábil para transferências de fundos em tempo real entre o Core Brasil (BRL) e o Core EUA (Finxact), controlando os lançamentos de débito e crédito, o provisionamento de sub-ledgers multi-moedas e as regras de compliance fiscal (IOF e contratos de câmbio automáticos do BACEN) 24/7.
+> Desenvolvimento da camada de mensageria assíncrona e desacoplamento (via Apache Kafka / AWS MSK) entre o ecossistema regulatório brasileiro e o core banking americano moderno Finxact, garantindo trânsito automático de dados e consistência contábil de saldos sem concorrência.
 
 ## 3. Contexto / Problema de Negócio
-No mercado tradicional de câmbio brasileiro, a conversão de divisas e a remessa internacional dependem de horários bancários restritos e intervenção manual para o fechamento de contratos, resultando em latências elevadas e experiências pouco intuitivas de carregamento de fundos. Para o Banco Inter, a consolidação da Conta Global Multimoeda exige a automatização completa deste fluxo, operando de forma ininterrupta e imediata diretamente pelo SuperApp.
-O grande desafio reside em criar uma conexão de alto desempenho e atomicidade contábil que conecte o sistema legado nacional (BRL) com o Core americano de nuvem Finxact. Os sub-ledgers (sub-contas por tipo de moeda) devem ser gerenciados de forma unificada sob a conta master do cliente, com suporte a bloqueios temporários de fundos (Holds) e postagens definitivas (Posts) em milissegundos. De acordo com o benchmark competitivo de concorrentes como Wise e Nomad, a velocidade de liquidação e o cálculo integrado e automático de tributos (como o IOF brasileiro) são fatores críticos para a atratividade do produto, necessitando de uma infraestrutura capaz de operar 24/7 e de gerar eletronicamente e em tempo real os contratos de câmbio simplificados para prestação de contas junto ao Banco Central do Brasil (BACEN).
+A conexão entre a mensageria e os sistemas bancários legados no Brasil e o core banking moderno nos EUA (Finxact) é complexa e opera tradicionalmente de forma síncrona ou em arquivos batch lentos. Isso acarreta gargalos de sincronização de dados de ordens, riscos de concorrência de saldos (um cliente gastar no cartão antes do débito da remessa ser consolidado) e problemas regulatórios cambiais entre geografias.
+Para consolidar a Conta Global Multimoeda do Banco Inter, é imperativo que os lançamentos contábeis de bloqueio (*Holds*) e liquidação (*Posts*) ocorram de forma extremamente confiável e performática em milissegundos. De acordo com o benchmark competitivo (Wise, Nomad e C6), a sincronização em tempo real de saldos e a mitigação completa de duplicidade de registros são pilares para a atratividade e escalabilidade de produtos de FX, eliminando os custos de inação e mitigando a intervenção humana em falhas de conciliação.
 
 ## 4. Proposta de Valor / Benefício
-*   **Liquidez Instantânea 24/7:** O cliente converte BRL em USD ou EUR a qualquer momento (inclusive fins de semana) e utiliza o saldo imediatamente.
-*   **Cálculo Tributário Integrado:** Eliminação de erros de cálculo fiscal de recolhimento de IOF por meio de um motor fiscal parametrizável automático.
-*   **Atomicidade Financeira:** Garantia de integridade contábil entre jurisdições (Brasil e EUA) sem a ocorrência de saldos inconsistentes.
+*   **Integração Desacoplada:** Substituição de polling síncrono ineficiente e batch por um pipeline assíncrono em tempo real.
+*   **Consistência de Sub-ledgers:** Controle à prova de falhas de saldos multi-moedas vinculados à conta unificada do cliente.
+*   **Mitigação de Riscos Contábeis:** Processador de Holds/Posts integrado diretamente ao Core Finxact com latência inferior a 2 segundos.
 
 ### 4.1 ROI do Épico
+O ROI desta iniciativa apoia-se na eliminação de depuração manual, redução drástica de suporte especializado de ledger e multas por atraso de fechamento.
 ```text
-Investimento CapEx Alocado: R$ 1.400.000,00 (33.3% do total de R$ 4.200.000,00)
-VPL Estimado do Programa (12.5% a.a.): R$ 12.450.000,00
-TIR do Programa: 148%
-Payback Descontado do Programa: 7 meses pós-lançamento
+Investimento Inicial CapEx: $249.000 USD
+Retorno Recorrente Estimado (Conservador): $150.000 USD/ano
+Retorno Recorrente Estimado (Otimista): $300.000 USD/ano
+
+Cenário Conservador:
+ROI % (1º Ano) = ( $150.000 - $249.000 ) / $249.000 = -39,76%
+Payback = ( $249.000 / $150.000 ) * 12 = 19,9 meses
+
+Cenário Otimista:
+ROI % (1º Ano) = ( $300.000 - $249.000 ) / $249.000 = +20,48%
+Payback = ( $249.000 / $300.000 ) * 12 = 10,0 meses
 ```
-**Conclusão Financeira: O investimento de R$ 1.400.000,00 une a robustez do Core Finxact (R$ 800k) com o Motor de Remessa Interna (R$ 600k), viabilizando a conversão primária de recursos que suportará a margem cambial estimada de R$ 21.000.000,00 no primeiro ano, garantindo o payback em apenas 7 meses.**
+**Conclusão Financeira: Como infraestrutura estruturante essencial, o Finxact Automated Transit elimina custos de mão de obra direta em reconciliações diárias manuais, gerando payback em 10 meses no cenário otimista e garantindo segurança contábil absoluta nas pernas multi-moeda.**
 
 #### Métricas SMART Associadas:
-1.  **Tempo de Resposta para Holds/Posts (EUA):** Execução de lançamentos de bloqueio/efetivação no Finxact em tempo inferior a 500ms em 95% das chamadas.
-2.  **Velocidade da Remessa de Ponta a Ponta:** Débito em BRL e crédito em USD na conta global em menos de 1.0 segundo.
-3.  **Acurácia Contábil da Conciliação:** Taxa de erro de reconciliação de D+0 contábil de exatamente 0.00% na rotina automática noturna.
-4.  **SLA de Reporte Regulatório:** Transmissão automática do contrato cambial simplificado ao BACEN em até 5 minutos após a transação.
+1.  **Erros de Integração de Ledger:** Redução de 95% nos erros de integração de ledger/sub-ledger entre o ecossistema brasileiro e norte-americano (de 5.000 erros semanais para < 250).
+2.  **SLA de Sincronização de Holds/Posts:** Latência de sincronização no Finxact menor que 2 segundos em 99,9% das ordens de câmbio.
+3.  **Custo de Suporte de Ledger:** Redução de 60% do custo de mão de obra direta (horas de analistas e engenheiros focados em suporte de ledger) em até 180 dias.
+4.  **Disponibilidade do Barramento:** SLA de uptime de 99,99% ao mês mantido no cluster AWS MSK (Kafka gerenciado).
 
 #### Premissas de ROI:
-*   A conectividade mTLS e VPN IPsec entre os datacenters AWS do Banco Inter e os endpoints do Core Finxact manterá latência estável inferior a 150ms.
-*   A legislação tributária manterá as regras de IOF para transferências de mesma titularidade em 1.1%.
+*   As APIs nativas de holds temporários e posts definitivos do Core Banking Finxact dos EUA suportam chamadas de barramentos de mensageria em alto volume de concorrência.
+*   Tolerância de falhas integrada com retry exponencial no processamento de mensagens.
 
 ## 5. Descrição Detalhada
 O sistema funcionará através de conectores em Spring Boot que encapsularão a complexidade das chamadas de API do Core Finxact e do Core BR. Quando uma transferência cambial for solicitada, o sistema executará os débitos contábeis no Core Brasil, aplicará os cálculos de IOF cabíveis, criará o Hold correspondente no Finxact, efetivará o crédito no sub-ledger de moeda estrangeira e enviará os metadados fiscais para a geração eletrônica dos contratos cambiais junto ao BACEN.
 
 | Escopo IN | Escopo OUT |
 | :--- | :--- |
-| Mapeamento de APIs Finxact para sub-ledgers lógicos de depósito | Remessas com destino a terceiros em outros bancos globais |
-| Desenvolvimento de endpoints de controle de Holds e Posts no Core EUA | Processamento físico de saques em caixas eletrônicos no exterior |
-| Cálculo automático de alíquotas de IOF (1.1% ou 0.38%) | Auditorias fiscais manuais ou envio físico de declarações de IR |
-| Emissão automática de mensagens e contratos de câmbio ao BACEN | Suporte a processos de arbitragem de moedas exóticas |
+| Pipeline de mensageria assíncrona robusto usando Apache Kafka / AWS MSK | Remessas com destino a terceiros em outros bancos globais |
+| Mecanismo de hold temporário de saldo (Hold) e postagem definitiva (Post) coordenado com o Core Finxact | Processamento físico de saques em caixas eletrônicos no exterior |
+| Motor de reconciliação automática de sub-ledgers multi-moeda e detecção de anomalias diárias | Auditorias fiscais manuais ou envio físico de declarações de IR |
+| Implementação de Circuit Breakers e técnicas de backpressure para proteção dos sistemas de core | Suporte a processos de arbitragem de moedas exóticas |
 
 ## 6. Critérios de Aceite
 1.  **Garantia de Atomicidade Síncrona:** A transação contábil de débito BRL no Core BR e crédito USD/EUR no Finxact deve ser atômica. Caso a chamada de crédito ao Finxact falhe ou sofra timeout (1.5s), a perna brasileira em BRL deve ser estornada de forma síncrona em até 500ms.
 2.  **Criação Dinâmica de Sub-ledgers:** O sistema deve criar automaticamente a partição contábil específica de moeda estrangeira no Finxact no primeiro clique de ativação de moeda do cliente no SuperApp, sem latências de backoffice.
 3.  **Expiração e Liberação de Holds (TTL):** Todos os Holds de saldo criados no Finxact durante a orquestração de câmbio devem possuir um Time-To-Live (TTL) de 15 minutos. Caso a transação SAGA não seja confirmada pelo Post, o Hold deve ser cancelado automaticamente, restabelecendo o saldo disponível do cliente.
 4.  **Cálculo e Retenção Tributária Dinâmica:** O motor de cálculo fiscal deve avaliar a titularidade das contas de origem e destino, aplicando a alíquota de IOF correta: 1.1% para mesma titularidade (contas vinculadas ao mesmo CPF) e 0.38% para titularidades distintas.
-5.  **Envio Automatizado de Contratos BACEN:** A aplicação de remessas deve coletar todos os dados cadastrais do cliente e gerar o payload estruturado do contrato de câmbio simplificado, enviando-o via mensageria para homologação contínua do BACEN em no máximo 5 minutos pós-liquidação.
-6.  **Trilha de Auditoria FINRA/BACEN:** Cada alteração contábil consolidada deve produzir logs estruturados contendo IDs das contas, hashes de transação unificados, spreads e taxas cobradas, e os dados completos das partidas duplas contábeis de débito e crédito, sendo persistidos criptografadamente (AES-256) por 5 anos.
+5.  **Envio Automatizado de Contratos BACEN:** A aplicação de remessas deve gerar o contrato de câmbio simplificado e enviá-lo via mensageria para o BACEN em no máximo 5 minutos pós-liquidação.
+6.  **Trilha de Auditoria FINRA/BACEN:** Cada alteração contábil consolidada deve produzir logs estruturados criptografados (AES-256) persistidos por 5 anos, contendo IDs das contas, hashes de transação unificados e spreads.
 
 ## 7. Features Sugeridas
 *   `BINTER-EP-02-F01` - **Configurador Automático de Sub-ledgers:** microconector para provisionamento de partições de USD/EUR unificados no ledger principal do cliente.
@@ -72,18 +80,18 @@ O sistema funcionará através de conectores em Spring Boot que encapsularão a 
 *   **Dependências de Negócio:**
     *   Aprovação jurídica das políticas operacionais de câmbio emergencial fora de horário de mercado comercial com o uso de spreads de contingência.
 *   **Dependências de Épicos:**
-    *   Serve como habilitador base para as operações do `BINTER-EP-01` (Seamless FX & Smart Wallet).
+    *   Serve como habilitador base para as operações do `BINTER-EP-01` (FX Orchestrator) e `BINTER-EP-06` (Seamless FX Smart Wallet).
 
 ## 9. Riscos
-| Risco Mapeado | Impacto | Mitigação Executiva |\
-| :--- | :--- | :--- |\
-| **Indisponibilidade do Core Finxact (EUA):** Perda de comunicação na perna de crédito que causaria a retenção indevida de valores no Brasil. | **Alto** | Mecanismo de rollback imediato local no Core BR e ativação de fila de compensação assíncrona blindada no RabbitMQ/Kafka. |\
-| **Flutuação de IOF por alteração governamental:** Mudança súbita de alíquotas tributárias de câmbio por decretos federais brasileiros. | **Alto** | Parametrização da alíquota do imposto em base de dados de configuração dinâmica, permitindo atualização em tempo real sem a necessidade de deploy. |\
-| **Gargalos de concorrência contábil em D+0:** Travamento de saldos por requisições paralelas simultâneas de remessas e compras físicas. | **Médio** | Implementar controle transacional avançado a nível de banco de dados e controle de locks de contas no Redis distribuído. |\
+| Risco Mapeado | Impacto | Mitigação Executiva |
+| :--- | :--- | :--- |
+| **Indisponibilidade do Core Finxact (EUA):** Perda de comunicação na perna de crédito que causaria a retenção indevida de valores no Brasil. | **Alto** | Mecanismo de rollback imediato local no Core BR e ativação de fila de compensação assíncrona blindada no Kafka. |
+| **Flutuação de IOF por alteração governamental:** Mudança súbita de alíquotas tributárias de câmbio por decretos federais brasileiros. | **Alto** | Parametrização da alíquota do imposto em base de dados de configuração dinâmica, permitindo atualização em tempo real sem a necessidade de deploy. |
+| **Gargalos de concorrência contábil em D+0:** Travamento de saldos por requisições paralelas simultâneas de remessas e compras físicas. | **Médio** | Implementar controle transacional avançado a nível de banco de dados e controle de locks de contas no Redis distribuído. |
 
 ## 10. Stakeholders
-*   **Thiago Mendes (Sponsor):** Demanda uma transferência de recursos sem atrito e instantânea como o principal motor de engajamento do correntista do Banco Inter.
-*   **Mariana Silveira (Tech Lead):** Demanda consistência eventual controlada com mecanismos de conciliação automática que garantam integridade de balanço 100% à prova de falhas.
+*   **Thiago Mendes (Sponsor de Negócio):** Exige trânsito contábil estável e rápido para viabilizar operações em tempo real sem quebras e concorrência de saldos.
+*   **Mariana Silveira (Tech Lead / Engenharia):** Demanda rotas de integração resilientes e desacopladas com o Kafka para evitar que oscilações sistêmicas do core comprometam a experiência do usuário.
 
 ## 11. Métricas de Sucesso
 *   **Curto Prazo (Até 30 dias pós-Go-Live):** Cobertura total de testes de integração e validação das rotas tributárias em ambiente de testes; zero discrepâncias de cálculos fiscais identificadas.
