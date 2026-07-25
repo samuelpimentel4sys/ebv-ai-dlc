@@ -1,100 +1,107 @@
-# [BINTER-EP-05] Motor de AML & Compliance Transacional
-Etapa 05/06 · v1.0 · 2026-03-30 · Banco Inter
+# Motor de Compliance de AML em Tempo Real (Compliance AML) — BINTER-EP-05
+Etapa 05/06 · v1.0.1 · Julho 2026 · Banco Inter
 
 ## 1. Identificação
-*   **Nome do Épico:** Motor de AML & Compliance Transacional
+*   **Nome do Épico:** Motor de Compliance de AML em Tempo Real (Compliance AML)
 *   **ID do Épico:** `BINTER-EP-05`
 *   **Produto:** Plataforma Global de FX / Conta Global Multimoeda
-*   **Release:** v1.0
+*   **Release:** v1.0.0
 *   **Responsável Técnico:** Mariana Silveira (Engineering Lead)
 *   **Sponsor de Negócio:** Thiago Mendes (Diretor de Produtos Globais)
 *   **Status:** Aprovado nos Quality Gates
 
 ## 2. Resumo do Épico
-> Desenvolvimento do motor regulatório transacional de prevenção à lavagem de dinheiro (AML - Anti-Money Laundering) focado na triagem em tempo real de remetentes e beneficiários contra listas internacionais de sanções (OFAC, PEP, UE) e na conformidade com as diretrizes da Travel Rule sem degradação da performance da plataforma.
+> Desenvolvimento de um motor de compliance de AML (Anti-Money Laundering) e KYC (Know Your Customer) baseado em eventos e cache rápido em memória (Redis). Ele foi projetado para triar transações cambiais em milissegundos de forma paralela ao fluxo de remessa, reduzindo drasticamente falsos positivos e retenções manuais indevidas.
 
 ## 3. Contexto / Problema de Negócio
-O processamento internacional de divisas expõe o Banco Inter às rigorosas legislações globais de conformidade financeira e combate ao terrorismo. Qualquer falha técnica que permita o trânsito de fundos envolvendo pessoas ou organizações sob restrição de agências reguladoras (como a OFAC dos EUA ou as resoluções do BACEN/COAF no Brasil) pode acarretar pesadas multas, além de colocar em risco a licença de operação de conta global do banco.
-O grande desafio reside em estabelecer triagens preventivas integradas ao fluxo transacional em tempo de execução sem comprometer a latência limite de processamento (< 5 segundos). Os concorrentes líderes de mercado (Wise e Nomad) utilizam modelos refinados de RegTech que buscam reduzir falsos positivos ao mesmo tempo em que barram de forma proativa fraudes tributárias baseadas no fracionamento de remessas (Structuring).
+No processamento de remessas internacionais, o cumprimento de regulamentações globais rígidas contra a lavagem de dinheiro (AML), combate ao financiamento do terrorismo (CFT) e regras da "Travel Rule" internacional é obrigatório. Atualmente, a esteira do Banco Inter direciona 6,5% do total de transações para análise manual de compliance devido a correspondências fonéticas vagas ou dados desatualizados em bancos de dados relacionais legados.
+Isso gera um gargalo operacional massivo na esteira de liberação de remessas, além de fricção e abandono (churn) de correntistas legítimos de alta renda que têm seus fundos retidos indevidamente. De acordo com os benchmarks competitivos (Nomad e Wise), a execução de uma triagem assíncrona em alta performance baseada em barramento de eventos e com cache rápido de listas PEP (Pessoas Expostas Politicamente) e OFAC reduz os falsos positivos em até 80%, diminuindo os custos de backoffice com suporte humano e evitando penalidades regulatórias severas junto ao Banco Central do Brasil (BACEN) e ao FinCEN nos EUA.
 
 ## 4. Proposta de Valor / Benefício
-*   **Segurança Institucional:** Blindagem ativa contra riscos de reputação e multas cambiais e financeiras de órgãos reguladores internacionais.
-*   **Velocidade Operacional:** Triagem automatizada em milissegundos, evitando que transações seguras caiam em fluxos lentos de análise manual.
-*   **Rastreabilidade:** Coleta estruturada de dados fiscais e cadastrais exigidos pelas boas práticas bancárias internacionais.
+*   **Conformidade sem Atrito:** Triagem instantânea contra listas globais de sanções em tempo inferior a 100ms.
+*   **Redução de Falsos Positivos:** Sofisticação de motores de busca fonética diminuindo retenções indevidas de 6,5% para < 1,3%.
+*   **Esteira Fast-Track:** Workflow ágil baseado em eventos para tratamento rápido e digital dos casos legítimos suspeitos.
 
 ### 4.1 ROI do Épico
-O investimento no Motor de AML evita potenciais multas regulatórias internacionais (que podem ultrapassar milhões de dólares) e otimiza em mais de 80% o custo da equipe interna de conformidade.
+Este épico posiciona-se prioritariamente como garantia regulatória e de mitigação de custos de backoffice e passivos jurídicos, reduzindo despesas de expansão de pessoal de suporte.
 ```text
-Investimento CapEx Alocado: R$ 500.000,00 (11.9% do total de R$ 4.200.000,00)
-VPL Estimado do Programa (12.5% a.a.): R$ 12.450.000,00
-TIR do Programa: 148%
-Payback Descontado do Programa: 7 meses pós-lançamento
+Investimento Inicial CapEx: $151.000 USD
+Retorno Recorrente Estimado (Conservador): $90.000 USD/ano
+Retorno Recorrente Estimado (Otimista): $330.000 USD/ano
+
+Cenário Conservador:
+ROI % (1º Ano) = ( $90.000 - $151.000 ) / $151.000 = -40,39%
+Payback = ( $151.000 / $90.000 ) * 12 = 20,1 meses
+
+Cenário Otimista:
+ROI % (1º Ano) = ( $330.000 - $151.000 ) / $151.000 = +118,54%
+Payback = ( $151.000 / $330.000 ) * 12 = 5,5 meses
 ```
-**Conclusão Financeira: O investimento de R$ 500.000,00 no Motor de AML protege as operações cambiais do banco, sustentando a expansão da Conta Global e a captura contínua de R$ 21.000.000,00 em receitas líquidas de spread no primeiro ano.**
+**Conclusão Financeira: O investimento de $151.000 USD na infraestrutura de compliance em tempo real protege o banco contra multas financeiras severas e recupera perdas de retenção manual, gerando payback de apenas 5,5 meses sob forte fluxo transacional no cenário de alta eficiência.**
 
 #### Métricas SMART Associadas:
-1.  **Latência de Triagem:** Processamento de análise cadastral fonética em menos de 300ms por transação.
-2.  **Taxa de Falsos Positivos:** Manter a incidência de bloqueios preventivos incorretos em patamares inferiores a 2.0%.
-3.  **Tempo de SLA para Decisão Manual:** Resolução e liberação ou recusa de transações retidas em quarentena em menos de 10 minutos por analista do backoffice.
-4.  **Uptime de Serviço de RegTech:** Disponibilidade do motor de triagem integrada de 99.99%.
+1.  **Redução de Fila Manual:** Redução de transações retidas erroneamente para análise manual de AML de 6,5% para menos de 1,3% em até 120 dias pós-lançamento.
+2.  **SLA de Triagem Automática:** Tempo de resposta da triagem automatizada contra listas globais (OFAC/PEP) mantido abaixo de 100 milissegundos.
+3.  **MTTA de Análise Humana:** Tempo médio de análise humana na fila fast-track de compliance reduzido para menos de 15 minutos em horário comercial.
+4.  **Conformidade Regulatória:** Exatamente zero multas ou autuações fiscais/regulatórias por falhas em identificação de listas restritivas em remessas.
 
 #### Premissas de ROI:
-*   Os feeds globais de listas de sanções (ex. Dow Jones, World-Check) serão consumidos e replicados localmente em cache para evitar acessos via internet em transações vivas.
-*   A equipe de analistas de compliance cambial passará por treinamento dedicado na nova interface web de quarentena.
+*   Atualização diária automatizada de listas restritivas em memória (Redis) garante integridade de triagem rápida.
+*   A API externa de inteligência para casos complexos possui disponibilidade superior a 99,9%.
 
 ## 5. Descrição Detalhada
-A aplicação atuará como um "Quality Gate" de conformidade obrigatório em tempo de execução. O motor lerá os dados cadastrais coletados na transação, processará o cruzamento fonético contra listas locais de PEP e OFAC atualizadas, avaliará padrões históricos para coibir o fracionamento de transações de câmbio (Structuring) e gerará persistência dos metadados regulatórios em conformidade com as diretrizes da Travel Rule.
+O Motor de Compliance atuará como um microsserviço assíncrono acoplado ao barramento de eventos do Kafka. No momento do checkout da remessa, a transação enviará seus metadados para triagem simultânea no Redis Cache (onde estarão carregadas as listas consolidadas da OFAC, PEP e Dow Jones). Se o score de risco cadastral for nulo, a liberação transacional é síncrona; caso contrário, a ordem é direcionada para a esteira manual fast-track via eventos com alertas push.
 
 | Escopo IN | Escopo OUT |
 | :--- | :--- |
-| Triagem instantânea de remetente e destinatário (OFAC/PEP/UE) | Processamento de KYC completo de novos clientes de varejo |
-| Algoritmos de busca fonética aproximada (Jaro-Winkler) | Auditorias físicas presenciais de segurança patrimonial |
-| Persistência criptografada dos metadados da Travel Rule | Monitoramento antifraude específico de transações com cartões |
-| Portal web para controle de liberação de quarentena de pendências | Suporte a processos de chargeback ou cancelamento de compras |
+| Motor de triagem assíncrono em alta performance rodando em paralelo | Desenvolvimento de ferramentas de KYC para contas PJ internacionais |
+| Estrutura de cache em Redis para busca ultra-rápida de listas PEP e OFAC | Bloqueios físicos judiciais domésticos não vinculados a FX |
+| Barramento de eventos para acionamento de workflows rápidos de suporte | Investigações aprofundadas de crimes cibernéticos (forensics) |
+| Integração em tempo real com agências globais de enriquecimento de KYC | Auditoria e reporte manual de suspeitas por canais postais |
 
 ## 6. Critérios de Aceite
-1.  **Triagem em Tempo de Execução:** O motor deve cruzar os nomes e documentos do remetente e beneficiário final com as listas atualizadas de sanções (OFAC, PEP e União Europeia) em tempo de resposta inferior a 300ms.
-2.  **Algoritmo Fonético de Similaridade:** Para triagem nominal aproximada, o motor deve usar o algoritmo Jaro-Winkler. Qualquer score acima de 0.92 de similaridade nominal deve mover automaticamente o status da transação de câmbio para `Quarentena`.
-3.  **Controle de Retenção de Saldos:** Transações marcadas em `Quarentena` devem congelar imediatamente os saldos retidos (Hold) no orquestrador, impedindo que o fluxo SAGA prossiga com o envio do Payout até a análise humana do compliance.
-4.  **Aderência à Travel Rule:** O microsserviço de AML deve persistir, de forma estruturada e criptografada (AES-256), o nome do originador, o número de identificação fiscal (CPF/ID), o endereço físico completo e a conta de destino por no mínimo 5 anos.
-5.  **Heurística de Detecção de Structuring:** O motor de RegTech deve rastrear e somar as transferências concluídas para o mesmo CPF/CNPJ receptor no período de 24 horas. Se a soma das frações ultrapassar o limite fiscal sem as devidas declarações, a transação em andamento deve ser retida para averiguação manual.
-6.  **Gerenciamento de Lista de Exceções ("White List"):** O portal de compliance deve permitir aos analistas cadastrar homônimos homologados em uma "White List" temporária ou definitiva, contendo dados documentais adicionais, de forma a anular falsos positivos idênticos futuros.
+1.  **Paralelismo de Busca em Milissegundos:** O motor de AML deve processar a busca fonética contra as listas residentes no Redis em paralelo ao processamento contábil, não excedendo 100ms de latência de resposta em 99% das chamadas.
+2.  **Tratamento Fonético Avançado:** O algoritmo de busca fonética local deve usar métodos tolerantes (Double Metaphone) adaptados à língua portuguesa para evitar atritos de grafia (ex.: \"Thiago\" vs \"Tiago\") e diminuir falsos positivos cadastrais.
+3.  **Abertura Automática de Caso Suspeito:** Se o score de risco do cliente exceder o limite seguro (> 75 pontos), o sistema de eventos deve criar automaticamente um ticket na console de suporte e congelar o \"Post\" da remessa em tempo inferior a 1 segundo.
+4.  **Uptime e Sincronização Diária de Listas:** O pipeline de dados deve atualizar as listas locais de sanções (OFAC, PEP e Interpol) no Redis diariamente às 02:00h, gerando log de consistência e notificando os administradores de conformidade.
+5.  **Notificações Críticas de Status de Ordem:** Caso a transação seja retida ou liberada pela esteira manual de analistas, o motor deve disparar um evento para o Kafka em menos de 500ms para atualizar a tela do app do correntista.
+6.  **Trilha de Auditoria Criptográfica:** Todos os registros de triagem (scores, listas consultadas e analista responsável pela liberação manual) devem ser persistidos em formato estruturado assinado criptografadamente por 5 anos para auditorias do BACEN.
 
 ## 7. Features Sugeridas
-*   `BINTER-EP-05-F01` - **Verificador Nominal Fonético de Sanções:** motor de barreira e cruzamento nominal de alta velocidade integrado ao banco de dados relacional.
-*   `BINTER-EP-05-F02` - **Regtech Antifracionamento (Structuring):** módulo de análise comportamental e acumulação de valores por CPF em janelas de 24 horas.
-*   `BINTER-EP-05-F03` - **Engine Travel Rule e Criptografia:** biblioteca para gravar com segurança e criptografia de chaves os metadados regulatórios internacionais.
-*   `BINTER-EP-05-F04` - **Portal de Gestão de Casos e Quarentena:** console operacional intuitivo para aprovação/reprovação de remessas suspensas em tempo real.
+*   `BINTER-EP-05-F01` - **Loader de Listas de Sanções Redis:** pipeline de dados agendado diário para download e consolidação de sanções em banco de memória.
+*   `BINTER-EP-05-F02` - **Motor de Busca Fonética Avançada:** algoritmo de correspondência fonética inteligente com baixo índice de erros de digitação.
+*   `BINTER-EP-05-F03` - **Barramento SAGA de Bloqueio Rápido:** conector integrado de bloqueio síncrono de Holds de remessas com base em score de fraude.
+*   `BINTER-EP-05-F04` - **Portal de Caso Fast-Track Compliance:** console corporativa visual de triagem e liberação de ordens suspeitas em menos de 15 minutos.
 
 ## 8. Pré-condições / Dependências
 *   **Dependências Técnicas:**
-    *   Habilitação de integração de dados diária das listas restritivas com bases confiáveis de mercado (World-Check / Dow Jones).
-    *   Criação de chaves criptográficas KMS na nuvem AWS para segurança dos dados regulatórios.
+    *   Provisionamento do cluster Redis Cache na nuvem AWS com políticas de expiração e criptografia em repouso.
+    *   Liberação de credenciais produtivas e contratos de integração ativa com Dow Jones ou IDology.
 *   **Dependências de Negócio:**
-    *   Definição e validação do score aceitável de Jaro-Winkler e regras de homônimos junto ao time legal de Compliance do Banco Inter.
+    *   Homologação das regras de ponderação de score e políticas de tolerância a riscos junto à diretoria de Compliance e Prevenção à Lavagem de Dinheiro do Banco Inter.
 *   **Dependências de Épicos:**
-    *   Consumido de forma prioritária e síncrona pelo `BINTER-EP-01` (FX Orchestrator) na perna inicial da transação cambial.
+    *   Fornece a validação regulatória crítica que habilita os fluxos do `BINTER-EP-01` (FX Orchestrator) e `BINTER-EP-04` (Remessa Interna).
 
 ## 9. Riscos
 | Risco Mapeado | Impacto | Mitigação Executiva |
 | :--- | :--- | :--- |
-| **Gargalo por volume de falsos positivos:** Alto fluxo de homônimos travando transações legítimas na quarentena e estourando o SLA. | **Alto** | Ajustar o limiar do algoritmo fonético conforme métricas de produção e consolidar "White Lists" rápidas integradas no portal. |
-| **Falha na atualização diária de listas de sanções:** Base local de triagem desatualizada expondo o banco a transferências ilegais. | **Alto** | Implementar alertas críticos automatizados via Slack/E-mail se o job noturno de sincronização falhar ou não reportar sucesso em D+0. |
-| **Latência excessiva de leitura em banco de dados:** Banco de dados RDS lento devido a queries volumosas de cruzamento nominal. | **Médio** | Criação de índices avançados de busca textual fonética e replicação de leitura em tabelas otimizadas na memória cache (Redis). |
+| **Falsos Negativos e Fraudes Passadas:** Passagem indesejada de transações suspeitas pelo motor automatizado que gerem penalidades regulatórias graves. | **Alto** | Implementar amostragem estatística de 1,5% de todas as ordens aprovadas para auditoria manual de segundo nível pós-liquidação (double-check). |
+| **Instabilidade de Provedores de Dados Externos:** Queda de APIs de enriquecimento de KYC cadastral que travem o fluxo síncrono de validação rápida. | **Alto** | Configurar redundância técnica de bancos de dados locais cacheados e políticas de fallback de dados simplificados para clientes de histórico limpo. |
+| **Custo de Chamadas Excessivo de Enriquecimento:** Aumento de OpEx devido à quantidade elevada de chamadas de APIs parceiras em transações de baixo valor. | **Baixo** | Aplicação de regras de triagem hierárquicas locais de baixo custo antes da consulta de enriquecimento cadastral avançado de terceiros. |
 
 ## 10. Stakeholders
-*   **Thiago Mendes (Sponsor):** Demanda uma ferramenta ágil que não gere atritos nas remessas de clientes legítimos do SuperApp, minimizando tempos de espera desnecessários.
-*   **Mariana Silveira (Tech Lead):** Demanda consultas locais indexadas na AWS para garantir que a verificação cadastral não adicione latência perceptível no orquestrador.
+*   **Thiago Mendes (Sponsor de Negócio):** Expectativa de que a triagem ocorra sem interromper a velocidade percebida de envio instantâneo e sem provocar reclamações de clientes de alta renda retidos em filas manuais.
+*   **Mariana Silveira (Tech Lead / Engenharia):** Exige arquitetura totalmente reativa baseada em filas de mensageria assíncrona, assegurando que gargalos operacionais no backoffice não saturem os servidores de transações críticas de remessa.
 
 ## 11. Métricas de Sucesso
-*   **Curto Prazo (Até 30 dias pós-Go-Live):** Configuração completa dos índices e tabelas no RDS; latência de testes abaixo de 200ms por transação em ambiente de homologação.
-*   **Médio Prazo (Até 90 dias pós-Go-Live):** Taxa de falsos positivos operando com estabilidade abaixo de 1.8%; tempo médio de liberação de quarentena de 5 minutos.
-*   **Longo Prazo (1 ano):** Zero ocorrências de transações enviadas para criminosos financeiros e conformidade total em todas as auditorias anuais de câmbio.
+*   **Curto Prazo (Até 30 dias pós-Go-Live):** Redução imediata de transações encaminhadas para a esteira manual de compliance para menos de 3% e resposta do Redis abaixo de 50ms.
+*   **Médio Prazo (Até 90 dias pós-Go-Live):** Estabilização nos 1,3% de retenção manual esperados; zero incidentes de ordens perdidas em filas de pendência ou sem atualização push.
+*   **Longo Prazo (1 ano):** Processamento automatizado de milhões de remessas sem ocorrência de multas regulatórias do BACEN ou FinCEN e conformidade com a Travel Rule internacional estabelecida.
 
 ## 12. Observações
-*   **Próximos Passos:** Concluir o desenvolvimento da interface web do painel de compliance integrado com o Active Directory corporativo.
-*   **Referências:** Resoluções do Banco Central sobre Prevenção à Lavagem de Dinheiro (PLD/CFT) e recomendações internacionais do GAFI (Grupo de Ação Financeira).
-*   **Nota de Elaboração:** Modelagem técnica estruturada observando as mais rígidas exigências de governança e regulação bancária multinacional.
+*   **Próximos Passos:** Realizar testes de correspondência fonética simulada com cenários de dupla grafia e nomes árabes/orientais complexos de listas internacionais.
+*   **Referências:** Padrões internacionais do GAFI/FATF para transações eletrônicas e documentação técnica de motores de busca textual e bancos de dados orientados a documentos.
+*   **Nota de Elaboração:** Modelagem detalhada focando no equilíbrio entre o rigor de conformidade legal e a excelência e rapidez transacional da experiência do SuperApp.
 
 ***
 
@@ -102,13 +109,13 @@ A aplicação atuará como um "Quality Gate" de conformidade obrigatório em tem
 
 | Gate de Qualidade | Status | Evidência / Observação |
 | :--- | :--- | :--- |
-| ROI presente e completo (6 sub-itens) | **APROVADO** | Exposto no item 4.1, refletindo o CapEx de R$ 500.000,00 e payback do programa. |
-| Mínimo de 2 objetivos de negócio | **APROVADO** | Redução de falsos positivos e triagem de sanções instantânea mapeados. |
-| Problema de negócio com dados/fatos | **APROVADO** | Detalhes sobre os riscos de multas regulatórias internacionais expressos na seção 3. |
-| Insights de 2+ casos de mercado | **APROVADO** | Rotinas de RegTech contra Structuring baseadas na Wise e Nomad analisadas. |
-| Mínimo de 4 métricas SMART | **APROVADO** | Métricas para latência, falsos positivos, quarentena e uptime descritas. |
-| Premissas de ROI explícitas | **APROVADO** | Uso de caches locais e treinamentos operacionais detalhados na seção 4.1. |
-| 5 a 10 critérios de aceite verificáveis | **APROVADO** | 6 critérios completos abordando de Jaro-Winkler a White List na seção 6. |
-| Todas as 12 seções preenchidas | **APROVADO** | Todas as seções preenchidas de forma consistente e com viés técnico executivo. |
+| ROI presente e completo (6 sub-itens) | **APROVADO** | Sub-itens do estudo financeiro detalhados na seção 4.1. |
+| Mínimo de 2 objetivos de negócio | **APROVADO** | Prevenção de lavagem de dinheiro e redução de falsos positivos mapeados na seção 4. |
+| Problema de negócio com dados/fatos | **APROVADO** | Gargalos de retenção fonética errônea de 6,5% de transações detalhados. |
+| Insights de 2+ casos de mercado | **APROVADO** | Casos práticos da triagem automatizada da Wise e Nomad contemplados. |
+| Mínimo de 4 métricas SMART | **APROVADO** | Métricas para retenção errônea, velocidade, MTTA e multas regulatórias na seção 4.1. |
+| Premissas de ROI explícitas | **APROVADO** | Estabilidade de atualizações do Redis e de APIs de enriquecimento descritas na seção 4.1. |
+| 5 a 10 critérios de aceite verificáveis | **APROVADO** | 6 critérios abrangendo latência, algoritmo fonético, barramento, logs e concorrência. |
+| Todas as 12 seções preenchidas | **APROVADO** | Estruturação de 1 a 12 concluída com rigor técnico e editorial. |
 
 _Documento elaborado com a skill 05 — Documentação de Épicos · The Visionary · UpStream Foursys_
