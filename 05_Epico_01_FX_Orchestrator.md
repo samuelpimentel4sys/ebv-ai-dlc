@@ -1,36 +1,43 @@
-# [BINTER-EP-01] FX Orchestrator & State Machine
-Etapa 05/06 · v1.0 · 2026-03-30 · Banco Inter
+# Orquestrador Global de Transações (FX Orchestrator) — BINTER-EP-01
+Etapa 05/06 · v1.0.1 · Julho 2026 · Banco Inter
 
 ## 1. Identificação
-*   **Nome do Épico:** FX Orchestrator & State Machine
+*   **Nome do Épico:** Orquestrador Global de Transações (FX Orchestrator)
 *   **ID do Épico:** `BINTER-EP-01`
 *   **Produto:** Plataforma Global de FX / Conta Global Multimoeda
-*   **Release:** v1.0
+*   **Release:** v1.0.0
 *   **Responsável Técnico:** Mariana Silveira (Engineering Lead)
 *   **Sponsor de Negócio:** Thiago Mendes (Diretor de Produtos Globais)
 *   **Status:** Aprovado nos Quality Gates
 
 ## 2. Resumo do Épico
-> Desenvolvimento do microsserviço orquestrador de câmbio transfronteiriço utilizando o padrão Saga Orquestrado (AWS Step Functions), encarregado de gerenciar com idempotência e resiliência absoluta as transições de estado entre o Core Brasil, o Core EUA (Finxact) e o gateway de liquidação externa (Tazapay).
+> Desenvolvimento do motor central de orquestração distribuída (padrão SAGA Orquestrado) via AWS Step Functions, encarregado de coordenar de forma idempotente, consistente e resiliente as transações de câmbio multi-geográficas entre o Core Brasil, Core EUA (Finxact) e o gateway de liquidação externa (Tazapay), garantindo zero perdas de saldo.
 
 ## 3. Contexto / Problema de Negócio
 O processamento atual de remessas e operações cambiais transfronteiriças no varejo brasileiro sofre com alta latência operacional (média de 2 horas até D+1). Para o Banco Inter, oferecer transações de câmbio instantâneas no SuperApp exige eliminar a fricção regulatória e técnica de intermediários tradicionais.
-O principal desafio é garantir a consistência dos saldos entre as diferentes jurisdições e cores bancários sob condições de instabilidade de rede sem incorrer em perdas financeiras (gastos duplicados) ou experiências frustrantes de tempo de espera. Insights extraídos do benchmark competitivo da Wise e Nomad demonstram que orquestradores nativos baseados em transições de estado transacionais e compensações imediatas em tempo real são cruciais para atingir níveis de satisfação de mercado e SLAs de resposta inferiores a 5 segundos de ponta a ponta.
+O principal desafio é garantir a consistência dos saldos entre as diferentes jurisdições e cores bancários sob condições de instabilidade de rede sem ocorrer perda de integridade de dados ou experiências de tempo de espera frustrantes para o cliente final. Se houver falha em qualquer perna do envio após o débito no Brasil, o saldo do cliente pode ficar retido de forma inconsistente, gerando volumosas chamadas de suporte. Os benchmarks de mercado (Wise, Nomad e C6) indicam que orquestradores nativos baseados em transições de estado transacionais e compensações lógicas imediatas em tempo real são cruciais para atingir níveis de satisfação de mercado superiores e SLAs de resposta ponta a ponta inferiores a 5 segundos.
 
 ## 4. Proposta de Valor / Benefício
-*   **Velocidade:** SLA transacional reduzido drasticamente para o cliente final.
-*   **Resiliência Financeira:** Garantia de concorrência zero e duplicidade nula em ambientes de rede móvel intermitentes, protegendo o saldo do cliente e o balanço do banco.
-*   **Auditorabilidade:** Rastreabilidade em tempo real de cada etapa cambial por meio de logs de transição persistidos.
+*   **Idempotência e Consistência:** Salvaguarda contra débitos duplicados ou inconsistências entre ledgers distribuídos (BR e EUA).
+*   **Rollback Lógico Automático:** Reversão automática de holds e reservas de saldo caso ocorra falha na liquidação do envio (payout).
+*   **Uptime e Baixa Latência:** Orquestração baseada em nuvem AWS com capacidade de resposta inferior a 1,5 segundos.
 
 ### 4.1 ROI do Épico
-O ROI específico desta iniciativa apoia-se na centralização técnica e na eliminação de tarifas de intermediação de terceiros, reduzindo custos de reconciliação de transações falhas.
+O ROI específico desta iniciativa apoia-se na estabilização técnica e na eliminação de perdas por falhas operacionais e estornos manuais caros de câmbio.
 ```text
-Investimento CapEx Alocado: R$ 900.000,00 (21.4% do total de R$ 4.200.000,00)
-VPL Estimado do Programa (12.5% a.a.): R$ 12.450.000,00
-TIR do Programa: 148%
-Payback Descontado do Programa: 7 meses pós-lançamento
+Investimento Inicial CapEx: $145.000 USD
+Retorno Recorrente Estimado (Conservador): $90.000 USD/ano
+Retorno Recorrente Estimado (Otimista): $227.500 USD/ano
+
+Cenário Conservador:
+ROI % (1º Ano) = ( $90.000 - $145.000 ) / $145.000 = -37,93%
+Payback = ( $145.000 / $90.000 ) * 12 = 19,3 meses
+
+Cenário Otimista:
+ROI % (1º Ano) = ( $227.500 - $145.000 ) / $145.000 = +56,90%
+Payback = ( $145.000 / $227.500 ) * 12 = 7,6 meses
 ```
-**Conclusão Financeira: O investimento de R$ 900.000,00 no FX Orchestrator apoia diretamente a captura de R$ 21.000.000,00 em receitas brutas de spread no Ano 1 de operação, garantindo o payback consolidado em apenas 7 meses.**
+**Conclusão Financeira: O investimento de $145.000 USD no FX Orchestrator apoia diretamente a integridade do ecossistema, gerando payback em 7,6 meses no cenário otimista de alta eficiência operacional e reduzindo drasticamente perdas operacionais estimadas em mais de $150.000 USD/ano.**
 
 #### Métricas SMART Associadas:
 1.  **SLA de Processamento Interno:** Resposta do orquestrador de ponta a ponta menor que 1.5 segundo em 99% das chamadas em ambiente controlado.
@@ -73,8 +80,8 @@ O orquestrador atuará de forma reativa a cada solicitação de transação camb
 *   **Dependências de Negócio:**
     *   Aprovação do desenho técnico do SAGA e regras de reversão de saldo junto à equipe de Riscos e Auditoria Interna do Banco Inter.
 *   **Dependências de Épicos:**
-    *   Depende do `BINTER-EP-02` (Integração Core EUA) para expor as APIs de bloqueio e débito ("Hold/Post").
-    *   Depende do `BINTER-EP-03` (Integração FX & Payout Gateway) para as rotas de envio de Euros.
+    *   Depende do `BINTER-EP-02` (Trânsito Automatizado Finxact) para expor as APIs de bloqueio e débito ("Hold/Post").
+    *   Depende do `BINTER-EP-03` (Integração de Gateway de Payout Tazapay) para as rotas de envio de Euros.
 
 ## 9. Riscos
 | Risco Mapeado | Impacto | Mitigação Executiva |
@@ -84,12 +91,12 @@ O orquestrador atuará de forma reativa a cada solicitação de transação camb
 | **Sobrecarga de chamadas no Redis:** Cluster de idempotência fora do ar ou com alta latência por gargalo de I/O. | **Médio** | Cluster Redis operando em arquitetura Multi-AZ com réplicas de leitura e failover automático de menos de 1 segundo. |
 
 ## 10. Stakeholders
-*   **Thiago Mendes (Sponsor):** Expectativa de que a tecnologia de orquestração reduza tempos de onboarding e tarifas de transações, tornando a plataforma líder de conversão.
-*   **Mariana Silveira (Tech Lead):** Expectativa de um sistema sem pontos de falha única, com observabilidade total, facilidade de debug de Sagas que falharam e altíssima cobertura de testes de integração.
+*   **Thiago Mendes (Sponsor de Negócio):** Expectativa de que a tecnologia de orquestração de transações garanta consistência absoluta e elimine as falhas operacionais de câmbio que mancham a reputação do app.
+*   **Mariana Silveira (Tech Lead / Engenharia):** Expectativa de um sistema sem pontos de falha única, com observabilidade total, facilidade de debug de Sagas que falharam e altíssima cobertura de testes de integração.
 
 ## 11. Métricas de Sucesso
 *   **Curto Prazo (Até 30 dias pós-Go-Live):** Cobertura de testes unitários e de integração acima de 90%; 100% dos cenários de falhas simuladas com rollback automático de fundos funcionando perfeitamente.
-*   **Médio Prazo (Até 90 dias pós-Go-Live):** Média real de processamento interno de ponta a ponta menor que 1s; zero incidentes de travamento ou duplicidade de saldos em produção.
+*   **Médio Prazo (Até 90 dias pós-Go-Live):** Média real de processamento interno de ponta a ponta menor que 1.5s; zero incidentes de travamento ou duplicidade de saldos em produção.
 *   **Longo Prazo (1 ano):** Sustentação de um volume transacional de 500.000 remessas mensais com taxa de transações inconsistentes em 0.00%.
 
 ## 12. Observações
