@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>05_Epico_04_Remessa_Interna (Banco Inter)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans">
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <header class="bg-gradient-to-r border-b border-orange-200 bg-white rounded-2xl p-6 shadow-sm mb-8">
+            <span class="bg-orange-100 text-orange-800 text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">Épico 04 - Alta (P1)</span>
+            <h1 class="text-2xl font-black text-slate-900 mt-2">BINTER-EP-04: Motor de Remessa Interna (Core BR → Core EUA)</h1>
+            <p class="text-slate-600">Trânsito regulatório, câmbio e envio de saldos BRL da conta brasileira para USD no Finxact.</p>
+        </header>
+
+        <div class="space-y-6 bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
+            <div>
+                <h3 class="text-lg font-bold text-slate-900 mb-2">Descrição e Objetivos</h3>
+                <p class="text-slate-700 leading-relaxed">
+                    Este épico estabelece o fluxo nativo de trâmite cambial brasileiro. Ele é responsável pelo débito em reais na conta corrente local do Banco Inter, a geração e registro de contratos de câmbio junto ao Banco Central do Brasil, a cobrança do IOF regulamentar correspondente e a imediata liberação de fundos na conta americana (Finxact).
+                </p>
+            </div>
+
+            <div class="border-t border-slate-100 pt-4">
+                <h3 class="text-lg font-bold text-slate-900 mb-2">Requisitos Técnicos Principais</h3>
+                <ul class="list-disc list-inside space-y-2 text-slate-700">
+                    <li>Desenvolvimento de integração gRPC entre o Core BR e o FX Orchestrator na AWS.</li>
+                    <li>Motor automatizado para registro eletrônico de operações cambiais (e-câmbio) de acordo com circulares do BACEN.</li>
+                    <li>Cálculo preciso e dinâmico de taxas e impostos locais (IOF para conta própria - 1,1% ou terceiros - 0,38%).</li>
+                    <li>Liquidação instantânea (Real-time Settlement) para experiência de ponta a ponta em segundos.</li>
+                </ul>
+            </div>
+
+            <div class="border-t border-slate-100 pt-4 bg-orange-50/50 p-4 rounded-xl">
+                <h3 class="text-sm font-bold text-orange-800 uppercase tracking-wider mb-2">Chave de Homologação Jira</h3>
+                <p class="text-sm text-slate-700">Mapeado no board padrão do Jira como: <strong>SCRUM-4</strong></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
