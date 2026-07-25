@@ -2,154 +2,106 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>04 - Viabilidade Financeira e ROI: Plataforma de FX (Banco Inter)</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Fase 04 - Análise de Viabilidade Financeira (ROI)</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; }
+        h1 { color: #FF5315; border-bottom: 2px solid #FF5315; padding-bottom: 10px; }
+        h2 { color: #222239; margin-top: 30px; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #222239; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans">
-    <div class="max-w-5xl mx-auto px-4 py-8">
-        <!-- Header -->
-        <header class="bg-gradient-to-r border-b border-orange-200 bg-white rounded-2xl p-8 shadow-sm mb-8">
-            <div class="flex items-center justify-between mb-4">
-                <span class="bg-orange-100 text-orange-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">UpStream Foursys — Etapa 4</span>
-                <span class="text-slate-400 text-sm">v1.0.0</span>
-            </div>
-            <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight sm:text-4xl mb-2">Modelagem Financeira e Retorno do Investimento (ROI)</h1>
-            <p class="text-lg text-slate-600">Projeções financeiras completas, análise de investimentos (Capex/Opex), payback period e taxas de atratividade para os primeiros 18 meses da solução.</p>
-        </header>
+<body>
+    <h1>Fase 04: Análise de Viabilidade Financeira (ROI)</h1>
+    <p>Este documento detalha o business case para a implantação da plataforma de FX Global do Banco Inter, estimando o retorno do investimento para os próximos meses.</p>
 
-        <!-- KPIs Principais -->
-        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100">
-                <div class="text-sm font-semibold text-slate-400 uppercase">Investimento Inicial (Capex)</div>
-                <div class="text-2xl font-black text-slate-900 mt-2">R$ 4.200.000</div>
-                <div class="text-xs text-slate-500 mt-1">10 meses de desenvolvimento</div>
-            </div>
-            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100">
-                <div class="text-sm font-semibold text-slate-400 uppercase">Payback Estimado</div>
-                <div class="text-2xl font-black text-orange-600 mt-2">7 Meses</div>
-                <div class="text-xs text-slate-500 mt-1">Após data do Go-Live</div>
-            </div>
-            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100">
-                <div class="text-sm font-semibold text-slate-400 uppercase">Valor Presente Líquido (VPL)</div>
-                <div class="text-2xl font-black text-green-600 mt-2">R$ 12.450.000</div>
-                <div class="text-xs text-slate-500 mt-1">Taxa de desconto @ 12% a.a.</div>
-            </div>
-            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100">
-                <div class="text-sm font-semibold text-slate-400 uppercase">Taxa de Retorno (TIR)</div>
-                <div class="text-2xl font-black text-emerald-600 mt-2">148%</div>
-                <div class="text-xs text-slate-500 mt-1">Atração anual projetada</div>
-            </div>
-        </section>
+    <h2>Premissas Financeiras</h2>
+    <ul>
+        <li><strong>Base de Clientes Ativos (Ano 1):</strong> 450.000 clientes</li>
+        <li><strong>Volume Transacionado Mensal Médio:</strong> US$ 220 por cliente</li>
+        <li><strong>Take Rate Líquido (Spread):</strong> 1,2% sobre o volume</li>
+        <li><strong>CapEx Estimado:</strong> R$ 4.200.000</li>
+        <li><strong>OpEx Mensal (Infraestrutura/Licenças):</strong> R$ 75.000</li>
+    </ul>
 
-        <!-- Seções -->
-        <div class="space-y-8">
-            <!-- Demonstração Detalhada -->
-            <section class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
-                <h2 class="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-                    <i class="fa-solid fa-coins text-orange-500"></i> Demonstrativo de Fluxo de Caixa (Em Reais)
-                </h2>
+    <h2>Projeções Trimestrais de Fluxo de Caixa</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Métrica</th>
+                <th>Q3 2026 (Go-live)</th>
+                <th>Q4 2026</th>
+                <th>Q1 2027</th>
+                <th>Q2 2027</th>
+                <th>Q3 2027</th>
+                <th>Q4 2027</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Clientes Ativos</strong></td>
+                <td>50.000</td>
+                <td>120.000</td>
+                <td>220.000</td>
+                <td>310.000</td>
+                <td>380.000</td>
+                <td>450.000</td>
+            </tr>
+            <tr>
+                <td><strong>Volume Transacionado (USD)</strong></td>
+                <td>$ 11.000.000</td>
+                <td>$ 26.400.000</td>
+                <td>$ 48.400.000</td>
+                <td>$ 68.200.000</td>
+                <td>$ 83.600.000</td>
+                <td>$ 99.000.000</td>
+            </tr>
+            <tr>
+                <td><strong>Receita Bruta (R$)</strong></td>
+                <td>R$ 726.000</td>
+                <td>R$ 1.742.400</td>
+                <td>R$ 3.194.400</td>
+                <td>R$ 4.501.200</td>
+                <td>R$ 5.517.600</td>
+                <td>R$ 6.534.000</td>
+            </tr>
+            <tr>
+                <td><strong>OpEx (R$)</strong></td>
+                <td>(R$ 225.000)</td>
+                <td>(R$ 225.000)</td>
+                <td>(R$ 225.000)</td>
+                <td>(R$ 225.000)</td>
+                <td>(R$ 225.000)</td>
+                <td>(R$ 225.000)</td>
+            </tr>
+            <tr>
+                <td><strong>Lucro Líquido (R$)</strong></td>
+                <td>R$ 501.000</td>
+                <td>R$ 1.517.400</td>
+                <td>R$ 2.969.400</td>
+                <td>R$ 4.276.200</td>
+                <td>R$ 5.292.600</td>
+                <td>R$ 6.309.000</td>
+            </tr>
+            <tr>
+                <td><strong>Retorno Acumulado</strong></td>
+                <td>-R$ 3.699.000</td>
+                <td>-R$ 2.181.600</td>
+                <td>R$ 787.800</td>
+                <td>R$ 5.064.000</td>
+                <td>R$ 10.356.600</td>
+                <td>R$ 16.665.600</td>
+            </tr>
+        </tbody>
+    </table>
 
-                <div class="overflow-x-auto border border-slate-200 rounded-xl mb-6">
-                    <table class="min-w-full divide-y divide-slate-200 text-sm">
-                        <thead class="bg-slate-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left font-semibold text-slate-500 uppercase">Indicador</th>
-                                <th class="px-4 py-3 text-center font-semibold text-slate-500 uppercase">Q3 2026 (Go-live)</th>
-                                <th class="px-4 py-3 text-center font-semibold text-slate-500 uppercase">Q4 2026</th>
-                                <th class="px-4 py-3 text-center font-semibold text-slate-500 uppercase">Q1 2027</th>
-                                <th class="px-4 py-3 text-center font-semibold text-slate-500 uppercase">Q2 2027</th>
-                                <th class="px-4 py-3 text-center font-semibold text-slate-500 uppercase">Q3 2027</th>
-                                <th class="px-4 py-3 text-center font-semibold text-slate-500 uppercase">Q4 2027</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-200 bg-white text-slate-700">
-                            <tr>
-                                <td class="px-6 py-4 font-bold text-slate-900">Clientes Ativos Acumulados</td>
-                                <td class="px-4 py-4 text-center">50.000</td>
-                                <td class="px-4 py-4 text-center">120.000</td>
-                                <td class="px-4 py-4 text-center">220.000</td>
-                                <td class="px-4 py-4 text-center">310.000</td>
-                                <td class="px-4 py-4 text-center">380.000</td>
-                                <td class="px-4 py-4 text-center">450.000</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 font-bold text-slate-900">Volume Transacionado (USD)</td>
-                                <td class="px-4 py-4 text-center text-slate-600">$ 11,0M</td>
-                                <td class="px-4 py-4 text-center text-slate-600">$ 26,4M</td>
-                                <td class="px-4 py-4 text-center text-slate-600">$ 48,4M</td>
-                                <td class="px-4 py-4 text-center text-slate-600">$ 68,2M</td>
-                                <td class="px-4 py-4 text-center text-slate-600">$ 83,6M</td>
-                                <td class="px-4 py-4 text-center text-slate-600">$ 99,0M</td>
-                            </tr>
-                            <tr class="bg-emerald-50/50">
-                                <td class="px-6 py-4 font-bold text-slate-900">Receita de Câmbio (R$)</td>
-                                <td class="px-4 py-4 text-center font-semibold text-emerald-700">R$ 726.000</td>
-                                <td class="px-4 py-4 text-center font-semibold text-emerald-700">R$ 1.742.400</td>
-                                <td class="px-4 py-4 text-center font-semibold text-emerald-700">R$ 3.194.400</td>
-                                <td class="px-4 py-4 text-center font-semibold text-emerald-700">R$ 4.501.200</td>
-                                <td class="px-4 py-4 text-center font-semibold text-emerald-700">R$ 5.517.600</td>
-                                <td class="px-4 py-4 text-center font-semibold text-emerald-700">R$ 6.534.000</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 font-bold text-slate-900">Opex de Sustentação (R$)</td>
-                                <td class="px-4 py-4 text-center text-red-600">(R$ 225.000)</td>
-                                <td class="px-4 py-4 text-center text-red-600">(R$ 225.000)</td>
-                                <td class="px-4 py-4 text-center text-red-600">(R$ 225.000)</td>
-                                <td class="px-4 py-4 text-center text-red-600">(R$ 225.000)</td>
-                                <td class="px-4 py-4 text-center text-red-600">(R$ 225.000)</td>
-                                <td class="px-4 py-4 text-center text-red-600">(R$ 225.000)</td>
-                            </tr>
-                            <tr class="bg-slate-50 font-bold">
-                                <td class="px-6 py-4 text-slate-900">Resultado Líquido do Período</td>
-                                <td class="px-4 py-4 text-center text-emerald-700">R$ 501.000</td>
-                                <td class="px-4 py-4 text-center text-emerald-700">R$ 1.517.400</td>
-                                <td class="px-4 py-4 text-center text-emerald-700">R$ 2.969.400</td>
-                                <td class="px-4 py-4 text-center text-emerald-700">R$ 4.276.200</td>
-                                <td class="px-4 py-4 text-center text-emerald-700">R$ 5.292.600</td>
-                                <td class="px-4 py-4 text-center text-emerald-700">R$ 6.309.000</td>
-                            </tr>
-                            <tr class="bg-orange-50 font-extrabold text-orange-900">
-                                <td class="px-6 py-4">Retorno Acumulado</td>
-                                <td class="px-4 py-4 text-center text-red-700">-R$ 3.699.000</td>
-                                <td class="px-4 py-4 text-center text-red-700">-R$ 2.181.600</td>
-                                <td class="px-4 py-4 text-center text-emerald-700">R$ 787.800</td>
-                                <td class="px-4 py-4 text-center text-emerald-700">R$ 5.064.000</td>
-                                <td class="px-4 py-4 text-center text-emerald-700">R$ 10.356.600</td>
-                                <td class="px-4 py-4 text-center text-emerald-700">R$ 16.665.600</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <!-- Premissas e Viabilidade -->
-            <section class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
-                <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-circle-info text-orange-500"></i> Premissas Adotadas na Modelagem
-                </h3>
-                <ul class="space-y-3 text-slate-700">
-                    <li class="flex items-start gap-2">
-                        <span class="text-orange-500 font-bold">•</span>
-                        <span><strong>Custo de Implantação (Capex):</strong> R$ 4,2M representam o custo integral do desenvolvimento ágil, squads Foursys dedicadas, testes, automação e integrações iniciais de homologação.</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <span class="text-orange-500 font-bold">•</span>
-                        <span><strong>Taxa de Conversão de Clientes:</strong> Crescimento gradativo de 50.000 ativos até 450.000 ativos na Conta Global de Euro até o fim de 18 meses.</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <span class="text-orange-500 font-bold">•</span>
-                        <span><strong>Spread Médio Obtido:</strong> 1,2% (take rate cambial líquido do Banco Inter), livre das despesas de trâmite e taxas de correspondentes internacionais que são repassadas diretamente.</span>
-                    </li>
-                </ul>
-            </section>
-        </div>
-
-        <!-- Footer -->
-        <footer class="mt-12 text-center text-slate-400 text-sm">
-            <p>© 2026 UpStream Foursys. Desenvolvido para o Banco Inter.</p>
-        </footer>
-    </div>
+    <h2>Indicadores de Viabilidade</h2>
+    <ul>
+        <li><strong>Payback Period:</strong> 7 meses pós-lançamento.</li>
+        <li><strong>Valor Presente Líquido (VPL):</strong> R$ 12.450.000</li>
+        <li><strong>Taxa Interna de Retorno (TIR):</strong> 148%</li>
+    </ul>
 </body>
 </html>
