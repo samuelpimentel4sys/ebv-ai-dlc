@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>05_Epico_03_Payout_Gateway_Tazapay (Banco Inter)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans">
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <header class="bg-gradient-to-r border-b border-orange-200 bg-white rounded-2xl p-6 shadow-sm mb-8">
+            <span class="bg-orange-100 text-orange-800 text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">Épico 03 - Alta (P1)</span>
+            <h1 class="text-2xl font-black text-slate-900 mt-2">BINTER-EP-03: Integração FX & Payout Gateway (Tazapay)</h1>
+            <p class="text-slate-600">Integração técnica com a API v3 da Tazapay para cotação real-time e liquidação via rede SEPA na Europa.</p>
+        </header>
+
+        <div class="space-y-6 bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
+            <div>
+                <h3 class="text-lg font-bold text-slate-900 mb-2">Descrição e Objetivos</h3>
+                <p class="text-slate-700 leading-relaxed">
+                    Este épico cuida da integração externa com os trilhos cambiais de alta performance da Tazapay. Ele disponibiliza endpoints para simulação cambial instantânea (Quoting), execução segura de payouts (/v3/payout) e recepção de webhooks de confirmação de entrega do dinheiro na rede bancária europeia.
+                </p>
+            </div>
+
+            <div class="border-t border-slate-100 pt-4">
+                <h3 class="text-lg font-bold text-slate-900 mb-2">Requisitos Técnicos Principais</h3>
+                <ul class="list-disc list-inside space-y-2 text-slate-700">
+                    <li>Conectar-se ao endpoint `/v3/payout` e mapear erros locais de rede e timeouts cambiais.</li>
+                    <li>Verificação criptográfica e validação de Webhooks recebidos (com verificação de assinatura no cabeçalho HTTP).</li>
+                    <li>Sincronização de tempos de cotação (garantir freeze cambial de até 30 segundos oferecido pela API).</li>
+                    <li>Tratamento de exceções e fluxo automático de estorno caso o payout falhe na outra ponta.</li>
+                </ul>
+            </div>
+
+            <div class="border-t border-slate-100 pt-4 bg-orange-50/50 p-4 rounded-xl">
+                <h3 class="text-sm font-bold text-orange-800 uppercase tracking-wider mb-2">Chave de Homologação Jira</h3>
+                <p class="text-sm text-slate-700">Mapeado no board padrão do Jira como: <strong>SCRUM-3</strong></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
