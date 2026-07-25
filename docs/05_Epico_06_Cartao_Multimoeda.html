@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>05_Epico_06_Cartao_Multimoeda (Banco Inter)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans">
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <header class="bg-gradient-to-r border-b border-orange-200 bg-white rounded-2xl p-6 shadow-sm mb-8">
+            <span class="bg-orange-100 text-orange-800 text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">Épico 06 - Média (P2)</span>
+            <h1 class="text-2xl font-black text-slate-900 mt-2">BINTER-EP-06: Autorização de Cartão de Débito Multimoeda</h1>
+            <p class="text-slate-600">Tratamento de mensagens ISO 8583 da rede adquirente e roteamento de débitos a partir de sub-posições cambiais em EUR.</p>
+        </header>
+
+        <div class="space-y-6 bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
+            <div>
+                <h3 class="text-lg font-bold text-slate-900 mb-2">Descrição e Objetivos</h3>
+                <p class="text-slate-700 leading-relaxed">
+                    Este épico estabelece a ponte operacional com a bandeira do cartão (Visa/Mastercard) e os adquirentes europeus. Quando o cliente passar seu cartão de débito físico ou virtual na Europa, as chamadas de autorização deverão ser validadas e debitadas diretamente do saldo em Euros na sub-posição de EUR, garantindo compras livres de spread local secundário.
+                </p>
+            </div>
+
+            <div class="border-t border-slate-100 pt-4">
+                <h3 class="text-lg font-bold text-slate-900 mb-2">Requisitos Técnicos Principais</h3>
+                <ul class="list-disc list-inside space-y-2 text-slate-700">
+                    <li>Roteamento dinâmico de autorizações com base na moeda original de solicitação do adquirente (ISO 4217).</li>
+                    <li>Fallback inteligente: caso o cliente não tenha saldo total em Euro, debitar parcialmente ou integralmente de USD com aviso em push.</li>
+                    <li>Sinalização e controle de fraudes locais no exterior através do parceiro de processamento de cartões.</li>
+                    <li>Conexão de mensageria de cartões de baixo tempo de resposta (autorização abaixo de 200ms).</li>
+                </ul>
+            </div>
+
+            <div class="border-t border-slate-100 pt-4 bg-orange-50/50 p-4 rounded-xl">
+                <h3 class="text-sm font-bold text-orange-800 uppercase tracking-wider mb-2">Chave de Homologação Jira</h3>
+                <p class="text-sm text-slate-700">Mapeado no board padrão do Jira como: <strong>SCRUM-6</strong></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
