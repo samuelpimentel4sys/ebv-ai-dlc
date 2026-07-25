@@ -2,42 +2,37 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>05_Epico_01_FX_Orchestrator (Banco Inter)</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>BINTER-EP-01 - FX Orchestrator & State Machine</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; }
+        h1 { color: #FF5315; border-bottom: 2px solid #FF5315; padding-bottom: 10px; }
+        h2 { color: #222239; margin-top: 30px; }
+        .tech-box { background: #f0f4f8; border-left: 5px solid #222239; padding: 15px; margin: 20px 0; border-radius: 4px; }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans">
-    <div class="max-w-4xl mx-auto px-4 py-8">
-        <header class="bg-gradient-to-r border-b border-orange-200 bg-white rounded-2xl p-6 shadow-sm mb-8">
-            <span class="bg-orange-100 text-orange-800 text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">Épico 01 - Crítico (P0)</span>
-            <h1 class="text-2xl font-black text-slate-900 mt-2">BINTER-EP-01: FX Orchestrator & State Machine</h1>
-            <p class="text-slate-600">Desenvolvimento do cérebro da plataforma: o orquestrador transacional de estado persistente com padrão Saga na AWS.</p>
-        </header>
+<body>
+    <h1>Épico BINTER-EP-01: FX Orchestrator & State Machine (SCRUM-1)</h1>
+    <p>Responsável pelo núcleo de orquestração assíncrona do fluxo transacional multimoeda, integrando o Core Brasil, Core EUA (Finxact) e parceiro de FX (Tazapay).</p>
 
-        <div class="space-y-6 bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
-            <div>
-                <h3 class="text-lg font-bold text-slate-900 mb-2">Descrição e Objetivos</h3>
-                <p class="text-slate-700 leading-relaxed">
-                    Este épico estabelece o motor de regras transacionais responsivo e tolerante a falhas na infraestrutura AWS. Utilizando AWS Step Functions e Redis Cache, ele gerenciará os estados da transação cambial desde a cotação inicial no celular do cliente até a liquidação final e envio do webhook de sucesso.
-                </p>
-            </div>
+    <h2>Objetivos Técnicos</h2>
+    <ul>
+        <li>Garantir consistência transacional usando o padrão <strong>Saga Orquestrado</strong>.</li>
+        <li>Manter estado consistente em caso de falhas parciais (compensação transacional).</li>
+        <li>Evitar execuções duplicadas utilizando chaves de idempotência baseadas em UUID geradas no App.</li>
+    </ul>
 
-            <div class="border-t border-slate-100 pt-4">
-                <h3 class="text-lg font-bold text-slate-900 mb-2">Requisitos Técnicos Principais</h3>
-                <ul class="list-disc list-inside space-y-2 text-slate-700">
-                    <li>Garantir consistência eventual distribuída (Padrão Saga) para transações multi-cores.</li>
-                    <li>Registrar idempotência rígida (UUIDv4) no Redis com expiração programada de 10 minutos.</li>
-                    <li>Implementação de filas de repetição e Dead Letter Queue (DLQ) via AWS SQS.</li>
-                    <li>Exposição de endpoints gRPC/REST para BFF do aplicativo do Banco Inter.</li>
-                </ul>
-            </div>
-
-            <div class="border-t border-slate-100 pt-4 bg-orange-50/50 p-4 rounded-xl">
-                <h3 class="text-sm font-bold text-orange-800 uppercase tracking-wider mb-2">Chave de Homologação Jira</h3>
-                <p class="text-sm text-slate-700">Mapeado no board padrão do Jira como: <strong>SCRUM-1</strong></p>
-            </div>
-        </div>
+    <h2>Arquitetura de Referência AWS</h2>
+    <div class="tech-box">
+        <strong>Componentes Principais:</strong>
+        <ul>
+            <li><strong>AWS Step Functions:</strong> Mecanismo de máquina de estados de longa duração.</li>
+            <li><strong>Amazon EKS (Kubernetes):</strong> Microsserviços em Spring Boot executando as tarefas de negócios.</li>
+            <li><strong>Amazon ElastiCache (Redis):</strong> Validação de concorrência e idempotência ultra-rápida (TTL de 24 horas).</li>
+            <li><strong>Amazon SQS & DLQ:</strong> Filas para reprocessamento de mensagens e notificações em background.</li>
+        </ul>
     </div>
+
+    <h2>Fluxo de Compensação (Caso de Falha)</h2>
+    <p>Se o envio de EUR pela Tazapay falhar após a realização do Hold na conta americana (Finxact), a máquina de estado dispara automaticamente a transação de compensação: liberação do hold (Release) e devolução dos fundos em USD para a conta de origem do cliente.</p>
 </body>
 </html>
