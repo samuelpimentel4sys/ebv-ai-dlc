@@ -2,124 +2,40 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>01 - Descoberta Estratégica: Plataforma Global de FX (Banco Inter)</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Fase 01 - Descoberta: Conta Global Banco Inter</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; }
+        h1 { color: #FF5315; border-bottom: 2px solid #FF5315; padding-bottom: 10px; }
+        h2 { color: #222239; margin-top: 30px; }
+        .persona { background: #f9f9f9; border-left: 5px solid #FF5315; padding: 15px; margin: 20px 0; border-radius: 4px; }
+        .persona-title { font-weight: bold; color: #222239; font-size: 1.2em; }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans">
-    <div class="max-w-5xl mx-auto px-4 py-8">
-        <!-- Header -->
-        <header class="bg-gradient-to-r border-b border-orange-200 bg-white rounded-2xl p-8 shadow-sm mb-8">
-            <div class="flex items-center justify-between mb-4">
-                <span class="bg-orange-100 text-orange-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">UpStream Foursys — Etapa 1</span>
-                <span class="text-slate-400 text-sm">v1.0.0</span>
-            </div>
-            <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight sm:text-4xl mb-2">Descoberta Estratégica: Plataforma Global de FX</h1>
-            <p class="text-lg text-slate-600">Entendimento do cenário, dores do usuário, personas de negócios e objetivos estratégicos do Banco Inter na expansão para remessas e sub-posições em EUR.</p>
-        </header>
+<body>
+    <h1>Fase 01: Descoberta e Contexto Estratégico</h1>
+    <p>Este documento consolida a fase de descoberta para a expansão da Conta Global Multimoeda do Banco Inter, focando na movimentação de divisas em EUR e outras moedas europeias via integração com a rede local SEPA.</p>
+    
+    <h2>Oportunidade de Mercado</h2>
+    <p>Com o aumento de brasileiros viajando, estudando e trabalhando remotamente para a Europa, a demanda por transações eficientes, baratas e instantâneas em Euros cresceu exponencialmente. A solução atual de conversão USD/EUR introduz dupla conversão cambial (spread cumulativo), o que reduz a competitividade do Banco Inter.</p>
 
-        <!-- Seções -->
-        <div class="space-y-8">
-            <!-- Introdução e Visão Geral -->
-            <section class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
-                <h2 class="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-compass text-orange-500"></i> Visão Geral da Iniciativa
-                </h2>
-                <p class="text-slate-700 leading-relaxed mb-4">
-                    O Banco Inter já conta com uma operação consolidada de Conta Global em Dólares (USD). O objetivo estratégico desta iniciativa é expandir essa infraestrutura para permitir a custódia e movimentação de múltiplas moedas, iniciando pelo **Euro (EUR)**. 
-                </p>
-                <p class="text-slate-700 leading-relaxed">
-                    A arquitetura visa implementar uma solução ágil, integrada ao Core Bancário dos EUA (Finxact) e parceiros globais de payout (Tazapay), permitindo ao cliente converter saldos e efetuar transações na Europa com custos locais e de forma transparente.
-                </p>
-            </section>
+    <h2>Dores Diagnósticas do Cliente</h2>
+    <ul>
+        <li>Dupla tributação e conversão cambial oculta (BRL -> USD -> EUR).</li>
+        <li>Inexistência de dados de contas locais europeias (IBAN individual).</li>
+        <li>Custos de transferência (SWIFT) proibitivos para pequenos valores.</li>
+    </ul>
 
-            <!-- Dores do Cliente e Oportunidades -->
-            <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
-                    <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2 text-red-600">
-                        <i class="fa-solid fa-triangle-exclamation"></i> Principais Dores (Fricção)
-                    </h3>
-                    <ul class="space-y-3 text-slate-700">
-                        <li class="flex items-start gap-2">
-                            <span class="text-red-500 font-bold">•</span>
-                            <span>Altos spreads de cartões internacionais tradicionais ao viajar para a zona do Euro (SWIFT/Crédito).</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <span class="text-red-500 font-bold">•</span>
-                            <span>Falta de transparência em taxas de conversão e tempos de liquidação imprecisos.</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <span class="text-red-500 font-bold">•</span>
-                            <span>Processos burocráticos de KYC/AML que impedem transferências rápidas ou de valores elevados.</span>
-                        </li>
-                    </ul>
-                </div>
+    <h2>Personas Alvo</h2>
+    <div class="persona">
+        <div class="persona-title">Thiago Mendes (34 anos) - Engenheiro de Software Remote-First</div>
+        <p><strong>Perfil:</strong> Recebe pagamentos em EUR de empresa europeia. Deseja reter os fundos na moeda forte e gastá-los diretamente em viagens à Europa ou transferi-los de volta para o Brasil conforme o câmbio favorecer.</p>
+        <p><strong>Dores:</strong> Altas taxas de conversão de terceiros, falta de agilidade no recebimento (SEPA Instant).</p>
+    </div>
 
-                <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
-                    <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2 text-green-600">
-                        <i class="fa-solid fa-lightbulb"></i> Oportunidades Estratégicas
-                    </h3>
-                    <ul class="space-y-3 text-slate-700">
-                        <li class="flex items-start gap-2">
-                            <span class="text-green-500 font-bold">•</span>
-                            <span>Oferecer conversão em tempo real de USD/BRL para EUR com taxa local (SEPA).</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <span class="text-green-500 font-bold">•</span>
-                            <span>Habilitar uso de cartão de débito físico/virtual diretamente ligado à sub-posição em EUR, eliminando spread de conversão na hora da compra.</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <span class="text-green-500 font-bold">•</span>
-                            <span>Fidelização e atração de novos investidores e correntistas de alta renda (segmentos Black e Win).</span>
-                        </li>
-                    </ul>
-                </div>
-            </section>
-
-            <!-- Personas de Negócios -->
-            <section class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
-                <h2 class="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-                    <i class="fa-solid fa-users text-orange-500"></i> Personas de Negócio e Impacto
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="border border-slate-200 rounded-xl p-6 bg-slate-50">
-                        <div class="flex items-center gap-3 mb-3">
-                            <span class="bg-orange-500 text-white rounded-full p-2 w-10 h-10 flex items-center justify-center">
-                                <i class="fa-solid fa-plane"></i>
-                            </span>
-                            <div>
-                                <h4 class="font-bold text-slate-900">Thiago Mendes, 34 anos</h4>
-                                <span class="text-xs text-slate-500">Viajante Frequente / Profissional de Tech</span>
-                            </div>
-                        </div>
-                        <p class="text-sm text-slate-600 leading-relaxed">
-                            Viaja anualmente para a Europa a trabalho e lazer. Deseja uma conta prática onde possa comprar Euros paulatinamente quando a cotação estiver favorável e usar seu cartão de débito físico em Portugal e Espanha sem sobressaltos e sem taxas ocultas.
-                        </p>
-                    </div>
-
-                    <div class="border border-slate-200 rounded-xl p-6 bg-slate-50">
-                        <div class="flex items-center gap-3 mb-3">
-                            <span class="bg-orange-500 text-white rounded-full p-2 w-10 h-10 flex items-center justify-center">
-                                <i class="fa-solid fa-graduation-cap"></i>
-                            </span>
-                            <div>
-                                <h4 class="font-bold text-slate-900">Mariana Silveira, 23 anos</h4>
-                                <span class="text-xs text-slate-500">Estudante de Intercâmbio na Europa</span>
-                            </div>
-                        </div>
-                        <p class="text-sm text-slate-600 leading-relaxed">
-                            Mora temporariamente na Irlanda para estudos. Precisa receber aportes mensais em Euros da sua família no Brasil de forma barata e rápida, mantendo os saldos protegidos em um banco seguro com atendimento na sua língua nativa.
-                        </p>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <!-- Footer -->
-        <footer class="mt-12 text-center text-slate-400 text-sm">
-            <p>© 2026 UpStream Foursys. Desenvolvido para o Banco Inter.</p>
-        </footer>
+    <div class="persona">
+        <div class="persona-title">Mariana Silveira (22 anos) - Estudante de Intercâmbio</div>
+        <p><strong>Perfil:</strong> Reside em Portugal para pós-graduação. Depende do envio regular de dinheiro dos pais no Brasil.</p>
+        <p><strong>Dores:</strong> Ansiedade pelo tempo de compensação bancária e taxas abusivas de IOF em cartões de crédito tradicionais.</p>
     </div>
 </body>
 </html>
