@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>05_Epico_01_FX_Orchestrator (Banco Inter)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans">
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <header class="bg-gradient-to-r border-b border-orange-200 bg-white rounded-2xl p-6 shadow-sm mb-8">
+            <span class="bg-orange-100 text-orange-800 text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">Épico 01 - Crítico (P0)</span>
+            <h1 class="text-2xl font-black text-slate-900 mt-2">BINTER-EP-01: FX Orchestrator & State Machine</h1>
+            <p class="text-slate-600">Desenvolvimento do cérebro da plataforma: o orquestrador transacional de estado persistente com padrão Saga na AWS.</p>
+        </header>
+
+        <div class="space-y-6 bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
+            <div>
+                <h3 class="text-lg font-bold text-slate-900 mb-2">Descrição e Objetivos</h3>
+                <p class="text-slate-700 leading-relaxed">
+                    Este épico estabelece o motor de regras transacionais responsivo e tolerante a falhas na infraestrutura AWS. Utilizando AWS Step Functions e Redis Cache, ele gerenciará os estados da transação cambial desde a cotação inicial no celular do cliente até a liquidação final e envio do webhook de sucesso.
+                </p>
+            </div>
+
+            <div class="border-t border-slate-100 pt-4">
+                <h3 class="text-lg font-bold text-slate-900 mb-2">Requisitos Técnicos Principais</h3>
+                <ul class="list-disc list-inside space-y-2 text-slate-700">
+                    <li>Garantir consistência eventual distribuída (Padrão Saga) para transações multi-cores.</li>
+                    <li>Registrar idempotência rígida (UUIDv4) no Redis com expiração programada de 10 minutos.</li>
+                    <li>Implementação de filas de repetição e Dead Letter Queue (DLQ) via AWS SQS.</li>
+                    <li>Exposição de endpoints gRPC/REST para BFF do aplicativo do Banco Inter.</li>
+                </ul>
+            </div>
+
+            <div class="border-t border-slate-100 pt-4 bg-orange-50/50 p-4 rounded-xl">
+                <h3 class="text-sm font-bold text-orange-800 uppercase tracking-wider mb-2">Chave de Homologação Jira</h3>
+                <p class="text-sm text-slate-700">Mapeado no board padrão do Jira como: <strong>SCRUM-1</strong></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
