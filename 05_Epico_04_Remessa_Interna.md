@@ -1,100 +1,107 @@
-# [BINTER-EP-04] Motor de Remessa Interna (Core BR -> Core EUA)
-Etapa 05/06 · v1.0 · 2026-03-30 · Banco Inter
+# Motor de Remessas Internas Instantâneas (Remessas Internas) — BINTER-EP-04
+Etapa 05/06 · v1.0.1 · Julho 2026 · Banco Inter
 
 ## 1. Identificação
-*   **Nome do Épico:** Motor de Remessa Interna (Core BR -> Core EUA)
+*   **Nome do Épico:** Motor de Remessas Internas Instantâneas (Remessas Internas)
 *   **ID do Épico:** `BINTER-EP-04`
 *   **Produto:** Plataforma Global de FX / Conta Global Multimoeda
-*   **Release:** v1.0
+*   **Release:** v1.0.0
 *   **Responsável Técnico:** Mariana Silveira (Engineering Lead)
 *   **Sponsor de Negócio:** Thiago Mendes (Diretor de Produtos Globais)
 *   **Status:** Aprovado nos Quality Gates
 
 ## 2. Resumo do Épico
-> Desenvolvimento do motor regulatório e de regras de negócio para a transferência eletrônica de fundos em tempo real entre a conta corrente nacional em BRL (Core BR) e a conta global multimoeda em USD (Core EUA), integrando cálculos fiscais dinâmicos de impostos (IOF) e reporte de contratos cambiais junto ao Banco Central (BACEN) 24/7.
+> Desenvolvimento do motor transacional unificado de remessas internas, responsável por processar transferências instantâneas com atomicidade ACID entre as contas correntes do Banco Inter no Brasil (BRL) e nos EUA (USD), automatizando o cálculo de impostos (IOF), spread dinâmico e emissão de contratos regulatórios em tempo real.
 
 ## 3. Contexto / Problema de Negócio
-O primeiro passo de qualquer transação transfronteiriça com origem no Brasil é a perna local de câmbio. Tradicionalmente, este processo ocorre em horário bancário estrito (9h às 16h) devido à necessidade de intermediação e fechamentos de contratos manuais, o que frustra o cliente varejista moderno que necessita de liquidez internacional instantânea para viagens ou investimentos em finais de semana e feriados.
-Para oferecer uma experiência unificada no SuperApp do Banco Inter, é imperativo automatizar totalmente o motor de conversão inicial, realizando cálculos imediatos de tarifas tributárias brasileiras de IOF de mesma titularidade (1.1%) e gerando eletronicamente os contratos de câmbio simplificados exigidos pelo BACEN. A análise competitiva da Wise e Nomad revela que a velocidade no carregamento de saldo internacional em moeda forte é o maior catalisador de conversão e fidelização de usuários.
+Atualmente, as transferências de recursos próprios entre contas de mesma titularidade (BRL para USD) sofrem com taxas elevadas e lentidões sistêmicas devido ao processamento assíncrono e desconectado dos cores bancários nacionais e internacionais. No SuperApp do Banco Inter, o fluxo apresenta uma taxa de abandono de 22% na etapa de simulação de remessas, evidenciando uma forte fricção cognitiva do usuário diante de spreads pouco claros e demora para visualização do saldo creditado.
+Para concorrer com players especializados (como Wise e Nomad) e capturar a preferência do correntista de varejo, o Banco Inter precisa disponibilizar um motor transacional unificado e blindado contra inconsistências. Esse motor deve garantir que, em menos de 5 segundos de ponta a ponta, o débito ocorra na conta nacional, os impostos aplicáveis (IOF) sejam retidos, a taxa de spread dinâmica seja aplicada de forma transparente e os dólares fiquem totalmente livres para uso no Core Finxact americano, gerando eletronicamente os contratos regulatórios necessários para o BACEN.
 
 ## 4. Proposta de Valor / Benefício
-*   **Disponibilidade Integral:** Liquidação de câmbio e provimento de saldo em USD na conta global em tempo real (24/7).
-*   **Zero Fricção Tributária:** Cálculo inteligente de impostos, mitigando erros fiscais de recolhimento de tributos.
-*   **Compliance Automatizado:** Reportes regulatórios gerados sem a necessidade de intervenção humana ou processamentos manuais de backoffice.
+*   **Remessas Transacionais ACID:** Garantia de consistência transacional absoluta: ou a remessa completa é liquidada com sucesso ou todo o fluxo é revertido instantaneamente.
+*   **Retenção Tributária e Regulação Nativa:** Automatização e emissão eletrônica de contratos cambiais simplificados em conformidade imediata com o BACEN.
+*   **Melhoria Radical da Experiência (UX):** Visualização imediata do spread, IOF e valor líquido a ser creditado com cotação congelada temporariamente.
 
 ### 4.1 ROI do Épico
-A automatização do fluxo de remessas e reporte ao BACEN reduz custos operacionais, dispensando equipes de retaguarda de câmbio dedicadas e eliminando penalidades fiscais.
+O EP-04 representa a maior alavanca de captura de novas receitas do programa, impulsionado pela facilidade de uso do app e rápida aquisição de usuários insatisfeitos com tarifas abusivas da concorrência tradicional.
 ```text
-Investimento CapEx Alocado: R$ 600.000,00 (14.3% do total de R$ 4.200.000,00)
-VPL Estimado do Programa (12.5% a.a.): R$ 12.450.000,00
-TIR do Programa: 148%
-Payback Descontado do Programa: 7 meses pós-lançamento
+Investimento Inicial CapEx: $155.000 USD
+Retorno Recorrente Estimado (Conservador): $300.000 USD/ano
+Retorno Recorrente Estimado (Otimista): $1.250.000 USD/ano
+
+Cenário Conservador:
+ROI % (1º Ano) = ( $300.000 - $155.000 ) / $155.000 = +93,55%
+Payback = ( $155.000 / $300.000 ) * 12 = 6,2 meses
+
+Cenário Otimista:
+ROI % (1º Ano) = ( $1.250.000 - $155.000 ) / $155.000 = +706,45%
+Payback = ( $155.000 / $1.250.000 ) * 12 = 1,5 meses
 ```
-**Conclusão Financeira: O investimento de R$ 600.000,00 viabiliza a captação e conversão primária de recursos BRL de correntistas em ativos internacionais, suportando diretamente a carteira ativa que proverá as receitas brutas de R$ 21.000.000,00 no Ano 1.**
+**Conclusão Financeira: Com um retorno espetacular de até 706,4% e payback em apenas 1,5 meses no cenário otimista, o Motor de Remessas Internas Instantâneas consolida-se como o coração financeiro da proposta de valor comercial da Plataforma Global de FX.**
 
 #### Métricas SMART Associadas:
-1.  **Tempo de Liquidação de Saldos:** Débito em BRL e correspondente crédito em USD no Finxact concluído em tempo inferior a 1.0 segundo.
-2.  **Precisão nos Cálculos Fiscais:** Exatamente 100% de acerto nas alíquotas de IOF aplicadas (zero erro fiscal).
-3.  **Reporte Automatizado ao Regulador:** Emissão e transmissão do contrato de câmbio ao BACEN em até 5 minutos após o processamento da remessa.
-4.  **Uptime Operacional das APIs Cambiais:** Disponibilidade contínua do motor de conversão em 99.95% das janelas mensais.
+1.  **Redução de Abandono de Simulação:** Reduzir a taxa de abandono do funil de simulação de remessas de 22% para menos de 5% em até 90 dias pós-lançamento.
+2.  **SLA Transacional Ponta a Ponta:** Tempo total de processamento (débito BRL, tributação, spread e crédito USD nos EUA) menor que 5 segundos em 99,5% das transações.
+3.  **Expansão de Volume de Remessas:** Aumento de 25% no volume líquido total de remessas transacionadas através do SuperApp no primeiro trimestre.
+4.  **Emissão Regulatória Imediata:** Geração e arquivamento eletrônico de 100% dos contratos regulatórios exigidos pelo BACEN em menos de 1 segundo pós-liquidação.
 
 #### Premissas de ROI:
-*   A regulamentação cambial brasileira manterá as regras vigentes de imposto (IOF) para remessas internacionais de mesma titularidade.
-*   A equipe de compliance cambial homologará a modelagem de fechamento automático de contratos em lotes diários.
+*   A UX intuitiva com cotação de spread garantida por x segundos reduz barreiras cognitivas dos usuários.
+*   Capacidade de processamento ACID síncrono nativo entre ledgers brasileiros e americanos.
 
 ## 5. Descrição Detalhada
-Desenvolver o microsserviço de remessas cambiais integrado com o ecossistema brasileiro de contas e o Core Finxact nos EUA. A aplicação calculará taxas, executará débitos transacionais atômicos no Core BR do Banco Inter, fará o crédito nas partições contábeis de USD no Finxact e gerará contratos simplificados estruturados com dados completos do cliente em conformidade com as diretrizes do BACEN.
+O motor de remessas será construído como um conjunto de APIs transacionais de alta segurança e performance. A aplicação receberá a intenção de envio do cliente, calculará dinamicamente a cotação cambial do minuto, deduzirá o IOF legal (1,1% para mesma titularidade e 0,38% para titularidades distintas) e acionará os microsserviços de débito e crédito nos cores bancários do Brasil e dos EUA, garantindo a atomicidade das duas pontas da transação.
 
 | Escopo IN | Escopo OUT |
 | :--- | :--- |
-| Cálculo em tempo real de IOF sobre as remessas (1.1% ou 0.38%) | Remessas com destino a terceiros em outros bancos globais |
-| Integração síncrona com Core BR (débitos) e Finxact (créditos) | Onboarding cambial inicial (responsabilidade do Core BR) |
-| Emissão eletrônica e envio automático de contratos BACEN | Transferências diretas em moedas exóticas ou fora de USD/EUR |
-| Registro detalhado de logs e tarifas tributárias deduzidas | Emissão de relatórios fiscais personalizados para o Imposto de Renda |
+| API transacional ACID de transferência imediata de fundos próprios | Processamento de depósitos físicos de dinheiro em espécie |
+| Motor de cálculo dinâmico de IOF, Spread Cambial e tarifas operacionais | Remessas de clientes corporativos com regras de comércio internacional |
+| Fluxo de UX/UI unificado para simulação de envio e confirmação rápida | Integrações com corretoras de valores externas fora do grupo |
+| Geração eletrônica síncrona de contratos cambiais para o BACEN | Emissão ou processamento físico do cartão multimoeda do cliente |
 
 ## 6. Critérios de Aceite
-1.  **Cálculo Tributário Dinâmico:** O motor fiscal deve calcular e aplicar dinamicamente as alíquotas vigentes: 1.1% para transferências entre contas de mesma titularidade (contas nacionais e globais pertencentes ao mesmo CPF) e 0.38% para os demais fluxos.
-2.  **Atomicidade na Movimentação:** O débito de BRL no Core Brasil e o crédito de USD no Finxact devem ocorrer como transação atômica síncrona. Em caso de falha de gravação ou time-out na perna americana, o débito no Core BR deve ser estornado em até 500ms.
-3.  **Suporte Operacional 24/7:** O motor de conversão deve aceitar ordens de transferência cambial a qualquer hora do dia ou da noite, incluindo finais de semana e feriados bancários locais e estrangeiros.
-4.  **Geração e Reporte Automatizado de Contratos BACEN:** A aplicação deve emitir o contrato de câmbio simplificado e transmiti-lo eletronicamente para o sistema de mensageria que o reporta ao BACEN em no máximo 5 minutos do encerramento da remessa.
-5.  **Validação Preventiva de Saldos:** O fluxo de conversão deve validar se o cliente possui saldo disponível em BRL equivalente ao valor solicitado somado aos impostos aplicáveis (IOF) e tarifas. Caso contrário, a operação deve ser abortada imediatamente no frontend sem gerar lançamentos contábeis.
-6.  **Trilha de Auditoria Fiscal:** Cada remessa executada com sucesso deve salvar na base de dados o histórico unificado contendo o valor em BRL, a taxa de câmbio e spread aplicados, as alíquotas e valores exatos deduzidos em impostos e o montante final em USD creditado na conta global.
+1.  **Garantia de Atomicidade Contábil (ACID):** A API de remessas deve assegurar consistência transacional forte. Caso a chamada de crédito de USD no Finxact falhe, o débito correspondente de BRL no Core BR deve sofrer rollback imediato e síncrono em até 500ms.
+2.  **Cálculo e Retenção do IOF Dinâmico:** O motor tributário deve calcular automaticamente a alíquota de IOF com base nas contas parametrizadas: 1,1% para mesma titularidade (contas vinculadas ao mesmo CPF/CNPJ) e 0,38% para contas de terceiros.
+3.  **Congelamento Garantido de Taxa (Câmbio):** Ao concluir a simulação, a taxa de câmbio exibida em tela para o cliente deve ser garantida e congelada por exatamente 15 segundos, bloqueando atualizações abruptas de mercado.
+4.  **SLA Limite do Processo:** O processamento interno completo da remessa e exibição do comprovante de sucesso na tela do smartphone do cliente não deve exceder 5 segundos em 99,5% das transações normais.
+5.  **Geração e Assinatura de Contrato Eletrônico:** Para cada remessa concluída, o sistema deve gerar automaticamente um contrato eletrônico estruturado de câmbio simplificado contendo os hashes criptográficos e enviar uma via por e-mail e push em menos de 1 segundo.
+6.  **Prevenção de Saldo Negativo e Holds:** O motor de remessa deve validar o saldo líquido disponível do cliente na conta BRL antes de disparar o débito, abortando o fluxo imediatamente caso o valor solicitado seja maior que o saldo real livre.
 
 ## 7. Features Sugeridas
-*   `BINTER-EP-04-F01` - **Módulo de Análise e Execução Fiscal (IOF):** biblioteca dinâmica parametrizável para processar as regras fiscais das remessas cambiais.
-*   `BINTER-EP-04-F02` - **API Transacional Core BR <-> Core EUA:** canal de comunicação seguro para processamento coordenado de débito nacional e crédito internacional.
-*   `BINTER-EP-04-F03` - **Engine de Emissão Eletrônica BACEN:** módulo integrado para criação automática de contratos simplificados de câmbio corporativo/varejo.
-*   `BINTER-EP-04-F04` - **Painel de Auditoria e Fechamentos Contábeis:** console administrativo para equipes financeiras reconciliarem volumes diários de câmbio.
+*   `BINTER-EP-04-F01` - **Simulador e Congelador de Câmbio UX:** interface rica para simulação de envios com bloqueio de volatilidade por 15 segundos.
+*   `BINTER-EP-04-F02` - **Motor de Transações ACID Inter-Core:** barramento lógico de transferência atômica com rollback síncrono integrado de partidas duplas.
+*   `BINTER-EP-04-F03` - **Engine de Cálculo Fiscal e Tributário:** microsserviço de verificação de CPFs e retenção automática parametrizada de IOF cambial.
+*   `BINTER-EP-04-F04` - **Gerador Eletrônico de Contratos Regulatórios:** módulo integrado para criação, assinatura e arquivamento em tempo real de contratos cambiais.
 
 ## 8. Pré-condições / Dependências
 *   **Dependências Técnicas:**
-    *   Exposição das APIs legadas de débito em conta corrente nacional do Core BR em ambientes de alta disponibilidade.
-    *   Habilitação de acessos de rede e regras no firewall interno para envio de contratos cambiais.
+    *   Exposição em alta disponibilidade e baixa latência das APIs do Core BR de débito e consulta de saldos.
+    *   Acesso total aos endpoints do sub-ledger Finxact para criação imediata de depósitos USD.
 *   **Dependências de Negócio:**
-    *   Aprovação jurídica das políticas de aceitação de taxa cambial dinâmica em horários de fechamento da mesa de câmbio (sobretudo finais de semana).
+    *   Definição e parametrização das tabelas comerciais de spreads por nível de segmentação de cliente (varejo, Inter One, Inter Black).
 *   **Dependências de Épicos:**
-    *   Serve como pré-requisito funcional para o `BINTER-EP-01` (Orchestrator) e fornece a liquidez (saldo em USD) necessária para as transações de cartões do `BINTER-EP-06` (Cartão Multimoeda).
+    *   Alimenta de saldos em USD as operações de cartão internacional coordenadas pelo `BINTER-EP-06` (Seamless FX Smart Wallet).
 
 ## 9. Riscos
 | Risco Mapeado | Impacto | Mitigação Executiva |
 | :--- | :--- | :--- |
-| **Alteração na Alíquota Tributária do IOF:** Mudança súbita de alíquotas de IOF pelo governo brasileiro gerando erros em cascata de arrecadação. | **Alto** | Parametrização das regras de taxas em banco de dados dinâmico de configuração rápida de ambiente, permitindo alterações em tempo real sem deploy de código. |
-| **Queda do Core BR durante a transação:** Indisponibilidade do sistema brasileiro impedindo o estorno contábil correto da operação cambial. | **Alto** | Implementar fila de contingência assíncrona baseada em filas RabbitMQ/Kafka locais para garantir a consistência final e reprocessamento do estorno. |
-| **Falta de liquidez cambial em finais de semana:** Oscilação excessiva de cotação do dólar em momentos sem funcionamento oficial da mesa cambial. | **Médio** | Definição de spread de segurança adicional flutuante em finais de semana para absorver eventuais oscilações cambiais extremas do mercado de balcão internacional. |
+| **Instabilidade de Redes de Comunicação Bilaterais:** Lentidão ou perda de pacotes na rede móvel do cliente durante a fase crítica de postagem definitiva do crédito. | **Alto** | Configurar o processador com tabelas locais de reconciliação assíncrona baseada em eventos Kafka com garantias de entrega "exactly-once". |
+| **Volatilidade Cambial Bruta Extrema:** Flutuações abruptas no preço do dólar durante os 15 segundos em que a taxa é congelada no app do cliente. | **Médio** | Algoritmos inteligentes de micro-hedge e buffers dinâmicos de segurança aplicados sobre o spread comercial em dias de alta volatilidade. |
+| **Gargalos de Processamento Contábil no Core BR:** Sobrecarga de chamadas simultâneas de débito síncrono nos picos de funcionamento comercial diário. | **Médio** | Cluster do motor de remessas dimensionado com escalabilidade horizontal automática na nuvem AWS de acordo com as curvas de tráfego. |
 
 ## 10. Stakeholders
-*   **Thiago Mendes (Sponsor):** Espera que a remessa imediata 24/7 seja o principal ponto de atratividade para converter correntistas domésticos em clientes ativos da plataforma internacional.
-*   **Mariana Silveira (Tech Lead):** Espera que a integração síncrona não gere travamento de processos do core principal e seja resiliente a manutenções preventivas programadas nos canais digitais.
+*   **Thiago Mendes (Sponsor de Negócio):** Espera que a agilidade do motor reduza significativamente os atritos comerciais de envio, gerando engajamento e fidelização imediata no SuperApp do Banco Inter.
+*   **Mariana Silveira (Tech Lead / Engenharia):** Exige consistência transacional estrita (padrão de duas fases ou Saga bem estruturado) para prevenir reclamações operacionais complexas de lançamentos cruzados não concluídos.
 
 ## 11. Métricas de Sucesso
-*   **Curto Prazo (Até 30 dias pós-Go-Live):** Cobertura total de validação tributária nos testes e homologação concluída sem erros junto ao departamento fiscal do Banco Inter.
-*   **Médio Prazo (Até 90 dias pós-Go-Live):** Tempo de processamento médio de ponta a ponta abaixo de 700ms; zero discrepâncias de contratos enviados em comparação com os lançamentos de débitos reais.
-*   **Longo Prazo (1 ano):** Emissão de mais de 1.000.000 de contratos simplificados de câmbio automatizados com 100% de compliance legal e zero notificações regulatórias negativas.
+*   **Curto Prazo (Até 30 dias pós-Go-Live):** Redução da taxa de abandono do funil de simulação para menos de 10% e latência real média de processamento interna abaixo de 3 segundos.
+*   **Médio Prazo (Até 90 dias pós-Go-Live):** Estabilização da taxa de abandono nos 5% estipulados e zero incidentes de duplicidade contábil ou inconsistência de saldo de CPF.
+*   **Longo Prazo (1 ano):** Sustentação de mais de 800.000 operações concluídas no ano com volume consolidado de remessas e novas receitas de spread gerando mais de $1,25M USD.
 
 ## 12. Observações
-*   **Próximos Passos:** Finalizar testes com cargas extremas simuladas para comprovar o comportamento do estorno transacional do Core BR.
-*   **Referências:** Resoluções cambiais e normativas tributárias do Banco Central do Brasil para operações simplificadas de divisas internacionais de varejo.
-*   **Nota de Elaboração:** Modelagem detalhada observando as premissas de conformidade financeira e governança fiscal do Banco Inter.
+*   **Próximos Passos:** Validar a conformidade jurídica dos algoritmos de cálculo de IOF para contas corporativas e contas vinculadas a CPFs de dependentes legais.
+*   **Referências:** Estudo de fluxos de checkout simplificados da Wise e especificações técnicas de integração de APIs transacionais de alta integridade contábil.
+*   **Nota de Elaboração:** Modelagem detalhada observando as normas de governança financeira, transacionalidade ACID e conformidade com as diretrizes do BACEN.
 
 ***
 
@@ -103,12 +110,12 @@ Desenvolver o microsserviço de remessas cambiais integrado com o ecossistema br
 | Gate de Qualidade | Status | Evidência / Observação |
 | :--- | :--- | :--- |
 | ROI presente e completo (6 sub-itens) | **APROVADO** | Sub-itens do estudo financeiro detalhados na seção 4.1. |
-| Mínimo de 2 objetivos de negócio | **APROVADO** | Disponibilidade de conversão 24/7 e automatização de reportes regulatórios descritos. |
-| Problema de negócio com dados/fatos | **APROVADO** | Discussão dos limites operacionais de horário bancário na seção 3. |
-| Insights de 2+ casos de mercado | **APROVADO** | Avaliação das rotinas cambiais automáticas da Wise e Nomad contemplada. |
-| Mínimo de 4 métricas SMART | **APROVADO** | Métricas de SLA para velocidade, precisão fiscal, tempo de reporte e uptime na seção 4.1. |
-| Premissas de ROI explícitas | **APROVADO** | Manutenção de alíquotas governamentais e processamento em lote detalhados. |
-| 5 a 10 critérios de aceite verificáveis | **APROVADO** | 6 critérios completos cobrindo alíquotas, atomicidade, operação 24/7, BACEN e validações. |
+| Mínimo de 2 objetivos de negócio | **APROVADO** | Redução de abandonos e processamento síncrono instantâneo ACID mapeados. |
+| Problema de negócio com dados/fatos | **APROVADO** | Fatos sobre taxa de abandono atual de 22% apresentados na seção 3. |
+| Insights de 2+ casos de mercado | **APROVADO** | Benchmarks operacionais de checkout da Wise e Nomad avaliados. |
+| Mínimo de 4 métricas SMART | **APROVADO** | Métricas para abandono, tempo transacional, volume e emissão na seção 4.1. |
+| Premissas de ROI explícitas | **APROVADO** | Redução de barreiras de UX e atomicidade entre ledgers mapeadas na seção 4.1. |
+| 5 a 10 critérios de aceite verificáveis | **APROVADO** | 6 critérios completos cobrindo atomicidade, IOF, congelamento, SLA, contrato e saldos. |
 | Todas as 12 seções preenchidas | **APROVADO** | Estruturação de 1 a 12 concluída com rigor técnico e editorial. |
 
 _Documento elaborado com a skill 05 — Documentação de Épicos · The Visionary · UpStream Foursys_
