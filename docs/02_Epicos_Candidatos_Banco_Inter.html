@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02 - Portfólio de Épicos e Priorização RICE (Banco Inter)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans">
+    <div class="max-w-5xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="bg-gradient-to-r border-b border-orange-200 bg-white rounded-2xl p-8 shadow-sm mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <span class="bg-orange-100 text-orange-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">UpStream Foursys — Etapa 2</span>
+                <span class="text-slate-400 text-sm">v1.0.0</span>
+            </div>
+            <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight sm:text-4xl mb-2">Portfólio de Épicos & Matriz RICE</h1>
+            <p class="text-lg text-slate-600">Modelagem do escopo macro em Épicos e racional estratégico de priorização usando o framework RICE.</p>
+        </header>
+
+        <!-- Seções -->
+        <div class="space-y-8">
+            <!-- Introdução RICE -->
+            <section class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
+                <h2 class="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-list-check text-orange-500"></i> Portfólio de Épicos Propostos
+                </h2>
+                <p class="text-slate-700 leading-relaxed mb-6">
+                    Mapeamos as necessidades estratégicas em 6 grandes Épicos (Iniciativas Tecnológicas). Cada um representa um bloco de valor independente, cuja prioridade de desenvolvimento foi calculada cientificamente através do cálculo de RICE (Reach, Impact, Confidence, Effort).
+                </p>
+
+                <!-- Tabela RICE -->
+                <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                    <table class="min-w-full divide-y divide-slate-200">
+                        <thead class="bg-slate-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">ID / Épico</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold text-slate-500 uppercase">Alcance</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold text-slate-500 uppercase">Impacto</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold text-slate-500 uppercase">Confiança</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold text-slate-500 uppercase">Esforço</th>
+                                <th class="px-6 py-3 text-center text-xs font-semibold text-orange-600 uppercase">Score RICE</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Prioridade</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 bg-white">
+                            <tr>
+                                <td class="px-6 py-4">
+                                    <div class="font-bold text-slate-900 text-sm">BINTER-EP-01</div>
+                                    <div class="text-slate-500 text-xs">FX Orchestrator & State Machine</div>
+                                </td>
+                                <td class="px-4 py-4 text-center text-sm font-semibold text-slate-700">10</td>
+                                <td class="px-4 py-4 text-center text-sm font-semibold text-slate-700">10</td>
+                                <td class="px-4 py-4 text-center text-sm text-slate-500">95%</td>
+                                <td class="px-4 py-4 text-center text-sm text-slate-500">5</td>
+                                <td class="px-6 py-4 text-center text-sm font-extrabold text-orange-600">19.0</td>
+                                <td class="px-6 py-4"><span class="bg-red-100 text-red-800 text-xs font-bold px-2 py-1 rounded">P0 - Crítica</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4">
+                                    <div class="font-bold text-slate-900 text-sm">BINTER-EP-02</div>
+                                    <div class="text-slate-500 text-xs">Integração Core EUA (Finxact)</div>
+                                </td>
+                                <td class="px-4 py-4 text-center text-sm font-semibold text-slate-700">8</td>
+                                <td class="px-4 py-4 text-center text-sm font-semibold text-slate-700">9</td>
+                                <td class="px-4 py-4 text-center text-sm text-slate-500">90%</td>
+                                <td class="px-4 py-4 text-center text-sm text-slate-500">6</td>
+                                <td class="px-6 py-4 text-center text-sm font-extrabold text-slate-800">10.8</td>
+                                <td class="px-6 py-4"><span class="bg-orange-100 text-orange-800 text-xs font-bold px-2 py-1 rounded">P1 - Alta</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4">
+                                    <div class="font-bold text-slate-900 text-sm">BINTER-EP-03</div>
+                                    <div class="text-slate-500 text-xs">Integração FX Gateway (Tazapay)</div>
+                                </td>
+                                <td class="px-4 py-4 text-center text-sm font-semibold text-slate-700">8</td>
+                                <td class="px-4 py-4 text-center text-sm font-semibold text-slate-700">8</td>
+                                <td class="px-4 py-4 text-center text-sm text-slate-500">85%</td>
+                                <td class="px-4 py-4 text-center text-sm text-slate-500">5</td>
+                                <td class="px-6 py-4 text-center text-sm font-extrabold text-slate-800">10.8</td>
+                                <td class="px-6 py-4"><span class="bg-orange-100 text-orange-800 text-xs font-bold px-2 py-1 rounded">P1 - Alta</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4">
+                                    <div class="font-bold text-slate-900 text-sm">BINTER-EP-04</div>
+                                    <div class="text-slate-500 text-xs">Motor de Remessa Interna (BR ➔ EUA)</div>
+                                </td>
+                                <td class="px-4 py-4 text-center text-sm font-semibold text-slate-700">10</td>
+                                <td class="px-4 py-4 text-center text-sm font-semibold text-slate-700">7</td>
+                                <td class="px-4 py-4 text-center text-sm text-slate-500">90%</td>
+                                <td class="px-4 py-4 text-center text-sm text-slate-500">6</td>
+                                <td class="px-6 py-4 text-center text-sm font-extrabold text-slate-800">10.5</td>
+                                <td class="px-6 py-4"><span class="bg-orange-100 text-orange-800 text-xs font-bold px-2 py-1 rounded">P1 - Alta</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4">
+                                    <div class="font-bold text-slate-900 text-sm">BINTER-EP-05</div>
+                                    <div class="text-slate-500 text-xs">Motor de AML & Compliance</div>
+                                </td>
+                                <td class="px-4 py-4 text-center text-sm font-semibold text-slate-700">10</td>
+                                <td class="px-4 py-4 text-center text-sm font-semibold text-slate-700">8</td>
+                                <td class="px-4 py-4 text-center text-sm text-slate-500">95%</td>
+                                <td class="px-4 py-4 text-center text-sm text-slate-500">8</td>
+                                <td class="px-6 py-4 text-center text-sm font-extrabold text-slate-800">9.5</td>
+                                <td class="px-6 py-4"><span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-1 rounded">P2 - Média</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4">
+                                    <div class="font-bold text-slate-900 text-sm">BINTER-EP-06</div>
+                                    <div class="text-slate-500 text-xs">Autorização de Cartão Multimoeda</div>
+                                </td>
+                                <td class="px-4 py-4 text-center text-sm font-semibold text-slate-700">6</td>
+                                <td class="px-4 py-4 text-center text-sm font-semibold text-slate-700">8</td>
+                                <td class="px-4 py-4 text-center text-sm text-slate-500">85%</td>
+                                <td class="px-4 py-4 text-center text-sm text-slate-500">7</td>
+                                <td class="px-6 py-4 text-center text-sm font-extrabold text-slate-800">5.8</td>
+                                <td class="px-6 py-4"><span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-1 rounded">P2 - Média</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Racional de Escopo dos P0/P1 -->
+            <section class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
+                <h2 class="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-lightbulb text-orange-500"></i> Racional da Priorização
+                </h2>
+                <div class="space-y-4 text-slate-700">
+                    <p>
+                        O <strong>BINTER-EP-01 (FX Orchestrator)</strong> possui o score mais alto de todos devido à sua criticidade arquitetural. Sem a infraestrutura de controle de estado das transações, nenhuma outra perna de integração de payout local ou de remessa interna consegue operar em segurança. Ele é o coração sistêmico do projeto.
+                    </p>
+                    <p>
+                        Os épicos de infraestrutura Core EUA (Finxact) e Gateway de Payout (Tazapay) receberam peso prioritário P1 devido ao alto impacto para destravar o "caminho do dinheiro". Por outro lado, o módulo de <strong>Cartão Multimoeda (BINTER-EP-06)</strong> pôde ser deixado em P2, pois os clientes inicialmente podem mover seus saldos para contas locais na Europa via rede SEPA antes de receberem o cartão físico habilitado para EUR.
+                    </p>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-12 text-center text-slate-400 text-sm">
+            <p>© 2026 UpStream Foursys. Desenvolvido para o Banco Inter.</p>
+        </footer>
+    </div>
+</body>
+</html>
