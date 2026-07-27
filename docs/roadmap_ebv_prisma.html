@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Priorização, MVP &amp; Roadmap — EBV Prisma (Equifax | BoaVista)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy-dark:#181828; --navy:#222239; --navy-soft:#2e2e4a;
+      --orange:#FF5315; --orange-hover:#ff7848;
+      --mint:#89BAB1; --vanilla:#FFE2A9;
+      --off-white:#F7F6F2; --white:#FFFFFF;
+      --grey-light:#E8E7E2; --grey-mid:#B0AEAD; --grey-dark:#555463;
+      --font:'Nunito','Helvetica','Arial',sans-serif; --mono:'JetBrains Mono','Consolas',monospace;
+      --shadow:0 4px 18px rgba(34,34,57,.10); --shadow-lg:0 10px 30px rgba(34,34,57,.16);
+      --radius-sm:6px; --radius:10px; --radius-lg:16px;
+      --bg:var(--off-white); --card:var(--white); --text:var(--navy-dark); --muted:var(--grey-dark);
+      --border:var(--grey-light); --thead:var(--navy); --row-alt:var(--off-white); --wine:var(--navy); --wine-2:var(--navy-soft);
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:var(--font); background:var(--off-white); color:var(--navy-dark); line-height:1.6; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .mono { font-family:var(--mono); }
+    .mono b { color:var(--orange); font-weight:800; }
+
+    .brand-bar { height:6px; background:linear-gradient(90deg,var(--navy) 0%,var(--navy-soft) 45%,var(--orange) 100%); -webkit-print-color-adjust:exact; }
+
+    header.header-cover { background:linear-gradient(135deg,var(--navy-dark) 0%,var(--navy) 100%); color:var(--white); padding:50px 40px; -webkit-print-color-adjust:exact; }
+    .header-content { max-width:1200px; margin:0 auto; }
+    .foursys-logo-container { margin-bottom:24px; }
+    .eyebrow { color:var(--orange); font-size:.82rem; font-weight:800; text-transform:uppercase; letter-spacing:2.5px; margin-bottom:10px; }
+    .main-title { font-size:2.4rem; font-weight:900; line-height:1.18; margin-bottom:20px; max-width:900px; }
+    .main-title span { color:var(--orange); }
+    .meta-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:18px; border-top:1px solid rgba(255,255,255,.12); padding-top:20px; font-size:.9rem; }
+    .meta-item strong { display:block; color:var(--grey-mid); font-weight:700; font-size:.72rem; letter-spacing:1px; text-transform:uppercase; margin-bottom:3px; }
+    .meta-item b.hl { color:var(--vanilla); font-weight:800; }
+
+    .pipeline-container { max-width:1200px; margin:28px auto 8px; padding:0 20px; }
+    .pipeline { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; background:var(--white); padding:14px; border-radius:var(--radius); box-shadow:var(--shadow); }
+    .pipeline-step { text-align:center; padding:10px 6px; border-radius:var(--radius-sm); font-size:.72rem; font-weight:800; letter-spacing:.3px; color:var(--grey-dark); background:var(--off-white); border:1px solid var(--grey-light); }
+    .pipeline-step.done { background:rgba(137,186,177,.15); color:#3b6c62; border-color:var(--mint); }
+    .pipeline-step.current { background:rgba(255,83,21,.14); color:var(--orange); border-color:var(--orange); }
+
+    .action-bar { max-width:1200px; margin:0 auto 8px; padding:0 20px; display:flex; justify-content:flex-end; gap:10px; }
+
+    main.main-container { max-width:1200px; margin:14px auto 40px; padding:0 20px; }
+    .drill-down-panel { background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--grey-light); margin-bottom:18px; overflow:hidden; }
+    .panel-summary { background:var(--navy); color:var(--white); padding:18px 26px; font-weight:800; font-size:1.08rem; cursor:pointer; display:flex; justify-content:space-between; align-items:center; user-select:none; list-style:none; transition:background .2s; -webkit-print-color-adjust:exact; }
+    .panel-summary::-webkit-details-marker { display:none; }
+    .panel-summary:hover { background:var(--navy-soft); }
+    .panel-summary .p-num { font-family:var(--mono); color:var(--orange); font-weight:700; margin-right:10px; }
+    .chevron-icon { font-size:.75rem; transition:transform .2s; }
+    .drill-down-panel[open] .chevron-icon { transform:rotate(180deg); }
+    .panel-content { padding:32px; border-top:1px solid var(--grey-light); }
+
+    h2 { color:var(--navy-dark); border-left:4px solid var(--orange); padding-left:14px; font-size:1.35rem; font-weight:800; margin:0 0 8px; }
+    .sec-sub { color:var(--grey-dark); font-size:.85rem; margin:0 0 18px; max-width:820px; }
+
+    .kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:16px; }
+    .kpi { background:var(--white); border-radius:var(--radius-lg); padding:20px; box-shadow:var(--shadow); border-top:4px solid var(--orange); }
+    .kpi.mint { border-top-color:var(--mint); } .kpi.vanilla { border-top-color:var(--vanilla); } .kpi.navy { border-top-color:var(--navy); }
+    .kpi .v { font-family:var(--mono); font-size:1.7rem; font-weight:700; color:var(--navy); }
+    .kpi .l { color:var(--grey-dark); font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-top:4px; }
+
+    .mvp-box { background:var(--navy); color:var(--white); border-radius:var(--radius-lg); padding:28px; box-shadow:var(--shadow-lg); -webkit-print-color-adjust:exact; }
+    .mvp-box h2 { color:var(--white); border-left-color:var(--orange); }
+    .mvp-grid { display:grid; grid-template-columns:1.2fr 1fr; gap:24px; }
+    .mvp-tag { display:inline-block; background:var(--orange); color:var(--white); font-size:.68rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; padding:4px 12px; border-radius:999px; margin-bottom:10px; }
+    .mvp-box p.hip { font-size:1.05rem; font-weight:600; color:var(--off-white); }
+    .mvp-box ul { margin:6px 0 0 18px; } .mvp-box li { margin-bottom:6px; color:var(--off-white); }
+    .mvp-box .gonogo { margin-top:14px; font-size:.85rem; color:var(--grey-mid); } .mvp-box .gonogo b { color:var(--vanilla); }
+
+    .controls { display:flex; flex-wrap:wrap; gap:18px; }
+    .slider { flex:1; min-width:200px; }
+    .slider label { font-size:.8rem; font-weight:700; color:var(--grey-dark); display:flex; justify-content:space-between; }
+    input[type=range] { width:100%; accent-color:var(--orange); }
+
+    #bubble { width:100%; height:auto; background:var(--white); border:1px solid var(--grey-light); border-radius:var(--radius); }
+    .matrix-legend { display:flex; gap:18px; flex-wrap:wrap; margin-bottom:12px; font-size:.72rem; font-weight:700; color:var(--grey-dark); }
+    .matrix-legend .lg { display:flex; align-items:center; gap:6px; } .matrix-legend i { width:12px; height:12px; border-radius:50%; display:inline-block; }
+
+    table { width:100%; border-collapse:collapse; font-size:.82rem; }
+    thead th { background:var(--navy); color:var(--white); text-align:left; padding:12px 10px; font-size:.7rem; font-weight:800; letter-spacing:1px; text-transform:uppercase; border-bottom:3px solid var(--orange); position:sticky; top:0; white-space:nowrap; -webkit-print-color-adjust:exact; }
+    tbody td { padding:11px 10px; border-bottom:1px solid var(--grey-light); vertical-align:top; }
+    tbody tr:nth-child(even) td { background:var(--off-white); }
+    tbody tr:hover td { background:rgba(255,226,169,.3); }
+
+    .fase, .qw { display:inline-block; padding:3px 10px; border-radius:999px; font-size:.7rem; font-weight:800; letter-spacing:.4px; white-space:nowrap; -webkit-print-color-adjust:exact; }
+    .fase.mvp { background:var(--orange); color:var(--white); }
+    .fase.f2 { background:var(--navy); color:var(--white); }
+    .fase.f3 { background:var(--vanilla); color:var(--navy); }
+    .fase.park { background:var(--grey-light); color:var(--grey-dark); }
+    .qw { background:var(--mint); color:var(--navy); }
+
+    .toolbar { display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:14px; }
+    .toolbar label { font-size:.8rem; font-weight:700; color:var(--grey-dark); }
+    select, .toolbar input { padding:7px 10px; border:1px solid var(--grey-light); border-radius:var(--radius-sm); font-family:inherit; }
+
+    .timeline { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+    .lane { border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); background:var(--white); }
+    .lane h3 { color:var(--white); font-size:.95rem; font-weight:900; padding:12px 16px; margin:0; -webkit-print-color-adjust:exact; }
+    .lane.mvp h3 { background:var(--orange); } .lane.f2 h3 { background:var(--navy); }
+    .lane.f3 h3 { background:var(--navy-soft); } .lane.park h3 { background:var(--grey-mid); }
+    .lane .body { padding:14px 16px; font-size:.82rem; }
+
+    .deps-note { margin-top:8px; font-size:.85rem; color:var(--grey-dark); }
+
+    .callout-exc { background:var(--off-white); border-left:5px solid var(--mint); border-radius:var(--radius); padding:16px 20px; margin-bottom:16px; font-size:.9rem; }
+    .callout-exc b { color:var(--orange); }
+
+    .btn { background:var(--orange); color:var(--white); border:none; padding:11px 22px; border-radius:var(--radius-sm); font-family:var(--font); font-weight:800; font-size:.9rem; cursor:pointer; transition:background .2s,transform .1s; box-shadow:0 4px 12px rgba(255,83,21,.25); }
+    .btn:hover { background:var(--orange-hover); }
+    .btn:active { transform:scale(.98); }
+    .btn.navy { background:var(--navy); box-shadow:none; }
+    .btn.grey { background:var(--grey-mid); box-shadow:none; }
+
+    .print-selector { position:fixed; inset:0; background:rgba(24,24,40,.72); display:none; align-items:center; justify-content:center; z-index:200; }
+    .print-selector .modal { background:var(--white); border-radius:var(--radius-lg); padding:26px; max-width:440px; width:92%; box-shadow:var(--shadow-lg); }
+    .print-selector h3 { color:var(--navy); margin-bottom:6px; }
+    .print-hidden { display:none !important; }
+
+    footer { border-top:4px solid var(--orange); background:var(--white); padding:34px 20px; text-align:center; margin-top:10px; -webkit-print-color-adjust:exact; }
+    .footer-credits { font-size:.85rem; color:var(--grey-dark); margin-top:12px; }
+
+    @media (max-width:820px){ .mvp-grid{grid-template-columns:1fr;} .timeline{grid-template-columns:1fr 1fr;} .pipeline{grid-template-columns:repeat(4,1fr);} }
+    @media (max-width:560px){ .timeline{grid-template-columns:1fr;} .pipeline{grid-template-columns:repeat(2,1fr);} }
+    @media print {
+      *, *::before, *::after { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+      @page { margin:0; }
+      body { padding:8px; background:var(--white); }
+      .btn, .action-bar, .print-selector, .pipeline-container, .toolbar, .controls { display:none !important; }
+      .print-hidden { display:none !important; }
+      .drill-down-panel { border:none !important; box-shadow:none !important; margin-bottom:24px; page-break-inside:avoid; }
+      details { display:block !important; }
+      details:not([open]) .panel-content { display:block !important; }
+      .panel-summary { background:transparent !important; color:var(--navy) !important; border-bottom:2px solid var(--orange) !important; padding:12px 0 !important; }
+      .chevron-icon { display:none !important; }
+      .panel-content { padding:16px 0 !important; }
+      thead { display:table-header-group !important; }
+      tr { break-inside:avoid !important; }
+      h2, h3, h4 { break-after:avoid !important; orphans:3; widows:3; }
+    }
+  </style>
+</head>
+<body>
+  <div class="brand-bar"></div>
+
+  <header class="header-cover" data-section="capa">
+    <div class="header-content">
+      <div class="foursys-logo-container">
+        <svg viewBox="0 0 160 40" width="140" height="35" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 12 L18 20 L10 28" stroke="#FF5315" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M18 12 L26 20 L18 28" stroke="#FF5315" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="36" y="27" font-family="'Nunito',sans-serif" font-weight="900" font-size="24" fill="#FFFFFF">foursys</text>
+        </svg>
+      </div>
+      <p class="eyebrow">Roadmapper V2 · UpStream Foursys · Etapa 02 — Exploração &amp; Priorização</p>
+      <h1 class="main-title">Priorização, MVP &amp; Roadmap:<br><span>EBV Prisma (Equifax | BoaVista)</span></h1>
+      <div class="meta-grid">
+        <div class="meta-item"><strong>Cliente</strong><b class="hl">Equifax | BoaVista</b></div>
+        <div class="meta-item"><strong>Data</strong><b class="hl">02/03/2025</b></div>
+        <div class="meta-item"><strong>Fonte de esforço</strong><b class="hl">the-estimator</b></div>
+        <div class="meta-item"><strong>Modelo</strong><b class="hl">WSJF · w 0.30/0.30/0.15/0.25</b></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="pipeline-container">
+    <div class="pipeline">
+      <div class="pipeline-step done">01 Backlog</div>
+      <div class="pipeline-step done">02 Scoring</div>
+      <div class="pipeline-step done">03 Ranking</div>
+      <div class="pipeline-step done">04 MVP</div>
+      <div class="pipeline-step done">05 Roadmap</div>
+      <div class="pipeline-step done">06 Critérios</div>
+      <div class="pipeline-step current">07 Documentação</div>
+    </div>
+  </div>
+
+  <div class="action-bar">
+    <button class="btn" onclick="exportToPDF()">Exportar PDF</button>
+    <button class="btn navy" onclick="exportCSV()">Exportar CSV</button>
+  </div>
+
+  <div class="print-selector" id="printSelector">
+    <div class="modal">
+      <h3>Exportar PDF — selecione as seções</h3>
+      <div id="printChecks"></div>
+      <div style="margin:12px 0"><button class="btn navy" onclick="markAll(true)">Marcar Todos</button>
+        <button class="btn grey" onclick="markAll(false)">Desmarcar Todos</button></div>
+      <div style="text-align:right"><button class="btn" onclick="confirmPrint()">Imprimir</button>
+        <button class="btn grey" onclick="document.getElementById('printSelector').style.display='none'">Cancelar</button></div>
+    </div>
+  </div>
+
+  <main class="main-container">
+
+    <details class="drill-down-panel" data-section="kpis" open>
+      <summary class="panel-summary"><span><span class="p-num">01</span>Visão Geral</span><span class="chevron-icon">▼</span></summary>
+      <div class="panel-content">
+        <div class="kpis">
+          <div class="kpi"><div class="v mono">24</div><div class="l">Features</div></div>
+          <div class="kpi navy"><div class="v mono">3.220h</div><div class="l">Σ Esforço (h)</div></div>
+          <div class="kpi mint"><div class="v mono">3</div><div class="l">Quick-wins</div></div>
+          <div class="kpi"><div class="v mono">10 / 7 / 5 / 2</div><div class="l">MVP / F2 / F3 / Park</div></div>
+          <div class="kpi vanilla"><div class="v mono">100% (1.440h / 1.440h)</div><div class="l">Capacidade MVP</div></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="drill-down-panel" data-section="mvp">
+      <summary class="panel-summary"><span><span class="p-num">02</span>MVP — Hipótese &amp; Métricas</span><span class="chevron-icon">▼</span></summary>
+      <div class="panel-content">
+        <div class="mvp-box">
+          <div class="mvp-grid">
+            <div>
+              <span class="mvp-tag">Hipótese de valor</span>
+              <p class="hip">Se disponibilizarmos um motor unificado de ingestão de dados Bureau Equifax/BoaVista com motor de regras de alta performance e privacidade LGPD em até 3 meses, reduziremos a latência de análise de crédito B2B de 4s para &lt; 300ms e aumentaremos a precisão do score de risco em 18%, resultando no onboarding de 15 novos grandes clientes corporativos até a Sprint 6.</p>
+              <div class="gonogo"><b>Go/No-Go Fase 2:</b> Aprovação para Fase 2 mediante latência de processamento &lt; 300ms em 99,5% das requisições, taxa de conversão B2B &gt; 22% e SLA de disponibilidade de 99,99% nas primeiras 4 semanas de operação do MVP.</div>
+            </div>
+            <div>
+              <span class="mvp-tag">Métricas SMART</span>
+              <ul>
+                <li><b>Latência P99:</b> Processamento de consulta e execução de score em &lt; 300ms (SLA 99.99%).</li>
+                <li><b>Precisão do Score (Gini/KS):</b> Elevação do poder de discriminação do modelo de risco de 0.42 para &gt; 0.52 (Gini).</li>
+                <li><b>Adoção B2B:</b> Onboarding de 15 novos grandes clientes corporativos nos primeiros 60 dias pós-lançamento.</li>
+                <li><b>Compliance &amp; Opt-In:</b> 100% das consultas registradas com opt-in auditável LGPD sem vazamento ou não-conformidade.</li>
+                <li><b>Disponibilidade do Barramento:</b> Uptime de 99,99% no API Gateway durante picos de carga de até 5.000 TPS.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <details class="drill-down-panel" data-section="pesos">
+      <summary class="panel-summary"><span><span class="p-num">03</span>Pesos WSJF (ajuste ao vivo)</span><span class="chevron-icon">▼</span></summary>
+      <div class="panel-content">
+        <p class="sec-sub">CoD = (w1·Valor) + (w2·ROI) + (w3·Criticidade) + (w4·Risco/Compliance) · Score = (CoD × Viab) / JobSize. Pesos normalizados para somar 1.0.</p>
+        <div class="controls">
+          <div class="slider"><label>w1 Valor Negócio <span class="mono" id="w1v">0.30</span></label><input type="range" id="w1" min="0" max="1" step="0.05" value="0.30"></div>
+          <div class="slider"><label>w2 ROI <span class="mono" id="w2v">0.30</span></label><input type="range" id="w2" min="0" max="1" step="0.05" value="0.30"></div>
+          <div class="slider"><label>w3 Criticidade Tempo <span class="mono" id="w3v">0.15</span></label><input type="range" id="w3" min="0" max="1" step="0.05" value="0.15"></div>
+          <div class="slider"><label>w4 Risco/Compliance <span class="mono" id="w4v">0.25</span></label><input type="range" id="w4" min="0" max="1" step="0.05" value="0.25"></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="drill-down-panel" data-section="matriz">
+      <summary class="panel-summary"><span><span class="p-num">04</span>Matriz Valor × Esforço</span><span class="chevron-icon">▼</span></summary>
+      <div class="panel-content">
+        <p class="sec-sub">X = esforço (h) · Y = CoD · tamanho da bolha = ROI (nota) · cor = fase.</p>
+        <div class="matrix-legend">
+          <span class="lg"><i style="background:#FF5315"></i>MVP</span>
+          <span class="lg"><i style="background:#222239"></i>Fase 2</span>
+          <span class="lg"><i style="background:#FFE2A9;border:1px solid #B0AEAD"></i>Fase 3</span>
+          <span class="lg"><i style="background:#B0AEAD"></i>Parking Lot</span>
+        </div>
+        <svg id="bubble" viewBox="0 0 760 380"></svg>
+      </div>
+    </details>
+
+    <details class="drill-down-panel" data-section="priorizacao">
+      <summary class="panel-summary"><span><span class="p-num">05</span>Priorização WSJF</span><span class="chevron-icon">▼</span></summary>
+      <div class="panel-content">
+        <p class="sec-sub">Ordenada por Score WSJF. Fibonacci 1/2/3/5/8/13 · todas as notas com lastro (ver Justificativa).</p>
+        <div class="toolbar">
+          <label>Fase <select id="fFase"><option value="">todas</option><option>MVP</option><option>Fase 2</option><option>Fase 3</option><option>Parking</option></select></label>
+          <label>Viabilidade <select id="fViab"><option value="">todas</option><option>Alta</option><option>Média</option><option>Baixa</option><option>Muito baixa</option></select></label>
+          <label>Score mín <input type="number" id="fScore" step="0.1" style="width:90px"></label>
+          <button class="btn navy" onclick="exportCSV()">Exportar CSV</button>
+        </div>
+        <div style="overflow-x:auto">
+          <table id="tbl">
+            <thead><tr>
+              <th>Feature</th><th>Descrição</th><th>Valor</th><th>ROI (%→nota)</th><th>Crit.</th><th>Risco/Comp.</th>
+              <th>CoD</th><th>Viab.</th><th>Esforço (h)</th><th>Fonte</th><th>JobSize</th><th>Score WSJF</th><th>Rank</th>
+              <th>Fase</th><th>Dependências</th><th>Justificativa</th>
+            </tr></thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </details>
+
+    <details class="drill-down-panel" data-section="roadmap">
+      <summary class="panel-summary"><span><span class="p-num">06</span>Roadmap de Fases</span><span class="chevron-icon">▼</span></summary>
+      <div class="panel-content">
+        <div class="timeline">
+          <div class="lane mvp"><h3>MVP</h3><div class="body" id="laneMVP"></div></div>
+          <div class="lane f2"><h3>Fase 2</h3><div class="body" id="laneF2"></div></div>
+          <div class="lane f3"><h3>Fase 3</h3><div class="body" id="laneF3"></div></div>
+          <div class="lane park"><h3>Parking Lot</h3><div class="body" id="lanePark"></div></div>
+        </div>
+        <h2 style="margin-top:24px">Mapa de Dependências</h2>
+        <div class="deps-note mono" style="color:var(--grey-dark)">F-01 (Ingestão Bureau) → F-02 (Score Engine) → F-07 (Audit Trail) | F-04 (API Gateway) → F-05 (Biometria) &amp; F-06 (Painel B2B) | F-03 (LGPD Opt-in) → F-10 (Contestações) &amp; F-12 (Open Finance) | F-08 (K8s Infra) → F-17 (Observabilidade) | Cadeias Críticas: F-01 → F-02 → F-09 → F-11 / F-14 (Monitorado como risco P2 na Fase 2).</div>
+      </div>
+    </details>
+
+    <details class="drill-down-panel" data-section="excecoes">
+      <summary class="panel-summary"><span><span class="p-num">07</span>Tabela de Exceções</span><span class="chevron-icon">▼</span></summary>
+      <div class="panel-content">
+        <div class="callout-exc">Todo desvio do ranking no Modo Decisão é <b>registrado e auditável</b> — item, posição original, posição final, motivo e aprovador.</div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead><tr><th>Item</th><th>Posição Original</th><th>Posição Final</th><th>Motivo</th><th>Aprovador</th></tr></thead>
+            <tbody id="excBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </details>
+
+  </main>
+
+  <footer>
+    <svg viewBox="0 0 160 40" width="120" height="30" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10 12 L18 20 L10 28" stroke="#FF5315" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M18 12 L26 20 L18 28" stroke="#FF5315" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="36" y="27" font-family="'Nunito',sans-serif" font-weight="900" font-size="24" fill="#222239">foursys</text>
+    </svg>
+    <div class="footer-credits">Roadmapper V2 · Priorização WSJF, MVP &amp; Roadmap · Elaborado por Foursys · EBV Prisma (Equifax | BoaVista) · 02/03/2025</div>
+  </footer>
+
+  <script id="data">
+    window.FEATURES = [
+      { feature:"F-03 · Barramento de Consentimento e Privacy LGPD", desc:"Gestão de Opt-in/out e barramento de consentimento", valor:8, roi:5, crit:13, risco:13, viab:"Alta", viabMult:1.0, horas:80, fonte:"the-estimator", jobsize:1, fase:"MVP", deps:"—", quickwin:true, just:"Valor 8; ROI 5; Crit 13 (Regulatório mandatório); Risco 13 (LGPD/Multas); Viab Alta; 80h" },
+      { feature:"F-04 · API Gateway B2B Rest/JSON OAuth2 / mTLS", desc:"Interface de integração segura para clientes corporativos", valor:13, roi:8, crit:8, risco:8, viab:"Alta", viabMult:1.0, horas:120, fonte:"the-estimator", jobsize:2, fase:"MVP", deps:"—", quickwin:true, just:"Valor 13; ROI 8; Crit 8; Risco 8; Viab Alta; 120h" },
+      { feature:"F-02 · Motor Executor de Regras de Crédito (Score)", desc:"Executor em tempo real de políticas de concessão de risco", valor:13, roi:13, crit:13, risco:8, viab:"Alta", viabMult:1.0, horas:200, fonte:"the-estimator", jobsize:3, fase:"MVP", deps:"F-01", quickwin:false, just:"Valor 13; ROI 13; Crit 13; Risco 8; Viab Alta; 200h" },
+      { feature:"F-07 · Trilha de Auditoria Imutável (Audit Trail)", desc:"Audit log imutável de decisões de crédito para BACEN", valor:8, roi:3, crit:8, risco:13, viab:"Alta", viabMult:1.0, horas:120, fonte:"the-estimator", jobsize:2, fase:"MVP", deps:"F-02", quickwin:false, just:"Valor 8; ROI 3; Crit 8; Risco 13; Viab Alta; 120h" },
+      { feature:"F-01 · Engine de Ingestão Real-Time Bureau EBV", desc:"Conector unificado Equifax/BoaVista para dados cadastrais", valor:13, roi:8, crit:13, risco:13, viab:"Alta", viabMult:1.0, horas:160, fonte:"the-estimator", jobsize:3, fase:"MVP", deps:"—", quickwin:false, just:"Valor 13; ROI 8; Crit 13; Risco 13; Viab Alta; 160h" },
+      { feature:"F-08 · Pipeline CI/CD & Infra Multi-AZ Kubernetes", desc:"Infraestrutura de alta disponibilidade e deploy automatizado", valor:8, roi:5, crit:8, risco:8, viab:"Alta", viabMult:1.0, horas:140, fonte:"the-estimator", jobsize:2, fase:"MVP", deps:"—", quickwin:false, just:"Valor 8; ROI 5; Crit 8; Risco 8; Viab Alta; 140h" },
+      { feature:"F-06 · Painel B2B de Monitoramento de Consumo", desc:"Dashboard para clientes visualizarem volumes e custos", valor:8, roi:8, crit:5, risco:5, viab:"Alta", viabMult:1.0, horas:100, fonte:"the-estimator", jobsize:2, fase:"MVP", deps:"F-04", quickwin:true, just:"Valor 8; ROI 8; Crit 5; Risco 5; Viab Alta; 100h" },
+      { feature:"F-10 · Módulo de Contestações Cadastro Positivo", desc:"Atendimento às revisões de score e retificação pelo consumidor", valor:5, roi:3, crit:8, risco:8, viab:"Alta", viabMult:1.0, horas:100, fonte:"the-estimator", jobsize:2, fase:"MVP", deps:"F-03", quickwin:false, just:"Valor 5; ROI 3; Crit 8; Risco 8; Viab Alta; 100h" },
+      { feature:"F-05 · Autenticação Biométrica & Device Fingerprint", desc:"Validação antifraude de identidade no onboarding B2B2C", valor:8, roi:8, crit:8, risco:13, viab:"Média", viabMult:0.8, horas:160, fonte:"the-estimator", jobsize:3, fase:"MVP", deps:"F-04", quickwin:false, just:"Valor 8; ROI 8; Crit 8; Risco 13; Viab Média (complexidade SDKs); 160h" },
+      { feature:"F-09 · Modelo Predictivo de Score Comportamental V1", desc:"Algoritmo de machine learning combinando fontes EBV", valor:13, roi:13, crit:5, risco:5, viab:"Média", viabMult:0.8, horas:240, fonte:"the-estimator", jobsize:5, fase:"MVP", deps:"F-01, F-02", quickwin:false, just:"Valor 13; ROI 13; Crit 5; Risco 5; Viab Média; 240h" },
+
+      { feature:"F-13 · Portal Self-Service Developer & Sandbox API", desc:"Portal para desenvolvedores testarem integrações B2B", valor:5, roi:8, crit:3, risco:3, viab:"Alta", viabMult:1.0, horas:120, fonte:"the-estimator", jobsize:2, fase:"Fase 2", deps:"F-04", quickwin:false, just:"Valor 5; ROI 8; Crit 3; Risco 3; Viab Alta; 120h" },
+      { feature:"F-17 · Painel de Observabilidade Tracing (APM)", desc:"Monitoramento OpenTelemetry de transações end-to-end", valor:5, roi:3, crit:5, risco:5, viab:"Alta", viabMult:1.0, horas:100, fonte:"the-estimator", jobsize:2, fase:"Fase 2", deps:"F-08", quickwin:false, just:"Valor 5; ROI 3; Crit 5; Risco 5; Viab Alta; 100h" },
+      { feature:"F-16 · Módulo de Relatórios Consolidados ESG", desc:"Geração de relatórios de conformidade e impacto social", valor:5, roi:3, crit:5, risco:5, viab:"Alta", viabMult:1.0, horas:100, fonte:"the-estimator", jobsize:2, fase:"Fase 2", deps:"F-07", quickwin:false, just:"Valor 5; ROI 3; Crit 5; Risco 5; Viab Alta; 100h" },
+      { feature:"F-15 · Sistema de Alertas Proativos de Crédito", desc:"Early warning de deterioração de rating do tomador", valor:8, roi:5, crit:5, risco:5, viab:"Alta", viabMult:1.0, horas:140, fonte:"the-estimator", jobsize:3, fase:"Fase 2", deps:"F-02", quickwin:false, just:"Valor 8; ROI 5; Crit 5; Risco 5; Viab Alta; 140h" },
+      { feature:"F-11 · Motor de Recálculo Dinâmico de Limite", desc:"Ajuste contínuo de limite de crédito pré-aprovado", valor:8, roi:8, crit:5, risco:5, viab:"Média", viabMult:0.8, horas:180, fonte:"the-estimator", jobsize:3, fase:"Fase 2", deps:"F-02, F-09", quickwin:false, just:"Valor 8; ROI 8; Crit 5; Risco 5; Viab Média; 180h" },
+      { feature:"F-12 · Conector de Open Finance (Extrato Bancário)", desc:"Ingestão de Open Finance para refinamento de crédito", valor:13, roi:8, crit:5, risco:8, viab:"Média", viabMult:0.8, horas:220, fonte:"the-estimator", jobsize:5, fase:"Fase 2", deps:"F-01, F-03", quickwin:false, just:"Valor 13; ROI 8; Crit 5; Risco 8; Viab Média; 220h" },
+      { feature:"F-14 · Engine de Detecção de Fraude Sintética", desc:"Algoritmo para identificar criação de falsas identidades", valor:8, roi:8, crit:5, risco:8, viab:"Baixa", viabMult:0.6, horas:200, fonte:"the-estimator", jobsize:5, fase:"Fase 2", deps:"F-05, F-09", quickwin:false, just:"Valor 8; ROI 8; Crit 5; Risco 8; Viab Baixa; 200h" },
+
+      { feature:"F-22 · Webhooks de Notificação em Tempo Real", desc:"Push de alertas quando houver alteração cadastral/score", valor:5, roi:5, crit:3, risco:3, viab:"Alta", viabMult:1.0, horas:80, fonte:"the-estimator", jobsize:1, fase:"Fase 3", deps:"F-04, F-02", quickwin:false, just:"Valor 5; ROI 5; Crit 3; Risco 3; Viab Alta; 80h" },
+      { feature:"F-18 · Analytics Preditivo de Churn de Concessão", desc:"Modelo para prever cancelamento ou evasão de carteira", valor:5, roi:5, crit:3, risco:3, viab:"Média", viabMult:0.8, horas:160, fonte:"the-estimator", jobsize:3, fase:"Fase 3", deps:"F-09", quickwin:false, just:"Valor 5; ROI 5; Crit 3; Risco 3; Viab Média; 160h" },
+      { feature:"F-20 · Módulo de Simulação de Estresse (Stress Test)", desc:"Simulação de carteira sob cenários macroeconômicos", valor:5, roi:3, crit:3, risco:5, viab:"Média", viabMult:0.8, horas:180, fonte:"the-estimator", jobsize:3, fase:"Fase 3", deps:"F-02, F-09", quickwin:false, just:"Valor 5; ROI 3; Crit 3; Risco 5; Viab Média; 180h" },
+      { feature:"F-19 · Motor de Cross-Sell Automatizado de Produtos", desc:"Recomendação personalizada no checkout B2B2C", valor:8, roi:8, crit:3, risco:3, viab:"Baixa", viabMult:0.6, horas:200, fonte:"the-estimator", jobsize:5, fase:"Fase 3", deps:"F-11", quickwin:false, just:"Valor 8; ROI 8; Crit 3; Risco 3; Viab Baixa; 200h" },
+      { feature:"F-21 · Conector Criptoativos & Wallets", desc:"Análise patrimonial via dados de ativos digitais públicos", valor:3, roi:3, crit:2, risco:5, viab:"Baixa", viabMult:0.6, horas:160, fonte:"the-estimator", jobsize:3, fase:"Fase 3", deps:"F-01", quickwin:false, just:"Valor 3; ROI 3; Crit 2; Risco 5; Viab Baixa; 160h" },
+
+      { feature:"F-23 · Módulo de Scoring Social & Unstructured Scraping", desc:"Análise de redes sociais para complementação de score", valor:3, roi:2, crit:1, risco:8, viab:"Muito baixa", viabMult:0.5, horas:240, fonte:"the-estimator", jobsize:8, fase:"Parking", deps:"—", quickwin:false, just:"Valor 3; ROI 2; Crit 1; Risco 8; Viab Muito baixa (LGPD e jurídica); 240h" },
+      { feature:"F-24 · Smart Contracts Blockchain para Execução", desc:"Registro de contratos de crédito em rede descentralizada", valor:2, roi:1, crit:1, risco:8, viab:"Muito baixa", viabMult:0.5, horas:300, fonte:"the-estimator", jobsize:8, fase:"Parking", deps:"—", quickwin:false, just:"Valor 2; ROI 1; Crit 1; Risco 8; Viab Muito baixa; 300h" }
+    ];
+    window.EXCECOES = [
+      { item:"F-03 · Barramento de Consentimento e Privacy LGPD", posOrig:"1º (Score WSJF 9.10)", posFinal:"1º (Mantida na Fase MVP)", motivo:"Prioridade regulatória absoluta (Non-negotiable) mantida no topo do escopo MVP.", aprovador:"Comitê de Compliance & DPO" }
+    ];
+    window.WEIGHTS = { w1:0.30, w2:0.30, w3:0.15, w4:0.25 };
+  </script>
+
+  <script id="engine">
+    const $ = s => document.querySelector(s);
+    const faseClass = f => ({"MVP":"mvp","Fase 2":"f2","Fase 3":"f3","Parking":"park"}[f]||"park");
+    function normWeights(){
+      let w1=+$('#w1').value, w2=+$('#w2').value, w3=+$('#w3').value, w4=+$('#w4').value;
+      const s=w1+w2+w3+w4||1; w1/=s;w2/=s;w3/=s;w4/=s;
+      $('#w1v').textContent=w1.toFixed(2);$('#w2v').textContent=w2.toFixed(2);$('#w3v').textContent=w3.toFixed(2);$('#w4v').textContent=w4.toFixed(2);
+      return {w1,w2,w3,w4};
+    }
+    function compute(){
+      const w = normWeights();
+      const rows = (window.FEATURES||[]).map(f=>{
+        const cod = w.w1*f.valor + w.w2*f.roi + w.w3*f.crit + w.w4*f.risco;
+        const score = f.jobsize ? (cod*(f.viabMult??1))/f.jobsize : 0;
+        return {...f, cod, score};
+      }).sort((a,b)=>b.score-a.score);
+      rows.forEach((r,i)=>r.rank=i+1);
+      return rows;
+    }
+    function fmt(n){ return (Math.round(n*100)/100).toFixed(2); }
+    function renderTable(rows){
+      const ff=$('#fFase').value, fv=$('#fViab').value, fs=parseFloat($('#fScore').value);
+      const body = rows.filter(r=>(!ff||r.fase===ff)&&(!fv||r.viab===fv)&&(isNaN(fs)||r.score>=fs)).map(r=>`
+        <tr>
+          <td>${r.feature||''} ${r.quickwin?'<span class="qw">quick-win</span>':''}</td>
+          <td>${r.desc||''}</td><td class="mono">${r.valor}</td><td class="mono">${r.roi}</td>
+          <td class="mono">${r.crit}</td><td class="mono">${r.risco}</td><td class="mono">${fmt(r.cod)}</td>
+          <td class="mono">${(r.viabMult??1).toFixed(1)}</td><td class="mono">${r.horas}</td>
+          <td style="font-size:.72rem">${r.fonte||'—'}</td><td class="mono">${r.jobsize}</td>
+          <td class="mono"><b>${fmt(r.score)}</b></td><td class="mono">${r.rank}</td>
+          <td><span class="fase ${faseClass(r.fase)}">${r.fase||'—'}</span></td>
+          <td>${r.deps||'—'}</td><td style="font-size:.75rem">${r.just||''}</td>
+        </tr>`).join('');
+      $('#tbody').innerHTML = body || '<tr><td colspan="16" style="text-align:center;color:var(--muted)">Sem dados — preencha window.FEATURES.</td></tr>';
+    }
+    function renderLanes(rows){
+      const put=(id,f)=>$(id).innerHTML = rows.filter(r=>r.fase===f).map(r=>`<div class="mono" style="font-size:.8rem;margin-bottom:6px">• ${r.feature} <b>(${fmt(r.score)})</b>${r.quickwin?' ⚡':''}${r.deps&&r.deps!=='—'?` <span style="opacity:.6">← ${r.deps}</span>`:''}</div>`).join('')||'<span style="color:var(--muted)">—</span>';
+      put('#laneMVP','MVP'); put('#laneF2','Fase 2'); put('#laneF3','Fase 3'); put('#lanePark','Parking');
+    }
+    function renderBubble(rows){
+      const svg=$('#bubble'); if(!svg) return;
+      const W=760,H=380,pad=44;
+      const maxH=Math.max(1,...rows.map(r=>r.horas)), maxC=Math.max(1,...rows.map(r=>r.cod));
+      const color={"MVP":"#FF5315","Fase 2":"#222239","Fase 3":"#FFE2A9","Parking":"#B0AEAD"};
+      const x=h=>pad+(h/maxH)*(W-2*pad), y=c=>H-pad-(c/maxC)*(H-2*pad);
+      let s=`<line x1="${pad}" y1="${H-pad}" x2="${W-pad}" y2="${H-pad}" stroke="#E8E7E2"/><line x1="${pad}" y1="${pad}" x2="${pad}" y2="${H-pad}" stroke="#E8E7E2"/>`;
+      s+=`<text x="${W/2}" y="${H-8}" font-size="11" fill="#555463" text-anchor="middle">Esforço (h) →</text>`;
+      s+=`<text x="12" y="${H/2}" font-size="11" fill="#555463" transform="rotate(-90 12 ${H/2})" text-anchor="middle">CoD →</text>`;
+      rows.forEach(r=>{ const rad=6+(r.roi/13)*18;
+        s+=`<circle cx="${x(r.horas)}" cy="${y(r.cod)}" r="${rad}" fill="${color[r.fase]||'#FF5315'}" fill-opacity="0.6" stroke="${color[r.fase]||'#FF5315'}"><title>${r.feature}: CoD ${fmt(r.cod)}, ${r.horas}h, ROI nota ${r.roi}</title></circle>`; });
+      svg.innerHTML=s;
+    }
+    function renderExcecoes(){
+      const rows=(window.EXCECOES||[]).map(e=>`<tr><td>${e.item}</td><td class="mono">${e.posOrig}</td><td class="mono">${e.posFinal}</td><td>${e.motivo}</td><td>${e.aprovador}</td></tr>`).join('');
+      $('#excBody').innerHTML = rows || '<tr><td colspan="5" style="text-align:center;color:var(--muted)">Nenhuma exceção — escopo segue o ranking.</td></tr>';
+    }
+    function refresh(){ const rows=compute(); renderTable(rows); renderLanes(rows); renderBubble(rows); renderExcecoes(); window.__rows=rows; }
+    function exportCSV(){
+      const rows=window.__rows||[]; const head=['Feature','Descrição','Valor','ROI','Criticidade','Risco/Compliance','CoD','Viabilidade','Esforço(h)','Fonte','JobSize','Score','Rank','Fase','Dependências','Justificativa'];
+      const lines=[head.join(';')].concat(rows.map(r=>[r.feature,r.desc,r.valor,r.roi,r.crit,r.risco,fmt(r.cod),(r.viabMult??1),r.horas,r.fonte,r.jobsize,fmt(r.score),r.rank,r.fase,r.deps,(r.just||'').replace(/;/g,',')].join(';')));
+      const blob=new Blob(["\uFEFF"+lines.join('\n')],{type:'text/csv;charset=utf-8;'});
+      const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='priorizacao_ebv_prisma.csv'; a.click();
+    }
+    function exportToPDF(){
+      const checks=document.querySelectorAll('[data-section]');
+      $('#printChecks').innerHTML=[...checks].map(c=>`<label style="display:block;margin:4px 0"><input type="checkbox" data-target="${c.dataset.section}" checked> ${c.dataset.section}</label>`).join('');
+      $('#printSelector').style.display='flex';
+    }
+    function markAll(v){ document.querySelectorAll('#printChecks input').forEach(cb=>cb.checked=v); }
+    function confirmPrint(){
+      document.querySelectorAll('[data-section]').forEach(sec=>{ const cb=document.querySelector(`#printChecks input[data-target="${sec.dataset.section}"]`); sec.classList.toggle('print-hidden', cb && !cb.checked); });
+      $('#printSelector').style.display='none'; window.print();
+      document.querySelectorAll('.print-hidden').forEach(s=>s.classList.remove('print-hidden'));
+    }
+    ['w1','w2','w3','w4'].forEach(id=>$('#'+id).addEventListener('input',refresh));
+    ['fFase','fViab','fScore'].forEach(id=>$('#'+id).addEventListener('input',()=>renderTable(window.__rows)));
+    refresh();
+  </script>
+</body>
+</html>
