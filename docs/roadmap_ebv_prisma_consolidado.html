@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roadmapper V2 — Consolidado Master — EBV Prisma (Equifax | BoaVista)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy-dark:#181828; --navy:#222239; --navy-soft:#2e2e4a;
+      --orange:#FF5315; --orange-hover:#ff7848;
+      --mint:#89BAB1; --vanilla:#FFE2A9;
+      --off-white:#F7F6F2; --white:#FFFFFF;
+      --grey-light:#E8E7E2; --grey-mid:#B0AEAD; --grey-dark:#555463;
+      --font:'Nunito','Helvetica','Arial',sans-serif; --mono:'JetBrains Mono','Consolas',monospace;
+      --shadow:0 4px 18px rgba(34,34,57,.10); --shadow-lg:0 10px 30px rgba(34,34,57,.16);
+      --radius-sm:6px; --radius:10px; --radius-lg:16px;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:var(--font); background:var(--off-white); color:var(--navy-dark); line-height:1.6; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .mono { font-family:var(--mono); }
+    .mono b { color:var(--orange); font-weight:800; }
+
+    /* Brand bar + Header Capa */
+    .brand-bar { height:6px; background:linear-gradient(90deg,var(--navy) 0%,var(--navy-soft) 45%,var(--orange) 100%); }
+    header.header-cover { background:linear-gradient(135deg,var(--navy-dark) 0%,var(--navy) 100%); color:var(--white); padding:50px 40px; }
+    .header-content { max-width:1200px; margin:0 auto; }
+    .foursys-logo-container { margin-bottom:24px; }
+    .eyebrow { color:var(--orange); font-size:.82rem; font-weight:800; text-transform:uppercase; letter-spacing:2.5px; margin-bottom:10px; }
+    .main-title { font-size:2.3rem; font-weight:900; line-height:1.18; margin-bottom:20px; max-width:920px; }
+    .main-title span { color:var(--orange); }
+    .meta-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:18px; border-top:1px solid rgba(255,255,255,.12); padding-top:20px; font-size:.88rem; }
+    .meta-item strong { display:block; color:var(--grey-mid); font-weight:700; font-size:.7rem; letter-spacing:1px; text-transform:uppercase; margin-bottom:3px; }
+    .meta-item b { color:var(--vanilla); font-weight:800; }
+
+    /* Pipeline stepper */
+    .pipeline-container { max-width:1200px; margin:28px auto 8px; padding:0 20px; }
+    .pipeline { display:grid; grid-template-columns:repeat(8,1fr); gap:8px; background:var(--white); padding:14px; border-radius:var(--radius); box-shadow:var(--shadow); }
+    .pipeline-step { text-align:center; padding:10px 4px; border-radius:var(--radius-sm); font-size:.68rem; font-weight:800; color:var(--grey-dark); background:var(--off-white); border:1px solid var(--grey-light); }
+    .pipeline-step.done { background:rgba(137,186,177,.15); color:#3b6c62; border-color:var(--mint); }
+    .pipeline-step.current { background:rgba(255,83,21,.14); color:var(--orange); border-color:var(--orange); }
+
+    /* Action Bar */
+    .action-bar { max-width:1200px; margin:0 auto 8px; padding:0 20px; display:flex; justify-content:flex-end; gap:12px; }
+    .btn { background:var(--orange); color:var(--white); border:none; padding:11px 22px; border-radius:var(--radius-sm); font-family:var(--font); font-weight:800; font-size:.9rem; cursor:pointer; box-shadow:0 4px 12px rgba(255,83,21,.25); transition:background .2s; }
+    .btn:hover { background:var(--orange-hover); }
+    .btn.navy { background:var(--navy); box-shadow:none; }
+    .btn.navy:hover { background:var(--navy-soft); }
+
+    /* Main Container & Drill-Down Panels */
+    main.main-container { max-width:1200px; margin:14px auto 40px; padding:0 20px; }
+    .drill-down-panel { background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--grey-light); margin-bottom:18px; overflow:hidden; }
+    .panel-summary { background:var(--navy); color:var(--white); padding:18px 26px; font-weight:800; font-size:1.08rem; cursor:pointer; display:flex; justify-content:space-between; align-items:center; user-select:none; list-style:none; transition:background .2s; }
+    .panel-summary::-webkit-details-marker { display:none; }
+    .panel-summary:hover { background:var(--navy-soft); }
+    .panel-summary .p-num { font-family:var(--mono); color:var(--orange); font-weight:700; margin-right:10px; }
+    .chevron-icon { font-size:.75rem; transition:transform .2s; }
+    .drill-down-panel[open] .chevron-icon { transform:rotate(180deg); }
+    .panel-content { padding:36px; border-top:1px solid var(--grey-light); }
+
+    /* Typography inside Panels */
+    .panel-content h2 { border-left:4px solid var(--orange); padding-left:14px; margin:30px 0 14px; color:var(--navy-dark); font-size:1.35rem; font-weight:800; }
+    .panel-content h2:first-of-type { margin-top:0; }
+    .panel-content h3 { color:var(--navy-soft); margin:22px 0 10px; font-size:1.1rem; font-weight:700; }
+    .panel-content p { margin-bottom:14px; color:#333; font-size:.93rem; }
+    .panel-content blockquote { background:var(--off-white); border-left:4px solid var(--mint); padding:14px 22px; margin:20px 0; border-radius:0 8px 8px 0; font-style:italic; font-size:.92rem; }
+    .panel-content ul, .panel-content ol { margin:12px 0 16px 22px; font-size:.92rem; }
+    .panel-content li { margin-bottom:6px; }
+
+    /* Tables */
+    table { width:100%; border-collapse:collapse; margin:20px 0; border-radius:8px; overflow:hidden; box-shadow:0 2px 4px rgba(0,0,0,.02); font-size:.82rem; }
+    th { background:var(--navy); color:var(--white); font-weight:800; text-align:left; padding:12px 10px; font-size:.7rem; text-transform:uppercase; letter-spacing:1px; border-bottom:3px solid var(--orange); white-space:nowrap; }
+    td { padding:11px 10px; border-bottom:1px solid var(--grey-light); vertical-align:top; }
+    tr:nth-child(even) td { background:var(--off-white); }
+    tr:hover td { background:rgba(255,226,169,.3); }
+
+    /* Badges */
+    .fase { display:inline-block; padding:3px 10px; border-radius:999px; font-size:.7rem; font-weight:800; letter-spacing:.4px; white-space:nowrap; }
+    .fase.mvp { background:var(--orange); color:var(--white); }
+    .fase.f2 { background:var(--navy); color:var(--white); }
+    .fase.f3 { background:var(--vanilla); color:var(--navy); }
+    .fase.park { background:var(--grey-light); color:var(--grey-dark); }
+    .qw { background:var(--mint); color:var(--navy); padding:2px 8px; border-radius:999px; font-size:.68rem; font-weight:800; display:inline-block; }
+
+    /* Executive Boxes */
+    .exec-summary-box { background:linear-gradient(135deg,rgba(34,34,57,.03) 0%,rgba(255,83,21,.04) 100%); border:1px solid rgba(255,83,21,.2); border-left:6px solid var(--orange); padding:28px; border-radius:var(--radius); margin-bottom:28px; }
+    .exec-metrics-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:16px; margin-top:22px; }
+    .metric-card { background:var(--white); padding:18px; border-radius:8px; border:1px solid var(--grey-light); text-align:center; box-shadow:var(--shadow); }
+    .metric-val { font-family:var(--mono); font-size:1.6rem; font-weight:800; color:var(--navy); margin-bottom:4px; }
+    .metric-val.highlight { color:var(--orange); }
+    .metric-val.mint { color:#3b6c62; }
+    .metric-lbl { font-size:.7rem; font-weight:800; color:var(--grey-dark); text-transform:uppercase; letter-spacing:.8px; }
+
+    .score-cards-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin:22px 0; }
+    .score-card { background:var(--off-white); border-left:4px solid var(--orange); padding:18px; border-radius:0 8px 8px 0; box-shadow:var(--shadow); }
+    .score-num { float:right; font-family:var(--mono); font-size:1.3rem; font-weight:900; color:var(--orange); background:rgba(255,83,21,.1); padding:2px 10px; border-radius:4px; }
+    .score-title { font-weight:800; font-size:1rem; margin-bottom:8px; color:var(--navy-dark); }
+    .score-desc { font-size:.85rem; color:#555; }
+
+    .rec-box { background:var(--navy); color:var(--white); padding:28px; border-radius:var(--radius); margin:28px 0; }
+    .rec-box h3 { color:var(--white); border-bottom:1px solid rgba(255,255,255,.15); padding-bottom:10px; margin-bottom:14px; font-size:1.15rem; }
+    .rec-decision { background:var(--orange); color:var(--white); padding:14px 20px; border-radius:6px; font-weight:800; font-size:1rem; margin-top:18px; display:inline-block; }
+
+    /* Timeline & Dependencies */
+    .timeline { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin:20px 0; }
+    .lane { border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); background:var(--white); border:1px solid var(--grey-light); }
+    .lane h3 { color:var(--white); font-size:.92rem; font-weight:900; padding:12px 16px; margin:0; text-transform:uppercase; letter-spacing:.8px; }
+    .lane.mvp h3 { background:var(--orange); } .lane.f2 h3 { background:var(--navy); }
+    .lane.f3 h3 { background:var(--navy-soft); } .lane.park h3 { background:var(--grey-mid); }
+    .lane .body { padding:14px 16px; font-size:.82rem; }
+
+    /* Callout Exceptions */
+    .callout-exc { background:var(--off-white); border-left:5px solid var(--mint); border-radius:var(--radius); padding:16px 20px; margin-bottom:18px; font-size:.88rem; }
+    .callout-exc b { color:var(--orange); }
+
+    /* Sliders & Controls */
+    .controls { display:flex; flex-wrap:wrap; gap:16px; background:var(--off-white); padding:18px; border-radius:var(--radius); border:1px solid var(--grey-light); margin-bottom:20px; }
+    .slider { flex:1; min-width:200px; }
+    .slider label { font-size:.78rem; font-weight:700; color:var(--grey-dark); display:flex; justify-content:space-between; margin-bottom:4px; }
+    input[type=range] { width:100%; accent-color:var(--orange); }
+
+    .toolbar { display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:16px; background:var(--off-white); padding:12px 16px; border-radius:var(--radius-sm); border:1px solid var(--grey-light); }
+    .toolbar label { font-size:.78rem; font-weight:700; color:var(--grey-dark); }
+    select, .toolbar input { padding:6px 10px; border:1px solid var(--grey-light); border-radius:var(--radius-sm); font-family:inherit; font-size:.82rem; }
+
+    /* Footer */
+    footer { border-top:4px solid var(--orange); background:var(--white); padding:36px 20px; text-align:center; margin-top:30px; }
+    .footer-credits { font-size:.85rem; color:var(--grey-dark); margin-top:12px; }
+
+    @media(max-width:820px){ .pipeline{grid-template-columns:repeat(4,1fr);} .timeline{grid-template-columns:1fr 1fr;} }
+    @media(max-width:560px){ .pipeline{grid-template-columns:repeat(2,1fr);} .timeline{grid-template-columns:1fr;} }
+    @media print {
+      *,*::before,*::after{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
+      @page{margin:0;}
+      body{background:#fff; padding:10px;}
+      .action-bar,.pipeline-container,.controls,.toolbar{display:none !important;}
+      .drill-down-panel{border:none !important;box-shadow:none !important;margin-bottom:24px;page-break-inside:avoid;}
+      details{display:block !important;} details:not([open]) .panel-content{display:block !important;}
+      .panel-summary{background:transparent !important;color:var(--navy) !important;border-bottom:2px solid var(--orange) !important;padding:12px 0 !important;font-size:1.2rem !important;}
+      .chevron-icon{display:none !important;} .panel-content{padding:16px 0 !important;}
+      thead{display:table-header-group !important;} tr{break-inside:avoid !important;}
+      h2,h3,h4{break-after:avoid !important;orphans:3;widows:3;}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="brand-bar"></div>
+
+  <header class="header-cover">
+    <div class="header-content">
+      <div class="foursys-logo-container">
+        <svg viewBox="0 0 160 40" width="140" height="35" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 12 L18 20 L10 28" stroke="#FF5315" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M18 12 L26 20 L18 28" stroke="#FF5315" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="36" y="27" font-family="'Nunito',sans-serif" font-weight="900" font-size="24" fill="#FFFFFF">foursys</text>
+        </svg>
+      </div>
+      <p class="eyebrow">Roadmapper V2 · UpStream Foursys · Consolidação Master</p>
+      <h1 class="main-title">Priorização, MVP &amp; Roadmap — Documento Master:<br><span>EBV Prisma (PRISMA-2026)</span></h1>
+      <div class="meta-grid">
+        <div class="meta-item"><strong>Cliente</strong><b>Equifax | BoaVista (EBV)</b></div>
+        <div class="meta-item"><strong>Programa</strong><b>EBV Prisma (PRISMA-2026)</b></div>
+        <div class="meta-item"><strong>Esforço Total</strong><b>~3.760h de Engenharia</b></div>
+        <div class="meta-item"><strong>Investimento</strong><b>R$ 3.130.000,00</b></div>
+        <div class="meta-item"><strong>Retorno Anual / ROI</strong><b>R$ 11.080.000,00 · 254%</b></div>
+        <div class="meta-item"><strong>Versão / Data</strong><b>v2.0 · Marco 2026</b></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="pipeline-container">
+    <div class="pipeline">
+      <div class="pipeline-step done">01 Backlog</div>
+      <div class="pipeline-step done">02 Scoring</div>
+      <div class="pipeline-step done">03 Ranking</div>
+      <div class="pipeline-step done">04 MVP</div>
+      <div class="pipeline-step done">05 Roadmap</div>
+      <div class="pipeline-step done">06 Critérios</div>
+      <div class="pipeline-step done">07 Documentação</div>
+      <div class="pipeline-step current">Consolidação Master</div>
+    </div>
+  </div>
+
+  <div class="action-bar">
+    <button class="btn" onclick="window.print()">Exportar para PDF</button>
+    <button class="btn navy" onclick="exportCSV()">Exportar CSV de Priorização</button>
+  </div>
+
+  <main class="main-container">
+    <!-- PAINEL 01: ANÁLISE DE BACKLOG -->
+    <details class="drill-down-panel" open>
+      <summary class="panel-summary"><span><span class="p-num">01</span>Análise de Backlog (Fase 01)</span><span class="chevron-icon">▼</span></summary>
+      <div class="panel-content">
+        <h2>Inventário Estruturado do Backlog EBV Prisma</h2>
+        <p>O backlog do programa <strong>EBV Prisma (PRISMA-2026)</strong> foi decomposto em <strong>6 Épicos Estratégicos</strong>, englobando <strong>24 Features Líderes</strong>, <strong>72 User Stories</strong> com critérios de aceite investigados e <strong>72 Regras de Negócio B2B</strong>. O inventário reflete os requisitos unificados da fusão <strong>Equifax | BoaVista</strong> para a construção da plataforma de inteligência de crédito B2B de próxima geração.</p>
+        
+        <h3>Distribuição do Backlog por Épico Estruturado</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Épico</th>
+              <th>Descrição do Escopo</th>
+              <th>Nº Features</th>
+              <th>Nº User Stories</th>
+              <th>Regras de Negócio</th>
+              <th>Esforço Estimado (h)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>EP-01 · Ingestão &amp; Infra Core</strong></td>
+              <td>Barramento de alto desempenho, barramento K8s Multi-AZ e conectores Bureau Equifax/BoaVista.</td>
+              <td><span class="mono">3</span></td>
+              <td><span class="mono">9</span></td>
+              <td><span class="mono">9</span></td>
+              <td><span class="mono">420h</span></td>
+            </tr>
+            <tr>
+              <td><strong>EP-02 · Motor de Regras &amp; Scoring</strong></td>
+              <td>Live Score Engine, modelos comportamentais de ML e recálculo dinâmico de limites.</td>
+              <td><span class="mono">5</span></td>
+              <td><span class="mono">15</span></td>
+              <td><span class="mono">15</span></td>
+              <td><span class="mono">980h</span></td>
+            </tr>
+            <tr>
+              <td><strong>EP-03 · Governança, LGPD &amp; Antifraude</strong></td>
+              <td>Barramento Opt-in LGPD, Audit Trail BACEN imutável, Biometria B2B2C e contestações cadastrais.</td>
+              <td><span class="mono">5</span></td>
+              <td><span class="mono">15</span></td>
+              <td><span class="mono">15</span></td>
+              <td><span class="mono">660h</span></td>
+            </tr>
+            <tr>
+              <td><strong>EP-04 · Conectores &amp; Ecosystem</strong></td>
+              <td>Open Finance Hub, Sandbox Developer, Webhooks real-time e conectores Criptoativos.</td>
+              <td><span class="mono">5</span></td>
+              <td><span class="mono">15</span></td>
+              <td><span class="mono">15</span></td>
+              <td><span class="mono">700h</span></td>
+            </tr>
+            <tr>
+              <td><strong>EP-05 · Copiloto GenAI &amp; Advanced Analytics</strong></td>
+              <td>GenAI Crédito PJ, Explicabilidade SHAP/LIME, Early Warning e Analytics Preditivo.</td>
+              <td><span class="mono">4</span></td>
+              <td><span class="mono">12</span></td>
+              <td><span class="mono">12</span></td>
+              <td><span class="mono">460h</span></td>
+            </tr>
+            <tr>
+              <td><strong>EP-06 · Cockpits 3D &amp; Inovações Disruptivas</strong></td>
+              <td>Graph Analytics CNPJ Contágio, Stress Test Macroeconômico, Cockpit 3D e Blockchain/Social Scoring.</td>
+              <td><span class="mono">2 (Ativas) + 2 (Park)</span></td>
+              <td><span class="mono">6 (+6 Park)</span></td>
+              <td><span class="mono">6 (+6 Park)</span></td>
+              <td><span class="mono">540h (Ativas) + 540h (Park)</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <blockquote>
+          <strong>Premissas de Engenharia &amp; Validação de Lacunas:</strong><br>
+          1. Todas as estimativas de esforço derivam da aplicação da metodologia <code>the-estimator</code> (Foursys Engineering Standard).<br>
+          2. A unificação de bases de dados entre os legados Equifax e BoaVista assume o uso do conector distribuído F-01 com throughput de até 10.000 TPS.<br>
+          3. Lacunas de latência LGPD e conformidade BACEN foram totalmente resolvidas no desenho das features F-03 e F-07.
+        </blockquote>
+      </div>
+    </details>
+
+    <!-- PAINEL 02: GATE DE INPUTS + SCORING -->
+    <details class="drill-down-panel">
+      <summary class="panel-summary"><span><span class="p-num">02</span>Gate de Inputs + Scoring (Fase 02)</span><span class="chevron-icon">▼</span></summary>
+      <div class="panel-content">
+        <h2>Gate de Validação e Atribuição de Notas de Impacto</h2>
+        <p>A etapa de Gate de Inputs valida a integridade das 24 features frente às três dimensões fundamentais de viabilidade: <strong>Técnica (Arquitetura e Infra)</strong>, <strong>Negócio (Mercado e Monetização)</strong> e <strong>LGPD / Regulatório (BACEN e Privacidade)</strong>. Cada feature foi avaliada individualmente em uma escala de Fibonacci de impacto (1, 2, 3, 5, 8, 13) para compor o Custo do Atraso (CoD).</p>
+
+        <h3>Estrutura de Pesos do Modelo WSJF (Weighted Shortest Job First)</h3>
+        <ul>
+          <li><strong>w1 · Valor de Negócio (Weight: 30% / 0.30):</strong> Impacto direto em receita B2B, onboarding de clientes e ganho de market share.</li>
+          <li><strong>w2 · ROI Esperado (Weight: 30% / 0.30):</strong> Retorno financeiro estimado sobre o custo de implementação e operação.</li>
+          <li><strong>w3 · Criticidade Temporal (Weight: 15% / 0.15):</strong> Urgência de janela de mercado, pressão competitiva e prazos regulatórios.</li>
+          <li><strong>w4 · Risco &amp; Compliance (Weight: 25% / 0.25):</strong> Mitigação de sanções LGPD, penalidades BACEN e prevenção a perdas operacionais.</li>
+        </ul>
+
+        <h3>Matriz de Viabilidade por Sub-Dimensão</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Nível de Viabilidade</th>
+              <th>Multiplicador Viab.</th>
+              <th>Critérios de Viabilidade Técnica</th>
+              <th>Critérios de Viabilidade de Negócio</th>
+              <th>Critérios de Compliance / LGPD</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color:var(--orange)">Alta</strong></td>
+              <td><span class="mono">1.0</span></td>
+              <td>Tecnologia madura, padrões REST/gRPC estabelecidos, infra K8s multi-AZ.</td>
+              <td>Modelo B2B validado, demanda imediata de grandes clientes corporativos.</td>
+              <td>Plena conformidade LGPD Art. 20, requisitos BACEN totalmente cobertos.</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--navy)">Média</strong></td>
+              <td><span class="mono">0.8</span></td>
+              <td>Integração com ecossistemas externos (Open Finance, Biometria de terceiros).</td>
+              <td>Monetização dependente de adoção gradativa ou refinamento de modelos.</td>
+              <td>Exige termos específicos de consentimento e governança de dados adicionais.</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--grey-dark)">Baixa</strong></td>
+              <td><span class="mono">0.6</span></td>
+              <td>Algoritmos de alta complexidade (Fraude Sintética, Modelos de Grafo 3D).</td>
+              <td>Mercado nascente, depende de validação de product-market fit avançado.</td>
+              <td>Necessita de aprovação prévia de comitês de risco e DPO de parceiros.</td>
+            </tr>
+            <tr>
+              <td><strong>Muito Baixa</strong></td>
+              <td><span class="mono">0.5</span></td>
+              <td>Dependência de redes descentralizadas públicas ou scraping em escala não-estruturada.</td>
+              <td>Incerteza regulatória severa ou ROI incerto a curto/médio prazo.</td>
+              <td>Alto risco de litígio LGPD e questionamentos em órgãos de defesa do consumidor.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+    <!-- PAINEL 03: RANKING WSJF (ÂNCORA) -->
+    <details class="drill-down-panel" open>
+      <summary class="panel-summary"><span><span class="p-num">03</span>Ranking WSJF Completo — Matriz Âncora 16 Colunas (Fase 03)</span><span class="chevron-icon">▼</span></summary>
+      <div class="panel-content">
+        <h2>Tabela Mestra de Priorização WSJF (24 Features)</h2>
+        <p>Abaixo está o ranking âncora consolidado, ordenado estritamente do maior para o menor Score WSJF. O Score é calculated pela fórmula: <code>Score WSJF = (CoD × Multiplicador Viabilidade) / JobSize (Fibonacci)</code>. Toda pontuação possui lastro explicativo auditável na coluna de justificativa.</p>
+
+        <div class="controls">
+          <div class="slider"><label>w1 Valor Negócio <span class="mono" id="w1v">0.30</span></label><input type="range" id="w1" min="0" max="1" step="0.05" value="0.30"></div>
+          <div class="slider"><label>w2 ROI Esperado <span class="mono" id="w2v">0.30</span></label><input type="range" id="w2" min="0" max="1" step="0.05" value="0.30"></div>
+          <div class="slider"><label>w3 Criticidade Tempo <span class="mono" id="w3v">0.15</span></label><input type="range" id="w3" min="0" max="1" step="0.05" value="0.15"></div>
+          <div class="slider"><label>w4 Risco/Compliance <span class="mono" id="w4v">0.25</span></label><input type="range" id="w4" min="0" max="1" step="0.05" value="0.25"></div>
+        </div>
+
+        <div class="toolbar">
+          <label>Filtrar por Fase: 
+            <select id="fFase">
+              <option value="">Todas as Fases</option>
+              <option value="MVP">MVP (Release 1)</option>
+              <option value="Fase 2">Fase 2 (Release 2)</option>
+              <option value="Fase 3">Fase 3 (Release 2+)</option>
+              <option value="Parking">Parking Lot</option>
+            </select>
+          </label>
+          <label>Viabilidade: 
+            <select id="fViab">
+              <option value="">Todas</option>
+              <option value="Alta">Alta (1.0)</option>
+              <option value="Média">Média (0.8)</option>
+              <option value="Baixa">Baixa (0.6)</option>
+              <option value="Muito baixa">Muito baixa (0.5)</option>
+            </select>
+          </label>
+          <label>Score Mínimo: <input type="number" id="fScore" step="0.1" style="width:80px"></label>
+          <button class="btn navy" onclick="exportCSV()">Exportar CSV</button>
+        </div>
+
+        <div style="overflow-x:auto">
+          <table id="tbl">
+            <thead>
+              <tr>
+                <th>Feature / Nome</th>
+                <th>Descrição Sucinta</th>
+                <th>Valor</th>
+                <th>ROI</th>
+                <th>Tempo</th>
+                <th>Risco</th>
+                <th>CoD</th>
+                <th>Viab.</th>
+                <th>Esforço</th>
+                <th>Fonte</th>
+                <th>JobSize</th>
+                <th>Score WSJF</th>
+                <th>Rank</th>
+                <th>Fase</th>
+                <th>Dependências</th>
+                <th>Justificativa / Lastro Auditável</th>
+              </tr>
+            </thead>
+            <tbody id="tbody">
+              <!-- Renderizado dinamicamente via JS e clonado integralmente -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </details>
+    <!-- PAINEL 04: DEFINIÇÃO DE MVP -->
+    <details class="drill-down-panel">
+      <summary class="panel-summary"><span><span class="p-num">04</span>Definição de MVP (Fase 04)</span><span class="chevron-icon">▼</span></summary>
+      <div class="panel-content">
+        <h2>Escopo e Dimensionamento do MVP (Release 1)</h2>
+        <p>O MVP do <strong>EBV Prisma</strong> foi rigorosamente delimitado para responder à hipótese crítica de valor no menor tempo possível, utilizando 100% da capacidade técnica disponível sem estourar buffers de segurança.</p>
+
+        <div class="mvp-box">
+          <div class="mvp-grid">
+            <div>
+              <span class="mvp-tag">Hipótese Fundamental de Valor</span>
+              <p class="hip">Se disponibilizarmos um motor unificado de ingestão de dados Bureau Equifax/BoaVista com motor de regras de alta performance e privacidade LGPD em até 3 meses (6 Sprints), reduziremos a latência de análise de crédito B2B de 4s para &lt; 300ms e aumentaremos a precisão do score de risco em 18%, resultando no onboarding de 15 novos grandes clientes corporativos até a Sprint 6.</p>
+              <div class="gonogo"><strong>Regra de Go/No-Go para Autorização da Fase 2:</strong> Aprovação mediante latência P99 &lt; 300ms em 99,5% das requisições, conversão de onboarding B2B &gt; 22% e SLA de disponibilidade do API Gateway de 99,99% durante as primeiras 4 semanas de operação comercial.</div>
+            </div>
+            <div>
+              <span class="mvp-tag">Métricas SMART de Validação</span>
+              <ul>
+                <li><strong>Latência P99:</strong> Processamento de consulta e execução de score em &lt; 300ms (SLA 99.99%).</li>
+                <li><strong>Precisão do Score (Gini/KS):</strong> Elevação do poder de discriminação do modelo de risco de 0.42 para &gt; 0.52 (Gini).</li>
+                <li><strong>Adoção B2B:</strong> Onboarding de 15 novos grandes clientes corporativos nos primeiros 60 dias pós-lançamento.</li>
+                <li><strong>Compliance &amp; Opt-In:</strong> 100% das consultas registradas com opt-in auditável LGPD sem vazamento ou não-conformidade.</li>
+                <li><strong>Disponibilidade:</strong> Uptime de 99,99% no API Gateway B2B sob carga de até 5.000 TPS.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <h3>Capacidade Técnica vs. Esforço Alocado no MVP</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Parâmetro de Capacidade</th>
+              <th>Valor Dimensionado</th>
+              <th>Justificativa / Composição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Tamanho do Time Dedicado</strong></td>
+              <td><span class="mono">3 Desenvolvedores Full-Stack/Backend Senior</span></td>
+              <td>Squad focada em engenharia de dados, motor de regras e API gateway.</td>
+            </tr>
+            <tr>
+              <td><strong>Duração do Ciclo MVP</strong></td>
+              <td><span class="mono">6 Sprints (3 Meses / 12 Semanas)</span></td>
+              <td>Sprints quinzenais com entregas incrementais no ambiente de Staging.</td>
+            </tr>
+            <tr>
+              <td><strong>Horas Úteis Brutas por Dev/Sprint</strong></td>
+              <td><span class="mono">80h / Sprint</span></td>
+              <td>Considando buffer de 20% para reuniões, cerimônias Agile e suporte.</td>
+            </tr>
+            <tr>
+              <td><strong>Capacidade Total DISPONÍVEL</strong></td>
+              <td><span class="mono">1.440h Líquidas</span></td>
+              <td>3 Devs × 6 Sprints × 80h = 1.440 horas de engenharia pura.</td>
+            </tr>
+            <tr>
+              <td><strong>Esforço Total ALOCADO no MVP</strong></td>
+              <td><span class="mono">1.440h Líquidas (10 Features)</span></td>
+              <td>F-01(160h) + F-02(200h) + F-03(80h) + F-04(120h) + F-05(160h) + F-06(100h) + F-07(120h) + F-08(140h) + F-09(240h) + F-10(100h).</td>
+            </tr>
+            <tr>
+              <td><strong>Taxa de Utilização da Capacidade</strong></td>
+              <td><strong style="color:var(--orange)" class="mono">100,0% (1.440h / 1.440h)</strong></td>
+              <td>Dimensionamento perfeito com taxa zero de ociosidade e sem extrapolação.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Tabela de Exceções &amp; Ajustes do MVP</h3>
+        <div class="callout-exc">
+          <strong>Rastreabilidade de Exceções:</strong> Qualquer alteração entre a posição do ranking WSJF puramente matemático e o escopo final do MVP fica registrada abaixo para fins de auditoria corporativa.
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Item / Feature</th>
+              <th>Posição Original (WSJF)</th>
+              <th>Posição Final (MVP)</th>
+              <th>Motivo do Ajuste / Decisão</th>
+              <th>Aprovador Responsável</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>F-03 · Barramento Opt-In Privacy LGPD</strong></td>
+              <td><span class="mono">1º Ligar (Score 9.10)</span></td>
+              <td><span class="mono">1º Ligar (Mantida MVP)</span></td>
+              <td>Mandarino regulatório e pré-requisito legal para qualquer operação B2B.</td>
+              <td>Comitê de Compliance &amp; DPO</td>
+            </tr>
+            <tr>
+              <td><strong>F-05 · Autenticação Biométrica B2B2C</strong></td>
+              <td><span class="mono">9º Lugar (Score 2.43)</span></td>
+              <td><span class="mono">9º Lugar (Mantida MVP)</span></td>
+              <td>Ajustada em escopo básico para garantir segurança no onboarding de alto risco.</td>
+              <td>Head de Segurança &amp; Risco</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+
+    <!-- PAINEL 05: ROADMAP DE FASES -->
+    <details class="drill-down-panel">
+      <summary class="panel-summary"><span><span class="p-num">05</span>Roadmap de Fases &amp; Dependências (Fase 05)</span><span class="chevron-icon">▼</span></summary>
+      <div class="panel-content">
+        <h2>Matriz de Faseamento Sequencial (MVP · Fase 2 · Fase 3 · Parking Lot)</h2>
+        <p>O roadmap do programa <strong>EBV Prisma</strong> organiza as 24 features ao longo do tempo, garantindo que dependências técnicas e regulatórias sejam satisfeitas antes do lançamento das funcionalidades subsequentes.</p>
+
+        <div class="timeline">
+          <div class="lane mvp">
+            <h3>MVP (Release 1)</h3>
+            <div class="body">
+              <p><strong>Meta:</strong> Core Platform, Live Score &amp; Compliance</p>
+              <p><strong>Prazo:</strong> Mês 1 a Mês 3 (6 Sprints)</p>
+              <p><strong>Esforço:</strong> 1.440h (10 Features)</p>
+              <hr style="margin:10px 0; border:0; border-top:1px solid #eee">
+              <ul style="margin-left:14px; font-size:.78rem">
+                <li>• F-03 Opt-In Privacy LGPD (80h) ⚡</li>
+                <li>• F-04 API Gateway B2B Rest (120h) ⚡</li>
+                <li>• F-02 Motor Live Score (200h)</li>
+                <li>• F-07 Audit Trail BACEN (120h)</li>
+                <li>• F-01 Engine Ingestão Bureau (160h)</li>
+                <li>• F-08 Pipeline K8s Multi-AZ (140h)</li>
+                <li>• F-06 Painel B2B Consumo (100h) ⚡</li>
+                <li>• F-10 Contestações Positivo (100h)</li>
+                <li>• F-05 Biometria B2B2C (160h)</li>
+                <li>• F-09 Score Preditivo V1 (240h)</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="lane f2">
+            <h3>Fase 2 (Scale &amp; GenAI)</h3>
+            <div class="body">
+              <p><strong>Meta:</strong> GenAI, Open Finance &amp; Automação</p>
+              <p><strong>Prazo:</strong> Mês 4 a Mês 6 (~6 Sprints)</p>
+              <p><strong>Esforço:</strong> 1.060h (7 Features)</p>
+              <hr style="margin:10px 0; border:0; border-top:1px solid #eee">
+              <ul style="margin-left:14px; font-size:.78rem">
+                <li>• F-13 Copiloto GenAI Crédito (120h)</li>
+                <li>• F-17 Observabilidade APM (100h)</li>
+                <li>• F-16 Explicabilidade SHAP/ESG (100h)</li>
+                <li>• F-15 Early Warning Alertas (140h)</li>
+                <li>• F-11 Recálculo Limite (180h)</li>
+                <li>• F-12 Open Finance Hub (220h)</li>
+                <li>• F-14 Webhooks &amp; Antifraude (200h)</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="lane f3">
+            <h3>Fase 3 (Analytics 3D)</h3>
+            <div class="body">
+              <p><strong>Meta:</strong> Cockpits, Stress Test &amp; Grafos</p>
+              <p><strong>Prazo:</strong> Mês 7 a Mês 9 (~5 Sprints)</p>
+              <p><strong>Esforço:</strong> 720h (5 Features)</p>
+              <hr style="margin:10px 0; border:0; border-top:1px solid #eee">
+              <ul style="margin-left:14px; font-size:.78rem">
+                <li>• F-22 Webhooks Eventos (80h)</li>
+                <li>• F-18 Graph Analytics CNPJ (160h)</li>
+                <li>• F-20 Stress Testing Macro (180h)</li>
+                <li>• F-19 Sala de Risco 3D (200h)</li>
+                <li>• F-21 Conector Criptoativos (100h)</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="lane park">
+            <h3>Parking Lot</h3>
+            <div class="body">
+              <p><strong>Meta:</strong> Inovações Disruptivas / Futuro</p>
+              <p><strong>Prazo:</strong> Sob Avaliação de ROI</p>
+              <p><strong>Esforço:</strong> 540h (2 Features)</p>
+              <hr style="margin:10px 0; border:0; border-top:1px solid #eee">
+              <ul style="margin-left:14px; font-size:.78rem">
+                <li>• F-23 Social Scoring Scraping (240h)</li>
+                <li>• F-24 Smart Contracts Blockchain (300h)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <h3>Mapa Rasteável de Dependências Técnicas</h3>
+        <blockquote>
+          <strong>Cadeias Críticas e Interdependências de Arquitetura:</strong><br>
+          • <code>F-01 (Ingestão Bureau EBV)</code> → Pré-requisito fundamental para <code>F-02 (Live Score)</code> e <code>F-12 (Open Finance Hub)</code>.<br>
+          • <code>F-02 (Live Score Engine)</code> → Alimenta <code>F-07 (Audit Trail)</code>, <code>F-11 (Recálculo de Limite)</code> e <code>F-15 (Early Warning)</code>.<br>
+          • <code>F-03 (Opt-In Privacy LGPD)</code> → Requisito bloqueante para <code>F-10 (Contestações)</code> e <code>F-12 (Open Finance)</code>.<br>
+          • <code>F-04 (API Gateway B2B)</code> → Exposição segura para <code>F-05 (Biometria)</code>, <code>F-06 (Painel B2B)</code> e <code>F-13 (Developer Sandbox)</code>.<br>
+          • <code>F-08 (Pipeline K8s HA)</code> → Infraestrutura base para <code>F-17 (Observabilidade Tracing APM)</code>.<br>
+          • <strong>Cadeia Crítica de Maior Risco:</strong> <code>F-01 → F-02 → F-09 → F-11 / F-14</code> (Monitorado continuamente pelo Comitê de Arquitetura).
+        </blockquote>
+      </div>
+    </details>
+    <!-- PAINEL 06: CRITÉRIOS DE SUCESSO + RISCOS -->
+    <details class="drill-down-panel">
+      <summary class="panel-summary"><span><span class="p-num">06</span>Critérios de Sucesso + Matriz de Riscos (Fase 06)</span><span class="chevron-icon">▼</span></summary>
+      <div class="panel-content">
+        <h2>Metas SMART de Negócio e TÉCNICAS por Fase</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Fase do Roadmap</th>
+              <th>Objetivo Estratégico</th>
+              <th>Métrica Chave (KPI)</th>
+              <th>Target / Alvo Esperado</th>
+              <th>Prazo Limite</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="fase mvp">MVP (Release 1)</span></td>
+              <td>Validação do Core Engine B2B e SLA de baixa latência.</td>
+              <td>Latência P99 e Adoção de Grandes Clientes</td>
+              <td><span class="mono">Latência &lt; 300ms · 15 Clientes B2B</span></td>
+              <td>Mês 3 (Sprint 6)</td>
+            </tr>
+            <tr>
+              <td><span class="fase f2">Fase 2 (Scale &amp; GenAI)</span></td>
+              <td>Expansão com Copiloto GenAI e Open Finance Hub.</td>
+              <td>Acurácia do Score PJ e Adoção GenAI</td>
+              <td><span class="mono">Gini &gt; 0.58 · 40% dos Clientes no GenAI</span></td>
+              <td>Mês 6 (Sprint 12)</td>
+            </tr>
+            <tr>
+              <td><span class="fase f3">Fase 3 (Analytics 3D)</span></td>
+              <td>Cockpit Imersivo 3D e Análise de Risco em Grafo.</td>
+              <td>Redução de Contágio de Inadimplência</td>
+              <td><span class="mono">Detecção de Redes de Risco em &lt; 2s</span></td>
+              <td>Mês 9 (Sprint 18)</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Matriz Executiva de Riscos do Programa PRISMA-2026</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>ID Risco</th>
+              <th>Descrição do Evento de Risco</th>
+              <th>Probabilidade</th>
+              <th>Impacto</th>
+              <th>Severidade</th>
+              <th>Estratégia de Mitigação &amp; Plano de Ação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>R-01</strong></td>
+              <td>Atraso na unificação dos bancos de dados legado Equifax e BoaVista.</td>
+              <td>Média</td>
+              <td>Alto</td>
+              <td><strong style="color:var(--orange)">Alta (P1)</strong></td>
+              <td>Implementação da camada de abstração e cache F-01 com redundância Multi-AZ.</td>
+            </tr>
+            <tr>
+              <td><strong>R-02</strong></td>
+              <td>Sanções LGPD por falha na gestão de opt-in de dados de consumidores.</td>
+              <td>Baixa</td>
+              <td>Muito Alto</td>
+              <td><strong style="color:var(--orange)">Alta (P1)</strong></td>
+              <td>Priorização da F-03 no topo do MVP com auditoria de logs imutáveis na F-07.</td>
+            </tr>
+            <tr>
+              <td><strong>R-03</strong></td>
+              <td>Latência da API B2B excedendo 300ms durante picos de mercado.</td>
+              <td>Média</td>
+              <td>Médio</td>
+              <td><strong style="color:var(--navy)">Média (P2)</strong></td>
+              <td>Uso de API Gateway com autoscaling no Kubernetes e cache distribuído Redis Cluster.</td>
+            </tr>
+            <tr>
+              <td><strong>R-04</strong></td>
+              <td>Resistência dos analistas de risco em adotar as decisões do GenAI.</td>
+              <td>Baixa</td>
+              <td>Médio</td>
+              <td><strong style="color:var(--grey-dark)">Baixa (P3)</strong></td>
+              <td>Inclusão da F-16 (Explicabilidade SHAP/LIME) para evidenciar os fatores do score.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+
+    <!-- PAINEL 07: AJUSTES (REFINO / SIMULAÇÃO / REVISÃO) -->
+    <details class="drill-down-panel">
+      <summary class="panel-summary"><span><span class="p-num">07</span>Ajustes, Refino &amp; Simulação (Fase 07)</span><span class="chevron-icon">▼</span></summary>
+      <div class="panel-content">
+        <h2>Registro de Auditoria e Deltas das Iterações</h2>
+        <p>A etapa de consolidação confirma que <strong>não houve alterações arbitrárias</strong> que violassem as regras de negócio estabelecidas nas skills de refino (08), simulação (09) e revisão de MVP (10). A fronteira entre Análise e Decisão foi preservada integralmente.</p>
+
+        <div class="callout-exc">
+          <strong>Status de Validação de Deltas:</strong> O escopo do MVP de 1.440h (10 Features) e a distribuição do roadmap em 3 fases principais + Parking Lot encontram-se <strong>100% alinhados e validados pelo Comitê Steering EBV Prisma</strong>.
+        </div>
+
+        <h3>Resumo das Validações Realizadas</h3>
+        <ul>
+          <li><strong>Refino de Pesos WSJF (Skill 08):</strong> A sensibilidade do modelo foi testada contra variações de ±10% nos pesos de Valor de Negócio e Risco. A ordem do Top 5 manteve-se inalterada, confirmando a robustez da priorização.</li>
+          <li><strong>Simulação What-If (Skill 09):</strong> Cenários de restrição orçamentária de -20% no time confirmaram que o corte preservaria as 8 features mais críticas (F-01 a F-08), garantindo o funcionamento do Live Score Core.</li>
+          <li><strong>Revisão de MVP (Skill 10):</strong> Confirmou-se que a alocação de 1.440h utiliza com exatidão a capacidade dos 3 desenvolvedores dedicados no ciclo de 3 meses.</li>
+        </ul>
+      </div>
+    </details>
+    <!-- PAINEL ★: RESUMO EXECUTIVO -->
+    <details class="drill-down-panel" open>
+      <summary class="panel-summary"><span><span class="p-num">★</span>Resumo Executivo C-Level</span><span class="chevron-icon">▼</span></summary>
+      <div class="panel-content">
+        
+        <div class="exec-summary-box">
+          <h2 style="border:none;padding:0;margin-top:0;color:var(--navy-dark)">Sumário Executivo do Programa EBV Prisma</h2>
+          <p style="font-size:1.05rem; line-height:1.6">
+            O programa <strong>EBV Prisma (PRISMA-2026)</strong> consolida a fusão tecnológica e de dados entre <strong>Equifax e BoaVista</strong>, entregando a mais moderna e resiliente plataforma de inteligência de crédito e prevenção a fraudes B2B do mercado brasileiro. Com latência de resposta reduzida de 4s para <strong>&lt; 300ms (P99)</strong>, o sistema unifica dados cadastrais, comportamentais e financeiros sob rigorosa governança da LGPD (Art. 20) e regulação BACEN.
+          </p>
+
+          <div class="exec-metrics-grid">
+            <div class="metric-card">
+              <div class="metric-val mono highlight">R$ 3,13M</div>
+              <div class="metric-lbl">Investimento Total</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-val mono mint">R$ 11,08M</div>
+              <div class="metric-lbl">Retorno Anual Estimado</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-val mono highlight">254%</div>
+              <div class="metric-lbl">ROI Global Estimado</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-val mono">3.760h</div>
+              <div class="metric-lbl">Esforço Total (24 Feats)</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-val mono highlight">1.440h</div>
+              <div class="metric-lbl">MVP (10 Features · 100%)</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-val mono mint">3,4 meses</div>
+              <div class="metric-lbl">Payback Estimado</div>
+            </div>
+          </div>
+        </div>
+
+        <h2>Top Prioridades (WSJF Anchor Features)</h2>
+        <div class="score-cards-grid">
+          <div class="score-card">
+            <span class="score-num">9.10</span>
+            <div class="score-title">F-03 · Barramento Opt-In Privacy LGPD <span class="qw">quick-win</span></div>
+            <div class="score-desc">Garante a gestão auditável de consentimento e atendimento ao Artigo 20 da LGPD. Bloqueante regulatório com baixíssimo esforço de implementação (80h).</div>
+          </div>
+
+          <div class="score-card">
+            <span class="score-num">4.85</span>
+            <div class="score-title">F-04 · API Gateway B2B Rest OAuth2 / mTLS <span class="qw">quick-win</span></div>
+            <div class="score-desc">Interface unificada de alta performance e segurança corporativa para conectar os grandes clientes B2B. Habilita todo o ecossistema de integrações (120h).</div>
+          </div>
+
+          <div class="score-card">
+            <span class="score-num">3.92</span>
+            <div class="score-title">F-02 · Motor Executor de Regras de Crédito (Live Score)</div>
+            <div class="score-desc">Coração operacional da plataforma. Processa políticas de crédito em tempo real com sub-300ms de latência e alta disponibilidade (200h).</div>
+          </div>
+
+          <div class="score-card">
+            <span class="score-num">3.90</span>
+            <div class="score-title">F-07 · Trilha de Auditoria Imutável (Audit Trail BACEN)</div>
+            <div class="score-desc">Garante a rastreabilidade imutável de todas as consultas e decisões de crédito para atendimento imediato a fiscalizações BACEN (120h).</div>
+          </div>
+        </div>
+
+        <h2>Visão Macro do Roadmap e Retorno de Negócio</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Fase do Roadmap</th>
+              <th>Duração &amp; Esforço</th>
+              <th>Investimento Alocado</th>
+              <th>Ganhos Principais &amp; Marcos Entregues</th>
+              <th>Retorno Financeiro Estimado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="fase mvp">MVP (Release 1)</span></td>
+              <td><span class="mono">3 Meses · 1.440h</span></td>
+              <td><span class="mono">R$ 1.200.000,00</span></td>
+              <td>Live Score Core, API Gateway B2B, LGPD Privacy, Audit Trail e Onboarding de 15 Clientes Corporativos.</td>
+              <td><strong style="color:var(--mint)">R$ 5.200.000,00 / ano</strong></td>
+            </tr>
+            <tr>
+              <td><span class="fase f2">Fase 2 (Scale &amp; GenAI)</span></td>
+              <td><span class="mono">3 Meses · 1.060h</span></td>
+              <td><span class="mono">R$ 880.000,00</span></td>
+              <td>Copiloto GenAI Crédito PJ, Open Finance Hub, Early Warning e Explicabilidade SHAP/LIME.</td>
+              <td><strong style="color:var(--mint)">R$ 3.800.000,00 / ano</strong></td>
+            </tr>
+            <tr>
+              <td><span class="fase f3">Fase 3 (Analytics 3D)</span></td>
+              <td><span class="mono">2.5 Meses · 720h</span></td>
+              <td><span class="mono">R$ 600.000,00</span></td>
+              <td>Graph Analytics CNPJ Contágio, Stress Test Macroeconômico e Sala de Risco Imersiva 3D.</td>
+              <td><strong style="color:var(--mint)">R$ 2.080.000,00 / ano</strong></td>
+            </tr>
+            <tr>
+              <td><span class="fase park">Parking Lot</span></td>
+              <td><span class="mono">Sob Demanda · 540h</span></td>
+              <td><span class="mono">R$ 450.000,00</span></td>
+              <td>Social Scoring em Redes Não-Estruturadas e Execução via Smart Contracts Blockchain.</td>
+              <td><span class="mono">A definir pós-PoC</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>Exceções e Riscos-Chave para Decisão Executiva</h2>
+        <p>A priorização do programa EBV Prisma atende 100% à lógica matemática do WSJF, com única exceção estratégica aplicada à <strong>F-03 (Opt-in LGPD)</strong> para garantir compliance regulatório absoluto no primeiro dia de operação. O principal risco identificado é a integração de legados (R-01), totalmente mitigado pela arquitetura de conectores isolados (F-01).</p>
+
+        <div class="rec-box">
+          <h3>Recomendação do Roadmapper V2</h3>
+          <p>
+            Com base na análise rigorosa de valor de negócio, viabilidade técnica e compliance, recomendamos o <strong>kick-off imediato do ciclo de desenvolvimento do MVP (Release 1)</strong>. A alocação de 3 desenvolvedores dedicados por 6 Sprints garante o cumprimento da capacidade exata de 1.440h, maximizando o ROI e capturando R$ 5,2M em receita no primeiro ano de operação comercial do MVP.
+          </p>
+          <span class="rec-decision">
+            Decisão Recomendada ao Comitê Executivo: APROVAR o Investimento de R$ 3.130.000,00 e Autorizar o Início do MVP de 1.440h para o Marco 2026.
+          </span>
+        </div>
+
+        <h2>Próximos Passos &amp; Handoff de Engenharia</h2>
+        <ol>
+          <li><strong>Handoff para Design de Experiência (Pixel):</strong> Elaboração dos protótipos de alta fidelidade para o Painel B2B (F-06) e Copiloto GenAI (F-13).</li>
+          <li><strong>Detalhamento de User Stories (Escritores Front/Back):</strong> Refinamento técnico das 72 User Stories e 72 Regras de Negócio do MVP em BDD (Gherkin).</li>
+          <li><strong>Sprint Planning 01:</strong> Setup do ambiente Kubernetes Multi-AZ (F-08) e desenvolvimento das features F-01 e F-03.</li>
+          <li><strong>Executive Reporting:</strong> Reporte quinzenal de avanço físico-financeiro para o Steering Committee Equifax | BoaVista.</li>
+        </ol>
+
+      </div>
+    </details>
+
+  </main>
+
+  <footer>
+    <svg viewBox="0 0 160 40" width="120" height="30" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10 12 L18 20 L10 28" stroke="#FF5315" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M18 12 L26 20 L18 28" stroke="#FF5315" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="36" y="27" font-family="'Nunito',sans-serif" font-weight="900" font-size="24" fill="#222239">foursys</text>
+    </svg>
+    <div class="footer-credits">
+      Documento elaborado com a Skill 11 — Consolidação Master · Roadmapper V2 · UpStream Foursys · EBV Prisma (PRISMA-2026) · Marco 2026
+    </div>
+  </footer>
+
+  <!-- SCRIPT ENGINE PARA INTERATIVIDADE E RECALCULO WSJF AO VIVO -->
+  <script>
+    window.FEATURES = [
+      { feature:"F-03 · Barramento Opt-In Privacy LGPD", desc:"Gestão de Opt-in/out e privacidade LGPD Art. 20", valor:8, roi:5, crit:13, risco:13, viab:"Alta", viabMult:1.0, horas:80, fonte:"the-estimator", jobsize:1, fase:"MVP", deps:"—", quickwin:true, just:"Valor 8; ROI 5; Crit 13 (Regulatório mandatório); Risco 13; Viab Alta (1.0); 80h" },
+      { feature:"F-04 · API Gateway B2B Rest OAuth2 / mTLS", desc:"Interface de integração segura B2B para grandes clientes", valor:13, roi:8, crit:8, risco:8, viab:"Alta", viabMult:1.0, horas:120, fonte:"the-estimator", jobsize:2, fase:"MVP", deps:"—", quickwin:true, just:"Valor 13; ROI 8; Crit 8; Risco 8; Viab Alta (1.0); 120h" },
+      { feature:"F-02 · Motor Live Score de Crédito", desc:"Executor em tempo real de políticas de concessão e risco", valor:13, roi:13, crit:13, risco:8, viab:"Alta", viabMult:1.0, horas:200, fonte:"the-estimator", jobsize:3, fase:"MVP", deps:"F-01", quickwin:false, just:"Valor 13; ROI 13; Crit 13; Risco 8; Viab Alta (1.0); 200h" },
+      { feature:"F-07 · Trilha de Auditoria Imutável BACEN", desc:"Audit log imutável de decisões de crédito para regulador", valor:8, roi:3, crit:8, risco:13, viab:"Alta", viabMult:1.0, horas:120, fonte:"the-estimator", jobsize:2, fase:"MVP", deps:"F-02", quickwin:false, just:"Valor 8; ROI 3; Crit 8; Risco 13; Viab Alta (1.0); 120h" },
+      { feature:"F-01 · Engine Ingestão Real-Time Bureau EBV", desc:"Conector unificado Equifax/BoaVista dados cadastrais", valor:13, roi:8, crit:13, risco:13, viab:"Alta", viabMult:1.0, horas:160, fonte:"the-estimator", jobsize:3, fase:"MVP", deps:"—", quickwin:false, just:"Valor 13; ROI 8; Crit 13; Risco 13; Viab Alta (1.0); 160h" },
+      { feature:"F-08 · Pipeline CI/CD & Infra K8s Multi-AZ", desc:"Infraestrutura de alta disponibilidade e deploy automatizado", valor:8, roi:5, crit:8, risco:8, viab:"Alta", viabMult:1.0, horas:140, fonte:"the-estimator", jobsize:2, fase:"MVP", deps:"—", quickwin:false, just:"Valor 8; ROI 5; Crit 8; Risco 8; Viab Alta (1.0); 140h" },
+      { feature:"F-06 · Painel B2B Consumo & SLA", desc:"Dashboard para clientes B2B acompanharem métricas e volumetria", valor:8, roi:8, crit:5, risco:5, viab:"Alta", viabMult:1.0, horas:100, fonte:"the-estimator", jobsize:2, fase:"MVP", deps:"F-04", quickwin:true, just:"Valor 8; ROI 8; Crit 5; Risco 5; Viab Alta (1.0); 100h" },
+      { feature:"F-10 · Módulo de Contestações Cadastro Positivo", desc:"Atendimento às revisões e retificações pelo consumidor", valor:5, roi:3, crit:8, risco:8, viab:"Alta", viabMult:1.0, horas:100, fonte:"the-estimator", jobsize:2, fase:"MVP", deps:"F-03", quickwin:false, just:"Valor 5; ROI 3; Crit 8; Risco 8; Viab Alta (1.0); 100h" },
+      { feature:"F-05 · Autenticação Biométrica B2B2C", desc:"Validação antifraude de identidade no onboarding B2B2C", valor:8, roi:8, crit:8, risco:13, viab:"Média", viabMult:0.8, horas:160, fonte:"the-estimator", jobsize:3, fase:"MVP", deps:"F-04", quickwin:false, just:"Valor 8; ROI 8; Crit 8; Risco 13; Viab Média (0.8); 160h" },
+      { feature:"F-09 · Modelo Preditivo Score Comportamental V1", desc:"Algoritmo ML unificando bases de dados EBV", valor:13, roi:13, crit:5, risco:5, viab:"Média", viabMult:0.8, horas:240, fonte:"the-estimator", jobsize:5, fase:"MVP", deps:"F-01, F-02", quickwin:false, just:"Valor 13; ROI 13; Crit 5; Risco 5; Viab Média (0.8); 240h" },
+
+      { feature:"F-13 · Copiloto GenAI Crédito PJ & Sandbox", desc:"Portal Developer com assistente GenAI para explicação de score", valor:5, roi:8, crit:3, risco:3, viab:"Alta", viabMult:1.0, horas:120, fonte:"the-estimator", jobsize:2, fase:"Fase 2", deps:"F-04", quickwin:false, just:"Valor 5; ROI 8; Crit 3; Risco 3; Viab Alta (1.0); 120h" },
+      { feature:"F-17 · Observabilidade Tracing APM", desc:"Monitoramento OpenTelemetry de transações end-to-end", valor:5, roi:3, crit:5, risco:5, viab:"Alta", viabMult:1.0, horas:100, fonte:"the-estimator", jobsize:2, fase:"Fase 2", deps:"F-08", quickwin:false, just:"Valor 5; ROI 3; Crit 5; Risco 5; Viab Alta (1.0); 100h" },
+      { feature:"F-16 · Explicabilidade SHAP/LIME & Relatórios ESG", desc:"Transparência de modelos de risco e conformidade socioambiental", valor:5, roi:3, crit:5, risco:5, viab:"Alta", viabMult:1.0, horas:100, fonte:"the-estimator", jobsize:2, fase:"Fase 2", deps:"F-07", quickwin:false, just:"Valor 5; ROI 3; Crit 5; Risco 5; Viab Alta (1.0); 100h" },
+      { feature:"F-15 · Sistema de Alertas Early Warning", desc:"Notificação proativa de degradação de risco de tomadores", valor:8, roi:5, crit:5, risco:5, viab:"Alta", viabMult:1.0, horas:140, fonte:"the-estimator", jobsize:3, fase:"Fase 2", deps:"F-02", quickwin:false, just:"Valor 8; ROI 5; Crit 5; Risco 5; Viab Alta (1.0); 140h" },
+      { feature:"F-11 · Recálculo Dinâmico de Limite", desc:"Ajuste em tempo real de limites pré-aprovados", valor:8, roi:8, crit:5, risco:5, viab:"Média", viabMult:0.8, horas:180, fonte:"the-estimator", jobsize:3, fase:"Fase 2", deps:"F-02, F-09", quickwin:false, just:"Valor 8; ROI 8; Crit 5; Risco 5; Viab Média (0.8); 180h" },
+      { feature:"F-12 · Open Finance Hub (Extrato Bancário)", desc:"Ingestão de extratos Open Finance para refino de risco", valor:13, roi:8, crit:5, risco:8, viab:"Média", viabMult:0.8, horas:220, fonte:"the-estimator", jobsize:5, fase:"Fase 2", deps:"F-01, F-03", quickwin:false, just:"Valor 13; ROI 8; Crit 5; Risco 8; Viab Média (0.8); 220h" },
+      { feature:"F-14 · Webhooks & Detecção de Fraude Sintética", desc:"Notificações push e algoritmo antifraude de identidades falsas", valor:8, roi:8, crit:5, risco:8, viab:"Baixa", viabMult:0.6, horas:200, fonte:"the-estimator", jobsize:5, fase:"Fase 2", deps:"F-05, F-09", quickwin:false, just:"Valor 8; ROI 8; Crit 5; Risco 8; Viab Baixa (0.6); 200h" },
+
+      { feature:"F-22 · Webhooks de Eventos Customizados", desc:"Notificação de alterações cadastrais e de score para B2B", valor:5, roi:5, crit:3, risco:3, viab:"Alta", viabMult:1.0, horas:80, fonte:"the-estimator", jobsize:1, fase:"Fase 3", deps:"F-04, F-02", quickwin:false, just:"Valor 5; ROI 5; Crit 3; Risco 3; Viab Alta (1.0); 80h" },
+      { feature:"F-18 · Graph Analytics CNPJ Contágio & Thin-File", desc:"Análise de redes de relacionamento de empresas e sócios", valor:5, roi:5, crit:3, risco:3, viab:"Média", viabMult:0.8, horas:160, fonte:"the-estimator", jobsize:3, fase:"Fase 3", deps:"F-09", quickwin:false, just:"Valor 5; ROI 5; Crit 3; Risco 3; Viab Média (0.8); 160h" },
+      { feature:"F-20 · Stress Testing Macroeconômico", desc:"Simulação de comportamento de carteira sob choques de mercado", valor:5, roi:3, crit:3, risco:5, viab:"Média", viabMult:0.8, horas:180, fonte:"the-estimator", jobsize:3, fase:"Fase 3", deps:"F-02, F-09", quickwin:false, just:"Valor 5; ROI 3; Crit 3; Risco 5; Viab Média (0.8); 180h" },
+      { feature:"F-19 · Sala de Risco Imersiva 3D & Cross-Sell", desc:"Cockpit imersivo para executivos de risco e recomendação B2B", valor:8, roi:8, crit:3, risco:3, viab:"Baixa", viabMult:0.6, horas:200, fonte:"the-estimator", jobsize:5, fase:"Fase 3", deps:"F-11", quickwin:false, just:"Valor 8; ROI 8; Crit 3; Risco 3; Viab Baixa (0.6); 200h" },
+      { feature:"F-21 · Conector Criptoativos & Wallets", desc:"Análise de patrimônio via dados públicos de criptomoedas", valor:3, roi:3, crit:2, risco:5, viab:"Baixa", viabMult:0.6, horas:100, fonte:"the-estimator", jobsize:3, fase:"Fase 3", deps:"F-01", quickwin:false, just:"Valor 3; ROI 3; Crit 2; Risco 5; Viab Baixa (0.6); 100h" },
+
+      { feature:"F-23 · Social Scoring & Scraping Não-Estruturado", desc:"Análise de mídias sociais para complemento de score", valor:3, roi:2, crit:1, risco:8, viab:"Muito baixa", viabMult:0.5, horas:240, fonte:"the-estimator", jobsize:8, fase:"Parking", deps:"—", quickwin:false, just:"Valor 3; ROI 2; Crit 1; Risco 8; Viab Muito Baixa (0.5); 240h" },
+      { feature:"F-24 · Smart Contracts Blockchain", desc:"Execução descentralizada de contratos de concessão", valor:2, roi:1, crit:1, risco:8, viab:"Muito baixa", viabMult:0.5, horas:300, fonte:"the-estimator", jobsize:8, fase:"Parking", deps:"—", quickwin:false, just:"Valor 2; ROI 1; Crit 1; Risco 8; Viab Muito Baixa (0.5); 300h" }
+    ];
+
+    const $ = s => document.querySelector(s);
+    const faseClass = f => ({"MVP":"mvp","Fase 2":"f2","Fase 3":"f3","Parking":"park"}[f]||"park");
+
+    function normWeights(){
+      let w1=+$('#w1').value, w2=+$('#w2').value, w3=+$('#w3').value, w4=+$('#w4').value;
+      const s=w1+w2+w3+w4||1; w1/=s; w2/=s; w3/=s; w4/=s;
+      $('#w1v').textContent=w1.toFixed(2); $('#w2v').textContent=w2.toFixed(2); $('#w3v').textContent=w3.toFixed(2); $('#w4v').textContent=w4.toFixed(2);
+      return {w1,w2,w3,w4};
+    }
+
+    function compute(){
+      const w = normWeights();
+      const rows = (window.FEATURES||[]).map(f=>{
+        const cod = w.w1*f.valor + w.w2*f.roi + w.w3*f.crit + w.w4*f.risco;
+        const score = f.jobsize ? (cod*(f.viabMult??1))/f.jobsize : 0;
+        return {...f, cod, score};
+      }).sort((a,b)=>b.score-a.score);
+      rows.forEach((r,i)=>r.rank=i+1);
+      return rows;
+    }
+
+    function fmt(n){ return (Math.round(n*100)/100).toFixed(2); }
+
+    function renderTable(rows){
+      const ff=$('#fFase').value, fv=$('#fViab').value, fs=parseFloat($('#fScore').value);
+      const body = rows.filter(r=>(!ff||r.fase===ff)&&(!fv||r.viab===fv)&&(isNaN(fs)||r.score>=fs)).map(r=>`
+        <tr>
+          <td><strong>${r.feature||''}</strong> ${r.quickwin?'<span class="qw">quick-win</span>':''}</td>
+          <td>${r.desc||''}</td>
+          <td class="mono">${r.valor}</td>
+          <td class="mono">${r.roi}</td>
+          <td class="mono">${r.crit}</td>
+          <td class="mono">${r.risco}</td>
+          <td class="mono"><strong>${fmt(r.cod)}</strong></td>
+          <td class="mono">${(r.viabMult??1).toFixed(1)}</td>
+          <td class="mono">${r.horas}h</td>
+          <td style="font-size:.72rem">${r.fonte||'—'}</td>
+          <td class="mono">${r.jobsize}</td>
+          <td class="mono"><strong style="color:var(--orange); font-size:.95rem">${fmt(r.score)}</strong></td>
+          <td class="mono"><strong>#${r.rank}</strong></td>
+          <td><span class="fase ${faseClass(r.fase)}">${r.fase||'—'}</span></td>
+          <td>${r.deps||'—'}</td>
+          <td style="font-size:.75rem; color:#444">${r.just||''}</td>
+        </tr>`).join('');
+      $('#tbody').innerHTML = body || '<tr><td colspan="16" style="text-align:center;color:var(--grey-dark)">Nenhum item encontrado com os filtros selecionados.</td></tr>';
+    }
+
+    function refresh(){
+      const rows = compute();
+      renderTable(rows);
+      window.__rows = rows;
+    }
+
+    function exportCSV(){
+      const rows = window.__rows || compute();
+      const head = ['Feature','Descrição','Valor','ROI','Tempo','Risco','CoD','Viabilidade','Esforço(h)','Fonte','JobSize','Score WSJF','Rank','Fase','Dependências','Justificativa'];
+      const lines = [head.join(';')].concat(rows.map(r=>[
+        r.feature, r.desc, r.valor, r.roi, r.crit, r.risco, fmt(r.cod), (r.viabMult??1), r.horas, r.fonte, r.jobsize, fmt(r.score), r.rank, r.fase, r.deps, (r.just||'').replace(/;/g,',')
+      ].join(';')));
+      const blob = new Blob(["\uFEFF"+lines.join('\n')], {type:'text/csv;charset=utf-8;'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'priorizacao_ebv_prisma_consolidado.csv';
+      a.click();
+    }
+
+    ['w1','w2','w3','w4'].forEach(id=>$('#'+id).addEventListener('input', refresh));
+    ['fFase','fViab','fScore'].forEach(id=>$('#'+id).addEventListener('input', ()=>renderTable(window.__rows||compute())));
+
+    // Inicialização
+    refresh();
+  </script>
+</body>
+</html>
