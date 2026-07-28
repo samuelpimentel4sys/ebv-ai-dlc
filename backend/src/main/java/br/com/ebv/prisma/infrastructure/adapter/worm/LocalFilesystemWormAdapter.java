@@ -3,6 +3,7 @@ package br.com.ebv.prisma.infrastructure.adapter.worm;
 import br.com.ebv.prisma.domain.decision.exception.WormWriteException;
 import br.com.ebv.prisma.domain.decision.port.out.WormStoragePort;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -16,8 +17,10 @@ import java.util.UUID;
 
 /**
  * Local filesystem WORM adapter — refuse overwrite simulates S3 Object Lock.
+ * Default when {@code prisma.worm.backend=fs} (or unset).
  */
 @Component
+@ConditionalOnProperty(name = "prisma.worm.backend", havingValue = "fs", matchIfMissing = true)
 public class LocalFilesystemWormAdapter implements WormStoragePort {
 
     private final Path basePath;

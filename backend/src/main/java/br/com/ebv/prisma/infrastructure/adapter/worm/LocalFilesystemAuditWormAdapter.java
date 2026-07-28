@@ -3,6 +3,7 @@ package br.com.ebv.prisma.infrastructure.adapter.worm;
 import br.com.ebv.prisma.domain.audit.exception.AuditWormWriteException;
 import br.com.ebv.prisma.domain.audit.port.out.AuditWormStoragePort;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -13,8 +14,9 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.UUID;
 
-/** Lab FS WORM for audit trail — refuse overwrite like decision WORM. */
+/** Lab FS WORM for audit trail — refuse overwrite like decision WORM. Default backend=fs. */
 @Component
+@ConditionalOnProperty(name = "prisma.audit-worm.backend", havingValue = "fs", matchIfMissing = true)
 public class LocalFilesystemAuditWormAdapter implements AuditWormStoragePort {
 
     private final Path basePath;

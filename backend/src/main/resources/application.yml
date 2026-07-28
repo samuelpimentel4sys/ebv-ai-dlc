@@ -47,11 +47,22 @@ prisma:
     topic-identity-corrections: ${KAFKA_TOPIC_IDENTITY:prisma.identity.corrections}
     partition-count: ${KAFKA_PARTITION_COUNT:6}
   worm:
+    backend: ${PRISMA_WORM_BACKEND:fs}
     base-path: ${PRISMA_WORM_BASE_PATH:./data/worm}
     fail: ${PRISMA_WORM_FAIL:false}
+    s3:
+      bucket: ${PRISMA_WORM_S3_BUCKET:}
+      prefix: ${PRISMA_WORM_S3_PREFIX:decisions/}
+      region: ${PRISMA_WORM_S3_REGION:us-east-1}
+      retention-years: ${PRISMA_WORM_S3_RETENTION_YEARS:5}
   audit-worm:
+    backend: ${PRISMA_AUDIT_WORM_BACKEND:fs}
     base-path: ${PRISMA_AUDIT_WORM_BASE_PATH:./data/audit-worm}
     fail: ${PRISMA_AUDIT_WORM_FAIL:false}
+    s3:
+      bucket: ${PRISMA_AUDIT_WORM_S3_BUCKET:${PRISMA_WORM_S3_BUCKET:}}
+      prefix: ${PRISMA_AUDIT_WORM_S3_PREFIX:audit/}
+      retention-years: ${PRISMA_AUDIT_WORM_S3_RETENTION_YEARS:5}
   dispute-evidence:
     base-path: ${PRISMA_DISPUTE_EVIDENCE_PATH:./data/dispute-evidence}
   cors:
