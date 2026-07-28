@@ -88,6 +88,13 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/portfolio/**").hasAnyRole(
                                 "RISK_ANALYST", "RISK_DIRECTOR", "PORTFOLIO_MANAGER",
                                 "DATA_ENGINEER", "COMMITTEE_SECRETARY", "PLATFORM")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/pj/opinions/*/submit")
+                                .hasAnyRole("ANALISTA_PJ", "PLATFORM")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/pj/opinions/*/approve")
+                                .hasAnyRole("APROVADOR_PJ_L1", "APROVADOR_PJ_L2", "APROVADOR_PJ_L3", "PLATFORM")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/pj/opinions/*/trail")
+                                .hasAnyRole("ANALISTA_PJ", "APROVADOR_PJ_L1", "APROVADOR_PJ_L2",
+                                        "APROVADOR_PJ_L3", "AUDIT", "PLATFORM")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> jwt.jwtAuthenticationConverter(keycloakRolesConverter())));

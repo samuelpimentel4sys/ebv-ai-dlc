@@ -153,7 +153,8 @@ F01 → F09 ✅ lab · [`DEV_RECORD_EP04.md`](./DEV_RECORD_EP04.md) · **Neptune
 - [ ] WORM port S3 (substituir FS lab onde crítico F04/F08)
 - [ ] Documentar gap Neptune/ONNX/Fairlearn (sem GenAI EP-03)
 
-> **EP-03 Copiloto PJ:** pulado — núcleo Python/Bedrock fora do escopo Noah neste ciclo.
+> **EP-03 Copiloto PJ:** núcleo GenAI = Python (`backend-python`).  
+> **F04 HITL reabrível agora** sem Bedrock — ver handoff Emilly: [`HANDOFF_EMILLY_NOAH_EP03_F04.md`](./HANDOFF_EMILLY_NOAH_EP03_F04.md).
 
 ---
 
@@ -202,7 +203,7 @@ Workflow agente: menu **DS** (8 fases).
 | Credenciais GitHub push | Publicar incremento | — |
 | Decisão Open Finance (ADR até M2) | Adapter F06 | — |
 | Escopo R1 (EP-06?) | Capacidade | — |
-| Serviço Python EP-03 | Monorepo vs repo | — |
+| Serviço Python EP-03 | **`Prisma/backend-python`** (Emilly P0 ✅) | [`../backend-python/docs/PLANO_TRABALHO_EP03_PYTHON.md`](../backend-python/docs/PLANO_TRABALHO_EP03_PYTHON.md) |
 
 ---
 

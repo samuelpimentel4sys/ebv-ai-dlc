@@ -6,15 +6,12 @@ Repositório do produto **Prisma** (EBV) — crédito event-driven, decisão exp
 
 ```
 Prisma/
-└── backend/          # Java 21 · Spring Boot 3 · Hexagonal + DDD
-    ├── docs/         # Plano, arquitetura, User Stories BE
-    ├── src/          # Código (domain → application → infrastructure → presentation)
-    ├── docker-compose.yml
-    ├── Dockerfile
-    └── pom.xml
+├── backend/          # Java 21 · Spring Boot 3 · Hexagonal + DDD (Noah)
+├── backend-python/   # Python 3.12 · FastAPI · EP-03 Copiloto GenAI (Emilly)
+└── frontend/
 ```
 
-## Backend
+## Backend (Java)
 
 ```bash
 cd backend
@@ -26,6 +23,19 @@ mvn spring-boot:run
 - Health: `http://localhost:8080/actuator/health`
 - Plano: [`backend/docs/PLANO_TRABALHO_BACKEND.md`](backend/docs/PLANO_TRABALHO_BACKEND.md)
 - US: [`backend/docs/user-stories/`](backend/docs/user-stories/)
+
+## Backend Python (EP-03 GenAI)
+
+```bash
+cd backend-python
+cp .env.example .env
+uv sync
+uv run uvicorn prisma_pj.presentation.main:app --port 8090
+```
+
+- Health: `http://localhost:8090/health`
+- Plano: [`backend-python/docs/PLANO_TRABALHO_EP03_PYTHON.md`](backend-python/docs/PLANO_TRABALHO_EP03_PYTHON.md)
+- Providers: `local` | `bedrock` | `openai` | `gemini` (sem voz)
 
 ## Fontes UpStream
 

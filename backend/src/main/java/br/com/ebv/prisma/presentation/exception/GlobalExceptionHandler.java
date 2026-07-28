@@ -43,6 +43,10 @@ import br.com.ebv.prisma.domain.mission.exception.MissionValidationException;
 import br.com.ebv.prisma.domain.marketplace.exception.MarketplaceNotFoundException;
 import br.com.ebv.prisma.domain.marketplace.exception.MarketplaceValidationException;
 import br.com.ebv.prisma.domain.portfolio.exception.PortfolioNotFoundException;
+import br.com.ebv.prisma.domain.pj.exception.PjConflictException;
+import br.com.ebv.prisma.domain.pj.exception.PjForbiddenException;
+import br.com.ebv.prisma.domain.pj.exception.PjNotFoundException;
+import br.com.ebv.prisma.domain.pj.exception.PjValidationException;
 import br.com.ebv.prisma.domain.portfolio.exception.PortfolioValidationException;
 import br.com.ebv.prisma.domain.sla.exception.SlaConflictException;
 import br.com.ebv.prisma.domain.sla.exception.SlaNotFoundException;
@@ -118,7 +122,8 @@ public class GlobalExceptionHandler {
             CoachNotFoundException.class,
             MissionNotFoundException.class,
             MarketplaceNotFoundException.class,
-            PortfolioNotFoundException.class
+            PortfolioNotFoundException.class,
+            PjNotFoundException.class
     })
     public ResponseEntity<Map<String, Object>> notFound(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.NOT_FOUND, ex.getMessage(), req, List.of());
@@ -129,7 +134,7 @@ public class GlobalExceptionHandler {
             ReplayConflictException.class, PolicyConflictException.class, ReasonConflictException.class,
             ReviewConflictException.class, SubjectRequestConflictException.class,
             DisputeConflictException.class, SlaConflictException.class, OnboardingConflictException.class,
-            CredentialConflictException.class})
+            CredentialConflictException.class, PjConflictException.class})
     public ResponseEntity<Map<String, Object>> conflict(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.CONFLICT, ex.getMessage(), req, List.of());
     }
@@ -148,13 +153,14 @@ public class GlobalExceptionHandler {
             ConsentValidationException.class, UtilityLinkValidationException.class,
             AltDataValidationException.class, ThinfileValidationException.class,
             CoachValidationException.class, MissionValidationException.class,
-            MarketplaceValidationException.class, PortfolioValidationException.class})
+            MarketplaceValidationException.class, PortfolioValidationException.class,
+            PjValidationException.class})
     public ResponseEntity<Map<String, Object>> unprocessable(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage(), req, List.of());
     }
 
     @ExceptionHandler({ConsentDeniedException.class, TraceForbiddenException.class, ReplayForbiddenException.class,
-            DisputeForbiddenException.class})
+            DisputeForbiddenException.class, PjForbiddenException.class})
     public ResponseEntity<Map<String, Object>> forbidden(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.FORBIDDEN, ex.getMessage(), req, List.of());
     }
