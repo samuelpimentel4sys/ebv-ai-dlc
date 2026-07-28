@@ -76,11 +76,11 @@ flowchart LR
 | F09 | Model registry promote/rollback | 🟡 ~70% API+Flyway V10+tests+smoke |
 | F03 | Recálculo incremental por evento | 🟡 ~65% stub+coalescence+V11+smoke |
 
-### Sprint 3 — Decisão + WORM (EP-01 F04, F05)
-| US | Entrega |
-|----|---------|
-| F04 | Snapshot imutável `decision_id` |
-| F05 | `POST /api/v1/decisions` p95 &lt; 250 ms |
+### Sprint 3 — Decisão + WORM (EP-01 F04, F05) — 🟡 ~70% (2026-07-28 local)
+| US | Entrega | Status |
+|----|---------|--------|
+| F04 | Snapshot imutável `decision_id` | 🟡 ~70% V12 · WORM FS · GET/verify · PUT 405 |
+| F05 | `POST /api/v1/decisions` p95 &lt; 250 ms | 🟡 ~70% budget · testes unit |
 
 ### Sprint 4 — Explicabilidade (EP-02 núcleo)
 F10 política → F04 trilha → F05 motivos → F01 SHAP → F02 contrafactuais → F03 dossiê

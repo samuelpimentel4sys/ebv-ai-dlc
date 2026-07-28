@@ -1,5 +1,9 @@
 package br.com.ebv.prisma.presentation.exception;
 
+import br.com.ebv.prisma.domain.decision.exception.ChainBrokenException;
+import br.com.ebv.prisma.domain.decision.exception.DecisionNotFoundException;
+import br.com.ebv.prisma.domain.decision.exception.SnapshotUnavailableException;
+import br.com.ebv.prisma.domain.decision.exception.WormWriteException;
 import br.com.ebv.prisma.domain.events.exception.SchemaIncompatibleException;
 import br.com.ebv.prisma.domain.events.exception.UnprocessableEventException;
 import br.com.ebv.prisma.domain.features.exception.AmbiguousIdentityException;
@@ -29,13 +33,18 @@ import java.util.UUID;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({GoldenRecordNotFoundException.class, ModelNotFoundException.class, FeatureNotFoundException.class})
+    @ExceptionHandler({
+            GoldenRecordNotFoundException.class,
+            ModelNotFoundException.class,
+            FeatureNotFoundException.class,
+            DecisionNotFoundException.class
+    })
     public ResponseEntity<Map<String, Object>> notFound(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.NOT_FOUND, ex.getMessage(), req, List.of());
     }
 
     @ExceptionHandler({CyclicMergeException.class, MergeUndoNotAllowedException.class,
-            ModelImmutableException.class, AmbiguousIdentityException.class})
+            ModelImmutableException.class, AmbiguousIdentityException.class, ChainBrokenException.class})
     public ResponseEntity<Map<String, Object>> conflict(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.CONFLICT, ex.getMessage(), req, List.of());
     }
@@ -55,8 +64,8 @@ public class GlobalExceptionHandler {
         return error(HttpStatus.FORBIDDEN, ex.getMessage(), req, List.of());
     }
 
-    @ExceptionHandler(ModelUnavailableException.class)
-    public ResponseEntity<Map<String, Object>> serviceUnavailable(ModelUnavailableException ex, HttpServletRequest req) {
+    @ExceptionHandler({ModelUnavailableException.class, WormWriteException.class, SnapshotUnavailableException.class})
+    public ResponseEntity<Map<String, Object>> serviceUnavailable(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage(), req, List.of());
     }
 

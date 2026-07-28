@@ -57,6 +57,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/features/**").hasAnyRole("ML", "ANALISTA_RISCO", "PLATFORM")
                         .requestMatchers("/api/v1/models/**").hasAnyRole("ML_OPS", "RISCO", "PLATFORM")
                         .requestMatchers("/api/v1/score/**").hasAnyRole("ANALISTA", "PLATFORM")
+                        .requestMatchers("/api/v1/decisions/**").hasAnyRole("COMPLIANCE", "B2B", "PLATFORM")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> jwt.jwtAuthenticationConverter(keycloakRolesConverter())));

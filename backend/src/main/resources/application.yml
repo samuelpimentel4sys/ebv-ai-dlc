@@ -46,6 +46,9 @@ prisma:
     topic-credit-events: ${KAFKA_TOPIC_CREDIT:prisma.credit.events}
     topic-identity-corrections: ${KAFKA_TOPIC_IDENTITY:prisma.identity.corrections}
     partition-count: ${KAFKA_PARTITION_COUNT:6}
+  worm:
+    base-path: ${PRISMA_WORM_BASE_PATH:./data/worm}
+    fail: ${PRISMA_WORM_FAIL:false}
 
 logging:
   level:
