@@ -11,16 +11,19 @@ import {
   KeyValueList,
   LineChart,
   Metric,
+  Modal,
   Notice,
   QueryBoundary,
   Tabs,
   useToast,
 } from '@/ds';
 import type { Column } from '@/ds';
-import { useDataQuery } from '@/lib/useDataQuery';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
+import { isLiveMode } from '@/lib/config';
 import { formatDateTime, formatNumber } from '@/lib/format';
 import { streamHealth, type QuarantineEvent, type TopicHealth } from '@/epics/score-vivo/data';
-import { fetchStreamHealthLive } from '@/api/scorePlatform';
+import { fetchStreamHealthLive, republishCreditEventLive } from '@/api/scorePlatform';
+import { MARIA } from '@/app/story';
 
 const statusTone = {
   healthy: 'success',
@@ -34,13 +37,24 @@ const statusLabel = {
   critical: 'crítico',
 } as const;
 
+function eventTypeFromTopic(topic: string): string {
+  const t = topic.toLowerCase();
+  if (t.includes('payment') || t.includes('pagamento')) return 'PAGAMENTO';
+  if (t.includes('protest')) return 'PROTESTO';
+  if (t.includes('baixa') || t.includes('settle')) return 'BAIXA';
+  return 'NEGATIVACAO';
+}
+
 export function StreamHealthPage() {
   const toast = useToast();
   const [event, setEvent] = useState<QuarantineEvent | null>(null);
+  const [confirmRepublish, setConfirmRepublish] = useState(false);
+  const [republishing, setRepublishing] = useState(false);
   const query = useDataQuery(streamHealth, fetchStreamHealthLive, {
     latency: 380,
-    refetchInterval: 15_000,
+    refetchInterval: 30_000,
   });
+  const lagThreshold = query.data?.lagThresholdSeconds ?? 30;
 
   const topicColumns: Column<TopicHealth>[] = [
     {
@@ -75,7 +89,11 @@ export function StreamHealthPage() {
       align: 'right',
       numeric: true,
       render: (row) => (
-        <span className={row.lagSeconds > 30 ? 'font-bold text-eqx-danger' : undefined}>
+        <span
+          className={
+            row.lagSeconds > lagThreshold ? 'font-bold text-eqx-accent-text' : undefined
+          }
+        >
           {formatNumber(row.lagSeconds)}
         </span>
       ),
@@ -159,8 +177,8 @@ export function StreamHealthPage() {
           <div className="grid gap-5">
             {data.topics.some((topic) => topic.lagSeconds > data.lagThresholdSeconds) ? (
               <Notice
-                tone="danger"
-                title="Lag acima do limite de 30 s"
+                tone="warning"
+                title={`Lag acima do limiar de ${data.lagThresholdSeconds} s`}
                 actions={
                   <Button
                     size="sm"
@@ -171,8 +189,8 @@ export function StreamHealthPage() {
                   </Button>
                 }
               >
-                O tópico <code>credit.events.negative.v3</code> acumula 47 s de atraso — recálculos
-                de score de negativação podem estar defasados.
+                Consumidores com lag acima do limite aparecem em laranja (CA-02). Verifique
+                throughput e a fila de quarentena antes de escalar.
               </Notice>
             ) : null}
 
@@ -264,10 +282,8 @@ export function StreamHealthPage() {
               Fechar
             </Button>
             <Button
-              onClick={() => {
-                toast.success('Reprocessamento solicitado', 'POST /api/v1/events/credit');
-                setEvent(null);
-              }}
+              onClick={() => setConfirmRepublish(true)}
+              disabled={!event}
             >
               Reprocessar evento
             </Button>
@@ -294,12 +310,90 @@ export function StreamHealthPage() {
   "eventId": "${event.eventId}",
   "topic": "${event.topic}",
   "occurredAt": "${event.occurredAt}",
-  "payload": { "documento": "1234567890", "amountCents": null }
+  "payload": { "documento": "${MARIA.document}", "amountCents": null }
 }`}</pre>
             </div>
           </div>
         ) : null}
       </Drawer>
+
+      <Modal
+        open={confirmRepublish && Boolean(event)}
+        onClose={() => !republishing && setConfirmRepublish(false)}
+        title="Republicar evento de crédito?"
+        description="POST /api/v1/events/credit com X-Idempotency-Key. Em lab o payload usa o documento da fixture Maria."
+        footer={
+          <div className="flex justify-end gap-2">
+            <Button
+              variant="secondary"
+              disabled={republishing}
+              onClick={() => setConfirmRepublish(false)}
+            >
+              Cancelar
+            </Button>
+            <Button
+              loading={republishing}
+              onClick={() => {
+                if (!event) return;
+                void (async () => {
+                  setRepublishing(true);
+                  try {
+                    if (isLiveMode()) {
+                      const result = await republishCreditEventLive({
+                        eventType: eventTypeFromTopic(event.topic),
+                        documento: MARIA.document,
+                        occurredAt: event.occurredAt,
+                        payload: {
+                          sourceEventId: event.eventId,
+                          topic: event.topic,
+                          reason: event.reason,
+                          republish: true,
+                        },
+                      });
+                      query.setData((current) => ({
+                        ...current,
+                        quarantine: current.quarantine.filter(
+                          (row) => row.eventId !== event.eventId,
+                        ),
+                      }));
+                      toast.success(
+                        result.status === 'DUPLICATE' ? 'Evento já publicado' : 'Evento aceito',
+                        `POST /api/v1/events/credit · ${result.eventId.slice(0, 8)}… · ${result.status}`,
+                      );
+                    } else {
+                      query.setData((current) => ({
+                        ...current,
+                        quarantine: current.quarantine.filter(
+                          (row) => row.eventId !== event.eventId,
+                        ),
+                      }));
+                      toast.success(
+                        'Reprocessamento solicitado',
+                        'Mock · POST /api/v1/events/credit',
+                      );
+                    }
+                    setConfirmRepublish(false);
+                    setEvent(null);
+                  } catch (error) {
+                    toast.error('Falha na republicação', errorMessage(error));
+                  } finally {
+                    setRepublishing(false);
+                  }
+                })();
+              }}
+            >
+              Confirmar republicação
+            </Button>
+          </div>
+        }
+      >
+        {event ? (
+          <Notice tone="info" title={event.eventId}>
+            Tipo inferido: <strong>{eventTypeFromTopic(event.topic)}</strong> · documento{' '}
+            <code className="text-xs">{MARIA.documentMasked}</code>
+          </Notice>
+        ) : null}
+      </Modal>
     </ScreenLayout>
   );
 }

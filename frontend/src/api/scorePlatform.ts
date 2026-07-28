@@ -533,6 +533,43 @@ export async function fetchStreamHealthLive(): Promise<StreamHealthResponse> {
   };
 }
 
+export type CreditEventType = 'NEGATIVACAO' | 'BAIXA' | 'PROTESTO' | 'PAGAMENTO';
+
+export type PublishCreditEventResult = {
+  eventId: string;
+  topic: string;
+  partition: number;
+  offset: number;
+  schemaVersion: string;
+  status: string;
+};
+
+/** Republicação assistida (CA F01) — `X-Idempotency-Key` opcional. */
+export async function republishCreditEventLive(input: {
+  eventType: CreditEventType | string;
+  documento: string;
+  occurredAt: string;
+  payload?: Record<string, unknown>;
+  idempotencyKey?: string;
+}): Promise<PublishCreditEventResult> {
+  const idempotencyKey =
+    input.idempotencyKey ??
+    (typeof crypto !== 'undefined' && 'randomUUID' in crypto
+      ? crypto.randomUUID()
+      : `credit-${Date.now()}`);
+
+  return httpClient<PublishCreditEventResult>('/api/v1/events/credit', {
+    method: 'POST',
+    headers: { 'X-Idempotency-Key': idempotencyKey },
+    body: {
+      eventType: input.eventType,
+      documento: input.documento,
+      occurredAt: new Date(input.occurredAt).toISOString(),
+      payload: input.payload ?? {},
+    },
+  });
+}
+
 /* -------------------------------------------------------------------------- */
 /* F08 Observability                                                          */
 /* -------------------------------------------------------------------------- */
