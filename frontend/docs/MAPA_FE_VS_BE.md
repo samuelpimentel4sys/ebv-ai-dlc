@@ -47,7 +47,9 @@
 
 | US | Prefixo típico | BE | FE pasta |
 |----|----------------|----|----------|
-| F01…F09 | grafo / stress / cubos / dossiê comitê | ⚪ | `sala-risco/` |
+| F01…F09 | `/api/v1/portfolio/*` | ✅ lab 9/9 (`9aa6fcf`) | `sala-risco/` · `api/portfolio.ts` |
+
+**Sofia:** plug live 2026-07-28 · stubs Neptune/Trino · `DEV_RECORD_PORTFOLIO_PLUG.md`
 
 ---
 

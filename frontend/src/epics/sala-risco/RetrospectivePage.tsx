@@ -14,7 +14,8 @@ import {
   SelectField,
 } from '@/ds';
 import type { Column } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { useDataQuery } from '@/lib/useDataQuery';
+import { fetchRetrospectiveLive } from '@/api/portfolio';
 import { formatCurrency, formatDate, formatNumber, formatPercent, formatSigned } from '@/lib/format';
 import { portfolioTimeline, snapshots } from '@/epics/sala-risco/data';
 
@@ -34,12 +35,16 @@ const kindTone = {
 } as const;
 
 export function RetrospectivePage() {
-  const query = useMockQuery(() => ({ snapshots, timeline: portfolioTimeline }), { latency: 340 });
+  const query = useDataQuery(
+    () => ({ snapshots, timeline: portfolioTimeline }),
+    fetchRetrospectiveLive,
+    { latency: 340 },
+  );
   const [left, setLeft] = useState('2026-06-30');
   const [right, setRight] = useState('2026-07-27');
 
-  const before = snapshots.find((item) => item.asOf === left);
-  const after = snapshots.find((item) => item.asOf === right);
+  const before = query.data?.snapshots.find((item) => item.asOf === left);
+  const after = query.data?.snapshots.find((item) => item.asOf === right);
 
   const rows: DiffRow[] =
     before && after

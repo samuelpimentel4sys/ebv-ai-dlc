@@ -18,7 +18,9 @@ import {
   useToast,
 } from '@/ds';
 import type { Column } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { isLiveMode } from '@/lib/config';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
+import { fetchStressScenariosLive, runStressLive } from '@/api/portfolio';
 import { formatCurrency, formatNumber, formatPercent, formatSigned } from '@/lib/format';
 import {
   runStress,
@@ -43,20 +45,28 @@ const CUSTOM_DEFAULTS: StressScenario = {
 
 export function StressPage() {
   const toast = useToast();
-  const query = useMockQuery(() => stressScenarios, { latency: 340 });
+  const query = useDataQuery(() => stressScenarios, fetchStressScenariosLive, { latency: 340 });
   const [params] = useSearchParams();
   const [scenarioId, setScenarioId] = useState(params.get('cenario') ?? 'adverso');
   const [custom, setCustom] = useState<StressScenario>(CUSTOM_DEFAULTS);
   const [result, setResult] = useState<StressResult | null>(null);
   const [running, setRunning] = useState(false);
 
-  function run(scenario: StressScenario) {
+  async function run(scenario: StressScenario) {
     setRunning(true);
     toast.info('Execução enfileirada', 'POST /api/v1/portfolio/stress/run');
-    window.setTimeout(() => {
-      setResult(runStress(scenario));
+    try {
+      if (isLiveMode()) {
+        setResult(await runStressLive(scenario));
+      } else {
+        await new Promise((resolve) => window.setTimeout(resolve, 900));
+        setResult(runStress(scenario));
+      }
+    } catch (error) {
+      toast.error('Falha no estresse', errorMessage(error));
+    } finally {
       setRunning(false);
-    }, 900);
+    }
   }
 
   const migrationColumns: Column<Migration>[] = [

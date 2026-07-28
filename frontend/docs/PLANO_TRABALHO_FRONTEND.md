@@ -6,8 +6,8 @@
 | **Produto** | **Prisma Equifax** (EBV · Equifax / BoaVista) |
 | **Repo FE** | `Prisma/frontend` |
 | **Repo BE** | `Prisma/backend` (Noah) |
-| **Atualizado em** | 2026-07-28 15:30 |
-| **Fase atual** | Inclusão/Coach live · R1 FE plugável fechado (01/02/05/06) · falta 03/04 |
+| **Atualizado em** | 2026-07-28 16:00 |
+| **Fase atual** | Portfólio live 9/9 · R1+R2 plugável (01/02/04/05/06) · EP-03 adiado GenAI |
 
 ---
 
@@ -22,7 +22,7 @@
 | **DS hardening (targets/inverse/overlay)** | ✅ P0.1 | `min-h-target` · `text-eqx-text-inverse` · `--color-overlay` |
 | Contratos FE = OpenAPI (sem mapper frouxo) | 🟡 | Mappers compensam gap mock×BE |
 | Login OIDC / papéis | ❌ | Lab aberto |
-| EP-02…06 live | ✅ 01+02+05+06 | EP-03/04 aguardam BE |
+| EP-02…06 live | ✅ 01+02+04+05+06 | EP-03 adiado (GenAI Python) |
 
 **Conclusão:** o FE está **conectado**, mas ainda **parece demo**. Próximo passo obrigatório = **virar Prisma Equifax** (navegação, copy, hierarquia), sem perder as rotas das US.
 
@@ -93,9 +93,13 @@ Noah lab 9/9 — ordem F04→F08→F01→F02→F03→F05→F06→F07→F09 — *
 - [ ] Empty/error reais sem depender só de `?state=`
 - [ ] Smoke roteiro operador (não demo 60 min)
 
-### P5+ — Copiloto PJ / Portfólio (quando BE)
+### P5 — Plug Portfólio / Sala de Risco (`portfolio.ts`) · **FEITO 2026-07-28**
 
-Conforme BE + WSJF.
+Noah lab 9/9 (stubs Neptune/Trino) · handoff 15:40 · **9/9 telas live**
+
+### P5+ — Copiloto PJ (quando Walter reabrir sem GenAI)
+
+EP-03 adiado no handoff Noah — **não plugar** enquanto núcleo for Python/Bedrock.
 
 ---
 
@@ -110,6 +114,7 @@ Conforme BE + WSJF.
 | P2 Explicabilidade live | ✅ (`explainability.ts`) |
 | P3 Contestação/Console live | ✅ (`dispute.ts` · `b2bConsole.ts`) |
 | P4 Inclusão/Coach live | ✅ (`inclusion.ts` · `DEV_RECORD_INCLUSION_PLUG.md`) |
+| P5 Portfólio/Sala de Risco live | ✅ (`portfolio.ts` · `DEV_RECORD_PORTFOLIO_PLUG.md`) |
 
 ---
 

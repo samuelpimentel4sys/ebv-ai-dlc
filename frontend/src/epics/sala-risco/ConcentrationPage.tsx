@@ -17,7 +17,9 @@ import {
   useToast,
 } from '@/ds';
 import type { Column } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { isLiveMode } from '@/lib/config';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
+import { fetchConcentrationLive, upsertLimitLive } from '@/api/portfolio';
 import { formatCurrency, formatDateTime, formatPercent } from '@/lib/format';
 import {
   concentration,
@@ -34,14 +36,16 @@ const statusTone = {
 
 export function ConcentrationPage() {
   const toast = useToast();
-  const query = useMockQuery(
+  const query = useDataQuery(
     () => ({ limits: concentration, alerts: concentrationAlerts }),
+    fetchConcentrationLive,
     { latency: 360 },
   );
   const [limits, setLimits] = useState<ConcentrationLimit[] | null>(null);
   const [editing, setEditing] = useState<ConcentrationLimit | null>(null);
   const [newLimit, setNewLimit] = useState('');
   const [note, setNote] = useState('');
+  const [saving, setSaving] = useState(false);
 
   const rows = limits ?? query.data?.limits ?? [];
 
@@ -265,6 +269,7 @@ export function ConcentrationPage() {
         description="POST /api/v1/portfolio/limits"
         footer={
           <Button
+            loading={saving}
             onClick={() => {
               if (!editing) return;
               const value = Number(newLimit);
@@ -276,24 +281,40 @@ export function ConcentrationPage() {
                 toast.error('Justificativa obrigatória', 'Descreva a decisão em pelo menos 10 caracteres');
                 return;
               }
-              setLimits(
-                rows.map((row) =>
-                  row.dimension === editing.dimension && row.bucket === editing.bucket
-                    ? {
-                        ...row,
-                        limitPct: value,
-                        status:
-                          row.sharePct > value
-                            ? 'estouro'
-                            : value - row.sharePct <= 3
-                              ? 'alerta'
-                              : 'ok',
-                      }
-                    : row,
-                ),
-              );
-              toast.success('Limite atualizado', `${editing.bucket} passa a ter teto de ${value}%`);
-              setEditing(null);
+              void (async () => {
+                setSaving(true);
+                try {
+                  if (isLiveMode()) {
+                    await upsertLimitLive({
+                      dimension: editing.dimension,
+                      thresholdPct: value,
+                      warnPct: Math.max(0, value - 3),
+                    });
+                  }
+                  setLimits(
+                    rows.map((row) =>
+                      row.dimension === editing.dimension && row.bucket === editing.bucket
+                        ? {
+                            ...row,
+                            limitPct: value,
+                            status:
+                              row.sharePct > value
+                                ? 'estouro'
+                                : value - row.sharePct <= 3
+                                  ? 'alerta'
+                                  : 'ok',
+                          }
+                        : row,
+                    ),
+                  );
+                  toast.success('Limite atualizado', `${editing.bucket} passa a ter teto de ${value}%`);
+                  setEditing(null);
+                } catch (error) {
+                  toast.error('Falha ao salvar limite', errorMessage(error));
+                } finally {
+                  setSaving(false);
+                }
+              })();
             }}
           >
             Salvar limite

@@ -16,15 +16,18 @@ import {
   QueryBoundary,
   useToast,
 } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { isLiveMode } from '@/lib/config';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
+import { detectCommunitiesLive, fetchCommunitiesLive } from '@/api/portfolio';
 import { formatCurrency, formatNumber, formatPercent } from '@/lib/format';
 import { communities } from '@/epics/sala-risco/data';
 import { cn } from '@/lib/cn';
 
 export function CommunitiesPage() {
   const toast = useToast();
-  const query = useMockQuery(() => communities, { latency: 380 });
+  const query = useDataQuery(() => communities, fetchCommunitiesLive, { latency: 380 });
   const [selectedId, setSelectedId] = useState('com-aurora');
+  const [detecting, setDetecting] = useState(false);
 
   return (
     <ScreenLayout
@@ -43,10 +46,23 @@ export function CommunitiesPage() {
         <Button
           size="sm"
           variant="secondary"
+          loading={detecting}
           icon={<ScanSearch size={16} aria-hidden="true" />}
           onClick={() => {
-            query.reload();
-            toast.info('Detecção agendada', 'POST /api/v1/portfolio/communities/detect');
+            void (async () => {
+              setDetecting(true);
+              try {
+                if (isLiveMode()) {
+                  await detectCommunitiesLive();
+                }
+                query.reload();
+                toast.info('Detecção agendada', 'POST /api/v1/portfolio/communities/detect');
+              } catch (error) {
+                toast.error('Falha na detecção', errorMessage(error));
+              } finally {
+                setDetecting(false);
+              }
+            })();
           }}
         >
           Redetectar

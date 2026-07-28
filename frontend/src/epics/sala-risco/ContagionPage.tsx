@@ -19,7 +19,8 @@ import {
   useToast,
 } from '@/ds';
 import type { Column } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { useDataQuery } from '@/lib/useDataQuery';
+import { fetchOriginNodesLive, runContagionLive } from '@/api/portfolio';
 import { formatCurrency, formatNumber, formatPercent } from '@/lib/format';
 import { AURORA } from '@/app/story';
 import {
@@ -33,19 +34,19 @@ type CriticalNode = ContagionResult['criticalNodes'][number];
 
 const DEFAULT_SEVERITY = 60;
 
-const originCandidates = portfolioNodes.filter((node) => node.type !== 'setor');
+const mockOriginCandidates = portfolioNodes.filter((node) => node.type !== 'setor');
 
 /**
  * A fixture canónica identifica a Aurora por `aurora`, enquanto o grafo prefixa
  * o id por tipo (`grp-`, `cli-`). O casamento por inclusão mantém a trilha
  * funcionando com qualquer das duas formas na URL.
  */
-function resolveOrigin(id: string | null): PortfolioNode {
+function resolveOrigin(id: string | null, candidates: PortfolioNode[]): PortfolioNode {
   const wanted = id ?? AURORA.graphNodeId;
   return (
-    originCandidates.find((node) => node.id === wanted) ??
-    originCandidates.find((node) => node.id.includes(wanted)) ??
-    originCandidates[0]
+    candidates.find((node) => node.id === wanted) ??
+    candidates.find((node) => node.id.includes(wanted)) ??
+    candidates[0]
   );
 }
 
@@ -54,28 +55,46 @@ export function ContagionPage() {
   const [searchParams] = useSearchParams();
   const originParam = searchParams.get('origem');
 
-  const [origin, setOrigin] = useState(() => resolveOrigin(originParam).id);
+  const originsQuery = useDataQuery(
+    () => mockOriginCandidates,
+    fetchOriginNodesLive,
+    { latency: 320 },
+  );
+  const originCandidates = originsQuery.data ?? mockOriginCandidates;
+
+  const [origin, setOrigin] = useState(() => resolveOrigin(originParam, mockOriginCandidates).id);
   const [severity, setSeverity] = useState(DEFAULT_SEVERITY);
   const [run, setRun] = useState(() => ({
-    origin: resolveOrigin(originParam).id,
+    origin: resolveOrigin(originParam, mockOriginCandidates).id,
     severity: DEFAULT_SEVERITY,
   }));
 
   // O passo anterior da trilha entrega o nó pela URL: trocar de origem sem
   // remontar a tela precisa recentrar a simulação.
   useEffect(() => {
-    const resolved = resolveOrigin(originParam);
+    const pool = originsQuery.data ?? mockOriginCandidates;
+    const resolved = resolveOrigin(originParam, pool);
     setOrigin(resolved.id);
     setSeverity(DEFAULT_SEVERITY);
     setRun({ origin: resolved.id, severity: DEFAULT_SEVERITY });
   }, [originParam]);
 
-  const query = useMockQuery(() => simulateContagion(run.origin, run.severity), {
-    latency: 720,
-    deps: [run.origin, run.severity],
-  });
+  useEffect(() => {
+    if (!originsQuery.data?.length) return;
+    const pool = originsQuery.data;
+    setOrigin((current) => (pool.some((n) => n.id === current) ? current : resolveOrigin(originParam, pool).id));
+  }, [originsQuery.data, originParam]);
 
-  const runOrigin = portfolioNodes.find((node) => node.id === run.origin);
+  const query = useDataQuery(
+    () => simulateContagion(run.origin, run.severity),
+    () => runContagionLive(run.origin, run.severity),
+    {
+      latency: 720,
+      deps: [run.origin, run.severity],
+    },
+  );
+
+  const runOrigin = originCandidates.find((node) => node.id === run.origin);
   const runOriginLabel = runOrigin?.label ?? run.origin;
 
   const columns: Column<CriticalNode>[] = [

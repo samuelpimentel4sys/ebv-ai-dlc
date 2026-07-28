@@ -16,7 +16,9 @@ import {
   useToast,
 } from '@/ds';
 import type { Column } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { isLiveMode } from '@/lib/config';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
+import { fetchFreshnessLive, refreshAggregateLive } from '@/api/portfolio';
 import { formatDateTime, formatNumber } from '@/lib/format';
 import { cubes, type CubeFreshness } from '@/epics/sala-risco/data';
 
@@ -35,7 +37,7 @@ function ageLabel(minutes: number) {
 
 export function FreshnessPage() {
   const toast = useToast();
-  const query = useMockQuery(() => cubes, { latency: 320 });
+  const query = useDataQuery(() => cubes, fetchFreshnessLive, { latency: 320 });
   const [rows, setRows] = useState<CubeFreshness[] | null>(null);
 
   const columns: Column<CubeFreshness>[] = [
@@ -109,19 +111,31 @@ export function FreshnessPage() {
           variant={row.status === 'ok' ? 'ghost' : 'secondary'}
           icon={<RefreshCw size={14} aria-hidden="true" />}
           onClick={() => {
-            setRows((current) =>
-              (current ?? query.data ?? []).map((item) =>
-                item.cube === row.cube
-                  ? {
-                      ...item,
-                      lastRefreshAt: new Date().toISOString(),
-                      ageMinutes: 0,
-                      status: 'ok',
-                    }
-                  : item,
-              ),
-            );
-            toast.success('Recarga disparada', `POST /api/v1/portfolio/aggregates/refresh`);
+            void (async () => {
+              try {
+                if (isLiveMode()) {
+                  await refreshAggregateLive(row.cube);
+                  query.reload();
+                  setRows(null);
+                } else {
+                  setRows((current) =>
+                    (current ?? query.data ?? []).map((item) =>
+                      item.cube === row.cube
+                        ? {
+                            ...item,
+                            lastRefreshAt: new Date().toISOString(),
+                            ageMinutes: 0,
+                            status: 'ok',
+                          }
+                        : item,
+                    ),
+                  );
+                }
+                toast.success('Recarga disparada', `POST /api/v1/portfolio/aggregates/refresh`);
+              } catch (error) {
+                toast.error('Falha na recarga', errorMessage(error));
+              }
+            })();
           }}
         >
           Recarregar

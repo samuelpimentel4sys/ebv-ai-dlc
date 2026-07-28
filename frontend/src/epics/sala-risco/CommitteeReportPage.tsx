@@ -15,7 +15,9 @@ import {
   TextField,
   useToast,
 } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { isLiveMode } from '@/lib/config';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
+import { createCommitteeReportLive, downloadReportLive } from '@/api/portfolio';
 import { formatNumber } from '@/lib/format';
 import { reportSections, stressScenarios } from '@/epics/sala-risco/data';
 import { cn } from '@/lib/cn';
@@ -25,7 +27,7 @@ const STRESS_SECTION_ID = 'estresse';
 
 export function CommitteeReportPage() {
   const toast = useToast();
-  const query = useMockQuery(() => reportSections, { latency: 300 });
+  const query = useDataQuery(() => reportSections, async () => reportSections, { latency: 300 });
   const [params] = useSearchParams();
   const scenarioId = params.get('cenario');
   const scenario = scenarioId
@@ -37,6 +39,8 @@ export function CommitteeReportPage() {
   const [watermark, setWatermark] = useState('Confidencial · Comitê de Risco · 28/07/2026');
   const [recipient, setRecipient] = useState('comite.risco@equifax.com.br');
   const [generated, setGenerated] = useState(false);
+  const [reportId, setReportId] = useState<string | null>(null);
+  const [generating, setGenerating] = useState(false);
 
   function toggle(id: string, sectionIds: string[], required: boolean) {
     if (required) {
@@ -154,9 +158,20 @@ export function CommitteeReportPage() {
                     <Button
                       size="sm"
                       icon={<FileDown size={16} aria-hidden="true" />}
-                      onClick={() =>
-                        toast.success('Download iniciado', 'Arquivo válido por 24 horas')
-                      }
+                      onClick={() => {
+                        void (async () => {
+                          try {
+                            if (isLiveMode() && reportId) {
+                              const dl = await downloadReportLive(reportId);
+                              toast.success('Download iniciado', dl.downloadUrl);
+                              return;
+                            }
+                            toast.success('Download iniciado', 'Arquivo válido por 24 horas');
+                          } catch (error) {
+                            toast.error('Falha no download', errorMessage(error));
+                          }
+                        })();
+                      }}
                     >
                       Baixar PDF
                     </Button>
@@ -274,6 +289,7 @@ export function CommitteeReportPage() {
                         hint="Aparece em todas as páginas junto à marca d'água."
                       />
                       <Button
+                        loading={generating}
                         onClick={() => {
                           if (!watermark.trim() || !recipient.includes('@')) {
                             toast.error(
@@ -282,8 +298,26 @@ export function CommitteeReportPage() {
                             );
                             return;
                           }
-                          setGenerated(true);
-                          toast.success('Dossiê gerado', 'POST /api/v1/portfolio/reports');
+                          void (async () => {
+                            setGenerating(true);
+                            try {
+                              if (isLiveMode()) {
+                                const created = await createCommitteeReportLive({
+                                  title: `Dossiê comitê · ${recipient}`,
+                                  watermarkTo: `${watermark} · ${recipient}`,
+                                  sections: ordered,
+                                  analysisRef: scenario?.id ?? 'lab-ref',
+                                });
+                                setReportId(created.reportId);
+                              }
+                              setGenerated(true);
+                              toast.success('Dossiê gerado', 'POST /api/v1/portfolio/reports');
+                            } catch (error) {
+                              toast.error('Falha ao gerar dossiê', errorMessage(error));
+                            } finally {
+                              setGenerating(false);
+                            }
+                          })();
                         }}
                       >
                         Gerar dossiê

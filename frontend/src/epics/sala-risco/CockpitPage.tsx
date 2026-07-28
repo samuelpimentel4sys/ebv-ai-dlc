@@ -18,7 +18,8 @@ import {
   SelectField,
 } from '@/ds';
 import type { GraphNode } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { useDataQuery } from '@/lib/useDataQuery';
+import { fetchCockpitLive } from '@/api/portfolio';
 import { formatCurrency, formatNumber, formatPercent } from '@/lib/format';
 import {
   lodLevels,
@@ -35,15 +36,17 @@ const DEFAULT_LOD = 'cliente';
 const DEFAULT_SECTOR = 'todos';
 
 export function CockpitPage() {
-  const query = useMockQuery(
+  const query = useDataQuery(
     () => ({ nodes: portfolioNodes, edges: portfolioEdges, summary: portfolioSummary }),
+    fetchCockpitLive,
     { latency: 420 },
   );
   const [lod, setLod] = useState<string>(DEFAULT_LOD);
   const [sector, setSector] = useState<string>(DEFAULT_SECTOR);
   const [detail, setDetail] = useState<PortfolioNode | null>(null);
 
-  const sectors = useMemo(() => ['todos', ...new Set(portfolioNodes.map((node) => node.sector))], []);
+  const allNodes = query.data?.nodes ?? portfolioNodes;
+  const sectors = useMemo(() => ['todos', ...new Set(allNodes.map((node) => node.sector))], [allNodes]);
   const filtered = lod !== DEFAULT_LOD || sector !== DEFAULT_SECTOR;
 
   function clearFilters() {

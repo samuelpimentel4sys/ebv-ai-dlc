@@ -15,17 +15,21 @@ import {
   Tabs,
 } from '@/ds';
 import type { Column, GraphNode } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { useDataQuery } from '@/lib/useDataQuery';
+import { fetchGraph2dLive } from '@/api/portfolio';
 import { formatCurrency, formatPercent } from '@/lib/format';
 import { portfolioEdges, portfolioNodes, type PortfolioNode } from '@/epics/sala-risco/data';
 
 export function Graph2DPage() {
-  const query = useMockQuery(() => ({ nodes: portfolioNodes, edges: portfolioEdges }), {
-    latency: 320,
-  });
+  const query = useDataQuery(
+    () => ({ nodes: portfolioNodes, edges: portfolioEdges }),
+    fetchGraph2dLive,
+    { latency: 320 },
+  );
   const [selected, setSelected] = useState<string | null>(null);
 
-  const columns: Column<PortfolioNode>[] = [
+  function buildColumns(edges: typeof portfolioEdges): Column<PortfolioNode>[] {
+    return [
     {
       key: 'label',
       header: 'Nó',
@@ -67,9 +71,10 @@ export function Graph2DPage() {
       align: 'right',
       numeric: true,
       render: (row) =>
-        portfolioEdges.filter((edge) => edge.from === row.id || edge.to === row.id).length,
+        edges.filter((edge) => edge.from === row.id || edge.to === row.id).length,
     },
   ];
+  }
 
   return (
     <ScreenLayout
@@ -101,6 +106,7 @@ export function Graph2DPage() {
         }}
       >
         {(data) => {
+          const columns = buildColumns(data.edges);
           const nodes: GraphNode[] = data.nodes.map((node) => ({
             id: node.id,
             label: node.label,
