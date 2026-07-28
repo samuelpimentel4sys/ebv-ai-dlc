@@ -13,9 +13,9 @@
 | EP-01…02…04…05…06 lab APIs | ✅ | Sofia pode plugar |
 | EP-03 GenAI | ⏭ ADIADO | Sem HITL GenAI neste ciclo |
 | Handoff Sofia atualizado | ✅ | `HANDOFF_SOFIA_EP01_FE.md` |
-| OIDC CTs (`OIDC_ENABLED=true`) | 🟡 doc | Ver § abaixo |
-| Testcontainers Postgres Flyway | 🟡 | IT opcional (Docker) |
-| S3 Object Lock WORM | 🟡 | `prisma.worm.backend=fs\|s3` — adapter COMPLIANCE + unit tests |
+| OIDC CTs (`OIDC_ENABLED=true`) | ✅ CT + 🟡 smoke lab | `OidcSecurityWebMvcTest` (JWT mock); smoke Keycloak § abaixo |
+| Testcontainers Postgres Flyway | ✅ CI | `FlywayPostgresIT` + `.github/workflows/backend-ci.yml` |
+| S3 Object Lock WORM | ✅ | `prisma.worm.backend=fs\|s3` — COMPLIANCE + unit tests |
 | Neptune / ONNX / Fairlearn | ❌ | stubs documentados |
 
 ## OIDC smoke (manual)
@@ -35,9 +35,9 @@
 
 ## Próximos hardening (quando pedir)
 
-1. Rodar IT Testcontainers no CI com Docker
-2. ~~Adapter S3 WORM (`prisma.worm.backend=s3|fs`)~~ ✅ (lab: `fs` default; prod: `s3` + bucket Object Lock)
-3. Smoke OIDC com token real no lab Keycloak
+1. ~~IT Testcontainers no CI~~ ✅ `backend-ci.yml`
+2. ~~Adapter S3 WORM~~ ✅ (lab `fs`; prod `s3` + Object Lock)
+3. ~~OIDC CTs automatizados~~ ✅; smoke manual Keycloak lab (token real) ainda pendente
 4. Reabrir EP-03 só se existir contrato Java HITL **sem** Bedrock no mesmo sprint
 
 ### Ativar S3 WORM
