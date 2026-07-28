@@ -5,9 +5,9 @@
 | **Agente** | Noah · `dev-java-esp` |
 | **Produto** | EBV Prisma · Equifax/BoaVista |
 | **Repo** | `Prisma/backend` · [ebv-ai-dlc](https://github.com/samuelpimentel4sys/ebv-ai-dlc) |
-| **Atualizado em** | 2026-07-28 14:55 (America/Sao_Paulo) |
+| **Atualizado em** | 2026-07-28 15:35 (America/Sao_Paulo) |
 | **Ambiente** | Java 21 · Spring Boot 3.4 · profiles `supabase,infra` |
-| **Git** | S1–S3 em `origin/main` · EP-02/EP-05/EP-06 lab local (**sem commit** neste slice) |
+| **Git** | S1–S3 em `origin/main` · EP-02/EP-05/EP-06/EP-04 lab local (**sem commit** neste slice) |
 
 ---
 
@@ -32,9 +32,10 @@ Ver slice anterior. **DEV_RECORD:** [`DEV_RECORD_EP02_F06_F07_F08_F09.md`](./DEV
 
 | Dimensão | Planejado | DoD 100% | Em andamento lab | Não iniciado |
 |----------|----------:|---------:|-----------------:|-------------:|
-| Épicos | 6 | 0 | 4 (EP-01, EP-02, EP-05, EP-06) | 2 |
+| Épicos | 6 | 0 | 5 (EP-01, EP-02, EP-04, EP-05, EP-06) | 1 (EP-03) |
 | Features EP-01 | 10 | 0 | **10** | **0** |
 | Features EP-02 | 10 | 0 | **10** | **0** |
+| Features EP-04 | 9 | 0 | **9** | **0** |
 | Features EP-05 | 9 | 0 | **9** | **0** |
 | Features EP-06 | 9 | 0 | **9** | **0** |
 
@@ -64,25 +65,33 @@ Consent → titularidade → ingest alt → thin-file → coach → gamificaçã
 
 **DEV_RECORD:** [`DEV_RECORD_EP06.md`](./DEV_RECORD_EP06.md) · Flyway **V31–V39**
 
+---
+
+## 6. EP-04 Sprint — lab **9/9** (NOVO)
+
+Sala de Risco / Portfólio — stubs Java (sem Neptune/Trino/Iceberg/Spark reais).
+
+**DEV_RECORD:** [`DEV_RECORD_EP04.md`](./DEV_RECORD_EP04.md) · Flyway **V40–V48**
+
 | F | Âncora |
 |---|--------|
-| F04 | `POST /api/v1/consents` |
-| F08 | `POST /api/v1/utilities/link` |
-| F01 | `POST /api/v1/alternative-data/ingest` |
-| F02 | `POST /api/v1/thinfile/score` |
-| F03 | `GET /api/v1/coach/journey` |
-| F05 | `GET /api/v1/missions` |
-| F06 | `POST /api/v1/coach/simulate` |
-| F07 | `GET /api/v1/marketplace/offers` |
-| F09 | `POST /api/v1/thinfile/monitoring/evaluate` |
+| F01 | `GET /api/v1/portfolio/graph` |
+| F02 | `POST /api/v1/portfolio/contagion/simulate` |
+| F03 | `POST /api/v1/portfolio/stress/run` |
+| F04 | `POST /api/v1/portfolio/limits` |
+| F05 | `POST /api/v1/portfolio/aggregates/refresh` |
+| F06 | `POST /api/v1/portfolio/communities/detect` |
+| F07 | `GET /api/v1/portfolio/snapshot` |
+| F08 | `POST /api/v1/portfolio/reports` |
+| F09 | `GET /api/v1/portfolio/graph/2d` |
 
 ---
 
-## 6. Próximos passos
+## 7. Próximos passos
 
 1. `mvn test` confirmação local  
 2. Commit/push quando pedir  
-3. Sprint 6 hardening (OIDC CTs · Testcontainers · SLO) · EP-03/EP-04
+3. EP-03 Copiloto PJ (Python + HITL Java) · hardening R1
 
 ---
 

@@ -131,6 +131,22 @@ F05 → F02 → F01 → F08 → F06 → F03 → F07 → F04 → F09 ✅ lab
 
 F04 → F08 → F01 → F02 → F03 → F05 → F06 → F07 → F09 ✅ lab · [`DEV_RECORD_EP06.md`](./DEV_RECORD_EP06.md)
 
+### Sprint EP-04 — Sala de Risco / Portfólio — ✅ lab 9/9 (2026-07-28)
+
+| US | Entrega | Status |
+|----|---------|--------|
+| F01 | Serviço grafo carteira | 🟡 lab V40 · graph/node/filter |
+| F02 | Propagação / contágio | 🟡 lab V41 · simulate/critical |
+| F03 | Motor estresse | 🟡 lab V42 · run/scenarios |
+| F04 | Vigilância limites | 🟡 lab V43 · concentration/limits/alerts |
+| F05 | Cubos incrementais | 🟡 lab V44 · aggregates/refresh/freshness |
+| F06 | Comunidades | 🟡 lab V45 · detect/list/detail |
+| F07 | Histórico / time-travel | 🟡 lab V46 · snapshot/compare/timeline |
+| F08 | Dossiê executivo | 🟡 lab V47 · reports/download stub |
+| F09 | Projeção 2D/tabular | 🟡 lab V48 · graph/2d · graph/tabular |
+
+F01 → F09 ✅ lab · [`DEV_RECORD_EP04.md`](./DEV_RECORD_EP04.md) · **Neptune/Trino/Iceberg/Spark fora (stubs)**
+
 ### Sprint 6 — Hardening R1
 EP-01 F08/F10 · Testcontainers · SLO · Fairlearn/Spark reais · OIDC CTs EP-05
 

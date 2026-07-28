@@ -4,14 +4,14 @@
 |-------|-------|
 | **De** | Noah (`dev-java-esp`) |
 | **Para** | Sofia (frontend) |
-| **Atualizado** | 2026-07-28 15:20 (America/Sao_Paulo) |
-| **BE** | `Prisma/backend` · `origin/main` ? `e3ebc6f` |
+| **Atualizado** | 2026-07-28 15:35 (America/Sao_Paulo) |
+| **BE** | `Prisma/backend` · lab EP-04 local (**sem commit** neste slice) |
 | **Auth lab** | `OIDC_ENABLED=false` (APIs abertas) · roles JWT no SecurityConfig p/ prod |
 | **CORS** | `http://localhost:5173` · `http://localhost:3000` |
 | **Base URL** | `http://localhost:8080` · profiles `supabase,infra` |
 | **OpenAPI** | `/swagger-ui.html` · `/v3/api-docs` |
 
-**Legenda:** ?? plugar agora · ?? plugar com ressalva (stub lab) · ?? ausente no BE
+**Legenda:** ? plugar agora · ?? plugar com ressalva (stub lab) · ? ausente no BE
 
 ---
 
@@ -23,8 +23,8 @@
 | **EP-02** Explicável | 10/10 | **Sim** |
 | **EP-05** Contestação / Console | 9/9 | **Sim** |
 | **EP-06** Inclusão / Coach | 9/9 | **Sim** |
-| **EP-03** Copiloto PJ | 0 | ?? GenAI Python + HITL Java pendente |
-| **EP-04** Portfólio / Grafo | 0 | ?? Próximo Noah (ou hardening) |
+| **EP-04** Portfólio / Grafo | 9/9 | **Sim** (lab stubs) |
+| **EP-03** Copiloto PJ | 0 | ? GenAI Python + HITL Java pendente |
 
 ---
 
@@ -84,7 +84,7 @@
 
 ---
 
-## 4. EP-06 ? Inclusão / Coach (9/9) ? **NOVO**
+## 4. EP-06 ? Inclusão / Coach (9/9)
 
 | US-FE | Status | Endpoints |
 |-------|--------|-----------|
@@ -103,20 +103,42 @@
 
 ---
 
-## 5. Ressalvas lab (todas)
+## 5. EP-04 ? Portfólio / Sala de Risco (9/9) ? **NOVO / PLUGÁVEL**
+
+Base: `/api/v1/portfolio` · header `X-Tenant-Id` · lab stubs (Neptune/Trino/Iceberg/Spark **não** reais).
+
+| US-FE | Status | Endpoints |
+|-------|--------|-----------|
+| F01 Grafo carteira | ?? | `GET /portfolio/graph` · `GET /portfolio/graph/node/{nodeId}` · `POST /portfolio/graph/filter` |
+| F02 Contágio | ?? | `POST /portfolio/contagion/simulate` (202) · `GET /portfolio/contagion/{simId}` · `GET /portfolio/contagion/critical` |
+| F03 Estresse | ?? | `POST /portfolio/stress/run` · `GET /portfolio/stress/scenarios` · `GET /portfolio/stress/{runId}` |
+| F04 Limites | ?? | `GET /portfolio/concentration` · `POST /portfolio/limits` · `GET /portfolio/alerts` |
+| F05 Cubos | ?? | `GET /portfolio/aggregates` · `POST /portfolio/aggregates/refresh` (202) · `GET /portfolio/aggregates/freshness` |
+| F06 Comunidades | ?? | `POST /portfolio/communities/detect` (202) · `GET /portfolio/communities` · `GET /portfolio/communities/{communityId}` |
+| F07 Histórico | ?? | `GET /portfolio/snapshot` · `POST /portfolio/compare` · `GET /portfolio/timeline` |
+| F08 Dossiê | ?? | `POST /portfolio/reports` (202) · `GET /portfolio/reports/{reportId}` · `GET /portfolio/reports/{reportId}/download` |
+| F09 Projeção 2D | ?? | `GET /portfolio/graph/2d` · `GET /portfolio/graph/tabular` |
+
+**Ordem plug sugerida:** F05 (frescor) ? F01 ? F09 ? F04 ? F02 ? F03 ? F06 ? F07 ? F08  
+**DEV_RECORD:** `docs/DEV_RECORD_EP04.md` · Flyway **V40?V48**
+
+---
+
+## 6. Ressalvas lab (todas)
 
 | Tema | Detalhe |
 |------|---------|
 | SHAP / DiCE / PDF / Fairlearn / Spark | Stubs Java ? não motores reais |
-| WORM | FS local (`./data/worm`, `audit-worm`, `dossier`, `dispute-evidence`) ? não S3 Object Lock |
+| Neptune / Trino / Iceberg | EP-04 stubs ? topologia/agregados sintéticos |
+| WORM | FS local (`./data/worm`, ?) ? não S3 Object Lock |
 | Serpro / concessionária / ONNX thin-file | Stubs |
 | Kafka health / OTel | Métricas parciais |
 | Shapes | Gap FE vs BE ? listar p/ Noah; **não inventar campo** fora da US |
-| EP-03 / EP-04 | **Ainda não** no BE |
+| EP-03 | **Ainda não** no BE |
 
 ---
 
-## 6. Commits BE âncora
+## 7. Commits BE âncora
 
 | Commit | Escopo |
 |--------|--------|
@@ -124,5 +146,6 @@
 | `9dd02c3` ? `f6192a1` | EP-02 |
 | `6cb93f4` ? `7ccd4aa` | EP-05 |
 | `e3ebc6f` | EP-06 lab 9/9 |
+| _(local)_ | EP-04 lab 9/9 ? **sem commit** |
 
 _Relatório: `backend/docs/RELATORIO_PROGRESSO_BACKEND.md`_

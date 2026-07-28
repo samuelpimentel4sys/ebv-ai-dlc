@@ -42,6 +42,8 @@ import br.com.ebv.prisma.domain.mission.exception.MissionNotFoundException;
 import br.com.ebv.prisma.domain.mission.exception.MissionValidationException;
 import br.com.ebv.prisma.domain.marketplace.exception.MarketplaceNotFoundException;
 import br.com.ebv.prisma.domain.marketplace.exception.MarketplaceValidationException;
+import br.com.ebv.prisma.domain.portfolio.exception.PortfolioNotFoundException;
+import br.com.ebv.prisma.domain.portfolio.exception.PortfolioValidationException;
 import br.com.ebv.prisma.domain.sla.exception.SlaConflictException;
 import br.com.ebv.prisma.domain.sla.exception.SlaNotFoundException;
 import br.com.ebv.prisma.domain.sla.exception.SlaValidationException;
@@ -115,7 +117,8 @@ public class GlobalExceptionHandler {
             ThinfileNotFoundException.class,
             CoachNotFoundException.class,
             MissionNotFoundException.class,
-            MarketplaceNotFoundException.class
+            MarketplaceNotFoundException.class,
+            PortfolioNotFoundException.class
     })
     public ResponseEntity<Map<String, Object>> notFound(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.NOT_FOUND, ex.getMessage(), req, List.of());
@@ -145,7 +148,7 @@ public class GlobalExceptionHandler {
             ConsentValidationException.class, UtilityLinkValidationException.class,
             AltDataValidationException.class, ThinfileValidationException.class,
             CoachValidationException.class, MissionValidationException.class,
-            MarketplaceValidationException.class})
+            MarketplaceValidationException.class, PortfolioValidationException.class})
     public ResponseEntity<Map<String, Object>> unprocessable(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage(), req, List.of());
     }

@@ -91,6 +91,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/coach/**").hasAnyRole("TITULAR_B2C", "PLATFORM")
                         .requestMatchers("/api/v1/missions/**").hasAnyRole("TITULAR_B2C", "PLATFORM")
                         .requestMatchers("/api/v1/marketplace/**").hasAnyRole("TITULAR_B2C", "PLATFORM")
+                        .requestMatchers("/api/v1/portfolio/**").hasAnyRole(
+                                "RISK_ANALYST", "RISK_DIRECTOR", "PORTFOLIO_MANAGER",
+                                "DATA_ENGINEER", "COMMITTEE_SECRETARY", "PLATFORM")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> jwt.jwtAuthenticationConverter(keycloakRolesConverter())));
