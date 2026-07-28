@@ -6,6 +6,7 @@ import br.com.ebv.prisma.domain.decision.port.in.CreateDecisionUseCase;
 import br.com.ebv.prisma.domain.decision.port.out.DecisionRepositoryPort;
 import br.com.ebv.prisma.domain.decision.port.out.WormStoragePort;
 import br.com.ebv.prisma.domain.features.port.in.GetFeaturesUseCase;
+import br.com.ebv.prisma.domain.observability.port.out.ObservabilityRepositoryPort;
 import br.com.ebv.prisma.domain.scoring.port.in.RecalculateScoreUseCase;
 import br.com.ebv.prisma.domain.scoring.port.out.ScoreRepositoryPort;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +17,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -33,12 +35,15 @@ public class CreateDecisionService implements CreateDecisionUseCase {
 
     /** Retention stub — 5 years compliance Object Lock. */
     static final int LOCK_YEARS = 5;
+    /** RN004 F08 — hot retention traces 7d. */
+    static final int TRACE_HOT_DAYS = 7;
 
     private final ScoreRepositoryPort scoreRepo;
     private final RecalculateScoreUseCase recalculateScore;
     private final GetFeaturesUseCase getFeatures;
     private final WormStoragePort wormStorage;
     private final DecisionRepositoryPort decisionRepo;
+    private final ObservabilityRepositoryPort observabilityRepo;
     private final ObjectMapper objectMapper;
 
     public CreateDecisionService(
@@ -47,6 +52,7 @@ public class CreateDecisionService implements CreateDecisionUseCase {
             GetFeaturesUseCase getFeatures,
             WormStoragePort wormStorage,
             DecisionRepositoryPort decisionRepo,
+            ObservabilityRepositoryPort observabilityRepo,
             ObjectMapper objectMapper
     ) {
         this.scoreRepo = scoreRepo;
@@ -54,6 +60,7 @@ public class CreateDecisionService implements CreateDecisionUseCase {
         this.getFeatures = getFeatures;
         this.wormStorage = wormStorage;
         this.decisionRepo = decisionRepo;
+        this.observabilityRepo = observabilityRepo;
         this.objectMapper = objectMapper;
     }
 
@@ -163,6 +170,9 @@ public class CreateDecisionService implements CreateDecisionUseCase {
                 lockedUntil
         ));
 
+        // F08 RN001 — correlação decision_id + spans lab (features, score, worm, persist)
+        persistTrace(decisionId, cmd.clientId(), now, latencyMs);
+
         return new Result(
                 decisionId,
                 scoreBundle.score(),
@@ -173,6 +183,36 @@ public class CreateDecisionService implements CreateDecisionUseCase {
                 List.copyOf(degradedFlags),
                 explanationRef
         );
+    }
+
+    private void persistTrace(UUID decisionId, String clientId, Instant now, int latencyMs) {
+        try {
+            List<Map<String, Object>> spans = new ArrayList<>();
+            spans.add(span("features", 1, null));
+            spans.add(span("score", 2, null));
+            spans.add(span("worm", 3, null));
+            spans.add(span("persist", 4, latencyMs));
+            String spanJson = objectMapper.writeValueAsString(spans);
+            observabilityRepo.saveTrace(new ObservabilityRepositoryPort.TraceRecord(
+                    decisionId,
+                    clientId,
+                    spanJson,
+                    now,
+                    now.plus(TRACE_HOT_DAYS, ChronoUnit.DAYS)
+            ));
+        } catch (Exception ignored) {
+            // RN001: sem correlação → alerta instrumentação; não falha decisão
+        }
+    }
+
+    private static Map<String, Object> span(String name, int order, Integer latencyMs) {
+        Map<String, Object> m = new LinkedHashMap<>();
+        m.put("name", name);
+        m.put("order", order);
+        if (latencyMs != null) {
+            m.put("latencyMs", latencyMs);
+        }
+        return m;
     }
 
     private ScoreBundle resolveScore(String doc, List<String> degradedFlags) {

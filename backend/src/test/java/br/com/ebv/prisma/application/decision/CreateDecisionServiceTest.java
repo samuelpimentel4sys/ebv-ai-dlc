@@ -42,6 +42,7 @@ class CreateDecisionServiceTest {
     @Mock GetFeaturesUseCase getFeatures;
     @Mock WormStoragePort wormStorage;
     @Mock DecisionRepositoryPort decisionRepo;
+    @Mock br.com.ebv.prisma.domain.observability.port.out.ObservabilityRepositoryPort observabilityRepo;
 
     ObjectMapper objectMapper = new ObjectMapper();
     CreateDecisionService service;
@@ -50,7 +51,7 @@ class CreateDecisionServiceTest {
     @BeforeEach
     void setUp() {
         service = new CreateDecisionService(
-                scoreRepo, recalculateScore, getFeatures, wormStorage, decisionRepo, objectMapper
+                scoreRepo, recalculateScore, getFeatures, wormStorage, decisionRepo, observabilityRepo, objectMapper
         );
         verifyService = new VerifyDecisionService(decisionRepo, wormStorage);
     }

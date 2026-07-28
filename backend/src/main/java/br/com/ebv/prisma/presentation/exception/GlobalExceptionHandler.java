@@ -13,6 +13,12 @@ import br.com.ebv.prisma.domain.identity.exception.CyclicMergeException;
 import br.com.ebv.prisma.domain.identity.exception.GoldenRecordNotFoundException;
 import br.com.ebv.prisma.domain.identity.exception.MergeUndoNotAllowedException;
 import br.com.ebv.prisma.domain.ingest.exception.ConsentDeniedException;
+import br.com.ebv.prisma.domain.observability.exception.TraceForbiddenException;
+import br.com.ebv.prisma.domain.observability.exception.TraceNotFoundException;
+import br.com.ebv.prisma.domain.replay.exception.ReplayConflictException;
+import br.com.ebv.prisma.domain.replay.exception.ReplayForbiddenException;
+import br.com.ebv.prisma.domain.replay.exception.ReplayNotFoundException;
+import br.com.ebv.prisma.domain.replay.exception.ReplayValidationException;
 import br.com.ebv.prisma.domain.scoring.exception.MetricsGateException;
 import br.com.ebv.prisma.domain.scoring.exception.ModelImmutableException;
 import br.com.ebv.prisma.domain.scoring.exception.ModelNotFoundException;
@@ -37,14 +43,17 @@ public class GlobalExceptionHandler {
             GoldenRecordNotFoundException.class,
             ModelNotFoundException.class,
             FeatureNotFoundException.class,
-            DecisionNotFoundException.class
+            DecisionNotFoundException.class,
+            TraceNotFoundException.class,
+            ReplayNotFoundException.class
     })
     public ResponseEntity<Map<String, Object>> notFound(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.NOT_FOUND, ex.getMessage(), req, List.of());
     }
 
     @ExceptionHandler({CyclicMergeException.class, MergeUndoNotAllowedException.class,
-            ModelImmutableException.class, AmbiguousIdentityException.class, ChainBrokenException.class})
+            ModelImmutableException.class, AmbiguousIdentityException.class, ChainBrokenException.class,
+            ReplayConflictException.class})
     public ResponseEntity<Map<String, Object>> conflict(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.CONFLICT, ex.getMessage(), req, List.of());
     }
@@ -54,13 +63,14 @@ public class GlobalExceptionHandler {
         return error(HttpStatus.CONFLICT, ex.getMessage(), req, List.of());
     }
 
-    @ExceptionHandler({UnprocessableEventException.class, MetricsGateException.class, FeatureLeakageException.class})
+    @ExceptionHandler({UnprocessableEventException.class, MetricsGateException.class, FeatureLeakageException.class,
+            ReplayValidationException.class})
     public ResponseEntity<Map<String, Object>> unprocessable(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage(), req, List.of());
     }
 
-    @ExceptionHandler(ConsentDeniedException.class)
-    public ResponseEntity<Map<String, Object>> forbidden(ConsentDeniedException ex, HttpServletRequest req) {
+    @ExceptionHandler({ConsentDeniedException.class, TraceForbiddenException.class, ReplayForbiddenException.class})
+    public ResponseEntity<Map<String, Object>> forbidden(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.FORBIDDEN, ex.getMessage(), req, List.of());
     }
 
