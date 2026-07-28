@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+﻿import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Beaker, Check } from 'lucide-react';
 import { cn } from '@/lib/cn';
@@ -51,7 +51,7 @@ export function DemoStateMenu() {
         aria-expanded={open}
         aria-haspopup="menu"
         className={cn(
-          'grid h-11 w-11 place-items-center rounded-sm transition-colors duration-fast',
+          'grid h-target w-target place-items-center rounded-sm transition-colors duration-fast',
           current === 'normal'
             ? 'text-eqx-text-muted hover:bg-eqx-surface-subtle hover:text-eqx-text'
             : 'bg-eqx-warning-bg text-eqx-warning',
@@ -79,7 +79,7 @@ export function DemoStateMenu() {
               role="menuitemradio"
               aria-checked={current === option.value}
               onClick={() => select(option.value)}
-              className="flex w-full min-h-[2.75rem] items-center gap-2 px-3 py-2 text-left text-sm hover:bg-eqx-surface-subtle"
+              className="flex w-full min-h-target items-center gap-2 px-3 py-2 text-left text-sm hover:bg-eqx-surface-subtle"
             >
               <Check
                 size={14}

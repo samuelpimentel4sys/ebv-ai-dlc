@@ -1,4 +1,4 @@
-import { useId, useState, type ReactNode } from 'react';
+﻿import { useId, useState, type ReactNode } from 'react';
 import { cn } from '@/lib/cn';
 
 export interface TabItem {
@@ -59,7 +59,7 @@ export function Tabs({
               tabIndex={selected ? 0 : -1}
               onClick={() => select(item.id)}
               className={cn(
-                'inline-flex min-h-[2.75rem] items-center gap-2 border-b-[0.1875rem] px-4 text-sm',
+                'inline-flex min-h-target items-center gap-2 border-b-[0.1875rem] px-4 text-sm',
                 'transition-colors duration-fast ease-standard',
                 selected
                   ? 'border-b-eqx-brand-text font-bold text-eqx-brand-text'

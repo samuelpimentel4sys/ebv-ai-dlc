@@ -1,4 +1,4 @@
-export function PrismaLogo({ size = 28 }: { size?: number }) {
+﻿export function PrismaLogo({ size = 28 }: { size?: number }) {
   return (
     <span className="inline-flex items-center gap-2">
       <svg
@@ -26,7 +26,7 @@ export function PrismaLogo({ size = 28 }: { size?: number }) {
       </svg>
       <span className="flex flex-col leading-tight">
         <span className="text-base font-bold tracking-tight">Prisma</span>
-        <span className="text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-eqx-text-muted">
+        <span className="text-xs font-semibold uppercase tracking-[0.12em] text-eqx-text-muted">
           Equifax
         </span>
       </span>

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+﻿import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CornerDownLeft, Search } from 'lucide-react';
@@ -71,7 +71,7 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
       {open ? (
         <div className="fixed inset-0 z-modal grid place-items-start justify-center p-4 pt-[10vh]">
           <motion.div
-            className="absolute inset-0 bg-black/55"
+            className="absolute inset-0 bg-eqx-overlay"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -104,9 +104,9 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
                 aria-controls="busca-telas-resultados"
                 aria-autocomplete="list"
                 aria-activedescendant={results[cursor] ? `busca-opcao-${cursor}` : undefined}
-                className="min-h-[2.5rem] w-full bg-transparent text-base outline-none placeholder:text-eqx-text-muted"
+                className="min-h-target w-full bg-transparent text-base outline-none placeholder:text-eqx-text-muted"
               />
-              <kbd className="rounded-sm border border-eqx-border px-1.5 py-0.5 font-mono text-[0.65rem] text-eqx-text-muted">
+              <kbd className="rounded-sm border border-eqx-border px-1.5 py-0.5 font-mono text-xs text-eqx-text-muted">
                 Esc
               </kbd>
             </div>
@@ -137,7 +137,7 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
                       index === cursor ? 'bg-eqx-action/12' : 'hover:bg-eqx-surface-subtle',
                     )}
                   >
-                    <span className="mt-0.5 w-14 shrink-0 font-mono text-[0.7rem] text-eqx-text-muted">
+                    <span className="mt-0.5 w-14 shrink-0 font-mono text-xs text-eqx-text-muted">
                       {item.epic ?? 'HOME'}
                     </span>
                     <span className="min-w-0 flex-1">

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Sidebar } from '@/shell/Sidebar';
 import { TopBar } from '@/shell/TopBar';
@@ -36,14 +36,14 @@ export function AppShell() {
     <div className="flex h-full w-full overflow-hidden">
       <a
         href="#conteudo"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-modal focus:rounded-sm focus:bg-eqx-action focus:px-4 focus:py-2 focus:font-semibold focus:text-white"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-modal focus:rounded-sm focus:bg-eqx-action focus:px-4 focus:py-2 focus:font-semibold focus:text-eqx-text-inverse"
       >
         Ir para o conteúdo
       </a>
 
       {menuOpen ? (
         <div
-          className="fixed inset-0 z-overlay bg-black/55 lg:hidden"
+          className="fixed inset-0 z-overlay bg-eqx-overlay lg:hidden"
           onClick={() => setMenuOpen(false)}
           role="presentation"
         />

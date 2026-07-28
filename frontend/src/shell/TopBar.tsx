@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+﻿import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Menu, Moon, Rows3, Search, Sun } from 'lucide-react';
 import { useTheme } from '@/app/ThemeContext';
 import { navItemByPathname } from '@/app/navigation';
@@ -11,7 +11,7 @@ import { dataMode } from '@/lib/config';
 import { isDemoMode, isDevMode } from '@/lib/productMode';
 
 const iconButton =
-  'grid h-11 w-11 place-items-center rounded-sm text-eqx-text-muted transition-colors duration-fast ' +
+  'grid h-target w-target place-items-center rounded-sm text-eqx-text-muted transition-colors duration-fast ' +
   'hover:bg-eqx-surface-subtle hover:text-eqx-text disabled:opacity-40 disabled:hover:bg-transparent';
 
 export function TopBar({
@@ -84,11 +84,11 @@ export function TopBar({
       <button
         type="button"
         onClick={onOpenSearch}
-        className="mr-1 hidden min-h-[2.25rem] items-center gap-2 rounded-sm border border-eqx-border px-3 text-sm text-eqx-text-muted hover:border-eqx-action hover:text-eqx-text md:flex"
+        className="mr-1 hidden min-h-target items-center gap-2 rounded-sm border border-eqx-border px-3 text-sm text-eqx-text-muted hover:border-eqx-action hover:text-eqx-text md:flex"
       >
         <Search size={15} aria-hidden="true" />
         Buscar
-        <kbd className="rounded-sm border border-eqx-border px-1 font-mono text-[0.65rem]">Ctrl K</kbd>
+        <kbd className="rounded-sm border border-eqx-border px-1 font-mono text-xs">Ctrl K</kbd>
       </button>
       <button type="button" onClick={onOpenSearch} className={cn(iconButton, 'md:hidden')} aria-label="Buscar">
         <Search size={18} aria-hidden="true" />

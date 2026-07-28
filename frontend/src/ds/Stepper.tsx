@@ -1,4 +1,4 @@
-import { Check } from 'lucide-react';
+﻿import { Check } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
 export interface StepperStep {
@@ -35,8 +35,8 @@ export function Stepper({
             <span
               className={cn(
                 'grid h-7 w-7 shrink-0 place-items-center rounded-pill text-xs font-bold',
-                done && 'bg-eqx-success text-white',
-                active && 'bg-eqx-action text-white',
+                done && 'bg-eqx-success text-eqx-text-inverse',
+                active && 'bg-eqx-action text-eqx-text-inverse',
                 !active && !done && 'bg-eqx-surface-subtle text-eqx-text-muted',
               )}
             >

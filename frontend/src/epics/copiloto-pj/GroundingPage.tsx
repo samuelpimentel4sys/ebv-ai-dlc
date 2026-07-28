@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PenLine, Quote, Search } from 'lucide-react';
 import { ScreenLayout } from '@/shell/ScreenLayout';
@@ -153,7 +153,7 @@ export function GroundingPage() {
                           onClick={() => setCitationId(item.citationId)}
                           aria-pressed={citation.citationId === item.citationId}
                           className={cn(
-                            'inline-flex min-h-[2.5rem] items-center gap-1 rounded-pill border px-3 text-xs font-semibold',
+                            'inline-flex min-h-target items-center gap-1 rounded-pill border px-3 text-xs font-semibold',
                             citation.citationId === item.citationId
                               ? 'border-eqx-accent-text bg-eqx-accent/15 text-eqx-accent-text'
                               : 'border-eqx-border hover:bg-eqx-surface-subtle',

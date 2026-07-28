@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowRight, Scale } from 'lucide-react';
 import { ScreenLayout } from '@/shell/ScreenLayout';
@@ -116,7 +116,7 @@ export function FactorsPage() {
                         <button
                           type="button"
                           onClick={() => setFactor(item)}
-                          className="flex min-h-[2.5rem] w-full items-center justify-between gap-3 rounded-md border border-eqx-border px-3 py-2 text-left hover:bg-eqx-surface-subtle"
+                          className="flex min-h-target w-full items-center justify-between gap-3 rounded-md border border-eqx-border px-3 py-2 text-left hover:bg-eqx-surface-subtle"
                         >
                           <span className="min-w-0">
                             <span className="block text-sm font-semibold">{item.label}</span>

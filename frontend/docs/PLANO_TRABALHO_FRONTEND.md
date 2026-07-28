@@ -6,8 +6,8 @@
 | **Produto** | **Prisma Equifax** (EBV · Equifax / BoaVista) |
 | **Repo FE** | `Prisma/frontend` |
 | **Repo BE** | `Prisma/backend` (Noah) |
-| **Atualizado em** | 2026-07-28 14:20 |
-| **Fase atual** | **P — Productização** (sair do showcase → app de produto) |
+| **Atualizado em** | 2026-07-28 14:40 |
+| **Fase atual** | **P — Productização** · P0.1 DS hardening feito · próximo P1/P2 |
 
 ---
 
@@ -18,7 +18,8 @@
 | Showcase 56 telas + Equifax DS | ✅ | Base UI boa |
 | HTTP + `VITE_DATA_MODE=live` | ✅ Sprint 0 | `httpClient` · proxy · badge live/mock |
 | EP-01 plug APIs | ✅ Sprint 1 | 10/10 telas live (lab) |
-| **IA / navegação de produto** | ❌ ainda showcase | Home = “Showcase”, sidebar = EP-01…EP-06, trilhas demo, US-ID no hero |
+| **IA / navegação de produto** | ✅ P0 | Domínios produto · demo/dev gated · `index.html` Prisma Equifax |
+| **DS hardening (targets/inverse/overlay)** | ✅ P0.1 | `min-h-target` · `text-eqx-text-inverse` · `--color-overlay` |
 | Contratos FE = OpenAPI (sem mapper frouxo) | 🟡 | Mappers compensam gap mock×BE |
 | Login OIDC / papéis | ❌ | Lab aberto |
 | EP-02…06 live | ❌ / Noah EP-02 lab pronto | Próximo plug após product shell |
@@ -65,6 +66,14 @@
 - [x] `ScreenLayout`: `usId` / JourneyNav só demo/dev
 - [x] Copy: zero “épico” na UI operador
 - [x] `docs/IA_PRODUTO_PRISMA.md` — mapa módulo ↔ rotas
+
+### P0.1 — Hardening Equifax DS · **FEITO 2026-07-28**
+
+- [x] Touch targets → `min-h-target` / `h-target` (48px)
+- [x] `text-white` → `text-eqx-text-inverse`
+- [x] Overlays → `bg-eqx-overlay` (`--color-overlay`)
+- [x] Magic sizes críticos no shell/ds (`text-xs`, icon buttons)
+- [x] Meta HTML: título/descrição **Prisma Equifax**
 
 ### P1 — Hardening live EP-01
 

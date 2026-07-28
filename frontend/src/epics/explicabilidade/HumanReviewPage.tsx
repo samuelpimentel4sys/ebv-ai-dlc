@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+﻿import { useMemo, useState } from 'react';
 import { CheckCheck, Clock3, UserSearch } from 'lucide-react';
 import { ScreenLayout } from '@/shell/ScreenLayout';
 import {
@@ -128,7 +128,7 @@ export function HumanReviewPage() {
                           type="button"
                           onClick={() => setActiveId(item.reviewId)}
                           className={cn(
-                            'min-h-[2.5rem] w-full rounded-md border px-3 py-2 text-left transition-colors',
+                            'min-h-target w-full rounded-md border px-3 py-2 text-left transition-colors',
                             item.reviewId === active?.reviewId
                               ? 'border-eqx-action bg-eqx-action/10'
                               : 'border-eqx-border hover:bg-eqx-surface-subtle',

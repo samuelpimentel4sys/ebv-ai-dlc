@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Award, Check, Flame, Lock, Target } from 'lucide-react';
 import { ScreenLayout } from '@/shell/ScreenLayout';
@@ -190,9 +190,9 @@ export function CoachJourneyPage() {
                         aria-hidden="true"
                         className={`grid h-9 w-9 shrink-0 place-items-center rounded-pill text-sm font-bold ${
                           stage.status === 'concluida'
-                            ? 'bg-eqx-success text-white'
+                            ? 'bg-eqx-success text-eqx-text-inverse'
                             : stage.status === 'atual'
-                              ? 'bg-eqx-action text-white'
+                              ? 'bg-eqx-action text-eqx-text-inverse'
                               : 'bg-eqx-surface-subtle text-eqx-text-muted'
                         }`}
                       >

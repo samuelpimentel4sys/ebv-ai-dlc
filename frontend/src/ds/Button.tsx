@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react';
+﻿import type { ButtonHTMLAttributes, ReactNode } from 'react';
 import { forwardRef } from 'react';
 import { cn } from '@/lib/cn';
 
@@ -7,20 +7,20 @@ type Size = 'sm' | 'md';
 
 const variants: Record<Variant, string> = {
   primary:
-    'bg-eqx-action text-white border-transparent hover:bg-eqx-action-hover disabled:bg-eqx-border',
+    'bg-eqx-action text-eqx-text-inverse border-transparent hover:bg-eqx-action-hover disabled:bg-eqx-border',
   secondary:
     'bg-transparent text-eqx-action border-eqx-action hover:bg-eqx-action/10 disabled:text-eqx-text-muted disabled:border-eqx-border',
   ghost:
     'bg-transparent text-eqx-text border-transparent hover:bg-eqx-surface-subtle disabled:text-eqx-text-muted',
   danger:
-    'bg-eqx-danger text-white border-transparent hover:bg-eqx-brand-strong disabled:bg-eqx-border',
+    'bg-eqx-danger text-eqx-text-inverse border-transparent hover:bg-eqx-brand-strong disabled:bg-eqx-border',
   brand:
-    'bg-eqx-brand text-white border-transparent hover:bg-eqx-brand-strong disabled:bg-eqx-border',
+    'bg-eqx-brand text-eqx-text-inverse border-transparent hover:bg-eqx-brand-strong disabled:bg-eqx-border',
 };
 
 /** Alturas conforme seção 08 do DS: alvo recomendado 48px; `sm` só em barras densas. */
 const sizes: Record<Size, string> = {
-  sm: 'min-h-[2.5rem] px-3 text-sm gap-2',
+  sm: 'min-h-target px-3 text-sm gap-2',
   md: 'min-h-target px-5 text-base gap-2',
 };
 

@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from 'react-router-dom';
+﻿import { NavLink, useLocation } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { cn } from '@/lib/cn';
@@ -14,7 +14,7 @@ import { EPICS } from '@/app/epics';
 import { JOURNEYS, journeyPersona, journeyPosition, journeyItems } from '@/app/journeys';
 
 const itemLink =
-  'flex min-h-[2.5rem] items-center gap-2 border-l-2 border-transparent px-2 py-1.5 text-sm ' +
+  'flex min-h-target items-center gap-2 border-l-2 border-transparent px-2 py-1.5 text-sm ' +
   'text-eqx-text transition-colors duration-fast ease-standard ' +
   'hover:border-l-eqx-brand-text hover:bg-eqx-surface hover:text-eqx-brand-text';
 
@@ -105,7 +105,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
                     type="button"
                     onClick={() => setCollapsed((prev) => ({ ...prev, [epic.id]: !folded }))}
                     aria-expanded={!folded}
-                    className="flex w-full min-h-11 items-center justify-between gap-2 rounded-sm px-2 py-2 text-left text-xs font-bold uppercase tracking-wide text-eqx-text-muted hover:bg-eqx-surface hover:text-eqx-text"
+                    className="flex w-full min-h-target items-center justify-between gap-2 rounded-sm px-2 py-2 text-left text-xs font-bold uppercase tracking-wide text-eqx-text-muted hover:bg-eqx-surface hover:text-eqx-text"
                   >
                     <span className="truncate">
                       {epic.id} · {epic.shortName}
@@ -120,7 +120,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
                     <div className="mb-2 ml-1 border-l border-eqx-border pl-1">
                       {journeys.map((journey) => (
                         <div key={journey.id} className="mb-2">
-                          <p className="px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-wide text-eqx-text-muted">
+                          <p className="px-2 py-1 text-xs font-semibold uppercase tracking-wide text-eqx-text-muted">
                             {journeyPersona(journey).name} · {journey.title}
                           </p>
                           <ul className="grid gap-0.5">
@@ -161,7 +161,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
                     type="button"
                     onClick={() => setCollapsed((prev) => ({ ...prev, [mod.id]: !folded }))}
                     aria-expanded={!folded}
-                    className="flex w-full min-h-11 items-center justify-between gap-2 rounded-sm px-2 py-2 text-left text-xs font-bold uppercase tracking-wide text-eqx-text-muted hover:bg-eqx-surface hover:text-eqx-text"
+                    className="flex w-full min-h-target items-center justify-between gap-2 rounded-sm px-2 py-2 text-left text-xs font-bold uppercase tracking-wide text-eqx-text-muted hover:bg-eqx-surface hover:text-eqx-text"
                   >
                     <span className="truncate">{mod.label}</span>
                     <ChevronDown
@@ -190,7 +190,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
             })}
       </div>
 
-      <div className="border-t border-eqx-border px-4 py-3 text-[0.65rem] text-eqx-text-muted">
+      <div className="border-t border-eqx-border px-4 py-3 text-xs text-eqx-text-muted">
         Equifax · Prisma
         {!demo ? (
           <span className="mt-1 block">

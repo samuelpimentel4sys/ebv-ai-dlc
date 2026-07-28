@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+﻿import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { KeyRound, RotateCw, ShieldX } from 'lucide-react';
 import { ScreenLayout } from '@/shell/ScreenLayout';
@@ -319,7 +319,7 @@ export function CredentialsPage() {
           <fieldset className="grid gap-2">
             <legend className="text-sm font-semibold">Escopos</legend>
             {availableScopes.map((scope) => (
-              <label key={scope} className="flex min-h-[2.5rem] items-center gap-2 text-sm">
+              <label key={scope} className="flex min-h-target items-center gap-2 text-sm">
                 <input
                   type="checkbox"
                   checked={scopes.includes(scope)}

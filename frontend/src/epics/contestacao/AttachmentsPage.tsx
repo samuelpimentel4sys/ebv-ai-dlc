@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+﻿import { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { FileArchive, FileImage, FileText, ShieldCheck, Upload } from 'lucide-react';
 import { ScreenLayout } from '@/shell/ScreenLayout';
@@ -306,7 +306,7 @@ export function AttachmentsPage() {
                           type="button"
                           onClick={() => setSelected(item.attachmentId)}
                           aria-current={active}
-                          className={`flex min-h-[2.5rem] w-full flex-wrap items-center gap-3 rounded-md border px-3 py-2 text-left text-sm transition-colors duration-fast ${
+                          className={`flex min-h-target w-full flex-wrap items-center gap-3 rounded-md border px-3 py-2 text-left text-sm transition-colors duration-fast ${
                             active
                               ? 'border-eqx-action bg-eqx-action/10'
                               : 'border-eqx-border hover:bg-eqx-surface-subtle'

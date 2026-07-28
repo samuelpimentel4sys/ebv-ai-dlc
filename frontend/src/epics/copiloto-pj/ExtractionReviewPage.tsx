@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CheckCircle2, FileText, PencilLine } from 'lucide-react';
 import { ScreenLayout } from '@/shell/ScreenLayout';
@@ -208,7 +208,7 @@ export function ExtractionReviewPage() {
                                   <button
                                     type="button"
                                     onClick={() => setPage(field.page)}
-                                    className="inline-flex min-h-[2.5rem] items-center text-xs text-eqx-action underline"
+                                    className="inline-flex min-h-target items-center text-xs text-eqx-action underline"
                                   >
                                     ver na página {field.page}
                                   </button>

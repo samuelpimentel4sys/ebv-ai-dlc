@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+﻿import { useEffect, useRef, useState } from 'react';
 import { Link2, Plug, Unlink } from 'lucide-react';
 import { ScreenLayout } from '@/shell/ScreenLayout';
 import {
@@ -223,7 +223,7 @@ export function UtilityLinkPage() {
                   </ul>
                 </div>
                 <div className="grid gap-1">
-                  <label className="flex min-h-[2.5rem] items-start gap-3 text-sm">
+                  <label className="flex min-h-target items-start gap-3 text-sm">
                     <input
                       type="checkbox"
                       checked={consent}

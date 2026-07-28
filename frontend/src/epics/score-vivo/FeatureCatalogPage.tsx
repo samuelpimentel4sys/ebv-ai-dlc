@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+﻿import { useMemo, useState } from 'react';
 import { Clock, Database, Search } from 'lucide-react';
 import { ScreenLayout } from '@/shell/ScreenLayout';
 import {
@@ -341,7 +341,7 @@ export function FeatureCatalogPage() {
                     key={step}
                     className="flex items-center gap-3 rounded-md border border-eqx-border px-3 py-2"
                   >
-                    <span className="grid h-6 w-6 place-items-center rounded-pill bg-eqx-action text-xs font-bold text-white">
+                    <span className="grid h-6 w-6 place-items-center rounded-pill bg-eqx-action text-xs font-bold text-eqx-text-inverse">
                       {index + 1}
                     </span>
                     <code className="text-xs">{step}</code>

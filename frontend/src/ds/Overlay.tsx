@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from 'react';
+﻿import { useEffect, useRef, type ReactNode } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/cn';
@@ -41,7 +41,7 @@ export function Drawer({
       {open ? (
         <div className="fixed inset-0 z-modal flex" role="presentation">
           <motion.div
-            className="absolute inset-0 bg-black/50"
+            className="absolute inset-0 bg-eqx-overlay"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -74,7 +74,7 @@ export function Drawer({
                 type="button"
                 onClick={onClose}
                 aria-label="Fechar painel"
-                className="grid h-11 w-11 place-items-center rounded-sm hover:bg-eqx-surface-subtle"
+                className="grid h-target w-target place-items-center rounded-sm hover:bg-eqx-surface-subtle"
               >
                 <X size={18} aria-hidden="true" />
               </button>
@@ -114,7 +114,7 @@ export function Modal({
       {open ? (
         <div className="fixed inset-0 z-modal grid place-items-center p-4" role="presentation">
           <motion.div
-            className="absolute inset-0 bg-black/50"
+            className="absolute inset-0 bg-eqx-overlay"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -144,7 +144,7 @@ export function Modal({
                 type="button"
                 onClick={onClose}
                 aria-label="Fechar"
-                className="grid h-11 w-11 shrink-0 place-items-center rounded-sm hover:bg-eqx-surface-subtle"
+                className="grid h-target w-target shrink-0 place-items-center rounded-sm hover:bg-eqx-surface-subtle"
               >
                 <X size={18} aria-hidden="true" />
               </button>

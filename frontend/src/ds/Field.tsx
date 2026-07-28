@@ -1,4 +1,4 @@
-import type {
+﻿import type {
   InputHTMLAttributes,
   ReactNode,
   SelectHTMLAttributes,
@@ -111,7 +111,7 @@ export const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(funct
           id={controlId}
           aria-describedby={describedBy}
           aria-invalid={error ? true : undefined}
-          className={cn(controlBase, 'min-h-[2.5rem]', error && 'border-eqx-danger')}
+          className={cn(controlBase, 'min-h-target', error && 'border-eqx-danger')}
           {...props}
         >
           {options.map((option) => (

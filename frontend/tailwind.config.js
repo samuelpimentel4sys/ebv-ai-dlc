@@ -31,6 +31,7 @@ export default {
           'danger-bg': 'rgb(var(--color-danger-bg) / <alpha-value>)',
           info: 'rgb(var(--color-info) / <alpha-value>)',
           'info-bg': 'rgb(var(--color-info-bg) / <alpha-value>)',
+          overlay: 'var(--color-overlay)',
           plum: 'rgb(var(--eqx-plum-600) / <alpha-value>)',
         },
       },

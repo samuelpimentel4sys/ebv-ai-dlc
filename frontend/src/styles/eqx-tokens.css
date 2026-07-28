@@ -130,6 +130,8 @@
   --color-danger-bg: var(--eqx-red-100);
   --color-info: var(--eqx-blue-700);
   --color-info-bg: var(--eqx-blue-100);
+  /* Scrim de modal/drawer/search — opacidade fixa do DS (não misturar com rgb()/alpha Tailwind). */
+  --color-overlay: rgb(var(--eqx-black) / 0.55);
 
   /* ----- Tier 3 — componentes ----- */
   --button-bg: var(--color-action);

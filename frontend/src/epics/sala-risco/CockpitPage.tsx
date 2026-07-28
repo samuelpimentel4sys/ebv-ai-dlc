@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+﻿import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Filter, Layers } from 'lucide-react';
 import { ScreenLayout } from '@/shell/ScreenLayout';
@@ -162,9 +162,9 @@ export function CockpitPage() {
                           aria-pressed={lod === level.id}
                           onClick={() => setLod(level.id)}
                           className={cn(
-                            'inline-flex min-h-[2.5rem] items-center gap-2 rounded-pill border px-4 text-sm font-semibold',
+                            'inline-flex min-h-target items-center gap-2 rounded-pill border px-4 text-sm font-semibold',
                             lod === level.id
-                              ? 'border-eqx-action bg-eqx-action text-white'
+                              ? 'border-eqx-action bg-eqx-action text-eqx-text-inverse'
                               : 'border-eqx-border hover:bg-eqx-surface-subtle',
                           )}
                         >
@@ -245,7 +245,7 @@ export function CockpitPage() {
                               type="button"
                               onClick={() => setDetail(node)}
                               className={cn(
-                                'flex min-h-[2.5rem] w-full items-center justify-between gap-3 rounded-md border px-3 py-2 text-left',
+                                'flex min-h-target w-full items-center justify-between gap-3 rounded-md border px-3 py-2 text-left',
                                 node.id === detail?.id
                                   ? 'border-eqx-action bg-eqx-action/10'
                                   : 'border-eqx-border hover:bg-eqx-surface-subtle',

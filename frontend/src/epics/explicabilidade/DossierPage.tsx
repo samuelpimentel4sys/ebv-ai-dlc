@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Download, FileText, Stamp } from 'lucide-react';
 import { ScreenLayout } from '@/shell/ScreenLayout';
 import {
@@ -225,7 +225,7 @@ export function DossierPage() {
                   key={section}
                   className="flex items-start gap-3 rounded-md border border-eqx-border px-3 py-2 text-sm"
                 >
-                  <span className="grid h-6 w-6 shrink-0 place-items-center rounded-pill bg-eqx-brand text-xs font-bold text-white">
+                  <span className="grid h-6 w-6 shrink-0 place-items-center rounded-pill bg-eqx-brand text-xs font-bold text-eqx-text-inverse">
                     {index + 1}
                   </span>
                   {section}

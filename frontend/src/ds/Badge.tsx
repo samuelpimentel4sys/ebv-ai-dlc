@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+﻿import type { ReactNode } from 'react';
 import { cn } from '@/lib/cn';
 
 export type BadgeTone = 'neutral' | 'info' | 'success' | 'warning' | 'danger' | 'brand' | 'accent';
@@ -9,7 +9,7 @@ const tones: Record<BadgeTone, string> = {
   success: 'bg-eqx-success-bg text-eqx-success border-eqx-success/40',
   warning: 'bg-eqx-warning-bg text-eqx-warning border-eqx-warning/40',
   danger: 'bg-eqx-danger-bg text-eqx-danger border-eqx-danger/40',
-  brand: 'bg-eqx-brand text-white border-transparent',
+  brand: 'bg-eqx-brand text-eqx-text-inverse border-transparent',
   accent: 'bg-eqx-accent/15 text-eqx-accent-text border-eqx-accent-text/40',
 };
 
