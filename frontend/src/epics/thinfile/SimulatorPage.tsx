@@ -17,7 +17,12 @@ import {
   useToast,
 } from '@/ds';
 import type { Column } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import {
+  fetchSimulationHistoryLive,
+  simulateCoachLive,
+} from '@/api/inclusion';
+import { isLiveMode } from '@/lib/config';
+import { useDataQuery } from '@/lib/useDataQuery';
 import { formatDateTime, formatNumber } from '@/lib/format';
 import { MARIA } from '@/app/story';
 import {
@@ -37,11 +42,25 @@ export function SimulatorPage() {
   const [submitted, setSubmitted] = useState<string[]>([DISPUTE_ACTION]);
   const [selectionError, setSelectionError] = useState('');
 
-  const query = useMockQuery(() => simulate(submitted), {
-    latency: 520,
-    deps: [submitted.join('|')],
-    enabled: submitted.length > 0,
-  });
+  const query = useDataQuery(
+    () => simulate(submitted),
+    async () => {
+      const primary = submitted[0];
+      if (!primary) throw new Error('Nenhuma ação selecionada');
+      return simulateCoachLive({ actionCode: primary });
+    },
+    {
+      latency: 520,
+      deps: [submitted.join('|')],
+      enabled: submitted.length > 0,
+    },
+  );
+
+  const historyQuery = useDataQuery(
+    () => simulationHistory,
+    fetchSimulationHistoryLive,
+    { latency: 320 },
+  );
 
   const historyColumns: Column<SimulationHistoryItem>[] = [
     { key: 'at', header: 'Quando', render: (row) => formatDateTime(row.at) },
@@ -144,6 +163,9 @@ export function SimulatorPage() {
                   }
                   setSelectionError('');
                   setSubmitted(selected);
+                  if (isLiveMode()) {
+                    historyQuery.reload();
+                  }
                   toast.info('Simulando', 'POST /api/v1/coach/simulate');
                 }}
               >
@@ -276,7 +298,7 @@ export function SimulatorPage() {
           <DataTable
             caption="Histórico de simulações do titular"
             columns={historyColumns}
-            rows={simulationHistory}
+            rows={historyQuery.data ?? simulationHistory}
             rowKey={(row) => row.simulationId}
             footer={`Score atual de referência: ${formatNumber(coachProgress.scoreNow)} pontos.`}
           />

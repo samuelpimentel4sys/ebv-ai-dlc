@@ -17,7 +17,9 @@ import {
   useToast,
 } from '@/ds';
 import type { Column } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { evaluateMonitoringLive, fetchDriftLive } from '@/api/inclusion';
+import { isLiveMode } from '@/lib/config';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
 import { formatDateTime, formatNumber } from '@/lib/format';
 import {
   driftFeatures,
@@ -49,13 +51,14 @@ export function DriftPage() {
   const toast = useToast();
   const [nonce, setNonce] = useState(0);
   const [evaluating, setEvaluating] = useState(false);
-  const query = useMockQuery(
+  const query = useDataQuery(
     () => ({
       features: driftFeatures,
       vintages,
       alerts: monitoringAlerts,
       thresholds: monitoringThresholds,
     }),
+    fetchDriftLive,
     { latency: 400, deps: [nonce] },
   );
 
@@ -158,12 +161,22 @@ export function DriftPage() {
 
   function evaluate() {
     setEvaluating(true);
-    toast.info('Avaliação disparada', 'POST /api/v1/thinfile/monitoring/evaluate');
-    setTimeout(() => {
-      setEvaluating(false);
-      setNonce((value) => value + 1);
-      toast.success('Avaliação concluída', 'Métricas recalculadas na safra corrente');
-    }, 1_400);
+    void (async () => {
+      try {
+        toast.info('Avaliação disparada', 'POST /api/v1/thinfile/monitoring/evaluate');
+        if (isLiveMode()) {
+          await evaluateMonitoringLive();
+        } else {
+          await new Promise((resolve) => setTimeout(resolve, 1_400));
+        }
+        setNonce((value) => value + 1);
+        toast.success('Avaliação concluída', 'Métricas recalculadas na safra corrente');
+      } catch (error) {
+        toast.error('Falha na reavaliação', errorMessage(error));
+      } finally {
+        setEvaluating(false);
+      }
+    })();
   }
 
   return (

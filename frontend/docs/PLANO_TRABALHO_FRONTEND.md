@@ -6,8 +6,8 @@
 | **Produto** | **Prisma Equifax** (EBV · Equifax / BoaVista) |
 | **Repo FE** | `Prisma/frontend` |
 | **Repo BE** | `Prisma/backend` (Noah) |
-| **Atualizado em** | 2026-07-28 15:00 |
-| **Fase atual** | Contestação/Console live · próximo P1 contrato / Inclusão |
+| **Atualizado em** | 2026-07-28 15:30 |
+| **Fase atual** | Inclusão/Coach live · R1 FE plugável fechado (01/02/05/06) · falta 03/04 |
 
 ---
 
@@ -22,7 +22,7 @@
 | **DS hardening (targets/inverse/overlay)** | ✅ P0.1 | `min-h-target` · `text-eqx-text-inverse` · `--color-overlay` |
 | Contratos FE = OpenAPI (sem mapper frouxo) | 🟡 | Mappers compensam gap mock×BE |
 | Login OIDC / papéis | ❌ | Lab aberto |
-| EP-02…06 live | ✅ EP-02 + EP-05 | EP-03/04/06 aguardam BE |
+| EP-02…06 live | ✅ 01+02+05+06 | EP-03/04 aguardam BE |
 
 **Conclusão:** o FE está **conectado**, mas ainda **parece demo**. Próximo passo obrigatório = **virar Prisma Equifax** (navegação, copy, hierarquia), sem perder as rotas das US.
 
@@ -81,7 +81,11 @@ Ordem Noah: F05 → F10 → F01 → F02 → F06 → F08 → F04 → F03 → F09 
 
 ### P3 — Plug Contestação & Console (`dispute.ts` · `b2bConsole.ts`) · **FEITO 2026-07-28**
 
-Noah lab 9/9 — **9/9 telas live** (titular, fila, tracking, anexos, SLA, onboarding, credenciais, console, deflection)
+Noah lab 9/9 — **9/9 telas live**
+
+### P4 — Plug Inclusão & Coach (`inclusion.ts`) · **FEITO 2026-07-28**
+
+Noah lab 9/9 — ordem F04→F08→F01→F02→F03→F05→F06→F07→F09 — **9/9 live**
 
 ### P1 — Hardening live Score & Plataforma
 
@@ -89,7 +93,7 @@ Noah lab 9/9 — **9/9 telas live** (titular, fila, tracking, anexos, SLA, onboa
 - [ ] Empty/error reais sem depender só de `?state=`
 - [ ] Smoke roteiro operador (não demo 60 min)
 
-### P4+ — Inclusão / Copiloto / Portfólio (quando BE)
+### P5+ — Copiloto PJ / Portfólio (quando BE)
 
 Conforme BE + WSJF.
 
@@ -105,6 +109,7 @@ Conforme BE + WSJF.
 | P0.1 DS hardening | ✅ |
 | P2 Explicabilidade live | ✅ (`explainability.ts`) |
 | P3 Contestação/Console live | ✅ (`dispute.ts` · `b2bConsole.ts`) |
+| P4 Inclusão/Coach live | ✅ (`inclusion.ts` · `DEV_RECORD_INCLUSION_PLUG.md`) |
 
 ---
 

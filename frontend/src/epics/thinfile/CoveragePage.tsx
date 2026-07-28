@@ -18,7 +18,9 @@ import {
   useToast,
 } from '@/ds';
 import type { Column } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { fetchCoverageLive, ingestAltDataLive } from '@/api/inclusion';
+import { isLiveMode } from '@/lib/config';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
 import { formatDateTime, formatNumber } from '@/lib/format';
 import {
   ingestBatches,
@@ -45,12 +47,19 @@ export function CoveragePage() {
   const toast = useToast();
   const [nonce, setNonce] = useState(0);
   const [status, setStatus] = useState(ALL);
-  const query = useMockQuery(
-    () => ({
+  const query = useDataQuery(
+    async () => ({
       partners: partnerCoverage.filter((item) => status === ALL || item.status === status),
       quality: qualityDimensions,
       batches: ingestBatches,
     }),
+    async () => {
+      const data = await fetchCoverageLive();
+      return {
+        ...data,
+        partners: data.partners.filter((item) => status === ALL || item.status === status),
+      };
+    },
     {
       latency: 380,
       deps: [nonce, status],
@@ -180,8 +189,23 @@ export function CoveragePage() {
           variant="secondary"
           icon={<RefreshCw size={16} aria-hidden="true" />}
           onClick={() => {
-            setNonce((value) => value + 1);
-            toast.info('Ingestão solicitada', 'POST /api/v1/alternative-data/ingest');
+            void (async () => {
+              try {
+                if (isLiveMode()) {
+                  await ingestAltDataLive({
+                    partnerCode: 'prt-energia-sul',
+                    utilityType: 'energia',
+                    recordCount: 100_000,
+                  });
+                  setNonce((value) => value + 1);
+                } else {
+                  setNonce((value) => value + 1);
+                }
+                toast.info('Ingestão solicitada', 'POST /api/v1/alternative-data/ingest');
+              } catch (error) {
+                toast.error('Falha ao solicitar ingestão', errorMessage(error));
+              }
+            })();
           }}
         >
           Solicitar ingestão

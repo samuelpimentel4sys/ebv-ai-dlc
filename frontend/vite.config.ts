@@ -26,5 +26,9 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     globals: true,
+    // Testes de UI usam mocks locais; live exige BE Noah e quebra a suíte offline.
+    env: {
+      VITE_DATA_MODE: 'mock',
+    },
   },
 });

@@ -15,12 +15,17 @@ import {
   Tabs,
 } from '@/ds';
 import type { Column } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { fetchModelCardLive } from '@/api/inclusion';
+import { useDataQuery } from '@/lib/useDataQuery';
 import { formatDate, formatNumber } from '@/lib/format';
 import { bandPerformance, modelCard, type BandPerformance } from '@/epics/thinfile/data';
 
 export function ModelCardPage() {
-  const query = useMockQuery(() => ({ card: modelCard, bands: bandPerformance }), { latency: 340 });
+  const query = useDataQuery(
+    () => ({ card: modelCard, bands: bandPerformance }),
+    fetchModelCardLive,
+    { latency: 340 },
+  );
 
   const bandColumns: Column<BandPerformance>[] = [
     { key: 'band', header: 'Faixa de risco', render: (row) => row.band },

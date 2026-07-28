@@ -16,7 +16,9 @@ import {
   SelectField,
   useToast,
 } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { fetchMissionsLive, progressMissionLive } from '@/api/inclusion';
+import { isLiveMode } from '@/lib/config';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
 import { formatNumber } from '@/lib/format';
 import { achievements, missions, type Mission } from '@/epics/thinfile/data';
 
@@ -49,11 +51,20 @@ export function MissionsPage() {
   const [detail, setDetail] = useState<Mission | null>(null);
   const [completed, setCompleted] = useState<Mission | null>(null);
 
-  const query = useMockQuery(
+  const query = useDataQuery(
     () => ({
       missions: missions.filter((mission) => category === ALL || mission.category === category),
       achievements,
     }),
+    async () => {
+      const data = await fetchMissionsLive();
+      return {
+        missions: data.missions.filter(
+          (mission) => category === ALL || mission.category === category,
+        ),
+        achievements: data.achievements,
+      };
+    },
     {
       latency: 330,
       deps: [category],
@@ -75,25 +86,45 @@ export function MissionsPage() {
     const previous = progressById[mission.missionId];
     const progress = Math.min(mission.progress + 1, mission.target);
     const done = progress >= mission.target;
-    setProgressById((current) => ({
-      ...current,
-      [mission.missionId]: progress,
-    }));
-    setDetail(null);
-    setCompleted(done ? mission : null);
-    toast.undoable(
-      done ? `Missão concluída! +${mission.points} pontos` : 'Progresso registrado',
-      `POST /api/v1/missions/${mission.missionId}/progress`,
-      () => {
-        setProgressById((current) => {
-          const next = { ...current };
-          if (previous === undefined) delete next[mission.missionId];
-          else next[mission.missionId] = previous;
-          return next;
-        });
-        setCompleted(null);
-      },
+    const deltaPct = Math.min(
+      100 - mission.progress,
+      Math.ceil(100 / Math.max(mission.target, 1)),
     );
+
+    void (async () => {
+      try {
+        if (isLiveMode()) {
+          await progressMissionLive({ missionId: mission.missionId, deltaPct });
+          query.reload();
+        } else {
+          setProgressById((current) => ({
+            ...current,
+            [mission.missionId]: progress,
+          }));
+        }
+        setDetail(null);
+        setCompleted(done ? mission : null);
+        toast.undoable(
+          done ? `Missão concluída! +${mission.points} pontos` : 'Progresso registrado',
+          `POST /api/v1/missions/${mission.missionId}/progress`,
+          () => {
+            if (isLiveMode()) {
+              query.reload();
+            } else {
+              setProgressById((current) => {
+                const next = { ...current };
+                if (previous === undefined) delete next[mission.missionId];
+                else next[mission.missionId] = previous;
+                return next;
+              });
+            }
+            setCompleted(null);
+          },
+        );
+      } catch (error) {
+        toast.error('Falha ao registrar progresso', errorMessage(error));
+      }
+    })();
   }
 
   return (

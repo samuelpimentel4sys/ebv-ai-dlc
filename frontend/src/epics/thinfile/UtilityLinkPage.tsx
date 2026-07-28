@@ -14,7 +14,14 @@ import {
   TextField,
   useToast,
 } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import {
+  fetchUtilityLinksLive,
+  linkUtilityLive,
+  unlinkUtilityLive,
+} from '@/api/inclusion';
+import { MARIA } from '@/app/story';
+import { isLiveMode } from '@/lib/config';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
 import { focusFirstInvalid } from '@/lib/focusFirstInvalid';
 import { formatDate } from '@/lib/format';
 import { linkablePartners, utilityLinks, type UtilityLink } from '@/epics/thinfile/data';
@@ -53,8 +60,8 @@ const wizardSteps = [
 
 export function UtilityLinkPage() {
   const toast = useToast();
-  const query = useMockQuery(() => utilityLinks, { latency: 320 });
-  const { setData } = query;
+  const query = useDataQuery(() => utilityLinks, fetchUtilityLinksLive, { latency: 320 });
+  const { setData, reload } = query;
   const [step, setStep] = useState(0);
   const [partner, setPartner] = useState(linkablePartners[0].value);
   const [accountRef, setAccountRef] = useState('');
@@ -97,53 +104,96 @@ export function UtilityLinkPage() {
       return;
     }
 
-    const created: UtilityLink = {
-      linkId: `lnk-${Math.random().toString(36).slice(2, 6)}`,
-      partner: linkablePartners.find((item) => item.value === partner)?.label ?? partner,
-      category: partner.includes('agua')
-        ? 'agua'
-        : partner.includes('telecom')
-          ? 'telecom'
-          : partner.includes('stream')
-            ? 'streaming'
-            : 'energia',
-      accountRef,
-      linkedAt: new Date().toISOString(),
-      status: 'validando',
-      monthsHistory: 0,
-    };
-    setData((list) => [created, ...list]);
-    setStep(0);
-    setAccountRef('');
-    setConsent(false);
-    setErrors({});
-    toast.success('Vínculo enviado para validação', 'POST /api/v1/utilities/link');
-    setTimeout(() => {
-      setData((list) =>
-        list.map((link) =>
-          link.linkId === created.linkId
-            ? { ...link, status: 'validado', monthsHistory: 11 }
-            : link,
-        ),
-      );
-    }, 1_800);
+    const utilityType = partner.includes('agua')
+      ? 'agua'
+      : partner.includes('telecom')
+        ? 'telecom'
+        : partner.includes('stream')
+          ? 'streaming'
+          : 'energia';
+
+    void (async () => {
+      try {
+        if (isLiveMode()) {
+          await linkUtilityLive({
+            partnerCode: partner,
+            accountRef,
+            utilityType,
+            holderName: MARIA.name,
+          });
+          reload();
+        } else {
+          const created: UtilityLink = {
+            linkId: `lnk-${Math.random().toString(36).slice(2, 6)}`,
+            partner: linkablePartners.find((item) => item.value === partner)?.label ?? partner,
+            category: utilityType,
+            accountRef,
+            linkedAt: new Date().toISOString(),
+            status: 'validando',
+            monthsHistory: 0,
+          };
+          setData((list) => [created, ...list]);
+          setTimeout(() => {
+            setData((list) =>
+              list.map((item) =>
+                item.linkId === created.linkId
+                  ? { ...item, status: 'validado', monthsHistory: 11 }
+                  : item,
+              ),
+            );
+          }, 1_800);
+        }
+        setStep(0);
+        setAccountRef('');
+        setConsent(false);
+        setErrors({});
+        toast.success('Vínculo enviado para validação', 'POST /api/v1/utilities/link');
+      } catch (error) {
+        toast.error('Falha ao vincular conta', errorMessage(error));
+      }
+    })();
   }
 
   function revoke(link: UtilityLink) {
-    setData((list) =>
-      list.map((item) => (item.linkId === link.linkId ? { ...item, status: 'revogado' } : item)),
-    );
-    toast.undoable(
-      'Vínculo removido',
-      `DELETE /api/v1/utilities/links/${link.linkId} — o histórico dessa conta sai do cálculo`,
-      () =>
-        setData((list) =>
-          list.map((item) =>
-            item.linkId === link.linkId ? { ...item, status: link.status } : item,
-          ),
-        ),
-      'Restaurar vínculo',
-    );
+    void (async () => {
+      try {
+        if (isLiveMode()) {
+          await unlinkUtilityLive(link.linkId);
+          reload();
+        } else {
+          setData((list) =>
+            list.map((item) =>
+              item.linkId === link.linkId ? { ...item, status: 'revogado' } : item,
+            ),
+          );
+        }
+        toast.undoable(
+          'Vínculo removido',
+          `DELETE /api/v1/utilities/links/${link.linkId} — o histórico dessa conta sai do cálculo`,
+          () => {
+            if (isLiveMode()) {
+              void linkUtilityLive({
+                partnerCode: link.partner,
+                accountRef: link.accountRef,
+                utilityType: link.category,
+                holderName: MARIA.name,
+              })
+                .then(() => reload())
+                .catch((error) => toast.error('Falha ao restaurar vínculo', errorMessage(error)));
+            } else {
+              setData((list) =>
+                list.map((item) =>
+                  item.linkId === link.linkId ? { ...item, status: link.status } : item,
+                ),
+              );
+            }
+          },
+          'Restaurar vínculo',
+        );
+      } catch (error) {
+        toast.error('Falha ao remover vínculo', errorMessage(error));
+      }
+    })();
   }
 
   return (

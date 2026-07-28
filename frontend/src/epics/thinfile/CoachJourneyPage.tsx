@@ -14,7 +14,8 @@ import {
   QueryBoundary,
   useToast,
 } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { fetchCoachJourneyLive } from '@/api/inclusion';
+import { useDataQuery } from '@/lib/useDataQuery';
 import { formatDate, formatNumber, relativeFromNow } from '@/lib/format';
 import { MARIA } from '@/app/story';
 import {
@@ -29,13 +30,14 @@ const rarityTone = { comum: 'neutral', raro: 'info', epico: 'accent' } as const;
 
 export function CoachJourneyPage() {
   const toast = useToast();
-  const query = useMockQuery(
+  const query = useDataQuery(
     () => ({
       stages: journeyStages,
       goals: weeklyGoals,
       achievements,
       progress: coachProgress,
     }),
+    fetchCoachJourneyLive,
     { latency: 340 },
   );
   const { setData } = query;

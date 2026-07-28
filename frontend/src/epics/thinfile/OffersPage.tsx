@@ -16,8 +16,10 @@ import {
   SelectField,
   useToast,
 } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
-import { achievements, offers, type Offer } from '@/epics/thinfile/data';
+import { applyOfferLive, fetchOffersLive } from '@/api/inclusion';
+import { isLiveMode } from '@/lib/config';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
+import { achievements, offers, type Achievement, type Offer } from '@/epics/thinfile/data';
 
 const categoryLabel: Record<Offer['category'], string> = {
   cartao: 'Cartão',
@@ -28,11 +30,18 @@ const categoryLabel: Record<Offer['category'], string> = {
 
 const ALL = 'todas';
 
-/** A conquista mais recente é a que explica por que a oferta apareceu agora. */
-const unlockedBy = [...achievements]
-  .filter((item) => item.unlockedAt)
-  .sort((a, b) => (a.unlockedAt ?? '').localeCompare(b.unlockedAt ?? ''))
-  .at(-1);
+function filterOffers(list: Offer[], visibility: string) {
+  return list.filter((offer) =>
+    visibility === ALL ? true : visibility === 'elegiveis' ? offer.eligible : !offer.eligible,
+  );
+}
+
+function latestUnlocked(list: Achievement[]) {
+  return [...list]
+    .filter((item) => item.unlockedAt)
+    .sort((a, b) => (a.unlockedAt ?? '').localeCompare(b.unlockedAt ?? ''))
+    .at(-1);
+}
 
 export function OffersPage() {
   const toast = useToast();
@@ -40,26 +49,44 @@ export function OffersPage() {
   const [detail, setDetail] = useState<Offer | null>(null);
   const [applied, setApplied] = useState<string[]>([]);
 
-  const query = useMockQuery(
-    () =>
-      offers.filter((offer) =>
-        visibility === ALL ? true : visibility === 'elegiveis' ? offer.eligible : !offer.eligible,
-      ),
+  const query = useDataQuery(
+    () => ({
+      offers: filterOffers(offers, visibility),
+      achievements,
+    }),
+    async () => {
+      const data = await fetchOffersLive();
+      return {
+        offers: filterOffers(data.offers, visibility),
+        achievements: data.achievements,
+      };
+    },
     {
       latency: 360,
       deps: [visibility],
-      isEmpty: (list) => list.length === 0,
+      isEmpty: (data) => data.offers.length === 0,
     },
   );
 
   function apply(offer: Offer) {
-    setApplied((current) => [...current, offer.offerId]);
-    toast.success(
-      'Solicitação enviada ao parceiro',
-      `POST /api/v1/marketplace/offers/${offer.offerId}/apply`,
-    );
-    setDetail(null);
+    void (async () => {
+      try {
+        if (isLiveMode()) {
+          await applyOfferLive({ offerId: offer.offerId });
+        }
+        setApplied((current) => [...current, offer.offerId]);
+        toast.success(
+          'Solicitação enviada ao parceiro',
+          `POST /api/v1/marketplace/offers/${offer.offerId}/apply`,
+        );
+        setDetail(null);
+      } catch (error) {
+        toast.error('Falha ao enviar solicitação', errorMessage(error));
+      }
+    })();
   }
+
+  const unlockedBy = latestUnlocked(query.data?.achievements ?? achievements);
 
   return (
     <ScreenLayout
@@ -121,7 +148,8 @@ export function OffersPage() {
             onClear: () => setVisibility(ALL),
           }}
         >
-          {(list) => {
+          {(data) => {
+            const list = data.offers;
             const eligible = list.filter((offer) => offer.eligible);
 
             return (

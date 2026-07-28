@@ -15,7 +15,13 @@ import {
   useToast,
 } from '@/ds';
 import type { Column } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import {
+  fetchConsentsLive,
+  grantConsentsLive,
+  revokeConsentLive,
+} from '@/api/inclusion';
+import { isLiveMode } from '@/lib/config';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
 import { formatDate, formatDateTime } from '@/lib/format';
 import {
   consentHistory,
@@ -33,10 +39,12 @@ const actionTone = {
 
 export function ConsentPage() {
   const toast = useToast();
-  const query = useMockQuery(() => ({ purposes: consentPurposes, history: consentHistory }), {
-    latency: 320,
-  });
-  const { setData } = query;
+  const query = useDataQuery(
+    () => ({ purposes: consentPurposes, history: consentHistory }),
+    fetchConsentsLive,
+    { latency: 320 },
+  );
+  const { setData, reload } = query;
   const [revoking, setRevoking] = useState<ConsentPurpose | null>(null);
 
   function patch(purpose: ConsentPurpose, changes: Partial<ConsentPurpose>) {
@@ -50,8 +58,27 @@ export function ConsentPage() {
 
   function toggle(purpose: ConsentPurpose) {
     if (!purpose.granted) {
-      patch(purpose, { granted: true, grantedAt: new Date().toISOString() });
-      toast.success('Permissão concedida', 'POST /api/v1/consents');
+      void (async () => {
+        try {
+          if (isLiveMode()) {
+            await grantConsentsLive({
+              purposes: [
+                {
+                  purposeCode: purpose.purpose,
+                  sourceCode: purpose.dataUsed[0] ?? 'WEB',
+                  accepted: true,
+                },
+              ],
+            });
+            reload();
+          } else {
+            patch(purpose, { granted: true, grantedAt: new Date().toISOString() });
+          }
+          toast.success('Permissão concedida', 'POST /api/v1/consents');
+        } catch (error) {
+          toast.error('Falha ao conceder permissão', errorMessage(error));
+        }
+      })();
       return;
     }
     // Revogar finalidade essencial derruba o score thin-file: exige confirmação explícita.
@@ -59,36 +86,73 @@ export function ConsentPage() {
       setRevoking(purpose);
       return;
     }
-    patch(purpose, {
-      granted: false,
-      grantedAt: undefined,
-      expiresAt: undefined,
-    });
-    toast.undoable(
-      'Permissão desativada',
-      `DELETE /api/v1/consents/${purpose.consentId} — efeito imediato`,
-      () =>
-        patch(purpose, {
-          granted: true,
-          grantedAt: purpose.grantedAt,
-          expiresAt: purpose.expiresAt,
-        }),
-      'Reativar',
-    );
+    void (async () => {
+      try {
+        if (isLiveMode()) {
+          await revokeConsentLive(purpose.consentId);
+          reload();
+        } else {
+          patch(purpose, {
+            granted: false,
+            grantedAt: undefined,
+            expiresAt: undefined,
+          });
+        }
+        toast.undoable(
+          'Permissão desativada',
+          `DELETE /api/v1/consents/${purpose.consentId} — efeito imediato`,
+          () => {
+            if (isLiveMode()) {
+              void grantConsentsLive({
+                purposes: [
+                  {
+                    purposeCode: purpose.purpose,
+                    sourceCode: purpose.dataUsed[0] ?? 'WEB',
+                    accepted: true,
+                  },
+                ],
+              })
+                .then(() => reload())
+                .catch((error) => toast.error('Falha ao reativar', errorMessage(error)));
+            } else {
+              patch(purpose, {
+                granted: true,
+                grantedAt: purpose.grantedAt,
+                expiresAt: purpose.expiresAt,
+              });
+            }
+          },
+          'Reativar',
+        );
+      } catch (error) {
+        toast.error('Falha ao revogar permissão', errorMessage(error));
+      }
+    })();
   }
 
   function confirmRevoke() {
     if (!revoking) return;
-    patch(revoking, {
-      granted: false,
-      grantedAt: undefined,
-      expiresAt: undefined,
-    });
-    toast.success(
-      'Permissão revogada',
-      `DELETE /api/v1/consents/${revoking.consentId} — efeito imediato`,
-    );
-    setRevoking(null);
+    void (async () => {
+      try {
+        if (isLiveMode()) {
+          await revokeConsentLive(revoking.consentId);
+          reload();
+        } else {
+          patch(revoking, {
+            granted: false,
+            grantedAt: undefined,
+            expiresAt: undefined,
+          });
+        }
+        toast.success(
+          'Permissão revogada',
+          `DELETE /api/v1/consents/${revoking.consentId} — efeito imediato`,
+        );
+        setRevoking(null);
+      } catch (error) {
+        toast.error('Falha ao revogar permissão', errorMessage(error));
+      }
+    })();
   }
 
   const historyColumns: Column<ConsentEvent>[] = [
