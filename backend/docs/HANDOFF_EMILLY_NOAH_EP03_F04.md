@@ -49,7 +49,7 @@ Java **não** embute LLM. Python **não** decide alçada.
 | RAG + pgvector no Supabase | ✅ smoke e2e OK |
 | F05 ratios / F03 opinions / F06 guardrails | ✅ P2 |
 | F01 extração | ⏭ **PENDENTE** (sem massa documental) |
-| Auth JWT nas rotas Python | ⏭ lab aberto (igual Java `OIDC_ENABLED=false`) |
+| Auth JWT nas rotas Python | ✅ Emilly 2026-07-28 — `OIDC_ENABLED` + JWKS (lab off default) |
 
 ### Base URL Python (lab)
 
@@ -349,6 +349,41 @@ sequenceDiagram
 
 Decisões D1–D4 aceitas. Lab F04 no `backend` Java: Flyway V50 + BC `pj` + REST + `PjHitlServiceTest` (CA-01..04) OK.
 Emilly: sem endpoint interno de status. Sofia: HITL em `:8080` (`submit` / `approve` / `trail`).
+
+### Ack Emilly 2026-07-28 (pós-Noah)
+
+- [x] Confirmado: **sem** `PATCH .../status` HTTP — JDBC Noah é fonte HITL
+- [x] D1–D4 aceitas do lado Python (state machine compartilhada)
+- [x] `PATCH` opinion já bloqueia `SUBMITTED` / `APPROVED` / `BLOCKED`
+- [x] F06 → `READY_FOR_REVIEW` (pré-requisito submit Noah)
+- [x] Handoff + plano Python atualizados (F04 Noah ✅)
+
+**Smoke cruzado lab (próximo):** opinion Python → guardrails PASSED → Java submit/approve → GET trail + GET opinion status.
+
+### Smoke Emilly↔Noah 2026-07-28 ✅
+
+`uv run python scripts/smoke_f04_cross.py` → **SMOKE_F04_CROSS_OK**
+
+| Passo | Resultado |
+|-------|-----------|
+| Seed `READY_FOR_REVIEW` + guardrail PASSED | OK |
+| Java submit | 200 · `SUBMITTED` · L2 |
+| Java approve | 200 · `APPROVED` |
+| Java trail | SUBMIT + APPROVE |
+| DB `tb_pj_opinion.status` | `APPROVED` |
+
+### Ack Noah → Sofia 2026-07-28 (lab)
+
+Confirmado por Noah (para constar neste handoff + `HANDOFF_SOFIA_EP01_FE.md`):
+
+| Item | Estado |
+|------|--------|
+| F04 HITL no ar (`:8080`) | ✅ |
+| Flyway **V50** no Supabase | ✅ |
+| Smoke cruzado Emilly↔Noah | ✅ |
+| GenAI permanece Emilly (`:8090`) | ✅ |
+| Sofia pluga HITL FE → Java | **próximo** (submit / approve / trail) |
+
 ---
 
 ## 10. Checklist Emilly (suporte)
@@ -356,19 +391,19 @@ Emilly: sem endpoint interno de status. Sofia: HITL em `:8080` (`submit` / `appr
 - [x] `tb_pj_opinion` + sections no Supabase
 - [x] GET opinion + guardrail report
 - [x] PATCH opinion bloqueia pós-SUBMITTED
-- [ ] (sob demanda) endpoint interno de transição de status
-- [ ] JWT validation no Python alinhada ao Keycloak (pós-lab)
+- [x] ~~(sob demanda) endpoint interno de transição de status~~ — **cancelado** (JDBC Noah)
+- [x] JWT validation no Python alinhada ao Keycloak (pós-lab) — Emilly `DEV_RECORD_JWT.md` · default lab off
 
 ---
 
-## 11. Decisões abertas (precisa OK Walter/Noah)
+## 11. Decisões D1–D4 — **FECHADAS** (lab 2026-07-28)
 
-| # | Pergunta | Sugestão Emilly |
-|---|----------|-----------------|
-| D1 | Java lê opinion via JDBC ou HTTP? | **JDBC mesmo DB** no lab |
-| D2 | Submit exige `READY_FOR_REVIEW` ou aceita `DRAFT`? | Exigir **READY_FOR_REVIEW** (F06) |
-| D3 | FE aponta HITL para `:8080` direto? | **Sim** |
-| D4 | Reabrir EP-03 no Sprint 6 Java? | Sim para F04 only (sem Bedrock) |
+| # | Decisão | Status |
+|---|---------|--------|
+| D1 | Java lê opinion via **JDBC** mesmo DB | ✅ |
+| D2 | Submit exige **READY_FOR_REVIEW** | ✅ |
+| D3 | FE HITL aponta **`:8080` direto** | ✅ |
+| D4 | F04 Java reaberto (sem Bedrock) | ✅ `0b537cd` |
 
 ---
 
@@ -379,7 +414,8 @@ Emilly: sem endpoint interno de status. Sofia: HITL em `:8080` (`submit` / `appr
 - Plano Python: `backend-python/docs/PLANO_TRABALHO_EP03_PYTHON.md`
 - ADR providers: `backend-python/docs/ADR-001-llm-provider-multi.md`
 - Hexagonal Java BC `pj`: `backend/docs/architecture/HEXAGONAL.md`
+- Handoff Sofia: `backend/docs/HANDOFF_SOFIA_EP01_FE.md`
 
 ---
 
-_Emilly · Python Expert · 2026-07-28 · Handoff F04 para Noah_
+_Emilly · Python Expert · 2026-07-28 · Handoff F04 · Noah lab ✅ · Sofia pluga HITL_

@@ -6,8 +6,8 @@
 | **Produto** | **Prisma Equifax** (EBV · Equifax / BoaVista) |
 | **Repo FE** | `Prisma/frontend` |
 | **Repo BE** | `Prisma/backend` (Noah) |
-| **Atualizado em** | 2026-07-28 16:30 |
-| **Fase atual** | Plug R1+R2 fechado (01/02/04/05/06) · Auth lab OK · OIDC produto = backlog P6 · EP-03 adiado |
+| **Atualizado em** | 2026-07-28 18:40 |
+| **Fase atual** | Noah F04 HITL ✅ · próximo Sofia plugar HITL FE · GenAI Emilly · P1/P6 backlog |
 
 ---
 
@@ -99,9 +99,12 @@ Noah lab 9/9 — ordem F04→F08→F01→F02→F03→F05→F06→F07→F09 — *
 
 Noah lab 9/9 (stubs Neptune/Trino) · handoff 15:40 · **9/9 telas live**
 
-### P5+ — Copiloto PJ (quando Walter reabrir sem GenAI)
+### P5+ — Copiloto PJ
 
-EP-03 adiado no handoff Noah — **não plugar** enquanto núcleo for Python/Bedrock.
+| Parte | Estado |
+|-------|--------|
+| **F04 HITL** (Noah `:8080`) | ✅ BE lab · **Sofia plugar** (`pjHitl` / `ApprovalPage` + submit) |
+| GenAI F01–F03/F05–F09 (Emilly `:8090`) | Aguarda contrato FE↔Python |
 
 ### P6 — Login OIDC produto (backlog · desenho Noah 2026-07-28)
 
@@ -188,9 +191,14 @@ Sofia (browser)
 
 ## 5. Decisão pedida ao stakeholder
 
-1. **Agora:** P1 hardening contrato Score & Plataforma (gaps OpenAPI × mappers)
-2. **Quando OIDC on em demo:** colar JWT em `VITE_API_BEARER` (sem tela login)
-3. **Quando produto:** autorizar sprint **P6** (PKCE + login UI)
-4. **EP-03:** só se Walter reabrir sem GenAI Python
+Inventário completo: [`GAP_US_FE_FORA_DO_ESCOPO.md`](./GAP_US_FE_FORA_DO_ESCOPO.md)
+
+1. **Agora:** plug EP-03 **F04 HITL** live (Noah ✅)
+2. **Em paralelo:** P1 hardening contrato Score & Plataforma
+3. **Quando OIDC on em demo:** colar JWT em `VITE_API_BEARER`
+4. **Quando produto:** autorizar sprint **P6** (PKCE + login UI)
+5. **EP-03 GenAI:** Emilly `:8090` — Sofia pluga quando contrato FE liberar
+6. **Biometria / OCR Nexus EP-05:** fora Downstream — reabrir se necessário
+7. **Docs:** gerar US-FE md EP-05 Downstream
 
 _Sofia · Prisma Equifax_
