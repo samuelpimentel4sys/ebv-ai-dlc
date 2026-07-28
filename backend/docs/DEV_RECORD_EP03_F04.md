@@ -27,7 +27,16 @@
 
 ## Lab
 
-`OIDC_ENABLED=false` — `actorId` / `actorMaxLevel` no body. Roles Keycloak prontas no `SecurityConfig` quando OIDC on.
+`OIDC_ENABLED=false` — `actorId` no body **ou** `prisma.lab.actor-fallback=true` (OBS-06).  
+OIDC on: actor = JWT `sub` apenas.
+
+## DoD US (OBS-10)
+
+- [x] Paths + HTTP contratos F04
+- [x] RNs unit (READY_FOR_REVIEW, guardrail, criador≠aprovador, escalate)
+- [x] Integração: JDBC mesmo Supabase (lab) — documentado handoff
+- [ ] OIDC on em staging demo
+- [x] DEV_RECORD + auditoria ack
 
 ## Não feito
 

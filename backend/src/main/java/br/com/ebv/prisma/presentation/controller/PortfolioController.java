@@ -49,7 +49,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/portfolio")
-@Tag(name = "Portfolio", description = "PRISMA-EP-04 Sala de Risco / Portfólio (lab)")
+@Tag(name = "Portfolio", description = "PRISMA-EP-04 Sala de Risco / Portfólio (lab stub — sem Neptune/Trino DoD)")
 public class PortfolioController {
 
     private final GetGraphUseCase getGraph;

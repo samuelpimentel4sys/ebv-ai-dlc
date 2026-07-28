@@ -11,6 +11,9 @@
 | **CORS** | `http://localhost:5173` · `http://localhost:3000` |
 | **Auth lab agora** | `OIDC_ENABLED=false` (APIs abertas) |
 | **Liveness lab** | `LIVENESS_MODE=http` · mock `http://192.168.31.47:8093` |
+| **Lab marker** | Header `X-Prisma-Lab: true` (OBS-04) ? não é produção |
+
+**Mapa hosts:** [`MAPA_HOSTS_FE.md`](./MAPA_HOSTS_FE.md) · Auditoria OBS: [`DEV_RECORD_AUDITORIA_OBS.md`](./DEV_RECORD_AUDITORIA_OBS.md)
 
 **Legenda:** OK = plugar agora · STUB = lab stub · SKIP = fora / adiado
 

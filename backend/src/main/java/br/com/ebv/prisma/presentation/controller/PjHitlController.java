@@ -3,11 +3,13 @@ package br.com.ebv.prisma.presentation.controller;
 import br.com.ebv.prisma.domain.pj.port.in.DecidePjOpinionUseCase;
 import br.com.ebv.prisma.domain.pj.port.in.GetPjApprovalTrailUseCase;
 import br.com.ebv.prisma.domain.pj.port.in.SubmitPjOpinionUseCase;
+import br.com.ebv.prisma.infrastructure.config.LabActorResolver;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,23 +24,24 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/pj/opinions")
-@Tag(name = "PJ HITL", description = "PRISMA-EP-03-F04 Alçada e trilha (Java)")
+@Tag(name = "PJ HITL", description = "PRISMA-EP-03-F04 Alçada e trilha — Java only (GenAI = Python :8090)")
 public class PjHitlController {
-
-    private static final UUID LAB_ACTOR = UUID.fromString("00000000-0000-4000-8000-0000000000aa");
 
     private final SubmitPjOpinionUseCase submit;
     private final DecidePjOpinionUseCase decide;
     private final GetPjApprovalTrailUseCase trail;
+    private final LabActorResolver actors;
 
     public PjHitlController(
             SubmitPjOpinionUseCase submit,
             DecidePjOpinionUseCase decide,
-            GetPjApprovalTrailUseCase trail
+            GetPjApprovalTrailUseCase trail,
+            LabActorResolver actors
     ) {
         this.submit = submit;
         this.decide = decide;
         this.trail = trail;
+        this.actors = actors;
     }
 
     public record SubmitRequest(UUID actorId, String comment) {}
@@ -50,12 +53,13 @@ public class PjHitlController {
     ) {}
 
     @PostMapping("/{id}/submit")
-    @Operation(summary = "Submete parecer para alçada")
+    @Operation(summary = "Submete parecer para alçada (HITL Java — não é GenAI)")
     public ResponseEntity<Map<String, Object>> submit(
             @PathVariable UUID id,
-            @RequestBody(required = false) SubmitRequest body
+            @RequestBody(required = false) SubmitRequest body,
+            Authentication authentication
     ) {
-        UUID actor = body != null && body.actorId() != null ? body.actorId() : LAB_ACTOR;
+        UUID actor = actors.resolve(body != null ? body.actorId() : null, authentication);
         String comment = body != null ? body.comment() : null;
         var r = submit.execute(new SubmitPjOpinionUseCase.Command(id, actor, comment));
         Map<String, Object> resp = new HashMap<>();
@@ -63,6 +67,7 @@ public class PjHitlController {
         resp.put("status", r.status());
         resp.put("requiredLevel", r.requiredLevel());
         resp.put("trailId", r.trailId());
+        resp.put("lab", true);
         return ResponseEntity.ok(resp);
     }
 
@@ -70,9 +75,10 @@ public class PjHitlController {
     @Operation(summary = "Aprova / rejeita / escala (HITL)")
     public ResponseEntity<Map<String, Object>> approve(
             @PathVariable UUID id,
-            @Valid @RequestBody DecideRequest body
+            @Valid @RequestBody DecideRequest body,
+            Authentication authentication
     ) {
-        UUID actor = body.actorId() != null ? body.actorId() : LAB_ACTOR;
+        UUID actor = actors.resolve(body.actorId(), authentication);
         String maxLevel = body.actorMaxLevel() != null ? body.actorMaxLevel() : "L2";
         var r = decide.execute(new DecidePjOpinionUseCase.Command(
                 id, actor, body.decision(), body.comment(), maxLevel
@@ -83,6 +89,7 @@ public class PjHitlController {
         resp.put("levelCode", r.levelCode());
         resp.put("approvedAt", r.decidedAt());
         resp.put("trailEntryId", r.trailEntryId());
+        resp.put("lab", true);
         return ResponseEntity.ok(resp);
     }
 
@@ -100,6 +107,10 @@ public class PjHitlController {
             m.put("at", t.at());
             return m;
         }).toList();
-        return ResponseEntity.ok(Map.of("opinionId", r.opinionId(), "trail", items));
+        Map<String, Object> body = new HashMap<>();
+        body.put("opinionId", r.opinionId());
+        body.put("trail", items);
+        body.put("lab", true);
+        return ResponseEntity.ok(body);
     }
 }

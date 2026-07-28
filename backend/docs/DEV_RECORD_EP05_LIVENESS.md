@@ -19,6 +19,14 @@
 
 Face Liveness **não** no LocalStack → mock WireMock (`docker-compose.liveness.yml`).
 
+## DoD US (OBS-10)
+
+- [x] Paths consent + session
+- [x] Unit CA consent/lockout/idempotency
+- [x] Port stub|http (WireMock) — ADR: Face Liveness ≠ LocalStack
+- [ ] AWS Rekognition real (`LIVENESS_MODE=aws`)
+- [x] DEV_RECORD + MockMvc contrato
+
 ## Fora deste slice
 
 - GetFaceLivenessSessionResults / scoring (US-BE-02)

@@ -89,6 +89,7 @@ flowchart LR
 | F04 | Trilha WORM audit | 🟡 lab V17 · FS WORM · hook decisão |
 | F05 | Catálogo + resolve motivos | 🟡 lab V16 · resolve stub |
 | — | CORS Sofia FE (`prisma.cors.allowed-origins`) | ✅ |
+| — | Auditoria OBS-01…11 (Lab≠DoD, X-Prisma-Lab, LAB_ACTOR gated, OIDC staging fail-fast) | ✅ [`DEV_RECORD_AUDITORIA_OBS.md`](./DEV_RECORD_AUDITORIA_OBS.md) |
 | F01 | SHAP explain snapshot | 🟡 lab V18 · stub · 3 endpoints |
 | F02 | Contrafactuais DiCE | 🟡 lab V19 · stub · simulate |
 | F03 | Dossiê regulatório | 🟡 lab V20 · PDF stub · 201 |

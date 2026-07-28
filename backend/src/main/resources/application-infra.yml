@@ -48,6 +48,9 @@ management:
       show-details: when_authorized
 
 prisma:
+  lab:
+    mark-responses: ${PRISMA_LAB_MARK:true}
+    actor-fallback: ${PRISMA_LAB_ACTOR_FALLBACK:true}
   liveness:
     mode: ${LIVENESS_MODE:stub}
     mock-url: ${LIVENESS_MOCK_URL:http://localhost:8093}

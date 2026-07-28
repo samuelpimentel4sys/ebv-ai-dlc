@@ -84,6 +84,12 @@ prisma:
     mode: ${LIVENESS_MODE:stub}
     mock-url: ${LIVENESS_MOCK_URL:http://localhost:8093}
     term-version: ${BIOMETRIC_TERM_VERSION:v1.0}
+  lab:
+    # OBS-04/06 — lab markers + actor fallback (desligar em staging/prod)
+    mark-responses: ${PRISMA_LAB_MARK:true}
+    actor-fallback: ${PRISMA_LAB_ACTOR_FALLBACK:true}
+  security:
+    enabled: ${OIDC_ENABLED:false}
 
 logging:
   level:
