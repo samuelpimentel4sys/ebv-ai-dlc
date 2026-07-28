@@ -22,6 +22,13 @@ import {
   sandboxCredential,
   type OnboardingDraft,
 } from '@/epics/contestacao/data';
+import {
+  completeOnboardingLive,
+  startOnboardingLive,
+  verifyOnboardingLive,
+} from '@/api/b2bConsole';
+import { isLiveMode } from '@/lib/config';
+import { errorMessage } from '@/lib/useDataQuery';
 import { focusFirstInvalid } from '@/lib/focusFirstInvalid';
 
 const steps = [
@@ -57,6 +64,13 @@ export function OnboardingPage() {
   const [focusNonce, setFocusNonce] = useState(0);
   const formRef = useRef<HTMLDivElement>(null);
   const [draft, setDraft] = useState<OnboardingDraft>(onboardingPrefill);
+  const [onboardingId, setOnboardingId] = useState<string | null>(null);
+  const [issuedCredential, setIssuedCredential] = useState<{
+    clientId: string;
+    secret: string;
+    scopes: string[];
+    env: string;
+  } | null>(null);
 
   useEffect(() => {
     if (focusNonce === 0) return;
@@ -110,12 +124,53 @@ export function OnboardingPage() {
       return;
     }
     setShowSummary(false);
-    if (step === 0) toast.success('CNPJ validado', 'POST /api/v1/onboarding/start');
-    if (step === 1)
-      toast.success('Representante verificado', 'POST /api/v1/onboarding/{id}/verify');
-    if (step === 2) toast.success('Contrato aceito', 'POST /api/v1/onboarding/{id}/complete');
-    setStep((value) => Math.min(value + 1, steps.length - 1));
+    void (async () => {
+      try {
+        if (isLiveMode()) {
+          if (step === 0) {
+            const res = await startOnboardingLive({
+              cnpj: draft.cnpj,
+              legalName: draft.razaoSocial,
+              representative: draft.repName,
+            });
+            setOnboardingId(res.id);
+            toast.success('CNPJ validado', 'POST /api/v1/onboarding/start');
+          } else if (step === 1) {
+            if (!onboardingId) throw new Error('Onboarding não iniciado');
+            await verifyOnboardingLive(onboardingId);
+            toast.success('Representante verificado', 'POST /api/v1/onboarding/{id}/verify');
+          } else if (step === 2) {
+            if (!onboardingId) throw new Error('Onboarding não iniciado');
+            const res = await completeOnboardingLive({
+              id: onboardingId,
+              contractVersion: draft.plan,
+              billingEmail: draft.repEmail,
+            });
+            setIssuedCredential(res.credential);
+            toast.success('Contrato aceito', 'POST /api/v1/onboarding/{id}/complete');
+          }
+        } else {
+          if (step === 0) toast.success('CNPJ validado', 'POST /api/v1/onboarding/start');
+          if (step === 1)
+            toast.success('Representante verificado', 'POST /api/v1/onboarding/{id}/verify');
+          if (step === 2) toast.success('Contrato aceito', 'POST /api/v1/onboarding/{id}/complete');
+        }
+        setStep((value) => Math.min(value + 1, steps.length - 1));
+      } catch (error) {
+        toast.error('Falha no onboarding', errorMessage(error));
+      }
+    })();
   }
+
+  const credentialDisplay = issuedCredential
+    ? {
+        baseUrl: sandboxCredential.baseUrl,
+        clientId: issuedCredential.clientId,
+        clientSecret: issuedCredential.secret,
+        scopes: issuedCredential.scopes,
+        rateLimit: sandboxCredential.rateLimit,
+      }
+    : sandboxCredential;
 
   const summary =
     showSummary && step < 3 ? (
@@ -300,17 +355,17 @@ export function OnboardingPage() {
                 items={[
                   {
                     label: 'Base URL',
-                    value: <code className="text-xs">{sandboxCredential.baseUrl}</code>,
+                    value: <code className="text-xs">{credentialDisplay.baseUrl}</code>,
                   },
                   {
                     label: 'Client ID',
-                    value: <code className="text-xs">{sandboxCredential.clientId}</code>,
+                    value: <code className="text-xs">{credentialDisplay.clientId}</code>,
                   },
                   {
                     label: 'Client secret',
                     value: (
                       <span className="flex flex-wrap items-center gap-2">
-                        <code className="text-xs">{sandboxCredential.clientSecret}</code>
+                        <code className="text-xs">{credentialDisplay.clientSecret}</code>
                         <Button
                           size="sm"
                           variant="ghost"
@@ -326,11 +381,11 @@ export function OnboardingPage() {
                   },
                   {
                     label: 'Escopos',
-                    value: sandboxCredential.scopes.join(', '),
+                    value: credentialDisplay.scopes.join(', '),
                   },
                   {
                     label: 'Limite de taxa',
-                    value: sandboxCredential.rateLimit,
+                    value: credentialDisplay.rateLimit,
                   },
                 ]}
               />

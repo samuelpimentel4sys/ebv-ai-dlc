@@ -6,8 +6,8 @@
 | **Produto** | **Prisma Equifax** (EBV · Equifax / BoaVista) |
 | **Repo FE** | `Prisma/frontend` |
 | **Repo BE** | `Prisma/backend` (Noah) |
-| **Atualizado em** | 2026-07-28 14:50 |
-| **Fase atual** | **P2 Explainability live** feito · próximo P1 contrato / EP-05 |
+| **Atualizado em** | 2026-07-28 15:00 |
+| **Fase atual** | Contestação/Console live · próximo P1 contrato / Inclusão |
 
 ---
 
@@ -22,7 +22,7 @@
 | **DS hardening (targets/inverse/overlay)** | ✅ P0.1 | `min-h-target` · `text-eqx-text-inverse` · `--color-overlay` |
 | Contratos FE = OpenAPI (sem mapper frouxo) | 🟡 | Mappers compensam gap mock×BE |
 | Login OIDC / papéis | ❌ | Lab aberto |
-| EP-02…06 live | ✅ EP-02 via `explainability.ts` | EP-03…06 aguardam BE |
+| EP-02…06 live | ✅ EP-02 + EP-05 | EP-03/04/06 aguardam BE |
 
 **Conclusão:** o FE está **conectado**, mas ainda **parece demo**. Próximo passo obrigatório = **virar Prisma Equifax** (navegação, copy, hierarquia), sem perder as rotas das US.
 
@@ -79,13 +79,17 @@
 
 Ordem Noah: F05 → F10 → F01 → F02 → F06 → F08 → F04 → F03 → F09 → F07 — **10/10 live**
 
+### P3 — Plug Contestação & Console (`dispute.ts` · `b2bConsole.ts`) · **FEITO 2026-07-28**
+
+Noah lab 9/9 — **9/9 telas live** (titular, fila, tracking, anexos, SLA, onboarding, credenciais, console, deflection)
+
 ### P1 — Hardening live Score & Plataforma
 
 - [ ] Diff OpenAPI × mappers (gap list Noah)
 - [ ] Empty/error reais sem depender só de `?state=`
 - [ ] Smoke roteiro operador (não demo 60 min)
 
-### P3+ — Contestação / Inclusão / R2 (03–04)
+### P4+ — Inclusão / Copiloto / Portfólio (quando BE)
 
 Conforme BE + WSJF.
 
@@ -99,7 +103,8 @@ Conforme BE + WSJF.
 | S1 Score & Plataforma live | ✅ (`scorePlatform.ts` · `DEV_RECORD_EP01_PLUG.md`) |
 | S2 F08/F10 | ✅ no plug (ressalvas lab) |
 | P0.1 DS hardening | ✅ |
-| P2 Explicabilidade live | ✅ (`explainability.ts` · `DEV_RECORD_EXPLAINABILITY_PLUG.md`) |
+| P2 Explicabilidade live | ✅ (`explainability.ts`) |
+| P3 Contestação/Console live | ✅ (`dispute.ts` · `b2bConsole.ts`) |
 
 ---
 

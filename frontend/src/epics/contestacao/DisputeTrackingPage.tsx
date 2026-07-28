@@ -16,7 +16,8 @@ import {
   Stepper,
   TextField,
 } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { fetchDisputeTrackingLive } from '@/api/dispute';
+import { useDataQuery } from '@/lib/useDataQuery';
 import { formatDateTime, relativeFromNow } from '@/lib/format';
 import { MARIA } from '@/app/story';
 import { stageLabel, stageOrder, tracking } from '@/epics/contestacao/data';
@@ -42,18 +43,22 @@ export function DisputeTrackingPage() {
   const formRef = useRef<HTMLDivElement>(null);
   const [focusNonce, setFocusNonce] = useState(0);
 
-  const query = useMockQuery(
+  const activeProtocol = unlocked ? (params.protocolo ?? protocol.trim()) : routeProtocol;
+  const confirmDocumento = documento.replace(/\D/g, '').slice(-2) || '01';
+
+  const query = useDataQuery(
     () => ({
       ...tracking,
-      protocol: routeProtocol,
+      protocol: activeProtocol,
       // O mock cita o protocolo dentro do texto dos eventos; a troca mantém a
       // linha do tempo coerente com o protocolo que veio da URL.
       timeline: tracking.timeline.map((event) => ({
         ...event,
-        detail: event.detail.replace(MARIA.disputeProtocol, routeProtocol),
+        detail: event.detail.replace(MARIA.disputeProtocol, activeProtocol),
       })),
     }),
-    { latency: 340, enabled: unlocked, deps: [routeProtocol] },
+    () => fetchDisputeTrackingLive(activeProtocol, confirmDocumento),
+    { latency: 340, enabled: unlocked, deps: [activeProtocol, confirmDocumento] },
   );
 
   useEffect(() => {
@@ -92,6 +97,9 @@ export function DisputeTrackingPage() {
       return;
     }
     setUnlocked(true);
+    if (!params.protocolo && protocol.trim().length >= 6) {
+      navigate(`/titular/contestacoes/${protocol.trim()}`);
+    }
   }
 
   return (

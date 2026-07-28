@@ -12,17 +12,26 @@ import {
   ProgressBar,
   QueryBoundary,
 } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { fetchDeflectionLive } from '@/api/b2bConsole';
+import { useDataQuery } from '@/lib/useDataQuery';
 import { formatCurrency, formatNumber } from '@/lib/format';
 import { deflectionFunnel, deflectionSeries, sacEconomics } from '@/epics/contestacao/data';
 
 export function DeflectionPage() {
-  const query = useMockQuery(
+  const query = useDataQuery(
     () => ({
       series: deflectionSeries,
       funnel: deflectionFunnel,
       economics: sacEconomics,
     }),
+    async () => {
+      const data = await fetchDeflectionLive();
+      return {
+        series: data.deflectionSeries,
+        funnel: data.deflectionFunnel,
+        economics: data.sacEconomics,
+      };
+    },
     { latency: 340 },
   );
 

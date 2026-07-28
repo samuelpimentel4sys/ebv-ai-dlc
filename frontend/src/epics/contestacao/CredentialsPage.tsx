@@ -18,7 +18,14 @@ import {
   useToast,
 } from '@/ds';
 import type { Column } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import {
+  createCredentialLive,
+  fetchCredentialsLive,
+  revokeCredentialLive,
+  rotateCredentialLive,
+} from '@/api/b2bConsole';
+import { isLiveMode } from '@/lib/config';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
 import { formatDate, formatDateTime } from '@/lib/format';
 import { VEGA } from '@/app/story';
 import { availableScopes, credentials, type Credential } from '@/epics/contestacao/data';
@@ -36,7 +43,7 @@ function daysUntil(iso: string) {
 
 export function CredentialsPage() {
   const toast = useToast();
-  const query = useMockQuery(() => credentials, { latency: 300 });
+  const query = useDataQuery(() => credentials, fetchCredentialsLive, { latency: 300 });
   const { setData } = query;
   const [creating, setCreating] = useState(false);
   const [name, setName] = useState('');
@@ -57,13 +64,30 @@ export function CredentialsPage() {
   }
 
   function rotate(row: Credential) {
-    patch(row.id, { status: 'rotacionando' });
-    toast.undoable(
-      'Rotação iniciada',
-      'Credencial antiga válida por 24 h para transição sem downtime',
-      () => patch(row.id, { status: row.status }),
-      'Cancelar rotação',
-    );
+    void (async () => {
+      try {
+        if (isLiveMode()) {
+          patch(row.id, { status: 'rotacionando' });
+          await rotateCredentialLive(row.id);
+          query.reload();
+          toast.success(
+            'Rotação concluída',
+            `POST /api/v1/credentials/${row.id}/rotate — secret exibido uma única vez`,
+          );
+          return;
+        }
+        patch(row.id, { status: 'rotacionando' });
+        toast.undoable(
+          'Rotação iniciada',
+          'Credencial antiga válida por 24 h para transição sem downtime',
+          () => patch(row.id, { status: row.status }),
+          'Cancelar rotação',
+        );
+      } catch (error) {
+        if (isLiveMode()) patch(row.id, { status: row.status });
+        toast.error('Falha na rotação', errorMessage(error));
+      }
+    })();
   }
 
   function create() {
@@ -74,25 +98,48 @@ export function CredentialsPage() {
       setFocusNonce((value) => value + 1);
       return;
     }
-    const record: Credential = {
-      id: `cred-${Math.random().toString(36).slice(2, 6)}`,
-      name: name.trim(),
-      environment: 'sandbox',
-      clientId: `prisma-sbx-${Math.random().toString(16).slice(2, 8)}`,
-      createdAt: new Date().toISOString(),
-      expiresAt: new Date(Date.now() + 180 * 86_400_000).toISOString(),
-      scopes,
-      status: 'ativa',
-    };
-    setData((list) => [record, ...list]);
-    setCreating(false);
-    setName('');
-    setErrors({});
-    setCreated(record);
-    toast.success(
-      'Credencial criada',
-      'POST /api/v1/console/credentials — secret exibido uma única vez',
-    );
+    void (async () => {
+      try {
+        if (isLiveMode()) {
+          const record = await createCredentialLive({
+            name: name.trim(),
+            environment: 'sandbox',
+            scopes,
+          });
+          query.reload();
+          setCreating(false);
+          setName('');
+          setErrors({});
+          setCreated(record);
+          toast.success(
+            'Credencial criada',
+            'POST /api/v1/credentials — secret exibido uma única vez',
+          );
+          return;
+        }
+        const record: Credential = {
+          id: `cred-${Math.random().toString(36).slice(2, 6)}`,
+          name: name.trim(),
+          environment: 'sandbox',
+          clientId: `prisma-sbx-${Math.random().toString(16).slice(2, 8)}`,
+          createdAt: new Date().toISOString(),
+          expiresAt: new Date(Date.now() + 180 * 86_400_000).toISOString(),
+          scopes,
+          status: 'ativa',
+        };
+        setData((list) => [record, ...list]);
+        setCreating(false);
+        setName('');
+        setErrors({});
+        setCreated(record);
+        toast.success(
+          'Credencial criada',
+          'POST /api/v1/console/credentials — secret exibido uma única vez',
+        );
+      } catch (error) {
+        toast.error('Falha ao criar credencial', errorMessage(error));
+      }
+    })();
   }
 
   const columns: Column<Credential>[] = [
@@ -353,12 +400,23 @@ export function CredentialsPage() {
               variant="danger"
               onClick={() => {
                 if (!revoking) return;
-                patch(revoking.id, { status: 'revogada' });
-                toast.success(
-                  'Credencial revogada',
-                  `DELETE /api/v1/console/credentials/${revoking.id}`,
-                );
-                setRevoking(null);
+                void (async () => {
+                  try {
+                    if (isLiveMode()) {
+                      await revokeCredentialLive(revoking.id);
+                      query.reload();
+                    } else {
+                      patch(revoking.id, { status: 'revogada' });
+                    }
+                    toast.success(
+                      'Credencial revogada',
+                      `DELETE /api/v1/credentials/${revoking.id}`,
+                    );
+                    setRevoking(null);
+                  } catch (error) {
+                    toast.error('Falha ao revogar credencial', errorMessage(error));
+                  }
+                })();
               }}
             >
               Revogar agora

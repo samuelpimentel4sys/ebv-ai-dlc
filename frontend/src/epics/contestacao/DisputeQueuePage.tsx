@@ -19,7 +19,9 @@ import {
   useToast,
 } from '@/ds';
 import type { Column } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { fetchDisputeQueueLive, resolveDisputeLive } from '@/api/dispute';
+import { isLiveMode } from '@/lib/config';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
 import { focusFirstInvalid } from '@/lib/focusFirstInvalid';
 import { formatDateTime, relativeFromNow } from '@/lib/format';
 import {
@@ -54,11 +56,17 @@ export function DisputeQueuePage() {
   const [focusNonce, setFocusNonce] = useState(0);
   const drawerRef = useRef<HTMLDivElement>(null);
 
-  const query = useMockQuery(
+  const query = useDataQuery(
     () =>
       disputeQueue.filter(
         (row) => !resolved.includes(row.id) && (channel === 'todos' || row.channel === channel),
       ),
+    async () => {
+      const items = await fetchDisputeQueueLive();
+      return items.filter(
+        (row) => !resolved.includes(row.id) && (channel === 'todos' || row.channel === channel),
+      );
+    },
     {
       latency: 350,
       deps: [channel, resolved],
@@ -141,16 +149,38 @@ export function DisputeQueuePage() {
       return;
     }
     const closed = treating;
-    setResolved((current) => [...current, closed.id]);
-    setErrors({});
-    setTreating(null);
-    setNote('');
-    toast.undoable(
-      'Contestação concluída',
-      `PATCH /api/v1/disputes/${closed.id}/resolve — ${outcome}`,
-      () => setResolved((current) => current.filter((id) => id !== closed.id)),
-      'Reabrir caso',
-    );
+    void (async () => {
+      try {
+        if (isLiveMode()) {
+          await resolveDisputeLive({
+            id: closed.id,
+            outcome: outcome as 'procedente' | 'parcial' | 'improcedente',
+            rationale: note.trim(),
+          });
+          query.reload();
+        } else {
+          setResolved((current) => [...current, closed.id]);
+        }
+        sessionStorage.setItem('prisma.lastDisputeId', closed.id);
+        setErrors({});
+        setTreating(null);
+        setNote('');
+        toast.undoable(
+          'Contestação concluída',
+          `PATCH /api/v1/disputes/${closed.id}/resolve — ${outcome}`,
+          () => {
+            if (!isLiveMode()) {
+              setResolved((current) => current.filter((id) => id !== closed.id));
+            } else {
+              query.reload();
+            }
+          },
+          'Reabrir caso',
+        );
+      } catch (error) {
+        toast.error('Falha ao concluir contestação', errorMessage(error));
+      }
+    })();
   }
 
   return (
@@ -294,8 +324,9 @@ export function DisputeQueuePage() {
               )}
               <div className="mt-3">
                 <Link
-                  to={`/disputas/${treating.protocol}/evidencias`}
+                  to={`/disputas/${treating.protocol}/evidencias?disputeId=${encodeURIComponent(treating.id)}`}
                   className={buttonClass('secondary', 'sm')}
+                  onClick={() => sessionStorage.setItem('prisma.lastDisputeId', treating.id)}
                 >
                   Abrir cofre de evidências
                 </Link>

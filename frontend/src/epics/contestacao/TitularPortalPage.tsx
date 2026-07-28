@@ -16,7 +16,9 @@ import {
   TextAreaField,
   useToast,
 } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { openSelfServiceDisputeLive, fetchTitularRecordsLive } from '@/api/dispute';
+import { isLiveMode } from '@/lib/config';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
 import { formatCurrency, formatDateTime } from '@/lib/format';
 import { disputeReasons, titularRecords, type TitularRecord } from '@/epics/contestacao/data';
 import { focusFirstInvalid } from '@/lib/focusFirstInvalid';
@@ -40,7 +42,7 @@ const typeOrder: TitularRecord['type'][] = ['apontamento', 'consulta', 'cadastro
 export function TitularPortalPage() {
   const toast = useToast();
   const navigate = useNavigate();
-  const query = useMockQuery(() => titularRecords, { latency: 300 });
+  const query = useDataQuery(() => titularRecords, fetchTitularRecordsLive, { latency: 300 });
   const [disputing, setDisputing] = useState<TitularRecord | null>(null);
   const [reason, setReason] = useState('quitado');
   const [detail, setDetail] = useState('');
@@ -63,16 +65,39 @@ export function TitularPortalPage() {
       setFocusNonce((value) => value + 1);
       return;
     }
-    // Evita colidir com o protocolo canónico CT-2026-448120 da demo.
-    let protocolo: string;
-    do {
-      protocolo = `CT-2026-448${Math.floor(Math.random() * 900 + 100)}`;
-    } while (protocolo === 'CT-2026-448120');
-    toast.success('Contestação registrada', `Protocolo ${protocolo} · prazo de 5 dias úteis`);
-    setDisputing(null);
-    setDetail('');
-    setErrors({});
-    navigate(`/titular/contestacoes/${protocolo}`);
+    void (async () => {
+      try {
+        if (isLiveMode()) {
+          const result = await openSelfServiceDisputeLive({
+            reasonCode: reason,
+            description: detail.trim(),
+            recordRef: disputing.recordId,
+          });
+          sessionStorage.setItem('prisma.lastDisputeId', result.id);
+          toast.success(
+            'Contestação registrada',
+            `Protocolo ${result.protocol} · prazo de 5 dias úteis`,
+          );
+          setDisputing(null);
+          setDetail('');
+          setErrors({});
+          navigate(`/titular/contestacoes/${result.protocol}`);
+          return;
+        }
+        // Evita colidir com o protocolo canónico CT-2026-448120 da demo.
+        let protocolo: string;
+        do {
+          protocolo = `CT-2026-448${Math.floor(Math.random() * 900 + 100)}`;
+        } while (protocolo === 'CT-2026-448120');
+        toast.success('Contestação registrada', `Protocolo ${protocolo} · prazo de 5 dias úteis`);
+        setDisputing(null);
+        setDetail('');
+        setErrors({});
+        navigate(`/titular/contestacoes/${protocolo}`);
+      } catch (error) {
+        toast.error('Falha ao registrar contestação', errorMessage(error));
+      }
+    })();
   }
 
   return (

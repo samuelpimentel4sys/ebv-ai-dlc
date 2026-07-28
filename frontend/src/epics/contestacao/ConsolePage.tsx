@@ -19,7 +19,8 @@ import {
   useToast,
 } from '@/ds';
 import type { Column } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { fetchConsoleLive } from '@/api/b2bConsole';
+import { useDataQuery } from '@/lib/useDataQuery';
 import { formatCurrency, formatDate, formatDateTime, formatNumber } from '@/lib/format';
 import { VEGA } from '@/app/story';
 import {
@@ -49,13 +50,22 @@ const DEFAULT_MONTHS = '6';
 export function ConsolePage() {
   const toast = useToast();
   const [months, setMonths] = useState(DEFAULT_MONTHS);
-  const query = useMockQuery(
+  const query = useDataQuery(
     () => ({
       usage: usageSeries.slice(-Number(months)),
       invoices,
       contracts,
       users: orgUsers,
     }),
+    async () => {
+      const data = await fetchConsoleLive();
+      return {
+        usage: data.usage.slice(-Number(months)),
+        invoices: data.invoices,
+        contracts: data.contracts,
+        users: orgUsers,
+      };
+    },
     {
       latency: 380,
       deps: [months],

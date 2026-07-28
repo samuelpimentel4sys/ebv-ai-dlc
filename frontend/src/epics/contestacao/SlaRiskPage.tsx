@@ -17,7 +17,8 @@ import {
   Tabs,
 } from '@/ds';
 import type { Column } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { fetchEscalationsLive, fetchSlaCasesLive } from '@/api/dispute';
+import { useDataQuery } from '@/lib/useDataQuery';
 import { formatDateTime, formatNumber } from '@/lib/format';
 import {
   escalations,
@@ -57,8 +58,12 @@ export function SlaRiskPage() {
   const [nonce, setNonce] = useState(0);
   const [band, setBand] = useState('todas');
 
-  const casesQuery = useMockQuery(
+  const casesQuery = useDataQuery(
     () => slaCases.filter((item) => band === 'todas' || item.band === band),
+    async () => {
+      const cases = await fetchSlaCasesLive();
+      return cases.filter((item) => band === 'todas' || item.band === band);
+    },
     {
       latency: 320,
       deps: [nonce, band],
@@ -67,7 +72,7 @@ export function SlaRiskPage() {
     },
   );
 
-  const escalationsQuery = useMockQuery(() => escalations, {
+  const escalationsQuery = useDataQuery(() => escalations, fetchEscalationsLive, {
     latency: 260,
     deps: [nonce],
   });
