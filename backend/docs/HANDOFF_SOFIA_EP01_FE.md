@@ -1,123 +1,128 @@
-# Handoff Noah â†’ Sofia â€” O que plugar (EP-01 + EP-02)
+# Handoff Noah ? Sofia ? Matriz FE × BE (atualizado)
 
 | Campo | Valor |
 |-------|-------|
 | **De** | Noah (`dev-java-esp`) |
 | **Para** | Sofia (frontend) |
-| **Atualizado** | 2026-07-28 14:20 (America/Sao_Paulo) |
-| **BE** | `Prisma/backend` Â· `origin/main` â‰¥ `f6192a1` |
-| **Auth lab** | `OIDC_ENABLED=false` (APIs abertas) Â· JWT roles no SecurityConfig p/ prod |
-| **CORS** | `http://localhost:5173` Â· `http://localhost:3000` (`prisma.cors.allowed-origins`) |
-| **Base URL** | `http://localhost:8080` Â· profiles `supabase,infra` |
+| **Atualizado** | 2026-07-28 15:20 (America/Sao_Paulo) |
+| **BE** | `Prisma/backend` · `origin/main` ? `e3ebc6f` |
+| **Auth lab** | `OIDC_ENABLED=false` (APIs abertas) · roles JWT no SecurityConfig p/ prod |
+| **CORS** | `http://localhost:5173` · `http://localhost:3000` |
+| **Base URL** | `http://localhost:8080` · profiles `supabase,infra` |
+| **OpenAPI** | `/swagger-ui.html` · `/v3/api-docs` |
 
-**Legenda:** ðŸŸ¢ plugar agora Â· ðŸŸ¡ plugar com ressalva (stub lab) Â· ðŸ”´ ausente
-
----
-
-## 1. EP-01 â€” Score Vivo (10/10 plugÃ¡vel)
-
-| US-FE | Status | Endpoints BE |
-|-------|--------|--------------|
-| F01 Streams health | ðŸŸ¡ | `GET /api/v1/streams/health` Â· `GET /events/{id}` Â· `POST /events/credit` |
-| F02 Features catalog | ðŸŸ¢ | `GET /features/catalog` Â· `GET /features/{doc}` Â· `POST /features/batch` |
-| F03 Score timeline | ðŸŸ¢ | `GET /score/{doc}` Â· `/history` Â· `POST /score/recalculate` |
-| F04 Snapshot compare | ðŸŸ¢ | `GET /decisions/{id}` Â· `/snapshot` Â· `POST .../verify` |
-| F05 Playground | ðŸŸ¢ | `POST /decisions` Â· `GET /decisions/{id}` Â· `GET /decisions/budget` |
-| F06 Ingest sources | ðŸŸ¢ | `GET /ingest/sources` Â· `POST /ingest/replay` |
-| F07 Identity merge | ðŸŸ¢ | `GET /identity/candidates` Â· `/{doc}` Â· `POST /merge` Â· `/merge/undo` |
-| F08 SLO panel | ðŸŸ¡ | `GET /observability/slo` Â· `/budget` Â· `/traces/{decisionId}` |
-| F09 Model registry | ðŸŸ¢ | `GET /models` Â· `POST .../promote` Â· `.../rollback` |
-| F10 Replay jobs | ðŸŸ¡ | `POST /replay/jobs` Â· `GET .../{jobId}` Â· `POST .../abort` |
-
-**Ordem EP-01:** F02 â†’ F03 â†’ F09 â†’ F07 â†’ F05 â†’ F04 â†’ F06 â†’ F01 â†’ F08 â†’ F10
+**Legenda:** ?? plugar agora · ?? plugar com ressalva (stub lab) · ?? ausente no BE
 
 ---
 
-## 2. EP-02 â€” ExplicÃ¡vel (10/10 plugÃ¡vel) â€” **NOVO**
+## Resumo executivo
 
-| US-FE | Status | Endpoints BE |
-|-------|--------|--------------|
-| F01 Fatores / explain | ðŸŸ¡ | `GET /explain/{decisionId}` Â· `/factors` Â· `POST /explain/batch` |
-| F02 Contrafactuais | ðŸŸ¡ | `GET /counterfactual/{decisionId}` Â· `POST /counterfactual/simulate` |
-| F03 DossiÃª LGPD | ðŸŸ¡ | `POST /dossier` Â· `GET /dossier/{id}` Â· `GET .../download` |
-| F04 Trilha auditoria | ðŸŸ¡ | `GET /audit/trail` Â· `/trail/{doc}` Â· `POST /audit/export` (202) |
-| F05 Motivos recusa | ðŸŸ¢ | `GET /reasons` Â· `POST /reasons` Â· `GET /reasons/resolve/{decisionId}` |
-| F06 RevisÃ£o humana | ðŸŸ¢ | `GET /reviews/queue` Â· `POST /reviews` Â· `PATCH .../decide` |
-| F07 Fairness | ðŸŸ¡ | `GET /fairness/metrics` Â· `/alerts` Â· `POST /fairness/analyze` (202) |
-| F08 Fila direitos | ðŸŸ¢ | `GET/POST /subject-requests` Â· `PATCH /subject-requests/{id}` |
-| F09 SimulaÃ§Ã£o polÃ­tica | ðŸŸ¡ | `GET /policy/baseline` Â· `POST /policy/simulate` Â· `GET /policy/simulations/{id}` |
-| F10 VersÃµes polÃ­tica | ðŸŸ¢ | `GET /policy/versions` Â· `.../diff/{a}/{b}` Â· `POST .../publish` |
-
-**Ordem EP-02 sugerida:**  
-1. F05 reasons Â· 2. F10 policy versions Â· 3. F01 explain (apÃ³s `POST /decisions` c/ `includeExplanation=true`)  
-4. F02 counterfactual Â· 5. F06 reviews Â· 6. F08 subject-requests Â· 7. F04 audit  
-8. F03 dossier Â· 9. F09 simulate Â· 10. F07 fairness  
-
-**Fluxo feliz FE:** `POST /decisions` â†’ `decisionId` â†’ explain + counterfactual + reasons/resolve â†’ dossier.
+| Épico | Features lab | Sofia pode plugar? |
+|-------|-------------:|--------------------|
+| **EP-01** Score Vivo | 10/10 | **Sim** |
+| **EP-02** Explicável | 10/10 | **Sim** |
+| **EP-05** Contestação / Console | 9/9 | **Sim** |
+| **EP-06** Inclusão / Coach | 9/9 | **Sim** |
+| **EP-03** Copiloto PJ | 0 | ?? GenAI Python + HITL Java pendente |
+| **EP-04** Portfólio / Grafo | 0 | ?? Próximo Noah (ou hardening) |
 
 ---
 
-## 3. Ressalvas lab (Sofia)
+## 1. EP-01 ? Score Vivo (10/10)
 
-| Tema | Detalhe |
-|------|---------|
-| SHAP / DiCE / PDF | Stubs Java â€” nÃ£o Python TreeExplainer / DiCE / PDFBox real |
-| WORM | FS `./data/worm` Â· `./data/audit-worm` Â· `./data/dossier` â€” nÃ£o S3 Object Lock |
-| Fairness / simulate | Analyze/simulate **202** sÃ­ncrono stub â€” sem Fairlearn/Spark |
-| Kafka health / OTel | MÃ©tricas parciais |
-| Outcome decisÃ£o | Threshold stub atÃ© policy Drools real |
-| Shapes | DivergÃªncia mock FE vs JSON BE â†’ gap list p/ Noah (sem inventar campo) |
-| EP-03â€¦06 | **Ainda nÃ£o** plugar â€” Noah em Sprint 5 (EP-05) agora |
+| US-FE | Status | Endpoints |
+|-------|--------|-----------|
+| F01 Streams | ?? | `GET /api/v1/streams/health` · `GET /events/{id}` · `POST /events/credit` |
+| F02 Features | ?? | `GET /features/catalog` · `GET /features/{doc}` · `POST /features/batch` |
+| F03 Score | ?? | `GET /score/{doc}` · `/history` · `POST /score/recalculate` |
+| F04 Snapshot | ?? | `GET /decisions/{id}` · `/snapshot` · `POST .../verify` |
+| F05 Playground | ?? | `POST /decisions` · `GET /decisions/{id}` · `GET /decisions/budget` |
+| F06 Ingest | ?? | `GET /ingest/sources` · `POST /ingest/replay` |
+| F07 Identity | ?? | `GET /identity/candidates` · `/{doc}` · `POST /merge` · `/merge/undo` |
+| F08 SLO | ?? | `GET /observability/slo` · `/budget` · `/traces/{decisionId}` |
+| F09 Models | ?? | `GET /models` · `POST .../promote` · `.../rollback` |
+| F10 Replay | ?? | `POST /replay/jobs` · `GET .../{jobId}` · `POST .../abort` |
 
----
-
-## 4. Commits BE relevantes
-
-| Commit | Escopo |
-|--------|--------|
-| `76509bd`â€¦`6d723af` | EP-01 S1â€“S3 + F08/F10 |
-| `6cc5fdd` | Handoff EP-01 inicial |
-| `9dd02c3` | EP-02 F10/F05/F04 + CORS |
-| `8df606c` | EP-02 F01â€“F03 |
-| `f6192a1` | EP-02 F06â€“F09 (Ã©pico lab fechado) |
-
-OpenAPI: `/swagger-ui.html` Â· `/v3/api-docs`
-
-_RelatÃ³rio: `backend/docs/RELATORIO_PROGRESSO_BACKEND.md`_
+**Ordem:** F02 ? F03 ? F09 ? F07 ? F05 ? F04 ? F06 ? F01 ? F08 ? F10
 
 ---
 
-## 5. EP-05 — Contestação / Console (9/9 lab) — **NOVO** (6cb93f4+)
+## 2. EP-02 ? Explicável (10/10)
+
+| US-FE | Status | Endpoints |
+|-------|--------|-----------|
+| F01 Explain | ?? | `GET /explain/{decisionId}` · `/factors` · `POST /explain/batch` |
+| F02 Contrafactual | ?? | `GET /counterfactual/{decisionId}` · `POST /counterfactual/simulate` |
+| F03 Dossiê | ?? | `POST /dossier` · `GET /dossier/{id}` · `GET .../download` |
+| F04 Audit | ?? | `GET /audit/trail` · `/trail/{doc}` · `POST /audit/export` (202) |
+| F05 Motivos | ?? | `GET /reasons` · `POST /reasons` · `GET /reasons/resolve/{decisionId}` |
+| F06 Reviews | ?? | `GET /reviews/queue` · `POST /reviews` · `PATCH .../decide` |
+| F07 Fairness | ?? | `GET /fairness/metrics` · `/alerts` · `POST /fairness/analyze` (202) |
+| F08 Subject-requests | ?? | `GET/POST /subject-requests` · `PATCH /subject-requests/{id}` |
+| F09 Policy sim | ?? | `GET /policy/baseline` · `POST /policy/simulate` · `GET /policy/simulations/{id}` |
+| F10 Policy versions | ?? | `GET /policy/versions` · `.../diff/{a}/{b}` · `POST .../publish` |
+
+**Fluxo:** `POST /decisions` (`includeExplanation=true`) ? explain ? counterfactual ? reasons/resolve ? dossier.
+
+---
+
+## 3. EP-05 ? Contestação / Console (9/9)
 
 | Área | Status | Endpoints |
 |------|--------|-----------|
-| Self-service F05 | ?? | /api/v1/self-service/identify · /records · /disputes |
-| Disputes F02/F01/F08 | ?? | /disputes · /queue · /resolve · /tracking · /timeline · /attachments · /evidence-pack |
-| SLA F06 | ?? | /sla/status · /sla/policies · /sla/escalations |
-| Onboarding F03 | ?? | /onboarding/start · /{id}/verify · /{id}/complete |
-| Credentials F07 | ?? | POST/DELETE /credentials · /rotate |
-| Console F04 | ?? | /console/usage · /invoices · /contracts |
-| Analytics F09 | ?? | /analytics/deflection · /sac-cost · /baseline |
+| F05 Self-service | ?? | `POST /self-service/identify` · `GET /records` · `POST /disputes` |
+| F02 Workflow | ?? | `POST /disputes` · `GET /disputes/queue` · `PATCH /disputes/{id}/resolve` |
+| F01 Tracking | ?? | `GET /disputes/{protocol}/tracking` · `/timeline` |
+| F08 Anexos | ?? | `POST/GET /disputes/{id}/attachments` · `GET .../evidence-pack` |
+| F06 SLA | ?? | `GET /sla/status` · `POST /sla/policies` · `GET /sla/escalations` |
+| F03 Onboarding | ?? | `POST /onboarding/start` · `/{id}/verify` · `/{id}/complete` |
+| F07 Credentials | ?? | `POST /credentials` · `POST .../rotate` · `DELETE /credentials/{id}` |
+| F04 Console | ?? | `GET /console/usage` · `/invoices` · `/contracts` |
+| F09 Analytics SAC | ?? | `GET /analytics/deflection` · `/sac-cost` · `/baseline` |
 
-EP-03/EP-04/EP-06 ainda **fora** (próximo plano Noah = EP-06 ou EP-04).
+**Ordem:** self-service ? disputes ? tracking ? attachments ? SLA ? onboarding ? credentials ? console ? analytics.
 
 ---
 
-## 6. EP-06 â€” Score InclusÃ£o + Coach B2C (9/9 lab) â€” **NOVO**
+## 4. EP-06 ? Inclusão / Coach (9/9) ? **NOVO**
 
-Auth lab: `OIDC_ENABLED=false`. Roles prod: `TITULAR_B2C` Â· `SYSTEM_INGEST` Â· `SCORE_CONSUMER` Â· `MODEL_OPS`.
+| US-FE | Status | Endpoints |
+|-------|--------|-----------|
+| F04 Privacidade / consent | ?? | `POST /consents` · `GET /consents/{documento}` · `DELETE /consents/{consentId}` |
+| F08 Vinculação consumo | ?? | `POST /utilities/link` · `GET /utilities/links` · `DELETE /utilities/links/{linkId}` |
+| F01 Monitor parceiros / alt | ?? | `POST /alternative-data/ingest` · `GET /alternative-data/coverage` · `GET /quality` |
+| F02 Thin-file | ?? | `POST /thinfile/score` · `GET /thinfile/model-card` · `GET /thinfile/{documento}` |
+| F03 Jornada coach | ?? | `GET /coach/journey` · `POST /coach/goals` · `GET /coach/progress` |
+| F05 Catálogo missões | ?? | `GET /missions` · `POST /missions/{id}/progress` · `GET /missions/achievements` |
+| F06 Simulador impacto | ?? | `POST /coach/simulate` · `GET /coach/simulations/history` |
+| F07 Vitrine ofertas | ?? | `GET /marketplace/offers` · `POST /marketplace/offers/{id}/apply` · `GET /marketplace/eligibility` |
+| F09 Painel deriva | ?? | `GET /thinfile/monitoring` · `GET /thinfile/drift` · `POST /thinfile/monitoring/evaluate` |
 
-| F | Status | Endpoints |
-|---|--------|-----------|
-| F04 Consent | stub | `POST /api/v1/consents` Â· `GET /consents/{documento}` Â· `DELETE /consents/{consentId}` |
-| F08 Utilities | stub | `POST /utilities/link` Â· `GET /utilities/links?documento=` Â· `DELETE /utilities/links/{linkId}` |
-| F01 Alt data | stub | `POST /alternative-data/ingest` Â· `GET /coverage` Â· `GET /quality` |
-| F02 Thin-file | stub | `POST /thinfile/score` Â· `GET /thinfile/model-card` Â· `GET /thinfile/{documento}` |
-| F03 Coach | stub | `GET /coach/journey?documento=` Â· `POST /coach/goals` Â· `GET /coach/progress` |
-| F05 Missions | stub | `GET /missions?documento=` Â· `POST /missions/{id}/progress` Â· `GET /missions/achievements` |
-| F06 Simulate | stub | `POST /coach/simulate` Â· `GET /coach/simulations/history?documento=` |
-| F07 Marketplace | stub | `GET /marketplace/offers?documento=` Â· `POST /offers/{id}/apply` Â· `GET /eligibility` |
-| F09 Drift | stub | `GET /thinfile/monitoring` Â· `GET /thinfile/drift` Â· `POST /thinfile/monitoring/evaluate` |
+**Ordem plug:** F04 ? F08 ? F01 ? F02 ? F03 ? F05 ? F06 ? F07 ? F09  
+**DEV_RECORD:** `docs/DEV_RECORD_EP06.md` · Flyway **V31?V39**
 
-Ordem plug: F04 â†’ F08 â†’ F01 â†’ F02 â†’ F03 â†’ F05 â†’ F06 â†’ F07 â†’ F09.  
-DEV_RECORD: `docs/DEV_RECORD_EP06.md` Â· Flyway V31â€“V39.
+---
+
+## 5. Ressalvas lab (todas)
+
+| Tema | Detalhe |
+|------|---------|
+| SHAP / DiCE / PDF / Fairlearn / Spark | Stubs Java ? não motores reais |
+| WORM | FS local (`./data/worm`, `audit-worm`, `dossier`, `dispute-evidence`) ? não S3 Object Lock |
+| Serpro / concessionária / ONNX thin-file | Stubs |
+| Kafka health / OTel | Métricas parciais |
+| Shapes | Gap FE vs BE ? listar p/ Noah; **não inventar campo** fora da US |
+| EP-03 / EP-04 | **Ainda não** no BE |
+
+---
+
+## 6. Commits BE âncora
+
+| Commit | Escopo |
+|--------|--------|
+| `76509bd` ? `6d723af` | EP-01 |
+| `9dd02c3` ? `f6192a1` | EP-02 |
+| `6cb93f4` ? `7ccd4aa` | EP-05 |
+| `e3ebc6f` | EP-06 lab 9/9 |
+
+_Relatório: `backend/docs/RELATORIO_PROGRESSO_BACKEND.md`_
