@@ -1,10 +1,10 @@
 # Dev Agent Record — PRISMA-EP-04 (lab skeleton 9/9)
 
 **Agente:** Noah (dev-java-esp)  
-**Data:** 2026-07-28  
-**Status:** Lab stubs hexagonais · Flyway V40–V48 · `mvn test` obrigatório · **sem commit**
+**Data:** 2026-07-28 (atualizado OBS-17/18)  
+**Status:** Lab stubs hexagonais · Flyway V40–V48 · commit em `main` · **DoD % = 0** até Neptune/Trino
 
-## Entregue
+## Entregue (Lab)
 
 | F | Feature | Flyway | Âncoras |
 |---|---------|--------|---------|
@@ -18,8 +18,25 @@
 | F08 | Dossiê executivo | V47 | `POST /reports` · `GET /reports/{id}` · `GET /reports/{id}/download` |
 | F09 | Projeção 2D/tabular | V48 | `GET /graph/2d` · `GET /graph/tabular` |
 
-Por feature: domain ports + application lab services + JPA adapter + `PortfolioController` + ≥1 unit test.  
-SecurityConfig roles EP-04 · GlobalExceptionHandler NotFound/422.
+OpenAPI: `@Tag Portfolio` = **(lab stub — sem Neptune/Trino DoD)** (OBS-17).
+
+## Plano de substituição (OBS-18) — DoD % permanece 0 até item
+
+| Feature | Lab hoje | Substituição DoD | Owner / nota |
+|---------|----------|------------------|--------------|
+| F01/F09 | `GraphLabService` + JPA | **Neptune** (ou Neo4j lab bridge já em host `192.168.31.47`) + Cypher real | Adapter `PortfolioGraphPort` |
+| F02 | Contágio stub | Neptune + algoritmo / Spark GraphX | Port out |
+| F03/F05/F07 | Cubos SQL lab | **Trino / Iceberg** OLAP + refresh job | Adapter query |
+| F06 | Comunidades stub | Louvain engine (Neptune Gremlin / Neo4j GDS) | — |
+| F08 | PDF/report stub | PDFBox + S3 pré-assinado | — |
+| Cache | — | Redis TTL grafo | profile `infra` |
+
+### Critério de saída Lab → DoD
+
+1. Adapter real atrás do mesmo port (sem mudar contrato REST FE).
+2. Feature flag / health: `partial=false` + OpenAPI sem “lab stub”.
+3. Teste integração com grafo/OLAP real + smoke FE Sofia.
+4. Atualizar `RELATORIO_PROGRESSO_BACKEND.md` Lab % vs DoD % **por feature**.
 
 ## Gaps (DoD)
 
@@ -29,4 +46,3 @@ SecurityConfig roles EP-04 · GlobalExceptionHandler NotFound/422.
 - [ ] Louvain / Graph algorithm engine (F06)
 - [ ] PDF + S3 pré-assinado dossiê (F08)
 - [ ] Redis cache TTL grafo
-- [ ] Commit/push

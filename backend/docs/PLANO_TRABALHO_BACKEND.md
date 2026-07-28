@@ -59,8 +59,10 @@ flowchart LR
 - [x] Scaffold Maven Hexagonal (`br.com.ebv.prisma`)
 - [x] `docker-compose` (Postgres 16 · Redis · Kafka)
 - [x] Flyway `V1__baseline_platform` (titular / score / decisão)
-- [ ] Health + OpenAPI + `.gitignore` Java
-- [ ] Pacotes por bounded context: `identity`, `scoring`, `decision`, `dispute`, `consent`
+- [x] Health + OpenAPI + `.gitignore` Java
+- [x] Pacotes por bounded context: `identity`, `scoring`, `decision`, `dispute`, `consent` (+ portfolio / pj / thinfile lab)
+
+> **Lab ≠ DoD (OBS-24):** checkboxes Sprint 0/lab skeletons ≠ US Done. Ver [`AUDITORIA_US_BE_vs_NOAH.md`](./AUDITORIA_US_BE_vs_NOAH.md) · ciclo 2 [`DEV_RECORD_AUDITORIA_OBS_CICLO2.md`](./DEV_RECORD_AUDITORIA_OBS_CICLO2.md).
 
 ### Sprint 1 — Identidade + Eventos (EP-01 F07, F01, F06)
 | US | Entrega |
@@ -133,13 +135,13 @@ Docs: [`PROVISIONAMENTO_LIVENESS_REKOGNITION.md`](./PROVISIONAMENTO_LIVENESS_REK
 |----|---------|--------|
 | F04 | Consentimento granular | 🟡 lab V31 · consents CRUD |
 | F08 | Titularidade utilities | 🟡 lab V32 · link/links/unlink |
-| F01 | Ingest alt data | 🟡 lab V33 · ingest/coverage/quality |
-| F02 | Score thin-file | 🟡 lab V34 · score/model-card/{doc} |
+| F01 | Ingest alt data | 🟡 lab V33 · **OBS-19 consent gate** + documento obrigatório |
+| F02 | Score thin-file | 🟡 lab V34 · score/model-card/{doc} · **OBS-20 partial/lab** |
 | F03 | Coach journey | 🟡 lab V35 · journey/goals/progress |
 | F05 | Gamificação | 🟡 lab V36 · missions/progress/achievements |
 | F06 | Efeito estimado | 🟡 lab V37 · simulate/history |
 | F07 | Marketplace | 🟡 lab V38 · offers/apply/eligibility |
-| F09 | Monitoring/drift | 🟡 lab V39 · monitoring/drift/evaluate |
+| F09 | Monitoring/drift | 🟡 lab V39 · **OBS-20** métricas marcadas lab |
 
 F04 → F08 → F01 → F02 → F03 → F05 → F06 → F07 → F09 ✅ lab · [`DEV_RECORD_EP06.md`](./DEV_RECORD_EP06.md)
 
@@ -157,13 +159,16 @@ F04 → F08 → F01 → F02 → F03 → F05 → F06 → F07 → F09 ✅ lab · [
 | F08 | Dossiê executivo | 🟡 lab V47 · reports/download stub |
 | F09 | Projeção 2D/tabular | 🟡 lab V48 · graph/2d · graph/tabular |
 
-F01 → F09 ✅ lab · [`DEV_RECORD_EP04.md`](./DEV_RECORD_EP04.md) · **Neptune/Trino/Iceberg/Spark fora (stubs)**
+F01 → F09 ✅ lab · [`DEV_RECORD_EP04.md`](./DEV_RECORD_EP04.md) · **DoD %=0** até Neptune/Trino (OBS-17/18)
 
 ### Sprint 6 — Hardening R1 (EP-03 GenAI **ADIADO**)
+- [x] Auditoria OBS-01…11 (lab mark, OIDC staging, smoke CT) — ciclo 1
+- [x] Auditoria OBS-12…20 / 23–24 (partial score, streams, consent gate, thinfile, EP-04 plano) — ciclo 2
 - [ ] OIDC smoke CTs (steward / SRE / B2B) com `OIDC_ENABLED=true`
 - [ ] Testcontainers (Postgres/Kafka) smoke suite
 - [ ] WORM port S3 (substituir FS lab onde crítico F04/F08)
-- [ ] Documentar gap Neptune/ONNX/Fairlearn (sem GenAI EP-03)
+- [ ] OTel / Camunda / XAI real — [`ADR_BACKLOG_OBS_14_15_16.md`](./ADR_BACKLOG_OBS_14_15_16.md)
+- [ ] Documentar gap Neptune/ONNX/Fairlearn (sem GenAI EP-03) — parcial em DEV_RECORD_EP04
 
 > **EP-03 Copiloto PJ:** núcleo GenAI = Python (`backend-python`).  
 > **F04 HITL reabrível agora** sem Bedrock — ver handoff Emilly: [`HANDOFF_EMILLY_NOAH_EP03_F04.md`](./HANDOFF_EMILLY_NOAH_EP03_F04.md).

@@ -194,8 +194,27 @@ Veredito aceito. Pacote P0/P1 comunicação + segurança lab aplicado.
 |----|--------|
 | OBS-01…11 | [x] ver [`DEV_RECORD_AUDITORIA_OBS.md`](./DEV_RECORD_AUDITORIA_OBS.md) |
 | OBS-21, 22 | [x] mapa hosts + Liveness = Noah BIO (não “Nexus owner”) |
-| OBS-12…20 | [ ] próximo ciclo (hardening R1) |
+| OBS-12…20 | [x] ver [`DEV_RECORD_AUDITORIA_OBS_CICLO2.md`](./DEV_RECORD_AUDITORIA_OBS_CICLO2.md) |
+| OBS-14…16 | [~] ADR backlog (não DoD neste ciclo) |
+| OBS-23 | [x] [`NOTA_ESCRITOR_BACK_OBS23.md`](./NOTA_ESCRITOR_BACK_OBS23.md) |
+| OBS-24 | [x] PLANO Sprint 0 + lab≠DoD |
 
 Correções à auditoria registradas: skeleton já commitado em `main`; WORM S3 adapter existe (`fs\|s3`); Liveness ownership Noah.
 
-_Próximo passo: OBS-12…16 hardening R1._
+---
+
+## 10. Ack Noah — pacote OBS-12…20 + 23/24 (2026-07-28)
+
+Veredito ciclo 2: honestidade lab + consent gate alt-data. **Não** fecha OTel/Camunda/XAI/Neptune DoD.
+
+| ID | Status |
+|----|--------|
+| OBS-12 | [x] score/decisão `partial`/`lab` |
+| OBS-13 | [x] streams health mode real vs stub |
+| OBS-14…16 | [~] [`ADR_BACKLOG_OBS_14_15_16.md`](./ADR_BACKLOG_OBS_14_15_16.md) |
+| OBS-17…18 | [x] Portfolio tag + plano EP-04 |
+| OBS-19 | [x] ingest fail-closed |
+| OBS-20 | [x] thinfile partial/lab |
+| OBS-23…24 | [x] nota Escritor + PLANO |
+
+_Próximo passo: OIDC smoke staging · adapters Neptune/ONNX/Fairlearn conforme ADR._

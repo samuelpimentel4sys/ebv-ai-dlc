@@ -26,7 +26,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/thinfile")
-@Tag(name = "Thin-File", description = "PRISMA-EP-06-F02/F09 Score thin-file + monitoring")
+@Tag(name = "Thin-File", description = "PRISMA-EP-06-F02/F09 Score thin-file + monitoring (lab — métricas stub / sem ONNX thin-file DoD)")
 public class ThinfileController {
 
     private final CalculateThinfileScoreUseCase calculate;
@@ -63,6 +63,9 @@ public class ThinfileController {
         body.put("thinFileFlag", r.thinFileFlag());
         body.put("routedToTraditional", r.routedToTraditional());
         body.put("modelVersion", r.modelVersion());
+        body.put("partial", true);
+        body.put("lab", true);
+        body.put("scoringBackend", "formula-lab");
         return ResponseEntity.status(HttpStatus.CREATED).body(body);
     }
 
@@ -76,6 +79,8 @@ public class ThinfileController {
         body.put("auc", r.auc());
         body.put("confidenceFloor", r.confidenceFloor());
         body.put("active", r.active());
+        body.put("partial", true);
+        body.put("lab", true);
         return body;
     }
 
@@ -92,7 +97,12 @@ public class ThinfileController {
             m.put("degradationPct", i.degradationPct());
             return m;
         }).toList();
-        return Map.of("runs", runs);
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("runs", runs);
+        body.put("partial", true);
+        body.put("lab", true);
+        body.put("note", "métricas lab — não usar como DoD F09");
+        return body;
     }
 
     @GetMapping("/drift")
@@ -107,7 +117,11 @@ public class ThinfileController {
             m.put("vulnerableSegment", i.vulnerableSegment());
             return m;
         }).toList();
-        return Map.of("metrics", metrics);
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("metrics", metrics);
+        body.put("partial", true);
+        body.put("lab", true);
+        return body;
     }
 
     @PostMapping("/monitoring/evaluate")
@@ -121,6 +135,8 @@ public class ThinfileController {
         body.put("status", r.status());
         body.put("degradationPct", r.degradationPct());
         body.put("actionTaken", r.actionTaken());
+        body.put("partial", true);
+        body.put("lab", true);
         return body;
     }
 
@@ -134,6 +150,9 @@ public class ThinfileController {
         body.put("confidenceBand", r.confidenceBand());
         body.put("modelVersion", r.modelVersion());
         body.put("thinFileFlag", r.thinFileFlag());
+        body.put("partial", true);
+        body.put("lab", true);
+        body.put("scoringBackend", "formula-lab");
         return body;
     }
 }

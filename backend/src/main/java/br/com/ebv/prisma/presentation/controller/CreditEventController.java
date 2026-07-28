@@ -70,16 +70,22 @@ public class CreditEventController {
     }
 
     @GetMapping("/streams/health")
-    @Operation(summary = "Saúde do barramento")
+    @Operation(summary = "Saúde do barramento (OBS-13: mode KAFKA vs LOCAL_STUB)")
     public Map<String, Object> streamsHealth(
-            @org.springframework.beans.factory.annotation.Value("${spring.profiles.active:}") String profiles
+            @org.springframework.beans.factory.annotation.Value("${spring.profiles.active:}") String profiles,
+            @org.springframework.beans.factory.annotation.Value("${spring.kafka.bootstrap-servers:}") String bootstrap,
+            @org.springframework.beans.factory.annotation.Value("${prisma.lab.mark-responses:true}") boolean labMark
     ) {
         boolean infra = profiles.contains("infra");
-        return Map.of(
-                "status", "UP",
-                "mode", infra ? "KAFKA" : "LOCAL_STUB",
-                "topic", "prisma.credit.events",
-                "bootstrapConfigured", infra
-        );
+        boolean bootstrapSet = bootstrap != null && !bootstrap.isBlank();
+        java.util.Map<String, Object> body = new java.util.LinkedHashMap<>();
+        body.put("status", "UP");
+        body.put("mode", infra && bootstrapSet ? "KAFKA" : "LOCAL_STUB");
+        body.put("topic", "prisma.credit.events");
+        body.put("bootstrapConfigured", bootstrapSet);
+        body.put("bootstrapServers", bootstrapSet ? bootstrap : null);
+        body.put("partial", !(infra && bootstrapSet));
+        body.put("lab", labMark || !(infra && bootstrapSet));
+        return body;
     }
 }

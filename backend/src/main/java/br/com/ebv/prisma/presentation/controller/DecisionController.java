@@ -72,6 +72,7 @@ public class DecisionController {
         body.put("modelVersion", result.modelVersion());
         body.put("latencyMs", result.latencyMs());
         body.put("partial", result.partial());
+        body.put("lab", result.partial());
         body.put("degradedFlags", result.degradedFlags());
         body.put("explanationRef", result.explanationRef());
         return body;
@@ -103,6 +104,7 @@ public class DecisionController {
         body.put("createdAt", d.createdAt().toString());
         body.put("latencyMs", d.latencyMs());
         body.put("partial", d.partial());
+        body.put("lab", d.partial());
         body.put("degradedFlags", d.degradedFlags());
         body.put("productCode", d.productCode());
         body.put("explanationRef", d.explanationRef());

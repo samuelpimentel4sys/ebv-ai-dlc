@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 
 public record IngestAltDataRequest(
+        @NotBlank String documento,
         @NotBlank String partnerCode,
         String utilityType,
         String sourceUri,

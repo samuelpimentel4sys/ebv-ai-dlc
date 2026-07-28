@@ -85,11 +85,12 @@ Mapa: [`MAPA_HOSTS_FE.md`](./MAPA_HOSTS_FE.md)
 
 ---
 
-## 7. Próximos passos (pós OBS-01…11)
+## 7. Próximos passos (pós OBS ciclo 2)
 
-1. OBS-12…16 hardening R1 (score, Kafka, OTel, Camunda, XAI)
-2. OBS-17…20 EP-04/06 adapters
-3. CTs HTTP ampliados (≥1 por US P1)
+1. ~~OBS-12…20 honestidade + consent gate~~ — [`DEV_RECORD_AUDITORIA_OBS_CICLO2.md`](./DEV_RECORD_AUDITORIA_OBS_CICLO2.md)
+2. OTel / Camunda / XAI real — [`ADR_BACKLOG_OBS_14_15_16.md`](./ADR_BACKLOG_OBS_14_15_16.md)
+3. Neptune/Trino EP-04 — plano em [`DEV_RECORD_EP04.md`](./DEV_RECORD_EP04.md)
+4. CTs HTTP ampliados (≥1 por US P1) + OIDC smoke staging
 
 ---
 

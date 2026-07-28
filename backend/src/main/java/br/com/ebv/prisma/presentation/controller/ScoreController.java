@@ -2,6 +2,7 @@ package br.com.ebv.prisma.presentation.controller;
 
 import br.com.ebv.prisma.domain.scoring.port.in.GetScoreUseCase;
 import br.com.ebv.prisma.domain.scoring.port.in.RecalculateScoreUseCase;
+import br.com.ebv.prisma.domain.scoring.port.out.OnnxScorerPort;
 import br.com.ebv.prisma.presentation.dto.scoring.RecalculateScoreRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,15 +20,21 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/score")
-@Tag(name = "Score", description = "PRISMA-EP-04-F03 Score Vivo")
+@Tag(name = "Score", description = "PRISMA-EP-04-F03 Score Vivo (partial=true se ONNX stub / fórmula lab)")
 public class ScoreController {
 
     private final RecalculateScoreUseCase recalculate;
     private final GetScoreUseCase getScore;
+    private final OnnxScorerPort onnxScorer;
 
-    public ScoreController(RecalculateScoreUseCase recalculate, GetScoreUseCase getScore) {
+    public ScoreController(
+            RecalculateScoreUseCase recalculate,
+            GetScoreUseCase getScore,
+            OnnxScorerPort onnxScorer
+    ) {
         this.recalculate = recalculate;
         this.getScore = getScore;
+        this.onnxScorer = onnxScorer;
     }
 
     @PostMapping("/recalculate")
@@ -36,24 +43,32 @@ public class ScoreController {
         var result = recalculate.execute(new RecalculateScoreUseCase.Command(
                 req.documento(), req.reason(), req.critical()
         ));
-        return Map.of(
-                "documento", result.documento(),
-                "score", result.score(),
-                "modelVersion", result.modelVersion(),
-                "coalesced", result.coalesced()
-        );
+        boolean onnxLive = onnxScorer.live();
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("documento", result.documento());
+        body.put("score", result.score());
+        body.put("modelVersion", result.modelVersion());
+        body.put("coalesced", result.coalesced());
+        body.put("partial", !onnxLive);
+        body.put("scoringBackend", onnxLive ? "onnx" : "formula-lab");
+        body.put("lab", !onnxLive);
+        return body;
     }
 
     @GetMapping("/{documento}")
     @Operation(summary = "Score atual do titular")
     public Map<String, Object> getCurrent(@PathVariable String documento) {
         var summary = getScore.getCurrent(documento);
-        return Map.of(
-                "documento", summary.documento(),
-                "score", summary.score(),
-                "modelVersion", summary.modelVersion(),
-                "updatedAt", summary.updatedAt().toString()
-        );
+        boolean onnxLive = onnxScorer.live();
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("documento", summary.documento());
+        body.put("score", summary.score());
+        body.put("modelVersion", summary.modelVersion());
+        body.put("updatedAt", summary.updatedAt().toString());
+        body.put("partial", !onnxLive);
+        body.put("scoringBackend", onnxLive ? "onnx" : "formula-lab");
+        body.put("lab", !onnxLive);
+        return body;
     }
 
     @GetMapping("/{documento}/history")
@@ -74,11 +89,14 @@ public class ScoreController {
                     return m;
                 })
                 .toList();
-        return Map.of(
-                "items", items,
-                "page", histPage.page(),
-                "size", histPage.size(),
-                "total", histPage.total()
-        );
+        boolean onnxLive = onnxScorer.live();
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("items", items);
+        body.put("page", histPage.page());
+        body.put("size", histPage.size());
+        body.put("total", histPage.total());
+        body.put("partial", !onnxLive);
+        body.put("lab", !onnxLive);
+        return body;
     }
 }

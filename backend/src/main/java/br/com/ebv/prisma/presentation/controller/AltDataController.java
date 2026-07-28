@@ -22,7 +22,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/alternative-data")
-@Tag(name = "Alternative Data", description = "PRISMA-EP-06-F01 Ingestão consentida")
+@Tag(name = "Alternative Data", description = "PRISMA-EP-06-F01 Ingestão consentida (OBS-19 fail-closed)")
 public class AltDataController {
 
     private final IngestAltDataUseCase ingest;
@@ -39,7 +39,7 @@ public class AltDataController {
     @Operation(summary = "Recebe lote de utilities")
     public ResponseEntity<Map<String, Object>> ingest(@Valid @RequestBody IngestAltDataRequest req) {
         var r = ingest.execute(new IngestAltDataUseCase.Command(
-                req.partnerCode(), req.utilityType(), req.sourceUri(),
+                req.documento(), req.partnerCode(), req.utilityType(), req.sourceUri(),
                 req.recordCount() != null ? req.recordCount() : 0,
                 req.errorRate() != null ? req.errorRate() : BigDecimal.ZERO
         ));
@@ -48,6 +48,8 @@ public class AltDataController {
         body.put("status", r.status());
         body.put("errorRate", r.errorRate());
         body.put("correlationId", r.correlationId().toString());
+        body.put("consentGate", "ACTIVE");
+        body.put("lab", true);
         return ResponseEntity.status(HttpStatus.CREATED).body(body);
     }
 
