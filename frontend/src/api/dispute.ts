@@ -2,7 +2,8 @@
  * API client — Contestações & autoatendimento do titular
  * (self-service, fila, tracking, anexos, SLA).
  */
-import { httpClient } from '@/lib/httpClient';
+import { httpClient, HttpError } from '@/lib/httpClient';
+import { MARIA } from '@/app/story';
 import type {
   Attachment,
   DisputeQueueItem,
@@ -19,6 +20,12 @@ function maskDocumento(doc: string | null | undefined): string {
   const digits = doc.replace(/\D/g, '');
   if (digits.length < 5) return doc;
   return `${digits.slice(0, 3)}.***.**${digits.slice(-2)}`;
+}
+
+/** Noah `IdentifySelfServiceService` compara `lastDigits` com os 4 finais do documento. */
+function last4Digits(documento: string): string {
+  const digits = documento.replace(/\D/g, '');
+  return digits.slice(-4);
 }
 
 function mapStage(statusOrStage: string): DisputeStage {
@@ -66,11 +73,24 @@ export function setSelfServiceSession(token: string) {
   sessionStorage.setItem(SESSION_KEY, token);
 }
 
+export function clearSelfServiceSession() {
+  try {
+    sessionStorage.removeItem(SESSION_KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
 export async function identifyTitularLive(input: {
   documento: string;
   birthDate?: string;
   lastDigits?: string;
 }): Promise<{ sessionToken: string; expiresAt: string }> {
+  const documento = input.documento.replace(/\D/g, '') || MARIA.document;
+  const lastDigits =
+    input.lastDigits !== undefined
+      ? input.lastDigits
+      : last4Digits(documento);
   const res = await httpClient<{
     sessionToken: string;
     verified: boolean;
@@ -78,21 +98,43 @@ export async function identifyTitularLive(input: {
   }>('/api/v1/self-service/identify', {
     method: 'POST',
     body: {
-      documento: input.documento,
+      documento,
       birthDate: input.birthDate,
-      lastDigits: input.lastDigits,
+      // Noah: 4 finais do CPF. Omitir também funciona (só documento); se enviar, tem de bater.
+      lastDigits: lastDigits || undefined,
     },
   });
   setSelfServiceSession(res.sessionToken);
   return { sessionToken: res.sessionToken, expiresAt: res.expiresAt };
 }
 
-export async function fetchTitularRecordsLive(sessionToken?: string): Promise<TitularRecord[]> {
-  let token = sessionToken || getSelfServiceSession();
-  if (!token) {
-    const id = await identifyTitularLive({ documento: '12345678901', lastDigits: '01' });
-    token = id.sessionToken;
+async function ensureSelfServiceSession(force = false): Promise<string> {
+  if (!force) {
+    const existing = getSelfServiceSession();
+    if (existing) return existing;
   }
+  const id = await identifyTitularLive({
+    documento: MARIA.document,
+    lastDigits: last4Digits(MARIA.document),
+  });
+  return id.sessionToken;
+}
+
+export async function fetchTitularRecordsLive(sessionToken?: string): Promise<TitularRecord[]> {
+  let token = sessionToken || (await ensureSelfServiceSession());
+  try {
+    return await listTitularRecords(token);
+  } catch (error) {
+    if (error instanceof HttpError && (error.shape.status === 401 || error.shape.status === 403)) {
+      clearSelfServiceSession();
+      token = await ensureSelfServiceSession(true);
+      return listTitularRecords(token);
+    }
+    throw error;
+  }
+}
+
+async function listTitularRecords(token: string): Promise<TitularRecord[]> {
   const res = await httpClient<{
     items: {
       recordRef: string;
@@ -109,7 +151,8 @@ export async function fetchTitularRecordsLive(sessionToken?: string): Promise<Ti
     if (t.includes('consult')) type = 'consulta';
     else if (t.includes('cadast') || t.includes('address')) type = 'cadastro';
     else if (t.includes('score')) type = 'score';
-    const open = (item.status || '').toUpperCase().includes('OPEN') ||
+    const open =
+      (item.status || '').toUpperCase().includes('OPEN') ||
       (item.status || '').toUpperCase().includes('ACTIVE');
     return {
       recordId: item.recordRef,
@@ -129,27 +172,34 @@ export async function openSelfServiceDisputeLive(input: {
   description: string;
   recordRef?: string;
 }): Promise<{ protocol: string; id: string }> {
-  let token = getSelfServiceSession();
-  if (!token) {
-    const id = await identifyTitularLive({ documento: '12345678901', lastDigits: '01' });
-    token = id.sessionToken;
+  const post = (token: string) =>
+    httpClient<{
+      id: string;
+      protocol: string;
+      status: string;
+      dueAt: string;
+      trackingUrl: string;
+    }>('/api/v1/self-service/disputes', {
+      method: 'POST',
+      body: {
+        sessionToken: token,
+        reason_code: input.reasonCode,
+        description: input.description,
+        record_ref: input.recordRef,
+      },
+    });
+
+  try {
+    const res = await post(await ensureSelfServiceSession());
+    return { protocol: res.protocol, id: res.id };
+  } catch (error) {
+    if (error instanceof HttpError && (error.shape.status === 401 || error.shape.status === 403)) {
+      clearSelfServiceSession();
+      const res = await post(await ensureSelfServiceSession(true));
+      return { protocol: res.protocol, id: res.id };
+    }
+    throw error;
   }
-  const res = await httpClient<{
-    id: string;
-    protocol: string;
-    status: string;
-    dueAt: string;
-    trackingUrl: string;
-  }>('/api/v1/self-service/disputes', {
-    method: 'POST',
-    body: {
-      sessionToken: token,
-      reason_code: input.reasonCode,
-      description: input.description,
-      record_ref: input.recordRef,
-    },
-  });
-  return { protocol: res.protocol, id: res.id };
 }
 
 /* -------------------------------------------------------------------------- */
