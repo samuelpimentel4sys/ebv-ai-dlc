@@ -17,6 +17,12 @@ import br.com.ebv.prisma.domain.policysim.exception.PolicySimulationValidationEx
 import br.com.ebv.prisma.domain.review.exception.ReviewConflictException;
 import br.com.ebv.prisma.domain.review.exception.ReviewNotFoundException;
 import br.com.ebv.prisma.domain.review.exception.ReviewValidationException;
+import br.com.ebv.prisma.domain.dispute.exception.DisputeConflictException;
+import br.com.ebv.prisma.domain.dispute.exception.DisputeForbiddenException;
+import br.com.ebv.prisma.domain.dispute.exception.DisputeLockoutException;
+import br.com.ebv.prisma.domain.dispute.exception.DisputeNotFoundException;
+import br.com.ebv.prisma.domain.dispute.exception.DisputeUnauthorizedException;
+import br.com.ebv.prisma.domain.dispute.exception.DisputeValidationException;
 import br.com.ebv.prisma.domain.subjectrequest.exception.SubjectRequestConflictException;
 import br.com.ebv.prisma.domain.subjectrequest.exception.SubjectRequestNotFoundException;
 import br.com.ebv.prisma.domain.subjectrequest.exception.SubjectRequestValidationException;
@@ -77,7 +83,8 @@ public class GlobalExceptionHandler {
             ReviewNotFoundException.class,
             FairnessNotFoundException.class,
             SubjectRequestNotFoundException.class,
-            PolicySimulationNotFoundException.class
+            PolicySimulationNotFoundException.class,
+            DisputeNotFoundException.class
     })
     public ResponseEntity<Map<String, Object>> notFound(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.NOT_FOUND, ex.getMessage(), req, List.of());
@@ -86,7 +93,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({CyclicMergeException.class, MergeUndoNotAllowedException.class,
             ModelImmutableException.class, AmbiguousIdentityException.class, ChainBrokenException.class,
             ReplayConflictException.class, PolicyConflictException.class, ReasonConflictException.class,
-            ReviewConflictException.class, SubjectRequestConflictException.class})
+            ReviewConflictException.class, SubjectRequestConflictException.class,
+            DisputeConflictException.class})
     public ResponseEntity<Map<String, Object>> conflict(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.CONFLICT, ex.getMessage(), req, List.of());
     }
@@ -99,14 +107,26 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({UnprocessableEventException.class, MetricsGateException.class, FeatureLeakageException.class,
             ReplayValidationException.class, PolicyValidationException.class, ReasonValidationException.class,
             AuditValidationException.class, ReviewValidationException.class, FairnessValidationException.class,
-            SubjectRequestValidationException.class, PolicySimulationValidationException.class})
+            SubjectRequestValidationException.class, PolicySimulationValidationException.class,
+            DisputeValidationException.class})
     public ResponseEntity<Map<String, Object>> unprocessable(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage(), req, List.of());
     }
 
-    @ExceptionHandler({ConsentDeniedException.class, TraceForbiddenException.class, ReplayForbiddenException.class})
+    @ExceptionHandler({ConsentDeniedException.class, TraceForbiddenException.class, ReplayForbiddenException.class,
+            DisputeForbiddenException.class})
     public ResponseEntity<Map<String, Object>> forbidden(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.FORBIDDEN, ex.getMessage(), req, List.of());
+    }
+
+    @ExceptionHandler(DisputeUnauthorizedException.class)
+    public ResponseEntity<Map<String, Object>> unauthorized(DisputeUnauthorizedException ex, HttpServletRequest req) {
+        return error(HttpStatus.UNAUTHORIZED, ex.getMessage(), req, List.of());
+    }
+
+    @ExceptionHandler(DisputeLockoutException.class)
+    public ResponseEntity<Map<String, Object>> lockout(DisputeLockoutException ex, HttpServletRequest req) {
+        return error(HttpStatus.TOO_MANY_REQUESTS, ex.getMessage(), req, List.of());
     }
 
     @ExceptionHandler({ModelUnavailableException.class, WormWriteException.class, SnapshotUnavailableException.class,

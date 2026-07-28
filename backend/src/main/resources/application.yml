@@ -52,6 +52,8 @@ prisma:
   audit-worm:
     base-path: ${PRISMA_AUDIT_WORM_BASE_PATH:./data/audit-worm}
     fail: ${PRISMA_AUDIT_WORM_FAIL:false}
+  dispute-evidence:
+    base-path: ${PRISMA_DISPUTE_EVIDENCE_PATH:./data/dispute-evidence}
   cors:
     allowed-origins: ${PRISMA_CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:3000}
 

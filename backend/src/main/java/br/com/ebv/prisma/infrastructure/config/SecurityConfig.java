@@ -54,6 +54,8 @@ public class SecurityConfig {
                                 "/api-docs/**",
                                 "/v3/api-docs/**"
                         ).permitAll()
+                        .requestMatchers("/api/v1/self-service/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/disputes/*/tracking", "/api/v1/disputes/*/timeline").permitAll()
                         .requestMatchers("/api/v1/identity/**").hasAnyRole("DATA_STEWARD", "PLATFORM")
                         .requestMatchers("/api/v1/events/**").hasAnyRole("EVENT_PRODUCER", "PLATFORM")
                         .requestMatchers("/api/v1/streams/**").hasAnyRole("SRE", "PLATFORM")
@@ -73,6 +75,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/reviews/**").hasAnyRole("SUBJECT", "PLATFORM")
                         .requestMatchers("/api/v1/fairness/**").hasAnyRole("MODEL_GOVERNANCE", "PLATFORM")
                         .requestMatchers("/api/v1/subject-requests/**").hasAnyRole("SUBJECT", "PLATFORM")
+                        .requestMatchers("/api/v1/disputes/**").hasAnyRole(
+                                "TITULAR", "ANALISTA_CONTESTACAO", "SUPERVISOR_CONTESTACAO", "JURIDICO", "PLATFORM")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> jwt.jwtAuthenticationConverter(keycloakRolesConverter())));

@@ -99,8 +99,18 @@ flowchart LR
 
 F10 política → F04 trilha → F05 motivos → F01–F03 → **F06–F09 ✅ lab**
 
-### Sprint 5 — Contestação + Console (EP-05 tronco)
-F05 autoatendimento → F02 fluxo → F01 tracking → F08 evidências → F06 SLA → F03/F07/F04 B2B
+### Sprint 5 — Contestação + Console (EP-05 tronco) — 🟡 ~40% (2026-07-28 lab slice 1)
+
+| US | Entrega | Status |
+|----|---------|--------|
+| F05 | Autoatendimento identify/records/disputes | 🟡 lab session + lockout |
+| F02 | Workflow open/queue/resolve | 🟡 lab V25 · SLA +7d · timeline |
+| F01 | Tracking + timeline | 🟡 lab confirmDocumento last4 |
+| F08 | Anexos + evidence-pack | 🟡 lab FS WORM · MIME allowlist |
+| F06 | SLA escalate | ⬜ |
+| F03/F07/F04 | Console B2B | ⬜ |
+
+F05 → F02 → F01 → F08 ✅ lab · F06/F03/F07/F04 pendentes
 
 ### Sprint 6 — Hardening R1
 EP-01 F08/F10 · EP-05 F09 · Testcontainers · SLO · Fairlearn/Spark reais

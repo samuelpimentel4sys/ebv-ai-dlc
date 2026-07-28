@@ -1,86 +1,86 @@
-# Handoff Noah → Sofia — O que plugar agora (EP-01)
+# Handoff Noah → Sofia — O que plugar (EP-01 + EP-02)
 
 | Campo | Valor |
 |-------|-------|
 | **De** | Noah (`dev-java-esp`) |
 | **Para** | Sofia (frontend) |
-| **Data** | 2026-07-28 |
-| **BE base** | `Prisma/backend` · `origin/main` (inclui F08/F10) |
-| **US FE** | `99.DownStream/.../User Stories/Frontend` (EP-01 F01–F10) |
-| **Auth lab** | `OIDC_ENABLED=false` → APIs abertas no smoke; contratos JWT prontos no SecurityConfig |
+| **Atualizado** | 2026-07-28 14:20 (America/Sao_Paulo) |
+| **BE** | `Prisma/backend` · `origin/main` ≥ `f6192a1` |
+| **Auth lab** | `OIDC_ENABLED=false` (APIs abertas) · JWT roles no SecurityConfig p/ prod |
+| **CORS** | `http://localhost:5173` · `http://localhost:3000` (`prisma.cors.allowed-origins`) |
+| **Base URL** | `http://localhost:8080` · profiles `supabase,infra` |
+
+**Legenda:** 🟢 plugar agora · 🟡 plugar com ressalva (stub lab) · 🔴 ausente
 
 ---
 
-## Veredito rápido
+## 1. EP-01 — Score Vivo (10/10 plugável)
 
-**Sofia pode plugar as 10 US-FE do EP-01** — todos os endpoints primários das US-FE existem no BE lab.
+| US-FE | Status | Endpoints BE |
+|-------|--------|--------------|
+| F01 Streams health | 🟡 | `GET /api/v1/streams/health` · `GET /events/{id}` · `POST /events/credit` |
+| F02 Features catalog | 🟢 | `GET /features/catalog` · `GET /features/{doc}` · `POST /features/batch` |
+| F03 Score timeline | 🟢 | `GET /score/{doc}` · `/history` · `POST /score/recalculate` |
+| F04 Snapshot compare | 🟢 | `GET /decisions/{id}` · `/snapshot` · `POST .../verify` |
+| F05 Playground | 🟢 | `POST /decisions` · `GET /decisions/{id}` · `GET /decisions/budget` |
+| F06 Ingest sources | 🟢 | `GET /ingest/sources` · `POST /ingest/replay` |
+| F07 Identity merge | 🟢 | `GET /identity/candidates` · `/{doc}` · `POST /merge` · `/merge/undo` |
+| F08 SLO panel | 🟡 | `GET /observability/slo` · `/budget` · `/traces/{decisionId}` |
+| F09 Model registry | 🟢 | `GET /models` · `POST .../promote` · `.../rollback` |
+| F10 Replay jobs | 🟡 | `POST /replay/jobs` · `GET .../{jobId}` · `POST .../abort` |
 
-| Prioridade | Significado |
-|------------|-------------|
-| 🟢 **Plugar agora** | Happy path + contrato principal alinhado |
-| 🟡 **Plugar com ressalva** | API existe; payload/integração ainda lab/stub (não DoD prod) |
-| 🔴 **Não** | Endpoint ausente |
-
----
-
-## Matriz US-FE × BE
-
-| US-FE Sofia | Tela | Status | Endpoints BE prontos |
-|-------------|------|--------|----------------------|
-| **F01** Saúde barramento | Console tópicos/lag | 🟡 | `GET /api/v1/streams/health` · `GET /api/v1/events/{eventId}` · `POST /api/v1/events/credit` |
-| **F02** Catálogo atributos | Catálogo + PIT | 🟢 | `GET /api/v1/features/catalog` · `GET /api/v1/features/{documento}` · `POST /api/v1/features/batch` |
-| **F03** Linha tempo score | Histórico titular | 🟢 | `GET /api/v1/score/{documento}` · `.../history` · `POST /api/v1/score/recalculate` |
-| **F04** Comparar decisões | Snapshot A/B | 🟢 | `GET /api/v1/decisions/{id}` · `.../snapshot` · `POST .../verify` |
-| **F05** Playground decisão | Teste integração | 🟢 | `POST /api/v1/decisions` · `GET .../{id}` · `GET .../budget` |
-| **F06** Conectores origem | Monitor ingest | 🟢 | `GET /api/v1/ingest/sources` · `POST /api/v1/ingest/replay` · OF callback |
-| **F07** Identidade ambígua | Console merge | 🟢 | `GET /api/v1/identity/candidates` · `GET .../{documento}` · `POST .../merge` · `POST .../merge/undo` *(extra BE)* |
-| **F08** Painel SLO | Observabilidade | 🟡 | `GET /api/v1/observability/slo` · `/budget` · `/traces/{decisionId}` |
-| **F09** Model registry | Promote/rollback | 🟢 | `GET /api/v1/models` · `POST .../promote` · `POST .../rollback` |
-| **F10** Replay jobs | Console replay | 🟡 | `POST /api/v1/replay/jobs` · `GET .../{jobId}` · `POST .../abort` |
+**Ordem EP-01:** F02 → F03 → F09 → F07 → F05 → F04 → F06 → F01 → F08 → F10
 
 ---
 
-## Ordem sugerida para Sofia (menor atrito → maior)
+## 2. EP-02 — Explicável (10/10 plugável) — **NOVO**
 
-1. **F02** catálogo / PIT  
-2. **F03** score timeline  
-3. **F09** models  
-4. **F07** identity merge  
-5. **F05** playground decisão (+ gera decisionId p/ F04/F08)  
-6. **F04** snapshot/compare/verify  
-7. **F06** ingest sources  
-8. **F01** streams health (métricas Kafka podem ser parciais)  
-9. **F08** SLO (agregação lab, não OTel real)  
-10. **F10** replay (job estado lab; sem Spark/Airflow)
+| US-FE | Status | Endpoints BE |
+|-------|--------|--------------|
+| F01 Fatores / explain | 🟡 | `GET /explain/{decisionId}` · `/factors` · `POST /explain/batch` |
+| F02 Contrafactuais | 🟡 | `GET /counterfactual/{decisionId}` · `POST /counterfactual/simulate` |
+| F03 Dossiê LGPD | 🟡 | `POST /dossier` · `GET /dossier/{id}` · `GET .../download` |
+| F04 Trilha auditoria | 🟡 | `GET /audit/trail` · `/trail/{doc}` · `POST /audit/export` (202) |
+| F05 Motivos recusa | 🟢 | `GET /reasons` · `POST /reasons` · `GET /reasons/resolve/{decisionId}` |
+| F06 Revisão humana | 🟢 | `GET /reviews/queue` · `POST /reviews` · `PATCH .../decide` |
+| F07 Fairness | 🟡 | `GET /fairness/metrics` · `/alerts` · `POST /fairness/analyze` (202) |
+| F08 Fila direitos | 🟢 | `GET/POST /subject-requests` · `PATCH /subject-requests/{id}` |
+| F09 Simulação política | 🟡 | `GET /policy/baseline` · `POST /policy/simulate` · `GET /policy/simulations/{id}` |
+| F10 Versões política | 🟢 | `GET /policy/versions` · `.../diff/{a}/{b}` · `POST .../publish` |
+
+**Ordem EP-02 sugerida:**  
+1. F05 reasons · 2. F10 policy versions · 3. F01 explain (após `POST /decisions` c/ `includeExplanation=true`)  
+4. F02 counterfactual · 5. F06 reviews · 6. F08 subject-requests · 7. F04 audit  
+8. F03 dossier · 9. F09 simulate · 10. F07 fairness  
+
+**Fluxo feliz FE:** `POST /decisions` → `decisionId` → explain + counterfactual + reasons/resolve → dossier.
 
 ---
 
-## Ressalvas para Sofia (importante)
+## 3. Ressalvas lab (Sofia)
 
 | Tema | Detalhe |
 |------|---------|
-| **Base URL** | Lab: `http://localhost:8080` · profiles `supabase,infra` |
-| **CORS** | Confirmar com Noah se FE origem precisa allowlist (avisar se 403 CORS) |
-| **Auth** | Smoke sem JWT; produção precisa roles da US (SRE, DATA_STEWARD, etc.) |
-| **F01** | Health/stream existe; campos de lag/throughput podem ser simplificados vs mock FE |
-| **F04/F05** | WORM = FS local (`./data/worm`), não S3 Object Lock |
-| **F05 outcome** | Threshold stub (APPROVE/REVIEW/REJECT), não motor EP-02 |
-| **F08** | Sem Prometheus/OTel real — p95 a partir de `tb_decision.latency_ms` |
-| **F10** | Job QUEUED/status/abort; sem worker async completo nem Kafka sandbox |
-| **Shapes** | Se FE mock diverge do JSON BE, abrir gap list — Noah alinha contrato US, não inventa campo |
+| SHAP / DiCE / PDF | Stubs Java — não Python TreeExplainer / DiCE / PDFBox real |
+| WORM | FS `./data/worm` · `./data/audit-worm` · `./data/dossier` — não S3 Object Lock |
+| Fairness / simulate | Analyze/simulate **202** síncrono stub — sem Fairlearn/Spark |
+| Kafka health / OTel | Métricas parciais |
+| Outcome decisão | Threshold stub até policy Drools real |
+| Shapes | Divergência mock FE vs JSON BE → gap list p/ Noah (sem inventar campo) |
+| EP-03…06 | **Ainda não** plugar — Noah em Sprint 5 (EP-05) agora |
 
 ---
 
-## Fora de escopo EP-01 (Sofia NÃO pluga ainda nestas US)
+## 4. Commits BE relevantes
 
-- EP-02…EP-06 US-FE (47 FE no pacote Sofia; só EP-01 tem BE espelhado hoje)
-- XAI `/api/v1/xai/...` (só `explanationRef` stub na decisão)
+| Commit | Escopo |
+|--------|--------|
+| `76509bd`…`6d723af` | EP-01 S1–S3 + F08/F10 |
+| `6cc5fdd` | Handoff EP-01 inicial |
+| `9dd02c3` | EP-02 F10/F05/F04 + CORS |
+| `8df606c` | EP-02 F01–F03 |
+| `f6192a1` | EP-02 F06–F09 (épico lab fechado) |
 
----
+OpenAPI: `/swagger-ui.html` · `/v3/api-docs`
 
-## Contato Noah
-
-Dúvida de contrato → citar `US-FE-ID` + path + body esperado vs recebido.  
-OpenAPI: `/swagger-ui.html` ou `/v3/api-docs` com app up.
-
-_Relatório complementar: `backend/docs/RELATORIO_PROGRESSO_BACKEND.md`_
+_Relatório: `backend/docs/RELATORIO_PROGRESSO_BACKEND.md`_
