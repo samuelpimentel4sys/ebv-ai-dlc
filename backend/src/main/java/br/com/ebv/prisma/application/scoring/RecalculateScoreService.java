@@ -4,6 +4,7 @@ import br.com.ebv.prisma.domain.features.port.out.FeatureStorePort;
 import br.com.ebv.prisma.domain.scoring.exception.ModelUnavailableException;
 import br.com.ebv.prisma.domain.scoring.port.in.RecalculateScoreUseCase;
 import br.com.ebv.prisma.domain.scoring.port.out.ModelRegistryPort;
+import br.com.ebv.prisma.domain.scoring.port.out.OnnxScorerPort;
 import br.com.ebv.prisma.domain.scoring.port.out.ScoreRepositoryPort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -31,15 +33,18 @@ public class RecalculateScoreService implements RecalculateScoreUseCase {
     private final ModelRegistryPort modelRegistry;
     private final ScoreRepositoryPort scoreRepo;
     private final FeatureStorePort featureStore;
+    private final OnnxScorerPort onnxScorer;
 
     public RecalculateScoreService(
             ModelRegistryPort modelRegistry,
             ScoreRepositoryPort scoreRepo,
-            FeatureStorePort featureStore
+            FeatureStorePort featureStore,
+            OnnxScorerPort onnxScorer
     ) {
         this.modelRegistry = modelRegistry;
         this.scoreRepo = scoreRepo;
         this.featureStore = featureStore;
+        this.onnxScorer = onnxScorer;
     }
 
     @Override
@@ -71,7 +76,8 @@ public class RecalculateScoreService implements RecalculateScoreUseCase {
 
     private BigDecimal computeScore(String doc) {
         Instant now = Instant.now();
-        BigDecimal score = BASELINE;
+        BigDecimal divida = BigDecimal.ZERO;
+        BigDecimal neg = BigDecimal.ZERO;
         boolean hasFeatures = false;
 
         var dividaOpt = featureStore.findAsOf(doc, "divida_aberta", now);
@@ -79,18 +85,24 @@ public class RecalculateScoreService implements RecalculateScoreUseCase {
 
         if (dividaOpt.isPresent()) {
             hasFeatures = true;
-            BigDecimal divida = parseNumeric(dividaOpt.get().rawJson());
-            score = score.subtract(divida.divide(DIVIDA_DIVISOR, 2, RoundingMode.HALF_UP));
+            divida = parseNumeric(dividaOpt.get().rawJson());
         }
-
         if (negOpt.isPresent()) {
             hasFeatures = true;
-            BigDecimal neg = parseNumeric(negOpt.get().rawJson());
-            score = score.subtract(neg.multiply(NEG_PENALTY));
+            neg = parseNumeric(negOpt.get().rawJson());
         }
 
-        if (!hasFeatures) {
-            score = BASELINE;
+        if (onnxScorer.live()) {
+            var onnx = onnxScorer.score(List.of(divida.doubleValue(), neg.doubleValue()));
+            if (onnx.isPresent()) {
+                return onnx.get().max(SCORE_MIN).min(SCORE_MAX).setScale(2, RoundingMode.HALF_UP);
+            }
+        }
+
+        BigDecimal score = BASELINE;
+        if (hasFeatures) {
+            score = score.subtract(divida.divide(DIVIDA_DIVISOR, 2, RoundingMode.HALF_UP));
+            score = score.subtract(neg.multiply(NEG_PENALTY));
         }
 
         return score.max(SCORE_MIN).min(SCORE_MAX).setScale(2, RoundingMode.HALF_UP);

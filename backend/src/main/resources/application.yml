@@ -67,6 +67,19 @@ prisma:
     base-path: ${PRISMA_DISPUTE_EVIDENCE_PATH:./data/dispute-evidence}
   cors:
     allowed-origins: ${PRISMA_CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:3000}
+  graph:
+    backend: ${GRAPH_BACKEND:stub}
+    neo4j:
+      uri: ${NEO4J_URI:bolt://localhost:7687}
+      user: ${NEO4J_USER:neo4j}
+      password: ${NEO4J_PASSWORD:}
+  onnx:
+    mode: ${ONNX_MODE:stub}
+    scorer-url: ${ONNX_SCORER_URL:http://localhost:8091}
+    model-path: ${ONNX_MODEL_PATH:}
+  fairlearn:
+    enabled: ${FAIRLEARN_ENABLED:false}
+    url: ${FAIRLEARN_URL:http://localhost:8092}
 
 logging:
   level:

@@ -2,6 +2,7 @@ package br.com.ebv.prisma.application.fairness;
 
 import br.com.ebv.prisma.domain.fairness.exception.FairnessValidationException;
 import br.com.ebv.prisma.domain.fairness.port.in.AnalyzeFairnessUseCase;
+import br.com.ebv.prisma.domain.fairness.port.out.FairlearnEnginePort;
 import br.com.ebv.prisma.domain.fairness.port.out.FairnessRepositoryPort;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
@@ -22,10 +23,16 @@ public class AnalyzeFairnessService implements AnalyzeFairnessUseCase {
     public static final BigDecimal STUB_DISPARITY = new BigDecimal("0.08000000");
 
     private final FairnessRepositoryPort fairnessRepo;
+    private final FairlearnEnginePort fairlearnEngine;
     private final ObjectMapper objectMapper;
 
-    public AnalyzeFairnessService(FairnessRepositoryPort fairnessRepo, ObjectMapper objectMapper) {
+    public AnalyzeFairnessService(
+            FairnessRepositoryPort fairnessRepo,
+            FairlearnEnginePort fairlearnEngine,
+            ObjectMapper objectMapper
+    ) {
         this.fairnessRepo = fairnessRepo;
+        this.fairlearnEngine = fairlearnEngine;
         this.objectMapper = objectMapper;
     }
 
@@ -65,16 +72,33 @@ public class AnalyzeFairnessService implements AnalyzeFairnessUseCase {
                 null
         ));
 
-        // Lab stub: sync QUEUED → DONE with fake metrics (Fairlearn later)
         String metricName = metrics.getFirst();
         String segment = segments.getFirst();
-        boolean exceeded = STUB_DISPARITY.compareTo(DEFAULT_LIMIT) > 0;
+        BigDecimal disparity = STUB_DISPARITY;
+        String externalRunId = null;
+
+        if (fairlearnEngine.enabled()) {
+            // Lab synthetic sample until Athena/window extract exists
+            var eng = fairlearnEngine.analyze(new FairlearnEnginePort.AnalyzeCommand(
+                    List.of(1, 0, 1, 0, 1, 0, 1, 0, 1, 0),
+                    List.of(1, 0, 1, 1, 1, 0, 0, 0, 1, 0),
+                    List.of("A", "A", "A", "A", "A", "B", "B", "B", "B", "B"),
+                    segment
+            ));
+            if (eng.isPresent()) {
+                disparity = eng.get().demographicParityDifference();
+                externalRunId = eng.get().runId();
+            }
+        }
+
+        boolean exceeded = disparity.compareTo(DEFAULT_LIMIT) > 0;
         UUID metricId = UUID.randomUUID();
         Instant finished = Instant.now();
 
         fairnessRepo.saveMetric(new FairnessRepositoryPort.MetricRecord(
                 metricId, runId, command.modelVersion().trim(), metricName, segment,
-                "GROUP_A", STUB_DISPARITY, DEFAULT_LIMIT, exceeded, finished
+                externalRunId != null ? "FAIRLEARN:" + externalRunId : "GROUP_A",
+                disparity, DEFAULT_LIMIT, exceeded, finished
         ));
 
         boolean alertOpened = false;
@@ -82,7 +106,8 @@ public class AnalyzeFairnessService implements AnalyzeFairnessUseCase {
             fairnessRepo.saveAlert(new FairnessRepositoryPort.AlertRecord(
                     UUID.randomUUID(), metricId, command.modelVersion().trim(),
                     "HIGH", "OPEN",
-                    "Lab stub: disparity " + STUB_DISPARITY + " > limit " + DEFAULT_LIMIT,
+                    "Disparity " + disparity + " > limit " + DEFAULT_LIMIT
+                            + (externalRunId != null ? " (fairlearn " + externalRunId + ")" : " (lab stub)"),
                     finished
             ));
             alertOpened = true;

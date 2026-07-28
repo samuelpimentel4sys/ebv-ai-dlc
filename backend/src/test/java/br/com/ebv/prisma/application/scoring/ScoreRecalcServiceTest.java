@@ -4,7 +4,9 @@ import br.com.ebv.prisma.domain.features.port.out.FeatureStorePort;
 import br.com.ebv.prisma.domain.scoring.exception.ModelUnavailableException;
 import br.com.ebv.prisma.domain.scoring.port.in.RecalculateScoreUseCase;
 import br.com.ebv.prisma.domain.scoring.port.out.ModelRegistryPort;
+import br.com.ebv.prisma.domain.scoring.port.out.OnnxScorerPort;
 import br.com.ebv.prisma.domain.scoring.port.out.ScoreRepositoryPort;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -26,12 +29,15 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class ScoreRecalcServiceTest {
 
-    @Mock
-    ModelRegistryPort modelRegistry;
-    @Mock
-    ScoreRepositoryPort scoreRepo;
-    @Mock
-    FeatureStorePort featureStore;
+    @Mock ModelRegistryPort modelRegistry;
+    @Mock ScoreRepositoryPort scoreRepo;
+    @Mock FeatureStorePort featureStore;
+    @Mock OnnxScorerPort onnxScorer;
+
+    @BeforeEach
+    void onnxOff() {
+        lenient().when(onnxScorer.live()).thenReturn(false);
+    }
 
     @Test
     @DisplayName("CT-07 recalc sem PRODUCTION model → ModelUnavailableException 503")
@@ -39,7 +45,7 @@ class ScoreRecalcServiceTest {
         when(modelRegistry.findProduction(RecalculateScoreService.SCORING_MODEL_ID))
                 .thenReturn(Optional.empty());
 
-        var service = new RecalculateScoreService(modelRegistry, scoreRepo, featureStore);
+        var service = new RecalculateScoreService(modelRegistry, scoreRepo, featureStore, onnxScorer);
         assertThatThrownBy(() -> service.execute(new RecalculateScoreUseCase.Command(
                 "12345678901", "MANUAL", false
         ))).isInstanceOf(ModelUnavailableException.class)
@@ -58,7 +64,7 @@ class ScoreRecalcServiceTest {
         when(featureStore.findAsOf(eq("12345678901"), eq("divida_aberta"), any())).thenReturn(Optional.empty());
         when(featureStore.findAsOf(eq("12345678901"), eq("qtd_negativacoes_12m"), any())).thenReturn(Optional.empty());
 
-        var service = new RecalculateScoreService(modelRegistry, scoreRepo, featureStore);
+        var service = new RecalculateScoreService(modelRegistry, scoreRepo, featureStore, onnxScorer);
         var result = service.execute(new RecalculateScoreUseCase.Command("12345678901", "TEST", false));
 
         assertThat(result.score()).isEqualByComparingTo(new BigDecimal("700.00"));
@@ -79,10 +85,9 @@ class ScoreRecalcServiceTest {
                 new FeatureStorePort.FeatureValue("qtd_negativacoes_12m", null, "4", Instant.now().minusSeconds(30))
         ));
 
-        var service = new RecalculateScoreService(modelRegistry, scoreRepo, featureStore);
+        var service = new RecalculateScoreService(modelRegistry, scoreRepo, featureStore, onnxScorer);
         var result = service.execute(new RecalculateScoreUseCase.Command("12345678901", "TEST", false));
 
-        // 700 - (4 * 15) = 700 - 60 = 640
         assertThat(result.score()).isEqualByComparingTo(new BigDecimal("640.00"));
         assertThat(result.coalesced()).isFalse();
     }
@@ -99,10 +104,8 @@ class ScoreRecalcServiceTest {
                 new ScoreRepositoryPort.CurrentScore("12345678901", new BigDecimal("700.00"), "3.1.0", Instant.now())
         ));
 
-        var service = new RecalculateScoreService(modelRegistry, scoreRepo, featureStore);
-        // first call
+        var service = new RecalculateScoreService(modelRegistry, scoreRepo, featureStore, onnxScorer);
         service.execute(new RecalculateScoreUseCase.Command("12345678901", "FIRST", false));
-        // second call immediately
         var result = service.execute(new RecalculateScoreUseCase.Command("12345678901", "SECOND", false));
 
         assertThat(result.coalesced()).isTrue();

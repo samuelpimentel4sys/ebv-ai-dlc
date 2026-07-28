@@ -1,6 +1,7 @@
 package br.com.ebv.prisma.application.fairness;
 
 import br.com.ebv.prisma.domain.fairness.port.in.AnalyzeFairnessUseCase;
+import br.com.ebv.prisma.domain.fairness.port.out.FairlearnEnginePort;
 import br.com.ebv.prisma.domain.fairness.port.out.FairnessRepositoryPort;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,17 +19,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class FairnessServiceTest {
 
     @Mock FairnessRepositoryPort fairnessRepo;
+    @Mock FairlearnEnginePort fairlearnEngine;
 
     AnalyzeFairnessService analyzeService;
 
     @BeforeEach
     void setUp() {
-        analyzeService = new AnalyzeFairnessService(fairnessRepo, new ObjectMapper());
+        when(fairlearnEngine.enabled()).thenReturn(false);
+        analyzeService = new AnalyzeFairnessService(fairnessRepo, fairlearnEngine, new ObjectMapper());
     }
 
     @Test
