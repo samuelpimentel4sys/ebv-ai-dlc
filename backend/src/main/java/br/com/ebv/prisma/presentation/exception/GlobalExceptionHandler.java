@@ -3,10 +3,13 @@ package br.com.ebv.prisma.presentation.exception;
 import br.com.ebv.prisma.domain.audit.exception.AuditNotFoundException;
 import br.com.ebv.prisma.domain.audit.exception.AuditValidationException;
 import br.com.ebv.prisma.domain.audit.exception.AuditWormWriteException;
+import br.com.ebv.prisma.domain.counterfactual.exception.CounterfactualNotFoundException;
 import br.com.ebv.prisma.domain.decision.exception.ChainBrokenException;
 import br.com.ebv.prisma.domain.decision.exception.DecisionNotFoundException;
 import br.com.ebv.prisma.domain.decision.exception.SnapshotUnavailableException;
 import br.com.ebv.prisma.domain.decision.exception.WormWriteException;
+import br.com.ebv.prisma.domain.dossier.exception.DossierNotFoundException;
+import br.com.ebv.prisma.domain.explain.exception.ExplanationNotFoundException;
 import br.com.ebv.prisma.domain.events.exception.SchemaIncompatibleException;
 import br.com.ebv.prisma.domain.events.exception.UnprocessableEventException;
 import br.com.ebv.prisma.domain.features.exception.AmbiguousIdentityException;
@@ -57,7 +60,10 @@ public class GlobalExceptionHandler {
             ReplayNotFoundException.class,
             PolicyNotFoundException.class,
             ReasonNotFoundException.class,
-            AuditNotFoundException.class
+            AuditNotFoundException.class,
+            ExplanationNotFoundException.class,
+            CounterfactualNotFoundException.class,
+            DossierNotFoundException.class
     })
     public ResponseEntity<Map<String, Object>> notFound(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.NOT_FOUND, ex.getMessage(), req, List.of());

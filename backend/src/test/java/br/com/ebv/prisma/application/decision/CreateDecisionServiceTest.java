@@ -1,11 +1,13 @@
 package br.com.ebv.prisma.application.decision;
 
 import br.com.ebv.prisma.domain.audit.port.in.AppendAuditEventUseCase;
+import br.com.ebv.prisma.domain.counterfactual.port.out.CounterfactualRepositoryPort;
 import br.com.ebv.prisma.domain.decision.exception.ChainBrokenException;
 import br.com.ebv.prisma.domain.decision.exception.WormWriteException;
 import br.com.ebv.prisma.domain.decision.port.in.CreateDecisionUseCase;
 import br.com.ebv.prisma.domain.decision.port.out.DecisionRepositoryPort;
 import br.com.ebv.prisma.domain.decision.port.out.WormStoragePort;
+import br.com.ebv.prisma.domain.explain.port.out.ExplanationRepositoryPort;
 import br.com.ebv.prisma.domain.features.port.in.GetFeaturesUseCase;
 import br.com.ebv.prisma.domain.scoring.port.in.RecalculateScoreUseCase;
 import br.com.ebv.prisma.domain.scoring.port.out.ScoreRepositoryPort;
@@ -45,6 +47,8 @@ class CreateDecisionServiceTest {
     @Mock DecisionRepositoryPort decisionRepo;
     @Mock br.com.ebv.prisma.domain.observability.port.out.ObservabilityRepositoryPort observabilityRepo;
     @Mock AppendAuditEventUseCase appendAuditEvent;
+    @Mock ExplanationRepositoryPort explanationRepo;
+    @Mock CounterfactualRepositoryPort counterfactualRepo;
 
     ObjectMapper objectMapper = new ObjectMapper();
     CreateDecisionService service;
@@ -54,7 +58,7 @@ class CreateDecisionServiceTest {
     void setUp() {
         service = new CreateDecisionService(
                 scoreRepo, recalculateScore, getFeatures, wormStorage, decisionRepo, observabilityRepo,
-                appendAuditEvent, objectMapper
+                appendAuditEvent, explanationRepo, counterfactualRepo, objectMapper
         );
         verifyService = new VerifyDecisionService(decisionRepo, wormStorage);
     }
@@ -81,7 +85,7 @@ class CreateDecisionServiceTest {
         assertThat(result.outcome()).isEqualTo("APPROVE");
         assertThat(result.modelVersion()).isEqualTo("score-v3.2.1");
         assertThat(result.partial()).isFalse();
-        assertThat(result.explanationRef()).startsWith("/api/v1/xai/");
+        assertThat(result.explanationRef()).startsWith("/api/v1/explain/");
 
         verify(wormStorage).put(eq(result.decisionId()), anyString());
         ArgumentCaptor<DecisionRepositoryPort.DecisionRecord> cap =
@@ -90,6 +94,8 @@ class CreateDecisionServiceTest {
         assertThat(cap.getValue().sha256()).hasSize(64);
         assertThat(cap.getValue().storageUri()).isEqualTo("file:///data/worm/x.json");
         verify(recalculateScore, never()).execute(any());
+        verify(explanationRepo).save(any());
+        verify(counterfactualRepo).save(any());
     }
 
     @Test

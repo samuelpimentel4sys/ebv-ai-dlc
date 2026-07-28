@@ -82,16 +82,18 @@ flowchart LR
 | F04 | Snapshot imutável `decision_id` | 🟡 ~70% V12 · WORM FS · GET/verify · PUT 405 |
 | F05 | `POST /api/v1/decisions` p95 &lt; 250 ms | 🟡 ~70% budget · testes unit |
 
-### Sprint 4 — Explicabilidade (EP-02 núcleo) — 🟡 start (2026-07-28)
+### Sprint 4 — Explicabilidade (EP-02 núcleo) — 🟡 cont. (2026-07-28)
 | US | Entrega | Status |
 |----|---------|--------|
 | F10 | Política versionada + publish/diff | 🟡 lab V15 · API · tests |
 | F04 | Trilha WORM audit | 🟡 lab V17 · FS WORM · hook decisão |
 | F05 | Catálogo + resolve motivos | 🟡 lab V16 · resolve stub |
 | — | CORS Sofia FE (`prisma.cors.allowed-origins`) | ✅ |
-| F01→F03 | SHAP · contrafactuais · dossiê | ⬜ próximo |
+| F01 | SHAP explain snapshot | 🟡 lab V18 · stub · 3 endpoints |
+| F02 | Contrafactuais DiCE | 🟡 lab V19 · stub · simulate |
+| F03 | Dossiê regulatório | 🟡 lab V20 · PDF stub · 201 |
 
-F10 política → F04 trilha → F05 motivos → F01 SHAP → F02 contrafactuais → F03 dossiê
+F10 política → F04 trilha → F05 motivos → F01 SHAP → F02 contrafactuais → F03 dossiê ✅ lab
 
 ### Sprint 5 — Contestação + Console (EP-05 tronco)
 F05 autoatendimento → F02 fluxo → F01 tracking → F08 evidências → F06 SLA → F03/F07/F04 B2B

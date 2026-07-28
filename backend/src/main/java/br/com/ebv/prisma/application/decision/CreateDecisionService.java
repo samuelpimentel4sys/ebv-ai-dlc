@@ -1,12 +1,16 @@
 package br.com.ebv.prisma.application.decision;
 
 import br.com.ebv.prisma.application.audit.AppendAuditEventService;
+import br.com.ebv.prisma.application.counterfactual.CounterfactualStubFactory;
+import br.com.ebv.prisma.application.explain.ExplanationStubFactory;
 import br.com.ebv.prisma.domain.audit.port.in.AppendAuditEventUseCase;
+import br.com.ebv.prisma.domain.counterfactual.port.out.CounterfactualRepositoryPort;
 import br.com.ebv.prisma.domain.decision.exception.SnapshotUnavailableException;
 import br.com.ebv.prisma.domain.decision.exception.WormWriteException;
 import br.com.ebv.prisma.domain.decision.port.in.CreateDecisionUseCase;
 import br.com.ebv.prisma.domain.decision.port.out.DecisionRepositoryPort;
 import br.com.ebv.prisma.domain.decision.port.out.WormStoragePort;
+import br.com.ebv.prisma.domain.explain.port.out.ExplanationRepositoryPort;
 import br.com.ebv.prisma.domain.features.port.in.GetFeaturesUseCase;
 import br.com.ebv.prisma.domain.observability.port.out.ObservabilityRepositoryPort;
 import br.com.ebv.prisma.domain.scoring.port.in.RecalculateScoreUseCase;
@@ -47,6 +51,8 @@ public class CreateDecisionService implements CreateDecisionUseCase {
     private final DecisionRepositoryPort decisionRepo;
     private final ObservabilityRepositoryPort observabilityRepo;
     private final AppendAuditEventUseCase appendAuditEvent;
+    private final ExplanationRepositoryPort explanationRepo;
+    private final CounterfactualRepositoryPort counterfactualRepo;
     private final ObjectMapper objectMapper;
 
     public CreateDecisionService(
@@ -57,6 +63,8 @@ public class CreateDecisionService implements CreateDecisionUseCase {
             DecisionRepositoryPort decisionRepo,
             ObservabilityRepositoryPort observabilityRepo,
             AppendAuditEventUseCase appendAuditEvent,
+            ExplanationRepositoryPort explanationRepo,
+            CounterfactualRepositoryPort counterfactualRepo,
             ObjectMapper objectMapper
     ) {
         this.scoreRepo = scoreRepo;
@@ -66,6 +74,8 @@ public class CreateDecisionService implements CreateDecisionUseCase {
         this.decisionRepo = decisionRepo;
         this.observabilityRepo = observabilityRepo;
         this.appendAuditEvent = appendAuditEvent;
+        this.explanationRepo = explanationRepo;
+        this.counterfactualRepo = counterfactualRepo;
         this.objectMapper = objectMapper;
     }
 
@@ -112,11 +122,13 @@ public class CreateDecisionService implements CreateDecisionUseCase {
         // STUB pending policy engine EP-02: APPROVE if score>=700 else REVIEW if >=500 else REJECT
         String outcome = resolveOutcomeStub(scoreBundle.score());
 
+        boolean persistExplanation = false;
         String explanationRef = null;
         if (cmd.includeExplanation()) {
             elapsedMs = elapsed(startNs);
             if (elapsedMs + SLICE_EXPLANATION_MS <= budgetMs) {
-                explanationRef = "/api/v1/xai/" + decisionId;
+                explanationRef = "/api/v1/explain/" + decisionId;
+                persistExplanation = true;
             } else {
                 degradedFlags.add("EXPLANATION_OMITTED_BUDGET");
                 partial = true;
@@ -174,6 +186,35 @@ public class CreateDecisionService implements CreateDecisionUseCase {
                 explanationRef,
                 lockedUntil
         ));
+
+        // EP-02 F01 — SHAP stub snapshot (immutable; GET never recalculates)
+        if (persistExplanation) {
+            var factors = ExplanationStubFactory.buildStubFactors(featuresSubset, scoreBundle.score());
+            explanationRepo.save(new ExplanationRepositoryPort.ExplanationRecord(
+                    decisionId,
+                    scoreBundle.score(),
+                    ExplanationStubFactory.toFactorsJson(objectMapper, factors),
+                    scoreBundle.modelVersion(),
+                    true,
+                    now
+            ));
+        }
+
+        // EP-02 F02 — DiCE stub actions for REJECT/REVIEW (APPROVE → empty actions)
+        if ("REJECT".equals(outcome) || "REVIEW".equals(outcome)) {
+            var actions = CounterfactualStubFactory.buildStubActions(outcome);
+            counterfactualRepo.save(new CounterfactualRepositoryPort.CounterfactualRecord(
+                    decisionId,
+                    CounterfactualStubFactory.toJson(objectMapper, actions),
+                    now
+            ));
+        } else if ("APPROVE".equals(outcome)) {
+            counterfactualRepo.save(new CounterfactualRepositoryPort.CounterfactualRecord(
+                    decisionId,
+                    CounterfactualStubFactory.toJson(objectMapper, List.of()),
+                    now
+            ));
+        }
 
         // F08 RN001 — correlação decision_id + spans lab (features, score, worm, persist)
         persistTrace(decisionId, cmd.clientId(), now, latencyMs);
