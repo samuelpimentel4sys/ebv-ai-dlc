@@ -25,7 +25,7 @@ import {
   SCORE_BAND_REFERENCE,
   type ScoreHistoryPoint,
 } from '@/epics/score-vivo/data';
-import { fetchScoreTimelineLive, recalculateScoreLive } from '@/api/ep01';
+import { fetchScoreTimelineLive, recalculateScoreLive } from '@/api/scorePlatform';
 
 export function ScoreTimelinePage() {
   const params = useParams();

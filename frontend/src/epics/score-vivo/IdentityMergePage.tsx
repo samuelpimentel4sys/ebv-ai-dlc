@@ -1,4 +1,4 @@
-﻿import { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { GitMerge, UserCheck, XCircle } from 'lucide-react';
 import { ScreenLayout } from '@/shell/ScreenLayout';
 import {
@@ -19,7 +19,7 @@ import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
 import { isLiveMode } from '@/lib/config';
 import { formatDateTime, formatPercent } from '@/lib/format';
 import { identityCandidates, type IdentityCandidate } from '@/epics/score-vivo/data';
-import { fetchIdentityCandidatesLive, mergeIdentityLive } from '@/api/ep01';
+import { fetchIdentityCandidatesLive, mergeIdentityLive } from '@/api/scorePlatform';
 import { cn } from '@/lib/cn';
 
 const fieldLabels: Record<string, string> = {

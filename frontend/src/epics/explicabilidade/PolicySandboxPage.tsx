@@ -12,7 +12,10 @@ import {
   TextAreaField,
   useToast,
 } from '@/ds';
+import { errorMessage } from '@/lib/useDataQuery';
+import { isLiveMode } from '@/lib/config';
 import { formatCurrency, formatNumber, formatPercent, formatSigned } from '@/lib/format';
+import { simulatePolicyLive } from '@/api/explainability';
 import {
   policyBaselineRule,
   simulatePolicy,
@@ -44,14 +47,20 @@ export function PolicySandboxPage() {
     }
     setRuleError(null);
     setRunning(true);
-    window.setTimeout(() => {
-      setResult(simulatePolicy(rule));
-      setRunning(false);
-      toast.success(
-        'Simulação concluída',
-        'POST /api/v1/policy/simulate — amostra de 412 mil decisões',
-      );
-    }, 700);
+    void (async () => {
+      try {
+        const sim = isLiveMode() ? await simulatePolicyLive(rule) : simulatePolicy(rule);
+        setResult(sim);
+        toast.success(
+          'Simulação concluída',
+          'POST /api/v1/policy/simulate — amostra de 412 mil decisões',
+        );
+      } catch (error) {
+        toast.error('Falha na simulação', errorMessage(error));
+      } finally {
+        setRunning(false);
+      }
+    })();
   }
 
   const deltaApproval = result ? result.candidate.approvalRatePct - result.baseline.approvalRatePct : 0;

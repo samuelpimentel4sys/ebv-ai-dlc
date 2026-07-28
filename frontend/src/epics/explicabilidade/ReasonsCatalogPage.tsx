@@ -18,9 +18,11 @@ import {
   useToast,
 } from '@/ds';
 import type { Column } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
+import { isLiveMode } from '@/lib/config';
 import { formatDate } from '@/lib/format';
 import { reasonCodes, type ReasonCode } from '@/epics/explicabilidade/data';
+import { createReasonLive, fetchReasonsLive } from '@/api/explainability';
 
 const statusTone = {
   publicado: 'success',
@@ -30,7 +32,7 @@ const statusTone = {
 
 export function ReasonsCatalogPage() {
   const toast = useToast();
-  const query = useMockQuery(() => reasonCodes, { latency: 320 });
+  const query = useDataQuery(() => reasonCodes, fetchReasonsLive, { latency: 320 });
   const [codes, setCodes] = useState<ReasonCode[] | null>(null);
   const [editing, setEditing] = useState<ReasonCode | null>(null);
   const [draft, setDraft] = useState('');
@@ -64,21 +66,37 @@ export function ReasonsCatalogPage() {
       document.querySelector<HTMLElement>('[name="reason-titular-label"]')?.focus();
       return;
     }
-    setCodes(
-      rows.map((row) =>
-        row.code === editing.code
-          ? {
-              ...row,
-              titularLabel: text,
-              status: 'aprovacao',
-              lastUpdatedAt: new Date().toISOString(),
-            }
-          : row,
-      ),
-    );
-    toast.success('Texto enviado para aprovação', 'POST /api/v1/reasons');
-    setEditing(null);
-    setDraftError(null);
+    void (async () => {
+      try {
+        if (isLiveMode()) {
+          await createReasonLive({
+            code: editing.code,
+            consumerText: text,
+            analystText: editing.technicalLabel,
+          });
+          query.reload();
+          setCodes(null);
+        } else {
+          setCodes(
+            rows.map((row) =>
+              row.code === editing.code
+                ? {
+                    ...row,
+                    titularLabel: text,
+                    status: 'aprovacao',
+                    lastUpdatedAt: new Date().toISOString(),
+                  }
+                : row,
+            ),
+          );
+        }
+        toast.success('Texto enviado para aprovação', 'POST /api/v1/reasons');
+        setEditing(null);
+        setDraftError(null);
+      } catch (error) {
+        toast.error('Falha ao salvar motivo', errorMessage(error));
+      }
+    })();
   }
 
   const columns: Column<ReasonCode>[] = [

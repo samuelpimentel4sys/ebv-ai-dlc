@@ -17,8 +17,10 @@ import {
   useToast,
 } from '@/ds';
 import type { Column } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
+import { isLiveMode } from '@/lib/config';
 import { formatDateTime, relativeFromNow } from '@/lib/format';
+import { fetchSubjectRequestsLive, patchSubjectRequestLive } from '@/api/explainability';
 import { subjectRequests, type SubjectRequest } from '@/epics/explicabilidade/data';
 
 const statusTone = {
@@ -38,7 +40,7 @@ const typeLabel = {
 
 export function SubjectRightsPage() {
   const toast = useToast();
-  const query = useMockQuery(() => subjectRequests, { latency: 350 });
+  const query = useDataQuery(() => subjectRequests, fetchSubjectRequestsLive, { latency: 350 });
   const [items, setItems] = useState<SubjectRequest[] | null>(null);
   const [status, setStatus] = useState('todos');
   const [type, setType] = useState('todos');
@@ -107,26 +109,43 @@ export function SubjectRightsPage() {
   ];
 
   function conclude(request: SubjectRequest) {
-    setItems(
-      all.map((row) =>
-        row.requestId === request.requestId
-          ? {
-              ...row,
-              status: 'concluida',
-              history: [
-                ...row.history,
-                {
-                  at: new Date().toISOString(),
-                  actor: 'encarregado.dpo',
-                  note: 'Resposta enviada ao titular com o dossiê anexado.',
-                },
-              ],
-            }
-          : row,
-      ),
-    );
-    setDetail(null);
-    toast.success('Solicitação concluída', `PATCH /api/v1/subject-requests/${request.requestId}`);
+    const responseSummary = 'Resposta enviada ao titular com o dossiê anexado.';
+    void (async () => {
+      try {
+        if (isLiveMode()) {
+          await patchSubjectRequestLive({
+            requestId: request.requestId,
+            action: 'COMPLETE',
+            responseSummary,
+          });
+          query.reload();
+          setItems(null);
+        } else {
+          setItems(
+            all.map((row) =>
+              row.requestId === request.requestId
+                ? {
+                    ...row,
+                    status: 'concluida',
+                    history: [
+                      ...row.history,
+                      {
+                        at: new Date().toISOString(),
+                        actor: 'encarregado.dpo',
+                        note: responseSummary,
+                      },
+                    ],
+                  }
+                : row,
+            ),
+          );
+        }
+        setDetail(null);
+        toast.success('Solicitação concluída', `PATCH /api/v1/subject-requests/${request.requestId}`);
+      } catch (error) {
+        toast.error('Falha ao concluir solicitação', errorMessage(error));
+      }
+    })();
   }
 
   return (

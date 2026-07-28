@@ -1,4 +1,4 @@
-﻿import { useMemo, useState } from 'react';
+﻿import { useEffect, useMemo, useState } from 'react';
 import { CheckCheck, Clock3, UserSearch } from 'lucide-react';
 import { ScreenLayout } from '@/shell/ScreenLayout';
 import {
@@ -16,9 +16,16 @@ import {
   TextAreaField,
   useToast,
 } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
+import { isLiveMode } from '@/lib/config';
 import { formatDateTime, relativeFromNow } from '@/lib/format';
-import { explain, reviewQueue, type ReviewItem } from '@/epics/explicabilidade/data';
+import {
+  decideReviewLive,
+  fetchExplainLive,
+  fetchReviewQueueLive,
+  isUuid,
+} from '@/api/explainability';
+import { explain, reviewQueue, type DecisionFactor, type ReviewItem } from '@/epics/explicabilidade/data';
 import { cn } from '@/lib/cn';
 
 const priorityTone = {
@@ -29,12 +36,13 @@ const priorityTone = {
 
 export function HumanReviewPage() {
   const toast = useToast();
-  const query = useMockQuery(() => reviewQueue, { latency: 360 });
+  const query = useDataQuery(() => reviewQueue, fetchReviewQueueLive, { latency: 360 });
   const [items, setItems] = useState<ReviewItem[] | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [outcome, setOutcome] = useState('manter');
   const [justification, setJustification] = useState('');
   const [justificationError, setJustificationError] = useState<string | null>(null);
+  const [factors, setFactors] = useState<DecisionFactor[]>([]);
 
   const rows = items ?? query.data ?? [];
   const pending = rows.filter((row) => row.status !== 'decidido');
@@ -42,7 +50,32 @@ export function HumanReviewPage() {
     () => rows.find((row) => row.reviewId === (activeId ?? pending[0]?.reviewId)),
     [rows, activeId, pending],
   );
-  const factors = active ? explain(active.decisionId).factors : [];
+
+  useEffect(() => {
+    if (!active) {
+      setFactors([]);
+      return;
+    }
+    if (!isLiveMode()) {
+      setFactors(explain(active.decisionId).factors);
+      return;
+    }
+    if (!isUuid(active.decisionId)) {
+      setFactors([]);
+      return;
+    }
+    let cancelled = false;
+    void fetchExplainLive(active.decisionId)
+      .then((res) => {
+        if (!cancelled) setFactors(res.factors);
+      })
+      .catch(() => {
+        if (!cancelled) setFactors([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [active?.decisionId, active?.reviewId]);
 
   function decide() {
     if (!active) return;
@@ -53,16 +86,38 @@ export function HumanReviewPage() {
       document.querySelector<HTMLElement>('[name="review-justification"]')?.focus();
       return;
     }
-    setItems(
-      rows.map((row) => (row.reviewId === active.reviewId ? { ...row, status: 'decidido' } : row)),
-    );
-    setJustification('');
-    setJustificationError(null);
-    setActiveId(null);
-    toast.success(
-      outcome === 'reverter' ? 'Decisão revertida' : 'Decisão mantida',
-      `PATCH /api/v1/reviews/${active.reviewId}/decide`,
-    );
+    void (async () => {
+      try {
+        const apiOutcome =
+          outcome === 'reverter' || outcome === 'reverter-limite' ? 'reverter' : 'manter';
+        if (isLiveMode()) {
+          await decideReviewLive({
+            reviewId: active.reviewId,
+            outcome: apiOutcome,
+            rationale: justification.trim(),
+          });
+          query.reload();
+          setItems(null);
+        } else {
+          setItems(
+            rows.map((row) =>
+              row.reviewId === active.reviewId ? { ...row, status: 'decidido' } : row,
+            ),
+          );
+        }
+        setJustification('');
+        setJustificationError(null);
+        setActiveId(null);
+        toast.success(
+          outcome === 'reverter' || outcome === 'reverter-limite'
+            ? 'Decisão revertida'
+            : 'Decisão mantida',
+          `PATCH /api/v1/reviews/${active.reviewId}/decide`,
+        );
+      } catch (error) {
+        toast.error('Falha ao registrar decisão', errorMessage(error));
+      }
+    })();
   }
 
   return (

@@ -23,7 +23,7 @@ import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
 import { isLiveMode } from '@/lib/config';
 import { formatDateTime, formatNumber } from '@/lib/format';
 import { divergenceHistogram, replayJobs, type ReplayJob } from '@/epics/score-vivo/data';
-import { abortReplayJobLive, createReplayJobLive } from '@/api/ep01';
+import { abortReplayJobLive, createReplayJobLive } from '@/api/scorePlatform';
 
 const statusTone = {
   executando: 'info',

@@ -15,7 +15,15 @@ import {
   useToast,
 } from '@/ds';
 import type { Column } from '@/ds';
+import { errorMessage } from '@/lib/useDataQuery';
+import { isLiveMode } from '@/lib/config';
 import { formatDateTime, formatNumber } from '@/lib/format';
+import {
+  downloadDossierLive,
+  isUuid,
+  issueDossierLive,
+  lastDecisionId,
+} from '@/api/explainability';
 import { dossierHistory, dossierSections, type DossierRecord } from '@/epics/explicabilidade/data';
 
 const statusTone = {
@@ -27,11 +35,14 @@ const statusTone = {
 export function DossierPage() {
   const toast = useToast();
   const [documento, setDocumento] = useState('12345678901');
-  const [decisionId, setDecisionId] = useState('dec-2026-07-27-1104');
+  const [decisionId, setDecisionId] = useState(
+    () => (isLiveMode() ? lastDecisionId() ?? '' : 'dec-2026-07-27-1104'),
+  );
   const [format, setFormat] = useState('PDF');
   const [step, setStep] = useState(0);
   const [records, setRecords] = useState<DossierRecord[]>(dossierHistory);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [issuing, setIssuing] = useState(false);
 
   const columns: Column<DossierRecord>[] = [
     {
@@ -70,9 +81,27 @@ export function DossierPage() {
             size="sm"
             variant="secondary"
             icon={<Download size={14} aria-hidden="true" />}
-            onClick={() =>
-              toast.success('Download iniciado', `GET /api/v1/dossier/${row.dossierId}/download`)
-            }
+            onClick={() => {
+              void (async () => {
+                try {
+                  if (isLiveMode()) {
+                    const blob = await downloadDossierLive(row.dossierId, row.format);
+                    const url = URL.createObjectURL(blob);
+                    const anchor = document.createElement('a');
+                    anchor.href = url;
+                    anchor.download = `dossier-${row.dossierId}.${row.format.toLowerCase()}`;
+                    anchor.click();
+                    URL.revokeObjectURL(url);
+                  }
+                  toast.success(
+                    'Download iniciado',
+                    `GET /api/v1/dossier/${row.dossierId}/download`,
+                  );
+                } catch (error) {
+                  toast.error('Falha no download', errorMessage(error));
+                }
+              })();
+            }}
           >
             Baixar
           </Button>
@@ -103,6 +132,11 @@ export function DossierPage() {
     }
     if (!decisionId.trim()) {
       next.decisionId = 'Informe o decision_id da decisão que motivou o pedido do titular.';
+    } else if (isLiveMode()) {
+      if (!isUuid(decisionId.trim()) && !lastDecisionId()) {
+        next.decisionId =
+          'Informe um decision_id UUID ou emita uma decisão no Playground (API live).';
+      }
     } else if (!/^dec-\d{4}-\d{2}-\d{2}-\d{4}$/.test(decisionId.trim())) {
       next.decisionId = 'Use o formato dec-AAAA-MM-DD-HHMM, como dec-2026-07-27-1104.';
     }
@@ -117,20 +151,37 @@ export function DossierPage() {
 
   function emit() {
     if (!validate()) return;
-    const record: DossierRecord = {
-      dossierId: `dos-2026-${Math.floor(Math.random() * 9000 + 1000)}`,
-      documento: `${documento.slice(0, 3)}.***.**${documento.slice(9)}`,
-      decisionId,
-      requestedAt: new Date().toISOString(),
-      status: 'disponivel',
-      format: format as 'PDF' | 'JSON',
-      sizeKb: format === 'PDF' ? 838 : 312,
-      requestedBy: 'encarregado.dpo',
-      expiresAt: new Date(Date.now() + 30 * 86_400_000).toISOString(),
-    };
-    setRecords([record, ...records]);
-    setStep(2);
-    toast.success('Dossiê emitido', 'POST /api/v1/dossier');
+    void (async () => {
+      setIssuing(true);
+      try {
+        if (isLiveMode()) {
+          const record = await issueDossierLive({
+            decisionId: decisionId.trim() || lastDecisionId() || '',
+            format: format as 'PDF' | 'JSON',
+          });
+          setRecords([record, ...records]);
+        } else {
+          const record: DossierRecord = {
+            dossierId: `dos-2026-${Math.floor(Math.random() * 9000 + 1000)}`,
+            documento: `${documento.slice(0, 3)}.***.**${documento.slice(9)}`,
+            decisionId,
+            requestedAt: new Date().toISOString(),
+            status: 'disponivel',
+            format: format as 'PDF' | 'JSON',
+            sizeKb: format === 'PDF' ? 838 : 312,
+            requestedBy: 'encarregado.dpo',
+            expiresAt: new Date(Date.now() + 30 * 86_400_000).toISOString(),
+          };
+          setRecords([record, ...records]);
+        }
+        setStep(2);
+        toast.success('Dossiê emitido', 'POST /api/v1/dossier');
+      } catch (error) {
+        toast.error('Falha ao emitir dossiê', errorMessage(error));
+      } finally {
+        setIssuing(false);
+      }
+    })();
   }
 
   return (
@@ -206,7 +257,7 @@ export function DossierPage() {
                 >
                   Pré-visualizar
                 </Button>
-                <Button icon={<Stamp size={16} aria-hidden="true" />} onClick={emit}>
+                <Button icon={<Stamp size={16} aria-hidden="true" />} loading={issuing} onClick={emit}>
                   Emitir dossiê
                 </Button>
               </div>

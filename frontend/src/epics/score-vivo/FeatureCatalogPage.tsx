@@ -1,4 +1,4 @@
-﻿import { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Clock, Database, Search } from 'lucide-react';
 import { ScreenLayout } from '@/shell/ScreenLayout';
 import {
@@ -21,7 +21,7 @@ import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
 import { isLiveMode } from '@/lib/config';
 import { formatNumber, formatPercent } from '@/lib/format';
 import { featureCatalog, pitLookup, type FeatureCatalogItem } from '@/epics/score-vivo/data';
-import { fetchFeatureCatalogLive, fetchPitLookupLive } from '@/api/ep01';
+import { fetchFeatureCatalogLive, fetchPitLookupLive } from '@/api/scorePlatform';
 
 export function FeatureCatalogPage() {
   const toast = useToast();

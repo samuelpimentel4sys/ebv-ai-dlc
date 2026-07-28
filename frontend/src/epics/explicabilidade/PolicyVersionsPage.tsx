@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GitCompare, Rocket, Undo2 } from 'lucide-react';
 import { ScreenLayout } from '@/shell/ScreenLayout';
 import {
@@ -15,9 +15,20 @@ import {
   useToast,
 } from '@/ds';
 import type { Column } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
+import { isLiveMode } from '@/lib/config';
 import { formatDateTime, formatPercent } from '@/lib/format';
-import { policyDiff, policyVersions, type PolicyVersion } from '@/epics/explicabilidade/data';
+import {
+  policyDiff as mockPolicyDiff,
+  policyVersions,
+  type PolicyDiffLine,
+  type PolicyVersion,
+} from '@/epics/explicabilidade/data';
+import {
+  fetchPolicyDiffLive,
+  fetchPolicyVersionsLive,
+  publishPolicyLive,
+} from '@/api/explainability';
 import { cn } from '@/lib/cn';
 
 const statusTone = {
@@ -27,22 +38,57 @@ const statusTone = {
   arquivada: 'warning',
 } as const;
 
+type LivePolicy = PolicyVersion & { artifactHash?: string; approvalId?: string | null };
+
 export function PolicyVersionsPage() {
   const toast = useToast();
-  const query = useMockQuery(() => policyVersions, { latency: 340 });
-  const [versions, setVersions] = useState<PolicyVersion[] | null>(null);
+  const query = useDataQuery(() => policyVersions as LivePolicy[], fetchPolicyVersionsLive, {
+    latency: 340,
+  });
+  const [versions, setVersions] = useState<LivePolicy[] | null>(null);
   const [left, setLeft] = useState('policy-pf-17');
   const [right, setRight] = useState('policy-pf-18');
-  const [promoting, setPromoting] = useState<PolicyVersion | null>(null);
+  const [diffLines, setDiffLines] = useState<PolicyDiffLine[]>(mockPolicyDiff);
+  const [promoting, setPromoting] = useState<LivePolicy | null>(null);
+  const [publishing, setPublishing] = useState(false);
 
   const rows = versions ?? query.data ?? [];
   const active = rows.find((row) => row.status === 'ativa');
 
-  const columns: Column<PolicyVersion>[] = [
+  useEffect(() => {
+    if (!rows.length) return;
+    const ids = rows.map((r) => r.id);
+    if (!ids.includes(left)) setLeft(ids[0]);
+    if (!ids.includes(right)) setRight(ids[1] ?? ids[0]);
+  }, [rows, left, right]);
+
+  useEffect(() => {
+    if (!left || !right || left === right) {
+      setDiffLines([{ kind: 'context', text: 'Selecione duas versões distintas.' }]);
+      return;
+    }
+    if (!isLiveMode()) {
+      setDiffLines(mockPolicyDiff);
+      return;
+    }
+    void (async () => {
+      try {
+        setDiffLines(await fetchPolicyDiffLive(left, right));
+      } catch (error) {
+        setDiffLines([{ kind: 'context', text: errorMessage(error) }]);
+      }
+    })();
+  }, [left, right, query.data]);
+
+  const columns: Column<LivePolicy>[] = [
     {
       key: 'id',
       header: 'Versão',
-      render: (row) => <code className="text-xs font-semibold">{row.id}</code>,
+      render: (row) => (
+        <code className="text-xs font-semibold">
+          {row.version ? `v${row.version}` : row.id.slice(0, 8)}
+        </code>
+      ),
     },
     {
       key: 'status',
@@ -56,14 +102,14 @@ export function PolicyVersionsPage() {
       header: 'Aprovação estimada',
       align: 'right',
       numeric: true,
-      render: (row) => formatPercent(row.approvalRatePct),
+      render: (row) => (row.approvalRatePct ? formatPercent(row.approvalRatePct) : '—'),
     },
     {
       key: 'changes',
       header: 'Regras alteradas',
       align: 'right',
       numeric: true,
-      render: (row) => row.changes,
+      render: (row) => row.changes || '—',
     },
     { key: 'createdAt', header: 'Criada em', render: (row) => formatDateTime(row.createdAt) },
     {
@@ -95,6 +141,41 @@ export function PolicyVersionsPage() {
     },
   ];
 
+  async function confirmPromote() {
+    if (!promoting) return;
+    setPublishing(true);
+    try {
+      if (isLiveMode()) {
+        await publishPolicyLive({
+          id: promoting.id,
+          artifactHash: promoting.artifactHash || '',
+          approvalId: promoting.approvalId,
+        });
+        query.reload();
+        setVersions(null);
+      } else {
+        setVersions(
+          rows.map((row) =>
+            row.id === promoting.id
+              ? { ...row, status: 'ativa' }
+              : row.status === 'ativa'
+                ? { ...row, status: 'arquivada' }
+                : row,
+          ),
+        );
+      }
+      toast.success(
+        `${promoting.id.slice(0, 8)} ativa em produção`,
+        'POST /api/v1/policy/versions/{id}/publish',
+      );
+      setPromoting(null);
+    } catch (error) {
+      toast.error('Falha ao promover política', errorMessage(error));
+    } finally {
+      setPublishing(false);
+    }
+  }
+
   return (
     <ScreenLayout
       usId="PRISMA-EP-02-F10-US-FE-01"
@@ -121,7 +202,7 @@ export function PolicyVersionsPage() {
       >
         {() => (
           <div className="grid gap-5">
-            <Notice tone="info" title={`Política ativa: ${active?.id ?? '—'}`}>
+            <Notice tone="info" title={`Política ativa: ${active?.version ?? active?.id ?? '—'}`}>
               Promoções exigem dupla aprovação (risco e compliance) e geram evento
               <code className="mx-1">POLICY_VERSION_ACTIVATED</code>na trilha de auditoria.
             </Notice>
@@ -134,7 +215,7 @@ export function PolicyVersionsPage() {
                 hint="prontos para simulação"
               />
               <Metric
-                value={formatPercent(active?.approvalRatePct ?? 0)}
+                value={active?.approvalRatePct ? formatPercent(active.approvalRatePct) : '—'}
                 label="Aprovação da política ativa"
                 tone="success"
               />
@@ -169,7 +250,7 @@ export function PolicyVersionsPage() {
                   onChange={(event) => setLeft(event.target.value)}
                   options={rows.map((row) => ({
                     value: row.id,
-                    label: `${row.id} · ${row.status}`,
+                    label: `${row.version || row.id.slice(0, 8)} · ${row.status}`,
                   }))}
                 />
                 <SelectField
@@ -178,7 +259,7 @@ export function PolicyVersionsPage() {
                   onChange={(event) => setRight(event.target.value)}
                   options={rows.map((row) => ({
                     value: row.id,
-                    label: `${row.id} · ${row.status}`,
+                    label: `${row.version || row.id.slice(0, 8)} · ${row.status}`,
                   }))}
                 />
               </div>
@@ -186,14 +267,14 @@ export function PolicyVersionsPage() {
               <div className="overflow-hidden rounded-md border border-eqx-border">
                 <div className="flex items-center justify-between gap-3 border-b border-eqx-border bg-eqx-surface-subtle px-3 py-2 text-xs font-semibold">
                   <span>
-                    <code>{left}</code> → <code>{right}</code>
+                    <code>{left.slice(0, 8)}</code> → <code>{right.slice(0, 8)}</code>
                   </span>
                   <span className="text-eqx-text-muted">
-                    {policyDiff.filter((line) => line.kind !== 'context').length} linhas alteradas
+                    {diffLines.filter((line) => line.kind !== 'context').length} linhas alteradas
                   </span>
                 </div>
                 <ul className="divide-y divide-eqx-border">
-                  {policyDiff.map((line, index) => (
+                  {diffLines.map((line, index) => (
                     <li
                       key={`${line.kind}-${index}`}
                       className={cn(
@@ -231,7 +312,7 @@ export function PolicyVersionsPage() {
       <Modal
         open={Boolean(promoting)}
         onClose={() => setPromoting(null)}
-        title={`Promover ${promoting?.id ?? ''} para produção`}
+        title={`Promover ${promoting?.version ?? promoting?.id?.slice(0, 8) ?? ''} para produção`}
         footer={
           <>
             <Button variant="secondary" onClick={() => setPromoting(null)}>
@@ -239,23 +320,8 @@ export function PolicyVersionsPage() {
             </Button>
             <Button
               icon={<Rocket size={16} aria-hidden="true" />}
-              onClick={() => {
-                if (!promoting) return;
-                setVersions(
-                  rows.map((row) =>
-                    row.id === promoting.id
-                      ? { ...row, status: 'ativa' }
-                      : row.status === 'ativa'
-                        ? { ...row, status: 'arquivada' }
-                        : row,
-                  ),
-                );
-                toast.success(
-                  `${promoting.id} ativa em produção`,
-                  'POST /api/v1/policy/versions/{id}/promote',
-                );
-                setPromoting(null);
-              }}
+              loading={publishing}
+              onClick={() => void confirmPromote()}
             >
               Confirmar promoção
             </Button>
@@ -264,13 +330,12 @@ export function PolicyVersionsPage() {
       >
         <div className="grid gap-3 text-sm">
           <p>
-            A promoção substitui <code>{active?.id}</code> imediatamente. Decisões em andamento
-            terminam com a versão anterior; novas requisições passam a usar{' '}
-            <code>{promoting?.id}</code>.
+            A promoção substitui <code>{active?.version ?? active?.id}</code> imediatamente. Decisões
+            em andamento terminam com a versão anterior; novas requisições passam a usar{' '}
+            <code>{promoting?.version ?? promoting?.id}</code>.
           </p>
           <Notice tone="warning" title="Impacto estimado">
-            Aprovação projetada de {formatPercent(promoting?.approvalRatePct ?? 0)} contra{' '}
-            {formatPercent(active?.approvalRatePct ?? 0)} da versão ativa.
+            Lab: promoção chama POST /api/v1/policy/versions/&#123;id&#125;/publish com hash do artefato.
           </Notice>
         </div>
       </Modal>

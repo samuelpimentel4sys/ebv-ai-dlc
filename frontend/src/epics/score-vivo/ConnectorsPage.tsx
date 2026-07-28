@@ -21,7 +21,7 @@ import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
 import { isLiveMode } from '@/lib/config';
 import { formatDateTime, formatNumber, formatPercent } from '@/lib/format';
 import { ingestSources, type IngestSource } from '@/epics/score-vivo/data';
-import { fetchIngestSourcesLive, replayIngestLive } from '@/api/ep01';
+import { fetchIngestSourcesLive, replayIngestLive } from '@/api/scorePlatform';
 
 const statusTone = {
   online: 'success',

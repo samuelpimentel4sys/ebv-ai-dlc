@@ -21,7 +21,7 @@ import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
 import { isLiveMode } from '@/lib/config';
 import { formatDate, formatNumber } from '@/lib/format';
 import { modelVersions, type ModelStage, type ModelVersion } from '@/epics/score-vivo/data';
-import { fetchModelsLive, promoteModelLive, rollbackModelLive } from '@/api/ep01';
+import { fetchModelsLive, promoteModelLive, rollbackModelLive } from '@/api/scorePlatform';
 
 const stageTone: Record<ModelStage, 'success' | 'info' | 'warning' | 'neutral'> = {
   producao: 'success',

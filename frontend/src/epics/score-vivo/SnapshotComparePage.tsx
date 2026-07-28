@@ -18,7 +18,7 @@ import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
 import { isLiveMode } from '@/lib/config';
 import { formatDateTime } from '@/lib/format';
 import { decisionPair, type AttributeDiff, type DecisionMeta } from '@/epics/score-vivo/data';
-import { fetchDecisionCompareLive, verifyDecisionLive } from '@/api/ep01';
+import { fetchDecisionCompareLive, verifyDecisionLive } from '@/api/scorePlatform';
 import { HttpError } from '@/lib/httpClient';
 
 function loadDecisionIdsFromSession(): [string, string] {

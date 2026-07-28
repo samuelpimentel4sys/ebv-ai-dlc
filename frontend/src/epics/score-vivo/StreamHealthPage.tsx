@@ -20,7 +20,7 @@ import type { Column } from '@/ds';
 import { useDataQuery } from '@/lib/useDataQuery';
 import { formatDateTime, formatNumber } from '@/lib/format';
 import { streamHealth, type QuarantineEvent, type TopicHealth } from '@/epics/score-vivo/data';
-import { fetchStreamHealthLive } from '@/api/ep01';
+import { fetchStreamHealthLive } from '@/api/scorePlatform';
 
 const statusTone = {
   healthy: 'success',

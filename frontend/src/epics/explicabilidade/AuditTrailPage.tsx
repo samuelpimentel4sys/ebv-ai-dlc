@@ -19,8 +19,10 @@ import {
   useToast,
 } from '@/ds';
 import type { Column } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
+import { isLiveMode } from '@/lib/config';
 import { formatDateTime } from '@/lib/format';
+import { exportAuditLive, fetchAuditTrailLive } from '@/api/explainability';
 import { auditTrail, type AuditEvent } from '@/epics/explicabilidade/data';
 
 const actorTone = {
@@ -31,16 +33,20 @@ const actorTone = {
 
 export function AuditTrailPage() {
   const toast = useToast();
-  const query = useMockQuery(() => auditTrail, { latency: 340 });
   const [documento, setDocumento] = useState('');
+  const query = useDataQuery(
+    () => auditTrail,
+    () => fetchAuditTrailLive(documento.trim() || undefined),
+    { latency: 340, deps: [documento] },
+  );
   const [actorType, setActorType] = useState('todos');
   const [action, setAction] = useState('todas');
   const [detail, setDetail] = useState<AuditEvent | null>(null);
   const [exportOpen, setExportOpen] = useState(false);
 
   const actions = useMemo(
-    () => ['todas', ...new Set(auditTrail.map((event) => event.action))],
-    [],
+    () => ['todas', ...new Set((query.data ?? []).map((event) => event.action))],
+    [query.data],
   );
 
   const rows = useMemo(
@@ -257,8 +263,19 @@ export function AuditTrailPage() {
             <Button
               icon={<ShieldCheck size={16} aria-hidden="true" />}
               onClick={() => {
-                toast.success('Exportação solicitada', 'POST /api/v1/audit/export');
-                setExportOpen(false);
+                void (async () => {
+                  try {
+                    if (isLiveMode()) {
+                      const { exportId } = await exportAuditLive('regulatory-export');
+                      toast.success('Exportação solicitada', `POST /api/v1/audit/export · ${exportId}`);
+                    } else {
+                      toast.success('Exportação solicitada', 'POST /api/v1/audit/export');
+                    }
+                    setExportOpen(false);
+                  } catch (error) {
+                    toast.error('Falha na exportação', errorMessage(error));
+                  }
+                })();
               }}
             >
               Gerar arquivo assinado

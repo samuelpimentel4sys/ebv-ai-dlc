@@ -30,7 +30,7 @@
 | F08 | SloPage | slo + budget (traces vazios no lab) |
 | F10 | ReplayJobsPage | create/abort (lista inicia vazia) |
 
-Arquivo central: `src/api/ep01.ts`
+Arquivo central: `src/api/scorePlatform.ts`
 
 ## Qualidade
 - `tsc --noEmit` PASS

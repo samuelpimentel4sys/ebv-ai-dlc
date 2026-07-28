@@ -1,3 +1,7 @@
+/**
+ * API client — Score & Plataforma (features, score, decisões, ingest, modelos, SLO, replay).
+ * Domínio produto: Plataforma · Dados · Risco · Integração · ML
+ */
 import { httpClient } from '@/lib/httpClient';
 import type {
   FeatureCatalogItem,
@@ -402,7 +406,7 @@ export async function createDecisionLive(payload: {
       body: {
         documento: payload.documento,
         productCode: payload.productCode,
-        includeExplanation: false,
+        includeExplanation: true,
       },
       headers: { 'X-Budget-Ms': '250' },
     }),

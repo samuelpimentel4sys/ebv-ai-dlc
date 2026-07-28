@@ -18,8 +18,10 @@ import {
   useToast,
 } from '@/ds';
 import type { Column } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
+import { isLiveMode } from '@/lib/config';
 import { formatDateTime, formatNumber, formatPercent } from '@/lib/format';
+import { analyzeFairnessLive, fetchFairnessLive } from '@/api/explainability';
 import {
   fairnessAlerts,
   fairnessMetrics,
@@ -36,11 +38,13 @@ const severityTone = {
 
 export function FairnessPage() {
   const toast = useToast();
-  const query = useMockQuery(
+  const query = useDataQuery(
     () => ({ metrics: fairnessMetrics, alerts: fairnessAlerts, series: fairnessSeries }),
+    fetchFairnessLive,
     { latency: 400 },
   );
   const [alert, setAlert] = useState<FairnessAlert | null>(null);
+  const [reevaluating, setReevaluating] = useState(false);
 
   const columns: Column<FairnessMetric>[] = [
     { key: 'group', header: 'Grupo comparado', render: (row) => row.group },
@@ -98,7 +102,23 @@ export function FairnessPage() {
           size="sm"
           variant="secondary"
           icon={<ScanSearch size={16} aria-hidden="true" />}
-          onClick={() => toast.info('Reavaliação agendada', 'POST /api/v1/fairness/evaluate')}
+          loading={reevaluating}
+          onClick={() => {
+            void (async () => {
+              setReevaluating(true);
+              try {
+                if (isLiveMode()) {
+                  await analyzeFairnessLive();
+                  query.reload();
+                }
+                toast.info('Reavaliação agendada', 'POST /api/v1/fairness/analyze');
+              } catch (error) {
+                toast.error('Falha na reavaliação', errorMessage(error));
+              } finally {
+                setReevaluating(false);
+              }
+            })();
+          }}
         >
           Reavaliar agora
         </Button>

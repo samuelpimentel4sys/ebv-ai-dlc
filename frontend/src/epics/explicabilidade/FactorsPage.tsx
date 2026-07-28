@@ -14,15 +14,24 @@ import {
   Notice,
   QueryBoundary,
 } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { useDataQuery } from '@/lib/useDataQuery';
+import { isLiveMode } from '@/lib/config';
 import { formatDateTime, formatSigned } from '@/lib/format';
 import { explain, type DecisionFactor } from '@/epics/explicabilidade/data';
+import { fetchExplainLive, lastDecisionId } from '@/api/explainability';
 
 export function FactorsPage() {
   const params = useParams();
-  const decisionId = params.decisionId ?? 'dec-2026-07-27-1104';
+  const fallback = lastDecisionId() ?? 'dec-2026-07-27-1104';
+  const decisionId = params.decisionId ?? fallback;
   const [factor, setFactor] = useState<DecisionFactor | null>(null);
-  const query = useMockQuery(() => explain(decisionId), { latency: 380, deps: [decisionId] });
+  const query = useDataQuery(
+    () => explain(decisionId),
+    () => fetchExplainLive(decisionId),
+    { latency: 380, deps: [decisionId] },
+  );
+
+  const displayId = query.data?.decisionId ?? decisionId;
 
   return (
     <ScreenLayout
@@ -34,7 +43,7 @@ export function FactorsPage() {
           EP-02 · Explicabilidade
         </Badge>,
         <Badge key="dec" tone="neutral" className="font-mono">
-          {decisionId}
+          {displayId}
         </Badge>,
       ]}
       wide
@@ -44,8 +53,9 @@ export function FactorsPage() {
         loadingRows={6}
         empty={{
           title: 'Esta decisão não tem fatores calculados.',
-          description:
-            'A versão de modelo usada na decisão não publicou contribuições por atributo. Consulte o registry para saber se há versão com explicabilidade habilitada.',
+          description: isLiveMode()
+            ? 'Emita uma decisão no Playground (includeExplanation) e use o decisionId UUID retornado.'
+            : 'A versão de modelo usada na decisão não publicou contribuições por atributo. Consulte o registry para saber se há versão com explicabilidade habilitada.',
         }}
       >
         {(data) => (
@@ -55,7 +65,7 @@ export function FactorsPage() {
               title={`Decisão: ${data.outcome}`}
               actions={
                 <Link
-                  to={`/explicabilidade/decisoes/${decisionId}/acoes`}
+                  to={`/explicabilidade/decisoes/${data.decisionId}/acoes`}
                   className={buttonClass('secondary', 'sm')}
                 >
                   Ver ações recomendadas

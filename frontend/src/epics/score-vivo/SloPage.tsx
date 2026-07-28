@@ -17,7 +17,7 @@ import {
 import { useDataQuery } from '@/lib/useDataQuery';
 import { formatNumber, formatPercent } from '@/lib/format';
 import { sloSnapshot } from '@/epics/score-vivo/data';
-import { fetchSloLive } from '@/api/ep01';
+import { fetchSloLive } from '@/api/scorePlatform';
 import { cn } from '@/lib/cn';
 
 const traceTone = {

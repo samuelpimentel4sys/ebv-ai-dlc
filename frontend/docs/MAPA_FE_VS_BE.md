@@ -20,7 +20,7 @@
 | F08 | SloPage | `/plataforma/observabilidade/slo` | slo · budget · traces | 🟡 | 9 |
 | F10 | ReplayJobsPage | `/dados/replay/jobs` | jobs · GET · abort | 🟡 | 10 |
 
-**Cobertura plugável agora:** 10/10 US-FE EP-01 · live via `src/api/ep01.ts` · `VITE_DATA_MODE=live`  
+**Cobertura plugável agora:** 10/10 US-FE EP-01 · live via `src/api/scorePlatform.ts` · `VITE_DATA_MODE=live`  
 **Registro:** `docs/DEV_RECORD_EP01_PLUG.md`
 
 ---

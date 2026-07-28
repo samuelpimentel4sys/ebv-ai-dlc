@@ -6,8 +6,8 @@
 | **Produto** | **Prisma Equifax** (EBV · Equifax / BoaVista) |
 | **Repo FE** | `Prisma/frontend` |
 | **Repo BE** | `Prisma/backend` (Noah) |
-| **Atualizado em** | 2026-07-28 14:40 |
-| **Fase atual** | **P — Productização** · P0.1 DS hardening feito · próximo P1/P2 |
+| **Atualizado em** | 2026-07-28 14:50 |
+| **Fase atual** | **P2 Explainability live** feito · próximo P1 contrato / EP-05 |
 
 ---
 
@@ -22,7 +22,7 @@
 | **DS hardening (targets/inverse/overlay)** | ✅ P0.1 | `min-h-target` · `text-eqx-text-inverse` · `--color-overlay` |
 | Contratos FE = OpenAPI (sem mapper frouxo) | 🟡 | Mappers compensam gap mock×BE |
 | Login OIDC / papéis | ❌ | Lab aberto |
-| EP-02…06 live | ❌ / Noah EP-02 lab pronto | Próximo plug após product shell |
+| EP-02…06 live | ✅ EP-02 via `explainability.ts` | EP-03…06 aguardam BE |
 
 **Conclusão:** o FE está **conectado**, mas ainda **parece demo**. Próximo passo obrigatório = **virar Prisma Equifax** (navegação, copy, hierarquia), sem perder as rotas das US.
 
@@ -75,17 +75,17 @@
 - [x] Magic sizes críticos no shell/ds (`text-xs`, icon buttons)
 - [x] Meta HTML: título/descrição **Prisma Equifax**
 
-### P1 — Hardening live EP-01
+### P2 — Plug Explicabilidade (`explainability.ts`) · **FEITO 2026-07-28**
+
+Ordem Noah: F05 → F10 → F01 → F02 → F06 → F08 → F04 → F03 → F09 → F07 — **10/10 live**
+
+### P1 — Hardening live Score & Plataforma
 
 - [ ] Diff OpenAPI × mappers (gap list Noah)
 - [ ] Empty/error reais sem depender só de `?state=`
 - [ ] Smoke roteiro operador (não demo 60 min)
 
-### P2 — Plug EP-02 (Noah handoff 14:20 — lab 10/10) · **PRÓXIMO após P1**
-
-Ordem: fatores → contrafactuais → motivos → auditoria → dossiê → revisão → fairness → direitos → política
-
-### P3+ — EP-05 / EP-06 / R2 (03–04)
+### P3+ — Contestação / Inclusão / R2 (03–04)
 
 Conforme BE + WSJF.
 
@@ -96,8 +96,10 @@ Conforme BE + WSJF.
 | Sprint | Status |
 |--------|--------|
 | S0 HTTP | ✅ |
-| S1 EP-01 live | ✅ (`DEV_RECORD_EP01_PLUG.md`) |
+| S1 Score & Plataforma live | ✅ (`scorePlatform.ts` · `DEV_RECORD_EP01_PLUG.md`) |
 | S2 F08/F10 | ✅ no plug (ressalvas lab) |
+| P0.1 DS hardening | ✅ |
+| P2 Explicabilidade live | ✅ (`explainability.ts` · `DEV_RECORD_EXPLAINABILITY_PLUG.md`) |
 
 ---
 
@@ -113,7 +115,6 @@ Conforme BE + WSJF.
 
 ## 5. Decisão pedida ao stakeholder
 
-Confirmar Sprint **P0** (shell produto) agora.  
-Depois: P1 gaps contrato · P2 EP-02 live.
+Próximo: P1 gaps contrato Score & Plataforma · P3 Contestação quando Noah fechar handoff.
 
 _Sofia · Prisma Equifax_

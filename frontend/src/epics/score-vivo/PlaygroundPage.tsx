@@ -19,7 +19,7 @@ import { playgroundRun, playgroundSamplePayload, type PlaygroundResponse } from 
 import { formatNumber } from '@/lib/format';
 import { isLiveMode } from '@/lib/config';
 import { errorMessage } from '@/lib/useDataQuery';
-import { createDecisionLive } from '@/api/ep01';
+import { createDecisionLive } from '@/api/scorePlatform';
 
 const DECISION_IDS_KEY = 'prisma.decisionIds';
 

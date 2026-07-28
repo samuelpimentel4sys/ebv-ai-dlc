@@ -14,9 +14,15 @@ import {
   QueryBoundary,
   useToast,
 } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
+import { isLiveMode } from '@/lib/config';
 import { formatNumber } from '@/lib/format';
 import { counterfactualActions, explain } from '@/epics/explicabilidade/data';
+import {
+  fetchCounterfactualLive,
+  lastDecisionId,
+  simulateCounterfactualLive,
+} from '@/api/explainability';
 import { cn } from '@/lib/cn';
 
 const feasibilityTone = {
@@ -27,23 +33,54 @@ const feasibilityTone = {
 
 export function CounterfactualPage() {
   const params = useParams();
-  const decisionId = params.decisionId ?? 'dec-2026-07-27-1104';
+  const fallback = lastDecisionId() ?? 'dec-2026-07-27-1104';
+  const decisionId = params.decisionId ?? fallback;
   const toast = useToast();
-  const [selected, setSelected] = useState<string[]>(['cf-01']);
-  const query = useMockQuery(
+  const [selected, setSelected] = useState<string[]>([]);
+  const query = useDataQuery(
     () => ({ decision: explain(decisionId), actions: counterfactualActions }),
-    { latency: 360, deps: [decisionId] },
+    () => fetchCounterfactualLive(decisionId),
+    {
+      latency: 360,
+      deps: [decisionId],
+      isEmpty: (data) => data.actions.length === 0,
+    },
   );
 
-  const chosen = counterfactualActions.filter((action) => selected.includes(action.id));
+  const actions = query.data?.actions ?? [];
+  const effectiveSelected = selected.length
+    ? selected
+    : actions[0]
+      ? [actions[0].id]
+      : [];
+  const chosen = actions.filter((action) => effectiveSelected.includes(action.id));
   const gainMin = chosen.reduce((sum, action) => sum + action.scoreGainMin, 0);
   const gainMax = chosen.reduce((sum, action) => sum + action.scoreGainMax, 0);
   const threshold = 620;
 
   function toggle(id: string) {
-    setSelected((current) =>
-      current.includes(id) ? current.filter((item) => item !== id) : [...current, id],
-    );
+    setSelected((current) => {
+      const base = current.length ? current : effectiveSelected;
+      return base.includes(id) ? base.filter((item) => item !== id) : [...base, id];
+    });
+  }
+
+  async function sendPlan() {
+    if (!chosen.length) return;
+    try {
+      if (isLiveMode()) {
+        await simulateCounterfactualLive(
+          decisionId,
+          chosen.map((a) => ({
+            attribute_code: a.attribute,
+            proposed_value: a.targetValue,
+          })),
+        );
+      }
+      toast.success('Plano enviado ao titular', 'POST /api/v1/counterfactual/simulate');
+    } catch (error) {
+      toast.error('Falha na simulação', errorMessage(error));
+    }
   }
 
   return (
@@ -56,7 +93,7 @@ export function CounterfactualPage() {
           EP-02 · Explicabilidade
         </Badge>,
         <Badge key="dec" tone="neutral" className="font-mono">
-          {decisionId}
+          {query.data?.decision.decisionId ?? decisionId}
         </Badge>,
       ]}
       wide
@@ -66,8 +103,9 @@ export function CounterfactualPage() {
         loadingRows={5}
         empty={{
           title: 'Nenhuma ação recomendada para esta decisão.',
-          description:
-            'O motor de contrafactuais não encontrou mudança viável capaz de reverter o resultado. Encaminhe o caso à revisão humana para avaliação manual.',
+          description: isLiveMode()
+            ? 'Emita uma decisão no Playground e abra as ações com o decisionId UUID.'
+            : 'O motor de contrafactuais não encontrou mudança viável. Encaminhe à revisão humana.',
         }}
       >
         {(data) => {
@@ -82,7 +120,7 @@ export function CounterfactualPage() {
               <div className="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_22rem]">
                 <div className="grid gap-3">
                   {data.actions.map((action) => {
-                    const active = selected.includes(action.id);
+                    const active = effectiveSelected.includes(action.id);
                     return (
                       <Card
                         key={action.id}
@@ -136,7 +174,10 @@ export function CounterfactualPage() {
                     <ProgressBar
                       className="mt-4"
                       label={`Distância até ${threshold} pts`}
-                      value={Math.min((gainMax / (threshold - baseScore)) * 100, 100)}
+                      value={Math.min(
+                        ((gainMax || 1) / Math.max(threshold - baseScore, 1)) * 100,
+                        100,
+                      )}
                       tone={baseScore + gainMax >= threshold ? 'success' : 'warning'}
                     />
                     <p className="mt-3 text-sm text-eqx-text-muted">
@@ -158,12 +199,7 @@ export function CounterfactualPage() {
                   />
                   <Button
                     icon={<Sparkles size={16} aria-hidden="true" />}
-                    onClick={() =>
-                      toast.success(
-                        'Plano enviado ao titular',
-                        'Publicado no portal e no coach de crédito',
-                      )
-                    }
+                    onClick={() => void sendPlan()}
                     disabled={chosen.length === 0}
                   >
                     Enviar plano ao titular
