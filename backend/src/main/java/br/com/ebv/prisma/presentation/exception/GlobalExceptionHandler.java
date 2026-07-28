@@ -10,6 +10,16 @@ import br.com.ebv.prisma.domain.decision.exception.SnapshotUnavailableException;
 import br.com.ebv.prisma.domain.decision.exception.WormWriteException;
 import br.com.ebv.prisma.domain.dossier.exception.DossierNotFoundException;
 import br.com.ebv.prisma.domain.explain.exception.ExplanationNotFoundException;
+import br.com.ebv.prisma.domain.fairness.exception.FairnessNotFoundException;
+import br.com.ebv.prisma.domain.fairness.exception.FairnessValidationException;
+import br.com.ebv.prisma.domain.policysim.exception.PolicySimulationNotFoundException;
+import br.com.ebv.prisma.domain.policysim.exception.PolicySimulationValidationException;
+import br.com.ebv.prisma.domain.review.exception.ReviewConflictException;
+import br.com.ebv.prisma.domain.review.exception.ReviewNotFoundException;
+import br.com.ebv.prisma.domain.review.exception.ReviewValidationException;
+import br.com.ebv.prisma.domain.subjectrequest.exception.SubjectRequestConflictException;
+import br.com.ebv.prisma.domain.subjectrequest.exception.SubjectRequestNotFoundException;
+import br.com.ebv.prisma.domain.subjectrequest.exception.SubjectRequestValidationException;
 import br.com.ebv.prisma.domain.events.exception.SchemaIncompatibleException;
 import br.com.ebv.prisma.domain.events.exception.UnprocessableEventException;
 import br.com.ebv.prisma.domain.features.exception.AmbiguousIdentityException;
@@ -63,7 +73,11 @@ public class GlobalExceptionHandler {
             AuditNotFoundException.class,
             ExplanationNotFoundException.class,
             CounterfactualNotFoundException.class,
-            DossierNotFoundException.class
+            DossierNotFoundException.class,
+            ReviewNotFoundException.class,
+            FairnessNotFoundException.class,
+            SubjectRequestNotFoundException.class,
+            PolicySimulationNotFoundException.class
     })
     public ResponseEntity<Map<String, Object>> notFound(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.NOT_FOUND, ex.getMessage(), req, List.of());
@@ -71,7 +85,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({CyclicMergeException.class, MergeUndoNotAllowedException.class,
             ModelImmutableException.class, AmbiguousIdentityException.class, ChainBrokenException.class,
-            ReplayConflictException.class, PolicyConflictException.class, ReasonConflictException.class})
+            ReplayConflictException.class, PolicyConflictException.class, ReasonConflictException.class,
+            ReviewConflictException.class, SubjectRequestConflictException.class})
     public ResponseEntity<Map<String, Object>> conflict(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.CONFLICT, ex.getMessage(), req, List.of());
     }
@@ -83,7 +98,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({UnprocessableEventException.class, MetricsGateException.class, FeatureLeakageException.class,
             ReplayValidationException.class, PolicyValidationException.class, ReasonValidationException.class,
-            AuditValidationException.class})
+            AuditValidationException.class, ReviewValidationException.class, FairnessValidationException.class,
+            SubjectRequestValidationException.class, PolicySimulationValidationException.class})
     public ResponseEntity<Map<String, Object>> unprocessable(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage(), req, List.of());
     }

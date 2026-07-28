@@ -82,7 +82,7 @@ flowchart LR
 | F04 | Snapshot imutável `decision_id` | 🟡 ~70% V12 · WORM FS · GET/verify · PUT 405 |
 | F05 | `POST /api/v1/decisions` p95 &lt; 250 ms | 🟡 ~70% budget · testes unit |
 
-### Sprint 4 — Explicabilidade (EP-02 núcleo) — 🟡 cont. (2026-07-28)
+### Sprint 4 — Explicabilidade (EP-02 núcleo) — ✅ lab 10/10 (2026-07-28)
 | US | Entrega | Status |
 |----|---------|--------|
 | F10 | Política versionada + publish/diff | 🟡 lab V15 · API · tests |
@@ -92,14 +92,18 @@ flowchart LR
 | F01 | SHAP explain snapshot | 🟡 lab V18 · stub · 3 endpoints |
 | F02 | Contrafactuais DiCE | 🟡 lab V19 · stub · simulate |
 | F03 | Dossiê regulatório | 🟡 lab V20 · PDF stub · 201 |
+| F06 | Revisão humana | 🟡 lab V21 · queue · decide 409 |
+| F07 | Fairness metrics/alerts | 🟡 lab V22 · analyze 202 stub |
+| F08 | Subject requests LGPD | 🟡 lab V23 · due_at por right_type |
+| F09 | Policy simulate sandbox | 🟡 lab V24 · 202 · baseline |
 
-F10 política → F04 trilha → F05 motivos → F01 SHAP → F02 contrafactuais → F03 dossiê ✅ lab
+F10 política → F04 trilha → F05 motivos → F01–F03 → **F06–F09 ✅ lab**
 
 ### Sprint 5 — Contestação + Console (EP-05 tronco)
 F05 autoatendimento → F02 fluxo → F01 tracking → F08 evidências → F06 SLA → F03/F07/F04 B2B
 
 ### Sprint 6 — Hardening R1
-EP-01 F08/F10 · EP-02 F06–F09 · EP-05 F09 · Testcontainers · SLO
+EP-01 F08/F10 · EP-05 F09 · Testcontainers · SLO · Fairlearn/Spark reais
 
 ---
 

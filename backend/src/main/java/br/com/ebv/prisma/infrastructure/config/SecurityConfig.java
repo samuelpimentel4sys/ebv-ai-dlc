@@ -70,6 +70,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/explain/**").hasAnyRole("ANALISTA", "DPO", "COMPLIANCE", "PLATFORM")
                         .requestMatchers("/api/v1/counterfactual/**").hasAnyRole("ANALISTA", "DPO", "COMPLIANCE", "PLATFORM")
                         .requestMatchers("/api/v1/dossier/**").hasAnyRole("DPO", "COMPLIANCE", "PLATFORM")
+                        .requestMatchers("/api/v1/reviews/**").hasAnyRole("SUBJECT", "PLATFORM")
+                        .requestMatchers("/api/v1/fairness/**").hasAnyRole("MODEL_GOVERNANCE", "PLATFORM")
+                        .requestMatchers("/api/v1/subject-requests/**").hasAnyRole("SUBJECT", "PLATFORM")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> jwt.jwtAuthenticationConverter(keycloakRolesConverter())));
