@@ -67,6 +67,17 @@ class SelfServiceServiceTest {
     }
 
     @Test
+    @DisplayName("F05 identify → records stub 2 itens")
+    void identifyThenRecords() {
+        var id = identify.execute(new IdentifySelfServiceUseCase.Command(
+                "12345678901", null, "8901"
+        ));
+        var items = listRecords.execute(new ListSelfServiceRecordsUseCase.Query(id.sessionToken()));
+        assertThat(items).hasSize(2);
+        assertThat(items.getFirst().recordRef()).contains("8901");
+    }
+
+    @Test
     @DisplayName("F05 records sem session → 401")
     void recordsUnauthorized() {
         assertThatThrownBy(() -> listRecords.execute(new ListSelfServiceRecordsUseCase.Query("bad")))

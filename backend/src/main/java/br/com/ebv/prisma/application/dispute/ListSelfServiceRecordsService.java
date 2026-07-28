@@ -4,10 +4,14 @@ import br.com.ebv.prisma.domain.dispute.exception.DisputeUnauthorizedException;
 import br.com.ebv.prisma.domain.dispute.port.in.ListSelfServiceRecordsUseCase;
 import br.com.ebv.prisma.domain.dispute.port.out.SelfServiceSessionPort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * Sessão self-service é in-memory/Redis — sem JPA.
+ * Não usar {@code @Transactional}: abre conexão JDBC desnecessária e pode 500 se o pool/Supabase falhar
+ * (Sofia correlationId fe0b44a1 — /titular/registros).
+ */
 @Service
 public class ListSelfServiceRecordsService implements ListSelfServiceRecordsUseCase {
 
@@ -18,7 +22,6 @@ public class ListSelfServiceRecordsService implements ListSelfServiceRecordsUseC
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<RecordItem> execute(Query query) {
         var session = sessions.findValid(query.sessionToken())
                 .orElseThrow(() -> new DisputeUnauthorizedException("sessionToken inválido ou expirado"));
