@@ -69,12 +69,12 @@ flowchart LR
 | F01 | `POST /api/v1/events/credit` + Kafka ordenado |
 | F06 | Ingest Open Finance / Cad. Positivo (adapters) |
 
-### Sprint 2 — Feature Store + Score (EP-01 F02, F09, F03)
-| US | Entrega |
-|----|---------|
-| F02 | Leitura PIT atributos |
-| F09 | Model registry promote/rollback |
-| F03 | Recálculo incremental por evento |
+### Sprint 2 — Feature Store + Score (EP-01 F02, F09, F03) — 🟡 ~70% (2026-07-28)
+| US | Entrega | Status |
+|----|---------|--------|
+| F02 | Leitura PIT atributos | 🟡 ~75% API+Flyway V9+tests+smoke |
+| F09 | Model registry promote/rollback | 🟡 ~70% API+Flyway V10+tests+smoke |
+| F03 | Recálculo incremental por evento | 🟡 ~65% stub+coalescence+V11+smoke |
 
 ### Sprint 3 — Decisão + WORM (EP-01 F04, F05)
 | US | Entrega |

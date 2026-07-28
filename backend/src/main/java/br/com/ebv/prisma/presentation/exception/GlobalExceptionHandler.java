@@ -2,10 +2,17 @@ package br.com.ebv.prisma.presentation.exception;
 
 import br.com.ebv.prisma.domain.events.exception.SchemaIncompatibleException;
 import br.com.ebv.prisma.domain.events.exception.UnprocessableEventException;
+import br.com.ebv.prisma.domain.features.exception.AmbiguousIdentityException;
+import br.com.ebv.prisma.domain.features.exception.FeatureLeakageException;
+import br.com.ebv.prisma.domain.features.exception.FeatureNotFoundException;
 import br.com.ebv.prisma.domain.identity.exception.CyclicMergeException;
 import br.com.ebv.prisma.domain.identity.exception.GoldenRecordNotFoundException;
 import br.com.ebv.prisma.domain.identity.exception.MergeUndoNotAllowedException;
 import br.com.ebv.prisma.domain.ingest.exception.ConsentDeniedException;
+import br.com.ebv.prisma.domain.scoring.exception.MetricsGateException;
+import br.com.ebv.prisma.domain.scoring.exception.ModelImmutableException;
+import br.com.ebv.prisma.domain.scoring.exception.ModelNotFoundException;
+import br.com.ebv.prisma.domain.scoring.exception.ModelUnavailableException;
 import br.com.ebv.prisma.infrastructure.config.CorrelationIdFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -22,12 +29,13 @@ import java.util.UUID;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(GoldenRecordNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> notFound(GoldenRecordNotFoundException ex, HttpServletRequest req) {
+    @ExceptionHandler({GoldenRecordNotFoundException.class, ModelNotFoundException.class, FeatureNotFoundException.class})
+    public ResponseEntity<Map<String, Object>> notFound(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.NOT_FOUND, ex.getMessage(), req, List.of());
     }
 
-    @ExceptionHandler({CyclicMergeException.class, MergeUndoNotAllowedException.class})
+    @ExceptionHandler({CyclicMergeException.class, MergeUndoNotAllowedException.class,
+            ModelImmutableException.class, AmbiguousIdentityException.class})
     public ResponseEntity<Map<String, Object>> conflict(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.CONFLICT, ex.getMessage(), req, List.of());
     }
@@ -37,14 +45,19 @@ public class GlobalExceptionHandler {
         return error(HttpStatus.CONFLICT, ex.getMessage(), req, List.of());
     }
 
-    @ExceptionHandler(UnprocessableEventException.class)
-    public ResponseEntity<Map<String, Object>> unprocessable(UnprocessableEventException ex, HttpServletRequest req) {
+    @ExceptionHandler({UnprocessableEventException.class, MetricsGateException.class, FeatureLeakageException.class})
+    public ResponseEntity<Map<String, Object>> unprocessable(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage(), req, List.of());
     }
 
     @ExceptionHandler(ConsentDeniedException.class)
     public ResponseEntity<Map<String, Object>> forbidden(ConsentDeniedException ex, HttpServletRequest req) {
         return error(HttpStatus.FORBIDDEN, ex.getMessage(), req, List.of());
+    }
+
+    @ExceptionHandler(ModelUnavailableException.class)
+    public ResponseEntity<Map<String, Object>> serviceUnavailable(ModelUnavailableException ex, HttpServletRequest req) {
+        return error(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage(), req, List.of());
     }
 
     @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})

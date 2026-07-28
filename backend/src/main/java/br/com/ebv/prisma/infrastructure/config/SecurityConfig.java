@@ -54,6 +54,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/events/**").hasAnyRole("EVENT_PRODUCER", "PLATFORM")
                         .requestMatchers("/api/v1/streams/**").hasAnyRole("SRE", "PLATFORM")
                         .requestMatchers("/api/v1/ingest/**").hasAnyRole("DATA_ENG", "PLATFORM", "EVENT_PRODUCER")
+                        .requestMatchers("/api/v1/features/**").hasAnyRole("ML", "ANALISTA_RISCO", "PLATFORM")
+                        .requestMatchers("/api/v1/models/**").hasAnyRole("ML_OPS", "RISCO", "PLATFORM")
+                        .requestMatchers("/api/v1/score/**").hasAnyRole("ANALISTA", "PLATFORM")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> jwt.jwtAuthenticationConverter(keycloakRolesConverter())));
