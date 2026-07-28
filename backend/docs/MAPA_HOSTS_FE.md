@@ -11,6 +11,13 @@
 | **Fairlearn** | `192.168.31.47` | **8092** | Ops | Fairness lab |
 | **Redis** | `192.168.31.47` | **6380** | Ops | Cache / lockout |
 | **Kafka** | `192.168.31.47` | **9094** | Ops | Eventos |
+| **Schema Registry** | `192.168.31.47` | **8081** | Ops | Avro/JSON schema |
+| **MinIO S3** | `192.168.31.47` | **9000** | Ops | WORM lab (`prisma-worm`) |
+| **MinIO Console** | `192.168.31.47` | **9001** | Ops | UI bucket |
+| **ClamAV** | `192.168.31.47` | **3310** | Ops | Antivirus (adapter BE pendente) |
+| **OTel Collector** | `192.168.31.47` | **4317**/4318 | Ops | OTLP gRPC/HTTP |
+| **Jaeger UI** | `192.168.31.47` | **16686** | Ops | Traces (vazio até instrumentar BE) |
+| **Neo4j Browser** | `192.168.31.47` | **7474** | Ops | UI grafo |
 
 ## EP-03 — regra de ouro
 

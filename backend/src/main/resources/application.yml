@@ -55,6 +55,9 @@ prisma:
       prefix: ${PRISMA_WORM_S3_PREFIX:decisions/}
       region: ${PRISMA_WORM_S3_REGION:us-east-1}
       retention-years: ${PRISMA_WORM_S3_RETENTION_YEARS:5}
+      # MinIO lab: http://192.168.31.47:9000 — vazio = AWS S3 real
+      endpoint: ${PRISMA_WORM_S3_ENDPOINT:}
+      path-style: ${PRISMA_WORM_S3_PATH_STYLE:true}
   audit-worm:
     backend: ${PRISMA_AUDIT_WORM_BACKEND:fs}
     base-path: ${PRISMA_AUDIT_WORM_BASE_PATH:./data/audit-worm}
