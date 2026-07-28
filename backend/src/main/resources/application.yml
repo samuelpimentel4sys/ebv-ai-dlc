@@ -80,6 +80,10 @@ prisma:
   fairlearn:
     enabled: ${FAIRLEARN_ENABLED:false}
     url: ${FAIRLEARN_URL:http://localhost:8092}
+  liveness:
+    mode: ${LIVENESS_MODE:stub}
+    mock-url: ${LIVENESS_MOCK_URL:http://localhost:8093}
+    term-version: ${BIOMETRIC_TERM_VERSION:v1.0}
 
 logging:
   level:

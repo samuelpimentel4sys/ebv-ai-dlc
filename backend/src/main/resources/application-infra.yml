@@ -48,6 +48,10 @@ management:
       show-details: when_authorized
 
 prisma:
+  liveness:
+    mode: ${LIVENESS_MODE:stub}
+    mock-url: ${LIVENESS_MOCK_URL:http://localhost:8093}
+    term-version: ${BIOMETRIC_TERM_VERSION:v1.0}
   kafka:
     topic-credit-events: ${KAFKA_TOPIC_CREDIT:prisma.credit.events}
     topic-credit-dlq: ${KAFKA_TOPIC_CREDIT_DLQ:prisma.credit.events.dlq}

@@ -115,6 +115,17 @@ F10 política → F04 trilha → F05 motivos → F01–F03 → **F06–F09 ✅ l
 
 F05 → F02 → F01 → F08 → F06 → F03 → F07 → F04 → F09 ✅ lab
 
+### Sprint 5b — Biometria / Liveness (EP-05 F01 BIO) — 🟡 lab (2026-07-28)
+
+| US | Entrega | Status |
+|----|---------|--------|
+| `EP05-F01` Liveness | `POST /api/v1/auth/liveness/session` + consent LGPD | 🟡 lab V51 · stub/http mock |
+| Rekognition | Port + `stub` \| `http` (WireMock :8093) \| `aws` (futuro) | Face Liveness **não** no LocalStack |
+
+Colisão de ID: F01 tracking (já lab) **e** F01 Liveness — ownership Noah; tracking permanece; Liveness = BIO.
+
+Docs: [`PROVISIONAMENTO_LIVENESS_REKOGNITION.md`](./PROVISIONAMENTO_LIVENESS_REKOGNITION.md) · [`DEV_RECORD_EP05_LIVENESS.md`](./DEV_RECORD_EP05_LIVENESS.md)
+
 ### Sprint 6b — EP-06 Score Inclusão + Coach B2C — ✅ lab 9/9 (2026-07-28)
 
 | US | Entrega | Status |

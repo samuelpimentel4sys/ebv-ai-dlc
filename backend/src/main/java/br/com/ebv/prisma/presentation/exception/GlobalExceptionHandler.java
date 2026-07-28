@@ -43,6 +43,12 @@ import br.com.ebv.prisma.domain.mission.exception.MissionValidationException;
 import br.com.ebv.prisma.domain.marketplace.exception.MarketplaceNotFoundException;
 import br.com.ebv.prisma.domain.marketplace.exception.MarketplaceValidationException;
 import br.com.ebv.prisma.domain.portfolio.exception.PortfolioNotFoundException;
+import br.com.ebv.prisma.domain.liveness.exception.LivenessConflictException;
+import br.com.ebv.prisma.domain.liveness.exception.LivenessForbiddenException;
+import br.com.ebv.prisma.domain.liveness.exception.LivenessLockoutException;
+import br.com.ebv.prisma.domain.liveness.exception.LivenessPreconditionException;
+import br.com.ebv.prisma.domain.liveness.exception.LivenessProviderException;
+import br.com.ebv.prisma.domain.liveness.exception.LivenessValidationException;
 import br.com.ebv.prisma.domain.pj.exception.PjConflictException;
 import br.com.ebv.prisma.domain.pj.exception.PjForbiddenException;
 import br.com.ebv.prisma.domain.pj.exception.PjNotFoundException;
@@ -134,9 +140,14 @@ public class GlobalExceptionHandler {
             ReplayConflictException.class, PolicyConflictException.class, ReasonConflictException.class,
             ReviewConflictException.class, SubjectRequestConflictException.class,
             DisputeConflictException.class, SlaConflictException.class, OnboardingConflictException.class,
-            CredentialConflictException.class, PjConflictException.class})
+            CredentialConflictException.class, PjConflictException.class, LivenessConflictException.class})
     public ResponseEntity<Map<String, Object>> conflict(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.CONFLICT, ex.getMessage(), req, List.of());
+    }
+
+    @ExceptionHandler(LivenessPreconditionException.class)
+    public ResponseEntity<Map<String, Object>> precondition(LivenessPreconditionException ex, HttpServletRequest req) {
+        return error(HttpStatus.PRECONDITION_FAILED, ex.getMessage(), req, List.of());
     }
 
     @ExceptionHandler(SchemaIncompatibleException.class)
@@ -154,13 +165,13 @@ public class GlobalExceptionHandler {
             AltDataValidationException.class, ThinfileValidationException.class,
             CoachValidationException.class, MissionValidationException.class,
             MarketplaceValidationException.class, PortfolioValidationException.class,
-            PjValidationException.class})
+            PjValidationException.class, LivenessValidationException.class})
     public ResponseEntity<Map<String, Object>> unprocessable(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage(), req, List.of());
     }
 
     @ExceptionHandler({ConsentDeniedException.class, TraceForbiddenException.class, ReplayForbiddenException.class,
-            DisputeForbiddenException.class, PjForbiddenException.class})
+            DisputeForbiddenException.class, PjForbiddenException.class, LivenessForbiddenException.class})
     public ResponseEntity<Map<String, Object>> forbidden(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.FORBIDDEN, ex.getMessage(), req, List.of());
     }
@@ -170,13 +181,13 @@ public class GlobalExceptionHandler {
         return error(HttpStatus.UNAUTHORIZED, ex.getMessage(), req, List.of());
     }
 
-    @ExceptionHandler(DisputeLockoutException.class)
-    public ResponseEntity<Map<String, Object>> lockout(DisputeLockoutException ex, HttpServletRequest req) {
+    @ExceptionHandler({DisputeLockoutException.class, LivenessLockoutException.class})
+    public ResponseEntity<Map<String, Object>> lockout(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.TOO_MANY_REQUESTS, ex.getMessage(), req, List.of());
     }
 
     @ExceptionHandler({ModelUnavailableException.class, WormWriteException.class, SnapshotUnavailableException.class,
-            AuditWormWriteException.class})
+            AuditWormWriteException.class, LivenessProviderException.class})
     public ResponseEntity<Map<String, Object>> serviceUnavailable(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage(), req, List.of());
     }

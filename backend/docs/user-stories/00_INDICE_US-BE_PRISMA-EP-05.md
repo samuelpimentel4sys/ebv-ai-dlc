@@ -60,10 +60,15 @@
 3. **F03** (onboarding) + **F07** (credenciais) + **F04** (console) — tronco B2B  
 4. **F09** (analytics ROI) — após telemetria dos canais
 
-## Nota
+## Nota — duas F01 no EP-05 (ownership Noah)
 
-Já existia no Downstream a US Nexus `EP05-F01-US-BE-01` (Liveness/Rekognition) — **escopo distinto** (portal LGPD/biometria).  
-Este pacote cobre o programa **PRISMA-EP-05** (Explorer Cursor) pedido: Contestação Transparente & Console B2B.
+| US | Título | Status lab |
+|----|--------|------------|
+| `PRISMA-EP-05-F01-US-BE-01` | Tracking contestação | ✅ Sprint 5 |
+| `EP05-F01-US-BE-01` (BIO) | Liveness Rekognition | 🟡 Sprint 5b · V51 |
+
+A US Liveness vive no UpStream Escritor Back (`06_US-BE_EP05-F01-US-BE-01_Orquestracao_Sessao_Liveness_Rekognition.md`).  
+**Não é produto externo** — é backlog Noah. Artefatos com rótulo “Nexus” no path são do mesmo programa Prisma.
 
 ---
 

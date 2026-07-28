@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPathPattern": "/.*"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/x-amz-json-1.1"
+    },
+    "jsonBody": {
+      "SessionId": "{{randomValue type='UUID'}}"
+    },
+    "transformers": ["response-template"]
+  }
+}

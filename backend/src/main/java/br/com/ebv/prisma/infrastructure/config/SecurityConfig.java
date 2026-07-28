@@ -49,6 +49,8 @@ public class SecurityConfig {
                                 "/v3/api-docs/**"
                         ).permitAll()
                         .requestMatchers("/api/v1/self-service/**").permitAll()
+                        .requestMatchers("/api/v1/auth/biometric-consent", "/api/v1/auth/liveness/**")
+                            .hasAnyRole("CITIZEN", "USER", "ONBOARDING", "TITULAR_B2C", "PLATFORM")
                         .requestMatchers("/api/v1/onboarding/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/disputes/*/tracking", "/api/v1/disputes/*/timeline").permitAll()
                         .requestMatchers("/api/v1/sla/**").hasAnyRole("SUPERVISOR_CONTESTACAO", "OPS_ADMIN", "PLATFORM")
