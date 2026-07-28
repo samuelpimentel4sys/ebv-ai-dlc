@@ -148,6 +148,9 @@ export const JOURNEYS: Journey[] = [
     goal: 'Abrir a contestação, acompanhar o prazo e anexar evidência sem ligar para o SAC.',
     payoff: 'Maria acompanha o próprio caso e o atendimento humano deixa de ser o único caminho.',
     steps: [
+      '/titular/biometria',
+      '/titular/biometria/mfa',
+      '/titular/biometria/resultado',
       '/titular/registros',
       '/titular/contestacoes/CT-2026-448120',
       '/disputas/CT-2026-448120/evidencias',

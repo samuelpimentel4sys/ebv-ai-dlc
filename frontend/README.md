@@ -1,6 +1,6 @@
 # EBV Prisma — Frontend
 
-Aplicação de demonstração do programa **Prisma (Equifax | BoaVista)** com **56 telas de produto** implementadas a partir das User Stories de frontend (US-FE) dos seis épicos.
+Aplicação de demonstração do programa **Prisma (Equifax | BoaVista)** com **59 telas de produto** implementadas a partir das User Stories de frontend (US-FE) dos seis épicos.
 
 > **Downstream:** workspace em `AI-DLC/Prisma/frontend` · integração com `Prisma/backend` (Noah).  
 > Plano: [`docs/PLANO_TRABALHO_FRONTEND.md`](./docs/PLANO_TRABALHO_FRONTEND.md) · Mapa FE↔BE: [`docs/MAPA_FE_VS_BE.md`](./docs/MAPA_FE_VS_BE.md)  
@@ -58,7 +58,7 @@ Cada tela registra-se em `src/epics/<epico>/nav.tsx` com rota da US-FE, `usId`, 
 
 ## Trilhas por persona
 
-`src/app/journeys.ts` organiza as 56 telas em **15 trilhas**, cada uma com persona, objetivo e sequência de passos. Uma tela pertence a exatamente uma trilha — garantido por teste.
+`src/app/journeys.ts` organiza as 59 telas em **15 trilhas**, cada uma com persona, objetivo e sequência de passos. Uma tela pertence a exatamente uma trilha — garantido por teste.
 
 A navegação toda deriva dessas trilhas:
 
@@ -78,7 +78,7 @@ A navegação toda deriva dessas trilhas:
 
 ## Acessibilidade e performance
 
-- Auditoria axe-core na home, nas 6 landings de épico, nas 56 telas de produto e no shell.
+- Auditoria axe-core na home, nas 6 landings de épico, nas 59 telas de produto e no shell.
 - Alvo de toque 48 px, `aria-live` em toasts, foco visível do DS, skip-link.
 - Busca: `Ctrl+K` ou `/` (combobox + listbox).
 - Tour de primeira visita na home (trilhas, busca, tema), dispensa registrada em `localStorage`.

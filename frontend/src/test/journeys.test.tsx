@@ -46,7 +46,7 @@ describe('trilhas de jornada', () => {
   it('reconhece a trilha por padrão de rota, e não só pelo href de exemplo', () => {
     const outroProtocolo = journeyPosition('/titular/contestacoes/CT-2026-999999');
     expect(outroProtocolo?.journey.id).toBe('ep05-titular');
-    expect(outroProtocolo?.index).toBe(1);
+    expect(outroProtocolo?.index).toBe(4);
   });
 
   it('encadeia passo anterior e próximo dentro da trilha', () => {

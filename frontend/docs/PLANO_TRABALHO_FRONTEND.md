@@ -6,8 +6,8 @@
 | **Produto** | **Prisma Equifax** (EBV · Equifax / BoaVista) |
 | **Repo FE** | `Prisma/frontend` |
 | **Repo BE** | `Prisma/backend` (Noah) |
-| **Atualizado em** | 2026-07-28 18:40 |
-| **Fase atual** | Noah F04 HITL ✅ · próximo Sofia plugar HITL FE · GenAI Emilly · P1/P6 backlog |
+| **Atualizado em** | 2026-07-28 19:45 |
+| **Fase atual** | BIO Liveness ✅ lab · HITL ✅ · GenAI Emilly · Amplify aws backlog · P1/P6 |
 
 ---
 
@@ -15,7 +15,7 @@
 
 | Camada | Estado | Comentário |
 |--------|--------|------------|
-| Showcase 56 telas + Equifax DS | ✅ | Base UI boa |
+| Showcase 59 telas + Equifax DS | ✅ | + SCR-BIO (3) |
 | HTTP + `VITE_DATA_MODE=live` | ✅ Sprint 0 | `httpClient` · proxy · badge live/mock |
 | EP-01 plug APIs | ✅ Sprint 1 | 10/10 telas live (lab) |
 | **IA / navegação de produto** | ✅ P0 | Domínios produto · demo/dev gated · `index.html` Prisma Equifax |
@@ -104,6 +104,7 @@ Noah lab 9/9 (stubs Neptune/Trino) · handoff 15:40 · **9/9 telas live**
 | Parte | Estado |
 |-------|--------|
 | **F04 HITL** (Noah `:8080`) | ✅ BE lab · ✅ FE plug (`pjHitl.ts`) |
+| **F01 BIO Liveness** (Noah `:8080`) | ✅ BE V51 · ✅ FE (`liveness.ts` + 3 telas) · Amplify fora |
 | GenAI F01–F03/F05–F09 (Emilly `:8090`) | Aguarda contrato FE↔Python |
 
 ### P6 — Login OIDC produto (backlog · desenho Noah 2026-07-28)
@@ -193,12 +194,12 @@ Sofia (browser)
 
 Inventário completo: [`GAP_US_FE_FORA_DO_ESCOPO.md`](./GAP_US_FE_FORA_DO_ESCOPO.md)
 
-1. **Agora:** plug EP-03 **F04 HITL** live (Noah ✅)
+1. **Feito:** F04 HITL + BIO Liveness lab (Noah V51 · `liveness.ts`)
 2. **Em paralelo:** P1 hardening contrato Score & Plataforma
 3. **Quando OIDC on em demo:** colar JWT em `VITE_API_BEARER`
 4. **Quando produto:** autorizar sprint **P6** (PKCE + login UI)
 5. **EP-03 GenAI:** Emilly `:8090` — Sofia pluga quando contrato FE liberar
-6. **Biometria / OCR Nexus EP-05:** fora Downstream — reabrir se necessário
+6. **Amplify Face Liveness:** só com `LIVENESS_MODE=aws` · GetResults / IAL3 backlog
 7. **Docs:** gerar US-FE md EP-05 Downstream
 
 _Sofia · Prisma Equifax_

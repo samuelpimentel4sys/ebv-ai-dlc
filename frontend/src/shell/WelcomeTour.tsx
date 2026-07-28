@@ -16,7 +16,7 @@ const steps = [
   {
     icon: RouteIcon,
     title: 'Trilhas por persona',
-    body: `As 56 telas estão organizadas em ${JOURNEYS.length} trilhas conduzidas por pessoas com nome e cargo. Cada tela indica o passo anterior, o próximo e o que a trilha entrega no fim.`,
+    body: `As 59 telas estão organizadas em ${JOURNEYS.length} trilhas conduzidas por pessoas com nome e cargo. Cada tela indica o passo anterior, o próximo e o que a trilha entrega no fim.`,
   },
   {
     icon: Beaker,

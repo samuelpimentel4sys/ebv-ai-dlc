@@ -32,7 +32,7 @@ describe('telas do showcase', () => {
       'EP-02': 10,
       'EP-03': 9,
       'EP-04': 9,
-      'EP-05': 9,
+      'EP-05': 12,
       'EP-06': 9,
     };
     for (const epic of EPICS) {
@@ -43,7 +43,7 @@ describe('telas do showcase', () => {
 
   it('associa uma US-FE a cada tela de produto', () => {
     const productScreens = NAV_ITEMS.filter((item) => Boolean(item.usId));
-    expect(productScreens).toHaveLength(56);
+    expect(productScreens).toHaveLength(59);
     for (const item of productScreens) {
       expect(item.usId, `${item.label} sem US-FE`).toMatch(/^PRISMA-EP-0\d-F\d\d-US-FE-\d\d$/);
     }

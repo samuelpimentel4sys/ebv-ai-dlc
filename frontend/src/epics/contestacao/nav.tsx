@@ -9,10 +9,46 @@ const SlaRiskPage = lazyScreen(() => import('@/epics/contestacao/SlaRiskPage'), 
 const CredentialsPage = lazyScreen(() => import('@/epics/contestacao/CredentialsPage'), 'CredentialsPage');
 const AttachmentsPage = lazyScreen(() => import('@/epics/contestacao/AttachmentsPage'), 'AttachmentsPage');
 const DeflectionPage = lazyScreen(() => import('@/epics/contestacao/DeflectionPage'), 'DeflectionPage');
+const LivenessCapturePage = lazyScreen(() => import('@/epics/contestacao/LivenessCapturePage'), 'LivenessCapturePage');
+const LivenessMfaPage = lazyScreen(() => import('@/epics/contestacao/LivenessMfaPage'), 'LivenessMfaPage');
+const LivenessResultPage = lazyScreen(() => import('@/epics/contestacao/LivenessResultPage'), 'LivenessResultPage');
 
 const GROUP = 'EP-05 · Contestação & Console B2B';
 
 export const contestacaoNav: NavItem[] = [
+  {
+    path: '/titular/biometria',
+    href: '/titular/biometria',
+    label: 'Captura biométrica',
+    epic: 'EP-05',
+    usId: 'PRISMA-EP-05-F10-US-FE-01',
+    group: GROUP,
+    description: 'Consentimento LGPD, sessão Liveness e guia facial (lab stub/WireMock, sem Amplify).',
+    keywords: ['biometria', 'liveness', 'rekognition', 'consentimento', 'camera'],
+    element: <LivenessCapturePage />,
+  },
+  {
+    path: '/titular/biometria/mfa',
+    href: '/titular/biometria/mfa',
+    label: 'MFA step-up',
+    epic: 'EP-05',
+    usId: 'PRISMA-EP-05-F11-US-FE-01',
+    group: GROUP,
+    description: 'Segundo fator após a sessão Liveness antes de liberar canal sensível.',
+    keywords: ['mfa', 'otp', 'step-up', 'biometria', 'ial'],
+    element: <LivenessMfaPage />,
+  },
+  {
+    path: '/titular/biometria/resultado',
+    href: '/titular/biometria/resultado',
+    label: 'Resultado da biometria',
+    epic: 'EP-05',
+    usId: 'PRISMA-EP-05-F12-US-FE-01',
+    group: GROUP,
+    description: 'Feedback de vivacidade, lockout e próximo passo do titular.',
+    keywords: ['biometria', 'vivacidade', 'score', 'lockout', 'resultado'],
+    element: <LivenessResultPage />,
+  },
   {
     path: '/titular/contestacoes/:protocolo',
     href: '/titular/contestacoes/CT-2026-448120',

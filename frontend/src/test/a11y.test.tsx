@@ -9,7 +9,7 @@ import { EPICS } from '@/app/epics';
 import { EpicLandingPage } from '@/app/EpicLandingPage';
 import { AppShell } from '@/shell/AppShell';
 
-/** Home + 56 telas de produto. */
+/** Home + 59 telas de produto. */
 const SAMPLE_HREFS = NAV_ITEMS.map((item) => item.href);
 
 /**
