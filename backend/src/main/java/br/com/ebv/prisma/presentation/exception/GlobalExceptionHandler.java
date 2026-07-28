@@ -17,12 +17,21 @@ import br.com.ebv.prisma.domain.policysim.exception.PolicySimulationValidationEx
 import br.com.ebv.prisma.domain.review.exception.ReviewConflictException;
 import br.com.ebv.prisma.domain.review.exception.ReviewNotFoundException;
 import br.com.ebv.prisma.domain.review.exception.ReviewValidationException;
+import br.com.ebv.prisma.domain.credential.exception.CredentialConflictException;
+import br.com.ebv.prisma.domain.credential.exception.CredentialNotFoundException;
+import br.com.ebv.prisma.domain.credential.exception.CredentialValidationException;
 import br.com.ebv.prisma.domain.dispute.exception.DisputeConflictException;
 import br.com.ebv.prisma.domain.dispute.exception.DisputeForbiddenException;
 import br.com.ebv.prisma.domain.dispute.exception.DisputeLockoutException;
 import br.com.ebv.prisma.domain.dispute.exception.DisputeNotFoundException;
 import br.com.ebv.prisma.domain.dispute.exception.DisputeUnauthorizedException;
 import br.com.ebv.prisma.domain.dispute.exception.DisputeValidationException;
+import br.com.ebv.prisma.domain.onboarding.exception.OnboardingConflictException;
+import br.com.ebv.prisma.domain.onboarding.exception.OnboardingNotFoundException;
+import br.com.ebv.prisma.domain.onboarding.exception.OnboardingValidationException;
+import br.com.ebv.prisma.domain.sla.exception.SlaConflictException;
+import br.com.ebv.prisma.domain.sla.exception.SlaNotFoundException;
+import br.com.ebv.prisma.domain.sla.exception.SlaValidationException;
 import br.com.ebv.prisma.domain.subjectrequest.exception.SubjectRequestConflictException;
 import br.com.ebv.prisma.domain.subjectrequest.exception.SubjectRequestNotFoundException;
 import br.com.ebv.prisma.domain.subjectrequest.exception.SubjectRequestValidationException;
@@ -84,7 +93,10 @@ public class GlobalExceptionHandler {
             FairnessNotFoundException.class,
             SubjectRequestNotFoundException.class,
             PolicySimulationNotFoundException.class,
-            DisputeNotFoundException.class
+            DisputeNotFoundException.class,
+            SlaNotFoundException.class,
+            OnboardingNotFoundException.class,
+            CredentialNotFoundException.class
     })
     public ResponseEntity<Map<String, Object>> notFound(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.NOT_FOUND, ex.getMessage(), req, List.of());
@@ -94,7 +106,8 @@ public class GlobalExceptionHandler {
             ModelImmutableException.class, AmbiguousIdentityException.class, ChainBrokenException.class,
             ReplayConflictException.class, PolicyConflictException.class, ReasonConflictException.class,
             ReviewConflictException.class, SubjectRequestConflictException.class,
-            DisputeConflictException.class})
+            DisputeConflictException.class, SlaConflictException.class, OnboardingConflictException.class,
+            CredentialConflictException.class})
     public ResponseEntity<Map<String, Object>> conflict(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.CONFLICT, ex.getMessage(), req, List.of());
     }
@@ -108,7 +121,8 @@ public class GlobalExceptionHandler {
             ReplayValidationException.class, PolicyValidationException.class, ReasonValidationException.class,
             AuditValidationException.class, ReviewValidationException.class, FairnessValidationException.class,
             SubjectRequestValidationException.class, PolicySimulationValidationException.class,
-            DisputeValidationException.class})
+            DisputeValidationException.class, SlaValidationException.class,
+            OnboardingValidationException.class, CredentialValidationException.class})
     public ResponseEntity<Map<String, Object>> unprocessable(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage(), req, List.of());
     }

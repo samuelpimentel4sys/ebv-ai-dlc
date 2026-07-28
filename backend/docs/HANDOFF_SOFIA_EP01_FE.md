@@ -84,3 +84,19 @@
 OpenAPI: `/swagger-ui.html` Â· `/v3/api-docs`
 
 _RelatÃ³rio: `backend/docs/RELATORIO_PROGRESSO_BACKEND.md`_
+
+---
+
+## 5. EP-05 — Contestação / Console (9/9 lab) — **NOVO** (6cb93f4+)
+
+| Área | Status | Endpoints |
+|------|--------|-----------|
+| Self-service F05 | ?? | /api/v1/self-service/identify · /records · /disputes |
+| Disputes F02/F01/F08 | ?? | /disputes · /queue · /resolve · /tracking · /timeline · /attachments · /evidence-pack |
+| SLA F06 | ?? | /sla/status · /sla/policies · /sla/escalations |
+| Onboarding F03 | ?? | /onboarding/start · /{id}/verify · /{id}/complete |
+| Credentials F07 | ?? | POST/DELETE /credentials · /rotate |
+| Console F04 | ?? | /console/usage · /invoices · /contracts |
+| Analytics F09 | ?? | /analytics/deflection · /sac-cost · /baseline |
+
+EP-03/EP-04/EP-06 ainda **fora** (próximo plano Noah = EP-06 ou EP-04).

@@ -55,7 +55,12 @@ public class SecurityConfig {
                                 "/v3/api-docs/**"
                         ).permitAll()
                         .requestMatchers("/api/v1/self-service/**").permitAll()
+                        .requestMatchers("/api/v1/onboarding/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/disputes/*/tracking", "/api/v1/disputes/*/timeline").permitAll()
+                        .requestMatchers("/api/v1/sla/**").hasAnyRole("SUPERVISOR_CONTESTACAO", "OPS_ADMIN", "PLATFORM")
+                        .requestMatchers("/api/v1/credentials/**").hasAnyRole("B2B_ADMIN", "PLATFORM")
+                        .requestMatchers("/api/v1/console/**").hasAnyRole("B2B_ADMIN", "B2B_BILLING", "PLATFORM")
+                        .requestMatchers("/api/v1/analytics/**").hasAnyRole("OPS_ANALYTICS", "GESTOR_SAC", "PLATFORM")
                         .requestMatchers("/api/v1/identity/**").hasAnyRole("DATA_STEWARD", "PLATFORM")
                         .requestMatchers("/api/v1/events/**").hasAnyRole("EVENT_PRODUCER", "PLATFORM")
                         .requestMatchers("/api/v1/streams/**").hasAnyRole("SRE", "PLATFORM")
