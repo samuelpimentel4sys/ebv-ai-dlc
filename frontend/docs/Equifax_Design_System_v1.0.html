@@ -1,0 +1,1289 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="light" xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Design System Equifax v1.0 — inventário visual inferido do site público Equifax.">
+  <title>Equifax Design System v1.0</title>
+  <style>
+    @font-face {
+      font-family: "Open Sans";
+      src: url("https://assets.equifax.com/global/fonts/OpenSans-Regular.woff") format("woff");
+      font-display: swap;
+      font-weight: 400;
+    }
+    @font-face {
+      font-family: "Open Sans";
+      src: url("https://assets.equifax.com/global/fonts/OpenSans-Semibold.woff") format("woff");
+      font-display: swap;
+      font-weight: 600;
+    }
+    @font-face {
+      font-family: "Open Sans";
+      src: url("https://assets.equifax.com/global/fonts/OpenSans-Bold.woff") format("woff");
+      font-display: swap;
+      font-weight: 700;
+    }
+
+    :root {
+      /* Tier 1 — primitivos observados no CSS público Equifax */
+      --eqx-white: 255 255 255;
+      --eqx-black: 0 0 0;
+      --eqx-gray-50: 248 249 250;
+      --eqx-gray-100: 241 244 245;
+      --eqx-gray-200: 238 238 238;
+      --eqx-gray-300: 217 223 227;
+      --eqx-gray-400: 178 178 178;
+      --eqx-gray-500: 163 170 173;
+      --eqx-gray-600: 95 106 114;
+      --eqx-gray-700: 91 103 113;
+      --eqx-gray-800: 51 62 72;
+      --eqx-gray-900: 33 37 41;
+      --eqx-blue-100: 216 241 250;
+      --eqx-blue-300: 0 172 230;
+      --eqx-blue-500: 0 147 201;
+      --eqx-blue-600: 0 118 163;
+      --eqx-blue-700: 0 114 152;
+      --eqx-blue-800: 0 86 116;
+      --eqx-red-100: 246 217 207;
+      --eqx-red-500: 231 0 51;
+      --eqx-red-700: 158 27 50;
+      --eqx-red-800: 152 30 50;
+      --eqx-orange-100: 255 232 220;
+      --eqx-orange-500: 255 102 27;
+      --eqx-orange-700: 183 59 0;
+      --eqx-green-100: 225 244 219;
+      --eqx-green-600: 63 174 41;
+      --eqx-green-700: 39 140 16;
+      --eqx-yellow-100: 255 246 204;
+      --eqx-yellow-600: 237 183 0;
+      --eqx-yellow-700: 137 102 0;
+      --eqx-plum-600: 101 47 108;
+
+      --font-family-sans: "Open Sans", Arial, Helvetica, sans-serif;
+      --font-family-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      --font-size-xs: .75rem;
+      --font-size-sm: .875rem;
+      --font-size-base: 1rem;
+      --font-size-lg: 1.125rem;
+      --font-size-xl: 1.25rem;
+      --font-size-2xl: 1.5rem;
+      --font-size-3xl: 2rem;
+      --font-size-4xl: clamp(2.25rem, 5vw, 4rem);
+      --line-height-tight: 1.15;
+      --line-height-snug: 1.35;
+      --line-height-normal: 1.6;
+      --font-weight-regular: 400;
+      --font-weight-semibold: 600;
+      --font-weight-bold: 700;
+
+      --space-0: 0;
+      --space-1: .25rem;
+      --space-2: .5rem;
+      --space-3: .75rem;
+      --space-4: 1rem;
+      --space-5: 1.5rem;
+      --space-6: 2rem;
+      --space-7: 3rem;
+      --space-8: 4.5rem;
+      --space-9: 6rem;
+      --size-target: 3rem;
+      --size-icon-sm: 1rem;
+      --size-icon-md: 1.25rem;
+      --size-icon-lg: 1.5rem;
+      --size-content: 75rem;
+      --size-sidebar: 17rem;
+
+      --border-width: .0625rem;
+      --border-width-strong: .125rem;
+      --radius-sm: .1875rem;
+      --radius-md: .25rem;
+      --radius-lg: .375rem;
+      --radius-pill: 999rem;
+      --shadow-1: 0 .0625rem .1875rem rgb(var(--eqx-black) / .12);
+      --shadow-2: 0 .25rem .875rem rgb(var(--eqx-black) / .12);
+      --shadow-3: 0 .75rem 2.5rem rgb(var(--eqx-black) / .18);
+      --duration-instant: 0ms;
+      --duration-fast: 150ms;
+      --duration-base: 250ms;
+      --duration-slow: 400ms;
+      --ease-standard: cubic-bezier(.4, 0, .2, 1);
+      --ease-decelerate: cubic-bezier(0, 0, .2, 1);
+      --z-sticky: 100;
+      --z-overlay: 200;
+      --z-modal: 300;
+
+      /* Tier 2 — semânticos */
+      --color-brand: var(--eqx-red-700);
+      --color-brand-strong: var(--eqx-red-800);
+      --color-action: var(--eqx-blue-700);
+      --color-action-hover: var(--eqx-blue-800);
+      --color-accent: var(--eqx-orange-500);
+      --color-bg: var(--eqx-white);
+      --color-surface: var(--eqx-white);
+      --color-surface-subtle: var(--eqx-gray-50);
+      --color-surface-strong: var(--eqx-gray-800);
+      --color-text: var(--eqx-gray-800);
+      --color-text-muted: var(--eqx-gray-600);
+      --color-text-inverse: var(--eqx-white);
+      --color-border: var(--eqx-gray-300);
+      --color-border-strong: var(--eqx-gray-600);
+      --color-focus: var(--eqx-blue-500);
+      --color-success: var(--eqx-green-700);
+      --color-success-bg: var(--eqx-green-100);
+      --color-warning: var(--eqx-yellow-700);
+      --color-warning-bg: var(--eqx-yellow-100);
+      --color-danger: var(--eqx-red-700);
+      --color-danger-bg: var(--eqx-red-100);
+      --color-info: var(--eqx-blue-700);
+      --color-info-bg: var(--eqx-blue-100);
+
+      /* Tier 3 — componentes */
+      --button-bg: var(--color-action);
+      --button-bg-hover: var(--color-action-hover);
+      --button-text: var(--color-text-inverse);
+      --input-bg: var(--color-surface);
+      --input-border: var(--color-border-strong);
+      --card-bg: var(--color-surface);
+      --card-border: var(--color-border);
+      --nav-bg: var(--color-surface-strong);
+    }
+
+    [data-theme="dark"] {
+      --color-bg: 24 30 35;
+      --color-surface: 46 57 68;
+      --color-surface-subtle: 51 62 72;
+      --color-surface-strong: 20 26 31;
+      --color-text: 248 249 250;
+      --color-text-muted: 217 223 227;
+      --color-border: 95 106 114;
+      --color-border-strong: 178 178 178;
+      --color-action: 0 172 230;
+      --color-action-hover: 0 147 201;
+      --color-focus: 255 102 27;
+      --button-text: 0 0 0;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: var(--space-0);
+      background: rgb(var(--color-bg));
+      color: rgb(var(--color-text));
+      font-family: var(--font-family-sans);
+      font-size: var(--font-size-base);
+      line-height: var(--line-height-normal);
+    }
+    a { color: rgb(var(--color-action)); }
+    a:hover { color: rgb(var(--color-action-hover)); }
+    button, input, select, textarea { font: inherit; }
+    code, pre { font-family: var(--font-family-mono); }
+    code {
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-sm);
+      background: rgb(var(--color-surface-subtle));
+    }
+    pre {
+      overflow: auto;
+      padding: var(--space-4);
+      border: var(--border-width) solid rgb(var(--color-border));
+      border-radius: var(--radius-md);
+      background: rgb(var(--color-surface-subtle));
+      font-size: var(--font-size-sm);
+    }
+    :focus-visible {
+      outline: var(--border-width-strong) solid rgb(var(--color-focus));
+      outline-offset: var(--space-1);
+    }
+    .skip-link {
+      position: fixed;
+      z-index: var(--z-modal);
+      top: var(--space-2);
+      left: var(--space-2);
+      transform: translateY(-200%);
+      padding: var(--space-3) var(--space-4);
+      background: rgb(var(--color-surface));
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .topbar {
+      position: sticky;
+      z-index: var(--z-sticky);
+      top: var(--space-0);
+      display: flex;
+      min-height: var(--size-target);
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+      padding: var(--space-3) var(--space-5);
+      border-bottom: var(--border-width) solid rgb(var(--color-border));
+      background: rgb(var(--color-surface));
+      box-shadow: var(--shadow-1);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+    .brand img { width: 9.375rem; height: auto; }
+    [data-theme="dark"] .brand img {
+      padding: var(--space-2);
+      border-radius: var(--radius-sm);
+      background: rgb(var(--eqx-white));
+    }
+    .version {
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-pill);
+      background: rgb(var(--color-danger-bg));
+      color: rgb(var(--color-danger));
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-bold);
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: var(--size-sidebar) minmax(0, 1fr);
+      max-width: calc(var(--size-content) + var(--size-sidebar));
+      margin: auto;
+    }
+    .sidebar {
+      position: sticky;
+      top: var(--size-target);
+      height: calc(100vh - var(--size-target));
+      overflow-y: auto;
+      padding: var(--space-5);
+      border-right: var(--border-width) solid rgb(var(--color-border));
+      background: rgb(var(--color-surface-subtle));
+    }
+    .sidebar strong {
+      display: block;
+      margin: var(--space-4) var(--space-2) var(--space-2);
+      color: rgb(var(--color-text-muted));
+      font-size: var(--font-size-xs);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .sidebar a {
+      display: block;
+      min-height: 2.25rem;
+      padding: var(--space-2);
+      border-left: var(--border-width-strong) solid transparent;
+      color: rgb(var(--color-text));
+      font-size: var(--font-size-sm);
+      text-decoration: none;
+    }
+    .sidebar a:hover,
+    .sidebar a.active {
+      border-left-color: rgb(var(--color-brand));
+      background: rgb(var(--color-surface));
+      color: rgb(var(--color-brand));
+    }
+    main {
+      min-width: 0;
+      padding: var(--space-7);
+    }
+    section {
+      max-width: var(--size-content);
+      margin: 0 auto var(--space-9);
+      scroll-margin-top: var(--space-8);
+    }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: var(--space-8);
+      border-radius: var(--radius-lg);
+      background: rgb(var(--color-surface-strong));
+      color: rgb(var(--color-text-inverse));
+    }
+    .hero::after {
+      position: absolute;
+      right: -3rem;
+      bottom: -5rem;
+      width: 16rem;
+      height: 16rem;
+      border: 2.5rem solid rgb(var(--eqx-red-700));
+      border-radius: 50%;
+      content: "";
+      opacity: .85;
+    }
+    .hero > * { position: relative; z-index: 1; }
+    .eyebrow {
+      margin: var(--space-0) var(--space-0) var(--space-2);
+      color: rgb(var(--eqx-orange-500));
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-bold);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3, h4 { line-height: var(--line-height-tight); }
+    h1 {
+      max-width: 14ch;
+      margin: var(--space-2) var(--space-0);
+      font-size: var(--font-size-4xl);
+    }
+    h2 {
+      margin: var(--space-0) var(--space-0) var(--space-5);
+      padding-bottom: var(--space-3);
+      border-bottom: var(--border-width) solid rgb(var(--color-border));
+      font-size: var(--font-size-3xl);
+    }
+    h2::before { color: rgb(var(--color-brand)); content: attr(data-number) " "; }
+    h3 { margin-top: var(--space-6); font-size: var(--font-size-2xl); }
+    .lede { max-width: 62ch; font-size: var(--font-size-lg); }
+    .meta-grid,
+    .grid-2,
+    .grid-3,
+    .grid-4 {
+      display: grid;
+      gap: var(--space-4);
+    }
+    .meta-grid { grid-template-columns: repeat(4, 1fr); margin-top: var(--space-6); }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .card {
+      padding: var(--space-5);
+      border: var(--border-width) solid rgb(var(--card-border));
+      border-radius: var(--radius-md);
+      background: rgb(var(--card-bg));
+      box-shadow: var(--shadow-1);
+    }
+    .card h3, .card h4 { margin-top: var(--space-0); }
+    .metric {
+      color: rgb(var(--color-brand));
+      font-size: var(--font-size-3xl);
+      font-weight: var(--font-weight-bold);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 1.75rem;
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-pill);
+      background: rgb(var(--color-info-bg));
+      color: rgb(var(--color-info));
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-bold);
+    }
+    .badge.success { background: rgb(var(--color-success-bg)); color: rgb(var(--color-success)); }
+    .badge.warning { background: rgb(var(--color-warning-bg)); color: rgb(var(--color-warning)); }
+    .badge.danger { background: rgb(var(--color-danger-bg)); color: rgb(var(--color-danger)); }
+    .notice {
+      padding: var(--space-4);
+      border-left: .25rem solid rgb(var(--color-info));
+      background: rgb(var(--color-info-bg));
+      color: rgb(var(--eqx-gray-800));
+    }
+    .notice.warning {
+      border-left-color: rgb(var(--color-warning));
+      background: rgb(var(--color-warning-bg));
+    }
+    .swatch {
+      overflow: hidden;
+      border: var(--border-width) solid rgb(var(--color-border));
+      border-radius: var(--radius-md);
+      background: rgb(var(--color-surface));
+    }
+    .swatch-color {
+      display: flex;
+      min-height: 7rem;
+      align-items: flex-end;
+      padding: var(--space-3);
+      color: rgb(var(--eqx-white));
+      font-weight: var(--font-weight-bold);
+      text-shadow: 0 .0625rem .125rem rgb(var(--eqx-black) / .65);
+    }
+    .swatch-info { padding: var(--space-3); font-size: var(--font-size-sm); }
+    .type-sample { margin: var(--space-3) 0; }
+    .type-display { font-size: var(--font-size-4xl); line-height: var(--line-height-tight); }
+    .type-h1 { font-size: var(--font-size-3xl); }
+    .type-h2 { font-size: var(--font-size-2xl); }
+    .type-body { font-size: var(--font-size-base); }
+    .type-caption { font-size: var(--font-size-xs); }
+    .spacing-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      margin: var(--space-3) 0;
+    }
+    .spacing-box { height: var(--space-5); background: rgb(var(--color-action)); }
+    .shadow-demo { min-height: 8rem; background: rgb(var(--color-surface)); }
+
+    .btn {
+      display: inline-flex;
+      min-height: var(--size-target);
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-5);
+      border: var(--border-width-strong) solid transparent;
+      border-radius: var(--radius-sm);
+      background: rgb(var(--button-bg));
+      color: rgb(var(--button-text));
+      cursor: pointer;
+      font-weight: var(--font-weight-bold);
+      text-decoration: none;
+      transition: background var(--duration-fast) var(--ease-standard),
+                  transform var(--duration-fast) var(--ease-standard);
+    }
+    .btn:hover { background: rgb(var(--button-bg-hover)); color: rgb(var(--button-text)); }
+    .btn:active { transform: translateY(var(--border-width)); }
+    .btn.secondary {
+      border-color: rgb(var(--color-action));
+      background: transparent;
+      color: rgb(var(--color-action));
+    }
+    .btn.danger { background: rgb(var(--color-danger)); color: rgb(var(--color-text-inverse)); }
+    .btn.ghost { background: transparent; color: rgb(var(--color-text)); }
+    .btn:disabled { cursor: not-allowed; opacity: .5; }
+    .field { display: grid; gap: var(--space-2); margin-bottom: var(--space-4); }
+    .field label { font-weight: var(--font-weight-semibold); }
+    .required { color: rgb(var(--color-danger)); }
+    .input {
+      width: 100%;
+      min-height: var(--size-target);
+      padding: var(--space-3);
+      border: var(--border-width) solid rgb(var(--input-border));
+      border-radius: var(--radius-sm);
+      background: rgb(var(--input-bg));
+      color: rgb(var(--color-text));
+    }
+    .input[aria-invalid="true"] { border-color: rgb(var(--color-danger)); }
+    .helper { color: rgb(var(--color-text-muted)); font-size: var(--font-size-sm); }
+    .error { color: rgb(var(--color-danger)); font-size: var(--font-size-sm); }
+    .button-row { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+    .demo-tabs {
+      display: flex;
+      gap: var(--space-1);
+      border-bottom: var(--border-width) solid rgb(var(--color-border));
+    }
+    .tab {
+      min-height: var(--size-target);
+      padding: var(--space-3) var(--space-4);
+      border: 0;
+      border-bottom: .1875rem solid transparent;
+      background: transparent;
+      color: rgb(var(--color-text));
+      cursor: pointer;
+    }
+    .tab[aria-selected="true"] {
+      border-bottom-color: rgb(var(--color-brand));
+      color: rgb(var(--color-brand));
+      font-weight: var(--font-weight-bold);
+    }
+    .tab-panel { padding: var(--space-5) 0; }
+    .accordion {
+      border-top: var(--border-width) solid rgb(var(--color-border));
+    }
+    .accordion button {
+      display: flex;
+      width: 100%;
+      min-height: var(--size-target);
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-4) 0;
+      border: 0;
+      border-bottom: var(--border-width) solid rgb(var(--color-border));
+      background: transparent;
+      color: rgb(var(--color-text));
+      cursor: pointer;
+      font-weight: var(--font-weight-bold);
+      text-align: left;
+    }
+    .accordion-panel { padding: var(--space-4); background: rgb(var(--color-surface-subtle)); }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--font-size-sm);
+    }
+    .data-table th, .data-table td {
+      padding: var(--space-3);
+      border-bottom: var(--border-width) solid rgb(var(--color-border));
+      text-align: left;
+      vertical-align: top;
+    }
+    .data-table th {
+      background: rgb(var(--color-surface-strong));
+      color: rgb(var(--color-text-inverse));
+    }
+    .table-wrap { overflow-x: auto; }
+    .anatomy {
+      counter-reset: anatomy;
+      display: grid;
+      gap: var(--space-2);
+      padding: var(--space-4);
+      border: var(--border-width) dashed rgb(var(--color-border-strong));
+    }
+    .anatomy span::before {
+      counter-increment: anatomy;
+      display: inline-grid;
+      width: 1.5rem;
+      height: 1.5rem;
+      place-items: center;
+      margin-right: var(--space-2);
+      border-radius: 50%;
+      background: rgb(var(--color-brand));
+      color: rgb(var(--color-text-inverse));
+      content: counter(anatomy);
+      font-size: var(--font-size-xs);
+    }
+    .status-table td:nth-child(2) { font-weight: var(--font-weight-bold); }
+    .do { border-top: .25rem solid rgb(var(--color-success)); }
+    .dont { border-top: .25rem solid rgb(var(--color-danger)); }
+    .footer {
+      padding: var(--space-7);
+      border-top: .25rem solid rgb(var(--color-brand));
+      background: rgb(var(--color-surface-strong));
+      color: rgb(var(--color-text-inverse));
+      text-align: center;
+    }
+    .icon-demo {
+      display: grid;
+      width: var(--size-target);
+      height: var(--size-target);
+      place-items: center;
+      border-radius: 50%;
+      background: rgb(var(--color-info-bg));
+      color: rgb(var(--color-info));
+      font-size: var(--font-size-xl);
+    }
+    .skeleton {
+      height: var(--space-5);
+      border-radius: var(--radius-sm);
+      background: linear-gradient(
+        90deg,
+        rgb(var(--color-border)) 25%,
+        rgb(var(--color-surface-subtle)) 50%,
+        rgb(var(--color-border)) 75%
+      );
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+    .theme-toggle { min-height: var(--size-target); }
+    .mobile-nav { display: none; }
+    .source-list li { margin-bottom: var(--space-2); }
+
+    @media (max-width: 62rem) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .mobile-nav { display: block; min-height: var(--size-target); }
+      main { padding: var(--space-5); }
+      .grid-4, .meta-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 42rem) {
+      .grid-2, .grid-3, .grid-4, .meta-grid { grid-template-columns: 1fr; }
+      .hero { padding: var(--space-6); }
+      .topbar { padding: var(--space-2) var(--space-3); }
+      .brand img { width: 7.5rem; }
+      main { padding: var(--space-4); }
+    }
+    @media print {
+      .topbar, .sidebar, .mobile-nav, .theme-toggle { display: none; }
+      .layout { display: block; }
+      main { padding: 0; }
+      section { break-inside: avoid; margin-bottom: var(--space-7); }
+      .hero { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:_ApprovalStatus msdt:dt="string">0</mso:_ApprovalStatus>
+<mso:_ApprovalAssignedTo msdt:dt="string"></mso:_ApprovalAssignedTo>
+<mso:_ApprovalRespondedBy msdt:dt="string"></mso:_ApprovalRespondedBy>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Pular para conteúdo</a>
+
+  <header class="topbar">
+    <div class="brand">
+      <img src="https://assets.equifax.com/global/images/logos/equifax_150_28.svg" alt="Equifax">
+      <span class="version">DS v1.0 · Study</span>
+    </div>
+    <select class="mobile-nav input" aria-label="Navegar entre seções">
+      <option value="#overview">Visão geral</option>
+      <option value="#foundations">Fundações</option>
+      <option value="#components">Componentes</option>
+      <option value="#patterns">Padrões</option>
+      <option value="#governance">Governança</option>
+    </select>
+    <button class="btn secondary theme-toggle" type="button" aria-pressed="false">
+      <span aria-hidden="true">◐</span> Alternar tema
+    </button>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Navegação do Design System">
+      <strong>Introdução</strong>
+      <a href="#overview">01 · Visão geral</a>
+      <a href="#principles">02 · Princípios</a>
+      <a href="#usage">03 · Como usar</a>
+      <strong>Fundações</strong>
+      <a href="#foundations">04 · Arquitetura</a>
+      <a href="#colors">05 · Cores</a>
+      <a href="#typography">06 · Tipografia</a>
+      <a href="#spacing">07 · Espaçamento</a>
+      <a href="#sizing">08 · Sizing</a>
+      <a href="#borders">09 · Bordas</a>
+      <a href="#elevation">10 · Elevação</a>
+      <a href="#motion">11 · Motion</a>
+      <a href="#layers">12 · Camadas</a>
+      <a href="#density">13 · Densidade</a>
+      <a href="#icons">14 · Iconografia</a>
+      <strong>Componentes</strong>
+      <a href="#components">15 · Átomos</a>
+      <a href="#molecules">16 · Moléculas</a>
+      <a href="#organisms">17 · Organismos</a>
+      <a href="#templates">18 · Templates</a>
+      <strong>Sistemas</strong>
+      <a href="#feedback">19 · Feedback</a>
+      <a href="#forms">20 · Formulários</a>
+      <a href="#data">21 · Data display</a>
+      <a href="#loading">22 · Loading</a>
+      <a href="#theming">23 · Temas</a>
+      <a href="#notifications">24 · Notificações</a>
+      <strong>Qualidade</strong>
+      <a href="#accessibility">25 · Acessibilidade</a>
+      <a href="#responsive">26 · Responsividade</a>
+      <a href="#i18n">27 · Internacionalização</a>
+      <a href="#voice">28 · Voice & Tone</a>
+      <a href="#performance">29 · Performance</a>
+      <a href="#browser">30 · Browsers</a>
+      <a href="#tooling">31 · Tooling</a>
+      <a href="#governance">32 · Governança</a>
+      <a href="#roadmap">33 · Roadmap</a>
+    </nav>
+
+    <main id="conteudo">
+      <section id="overview" class="hero">
+        <p class="eyebrow">Equifax Design Language · Estudo independente</p>
+        <h1>Conhecimento transforma decisões.</h1>
+        <p class="lede">
+          Sistema visual, editorial e técnico derivado de ativos públicos do site Equifax.
+          Criado para protótipos do Projeto Prisma; não representa documentação oficial da marca.
+        </p>
+        <div class="meta-grid">
+          <div><small>Versão</small><br><strong>1.0.0</strong></div>
+          <div><small>Status</small><br><strong>Living Study</strong></div>
+          <div><small>Data</small><br><strong>27 jul 2026</strong></div>
+          <div><small>Conformidade</small><br><strong>WCAG 2.2 AA</strong></div>
+        </div>
+      </section>
+
+      <section aria-labelledby="disclaimer-title">
+        <div class="notice warning">
+          <h3 id="disclaimer-title">Classificação da evidência</h3>
+          <p><strong>Observado:</strong> extraído do CSS, fontes, logos e padrões públicos de <a href="https://www.equifax.com/">equifax.com</a>.</p>
+          <p><strong>Inferido:</strong> normalização de tokens, dark mode, arquitetura de componentes, governança e padrões de acessibilidade.</p>
+          <p><strong>Não oficial:</strong> nenhuma biblioteca pública oficial de Design System Equifax foi localizada durante pesquisa.</p>
+        </div>
+      </section>
+
+      <section id="principles">
+        <h2 data-number="02">Filosofia & Princípios</h2>
+        <div class="grid-3">
+          <article class="card"><span class="metric">01</span><h3>Clareza gera confiança</h3><p>Hierarquia objetiva, linguagem direta e decisões visíveis.</p></article>
+          <article class="card"><span class="metric">02</span><h3>Dados com propósito</h3><p>Informação financeira complexa traduzida em ações compreensíveis.</p></article>
+          <article class="card"><span class="metric">03</span><h3>Proteção por padrão</h3><p>Privacidade, segurança e consentimento incorporados ao fluxo.</p></article>
+          <article class="card"><span class="metric">04</span><h3>Acesso para todos</h3><p>WCAG 2.2 AA, teclado, leitores de tela e conteúdo robusto.</p></article>
+          <article class="card"><span class="metric">05</span><h3>Consistência escalável</h3><p>Tokens semânticos e composição eliminam variação acidental.</p></article>
+          <article class="card"><span class="metric">06</span><h3>Evidência antes de estética</h3><p>Decisões marcadas como observadas ou inferidas.</p></article>
+        </div>
+      </section>
+
+      <section id="usage">
+        <h2 data-number="03">Como Usar</h2>
+        <div class="grid-3">
+          <article class="card"><h3>Designers</h3><p>Comece por cores, tipo, spacing e componentes Stable. Valide contraste e estados antes do handoff.</p></article>
+          <article class="card"><h3>Desenvolvedores</h3><p>Consuma tokens Tier 2/3. Evite valores diretos. Preserve HTML semântico e comportamento de teclado.</p></article>
+          <article class="card"><h3>Produto & Conteúdo</h3><p>Use padrões editoriais, matriz de feedback e critérios de governança para novas jornadas.</p></article>
+        </div>
+      </section>
+
+      <section id="foundations">
+        <h2 data-number="04">Arquitetura de Tokens</h2>
+        <div class="grid-3">
+          <article class="card"><span class="badge">Tier 1</span><h3>Global</h3><p>Valores de marca: <code>--eqx-red-700</code>, <code>--space-4</code>, <code>--radius-md</code>.</p></article>
+          <article class="card"><span class="badge warning">Tier 2</span><h3>Semantic</h3><p>Intenção: <code>--color-brand</code>, <code>--color-text</code>, <code>--color-danger</code>.</p></article>
+          <article class="card"><span class="badge success">Tier 3</span><h3>Component</h3><p>Uso: <code>--button-bg</code>, <code>--input-border</code>, <code>--card-bg</code>.</p></article>
+        </div>
+        <pre aria-label="Exemplo de token DTCG"><code>{
+  "color": {
+    "brand": {
+      "$value": "{color.equifax.red.700}",
+      "$type": "color",
+      "$description": "Assinatura e ênfase institucional"
+    }
+  }
+}</code></pre>
+      </section>
+
+      <section id="colors">
+        <h2 data-number="05">Tokens — Cores</h2>
+        <p>Paleta principal observada no CSS público. Vermelho identifica marca; azul sinaliza ação; carvão estrutura conteúdo.</p>
+        <div class="grid-4">
+          <article class="swatch"><div class="swatch-color" style="background:rgb(var(--eqx-red-700))">Brand</div><div class="swatch-info"><strong>#9E1B32</strong><br><code>--eqx-red-700</code></div></article>
+          <article class="swatch"><div class="swatch-color" style="background:rgb(var(--eqx-blue-700))">Action</div><div class="swatch-info"><strong>#007298</strong><br><code>--eqx-blue-700</code></div></article>
+          <article class="swatch"><div class="swatch-color" style="background:rgb(var(--eqx-gray-800))">Ink</div><div class="swatch-info"><strong>#333E48</strong><br><code>--eqx-gray-800</code></div></article>
+          <article class="swatch"><div class="swatch-color" style="background:rgb(var(--eqx-orange-500))">Accent</div><div class="swatch-info"><strong>#FF661B</strong><br><code>--eqx-orange-500</code></div></article>
+          <article class="swatch"><div class="swatch-color" style="background:rgb(var(--eqx-green-700))">Success</div><div class="swatch-info"><strong>#278C10</strong><br><code>--color-success</code></div></article>
+          <article class="swatch"><div class="swatch-color" style="background:rgb(var(--eqx-yellow-600));color:rgb(var(--eqx-gray-900));text-shadow:none">Warning</div><div class="swatch-info"><strong>#EDB700</strong><br><code>--eqx-yellow-600</code></div></article>
+          <article class="swatch"><div class="swatch-color" style="background:rgb(var(--eqx-blue-300));color:rgb(var(--eqx-gray-900));text-shadow:none">Info</div><div class="swatch-info"><strong>#00ACE6</strong><br><code>--eqx-blue-300</code></div></article>
+          <article class="swatch"><div class="swatch-color" style="background:rgb(var(--eqx-plum-600))">Plum</div><div class="swatch-info"><strong>#652F6C</strong><br><code>--eqx-plum-600</code></div></article>
+        </div>
+        <h3>Contraste de pares principais</h3>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Foreground</th><th>Background</th><th>Razão aproximada</th><th>Uso</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>#333E48</td><td>#FFFFFF</td><td>≈ 10.9:1</td><td>Texto normal</td><td><span class="badge success">AAA</span></td></tr>
+              <tr><td>#007298</td><td>#FFFFFF</td><td>≈ 5.5:1</td><td>Links e botões</td><td><span class="badge success">AA</span></td></tr>
+              <tr><td>#9E1B32</td><td>#FFFFFF</td><td>≈ 8.1:1</td><td>Marca e danger</td><td><span class="badge success">AAA</span></td></tr>
+              <tr><td>#FF661B</td><td>#FFFFFF</td><td>≈ 3.0:1</td><td>Gráficos/acentos</td><td><span class="badge warning">Não usar em texto normal</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="typography">
+        <h2 data-number="06">Tokens — Tipografia</h2>
+        <p>Open Sans é fonte observada nos assets oficiais. Fallback: Arial, Helvetica, sans-serif.</p>
+        <div class="card">
+          <div class="type-sample type-display">Crédito com clareza</div>
+          <div class="type-sample type-h1">Proteja sua identidade</div>
+          <div class="type-sample type-h2">Entenda sua jornada financeira</div>
+          <div class="type-sample type-body">Informação confiável ajuda pessoas e negócios a tomar melhores decisões.</div>
+          <div class="type-sample type-caption">Atualizado em 27 de julho de 2026 · Conteúdo informativo</div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Token</th><th>Tamanho</th><th>Peso</th><th>Uso</th></tr></thead>
+            <tbody>
+              <tr><td>display</td><td>clamp(36–64)</td><td>700</td><td>Hero</td></tr>
+              <tr><td>heading-1</td><td>32</td><td>700</td><td>Título de página</td></tr>
+              <tr><td>heading-2</td><td>24</td><td>600</td><td>Seção</td></tr>
+              <tr><td>body</td><td>16</td><td>400</td><td>Leitura padrão</td></tr>
+              <tr><td>caption</td><td>12</td><td>400</td><td>Metadados</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="spacing">
+        <h2 data-number="07">Tokens — Spacing</h2>
+        <p>Escala baseada em 4pt. Use spacing semântico por contexto, nunca ajuste ótico isolado sem RFC.</p>
+        <div class="card">
+          <div class="spacing-row"><code>space-1</code><div class="spacing-box" style="width:var(--space-1)"></div><span>4</span></div>
+          <div class="spacing-row"><code>space-2</code><div class="spacing-box" style="width:var(--space-2)"></div><span>8</span></div>
+          <div class="spacing-row"><code>space-4</code><div class="spacing-box" style="width:var(--space-4)"></div><span>16</span></div>
+          <div class="spacing-row"><code>space-6</code><div class="spacing-box" style="width:var(--space-6)"></div><span>32</span></div>
+          <div class="spacing-row"><code>space-8</code><div class="spacing-box" style="width:var(--space-8)"></div><span>72</span></div>
+        </div>
+      </section>
+
+      <section id="sizing">
+        <h2 data-number="08">Tokens — Sizing</h2>
+        <div class="grid-3">
+          <article class="card"><span class="metric">48</span><h3>Touch target</h3><p>Mínimo recomendado para controles interativos.</p></article>
+          <article class="card"><span class="metric">16–24</span><h3>Ícones</h3><p>Escala sm, md e lg. Ícone não define área clicável.</p></article>
+          <article class="card"><span class="metric">1200</span><h3>Conteúdo</h3><p>Largura máxima para documentação e dashboards.</p></article>
+        </div>
+      </section>
+
+      <section id="borders">
+        <h2 data-number="09">Border, Radius & Stroke</h2>
+        <div class="grid-3">
+          <article class="card" style="border-radius:var(--radius-sm)"><h3>Small</h3><code>radius-sm</code><p>Inputs e botões.</p></article>
+          <article class="card" style="border-radius:var(--radius-md)"><h3>Medium</h3><code>radius-md</code><p>Cards e painéis.</p></article>
+          <article class="card" style="border-radius:var(--radius-pill)"><h3>Pill</h3><code>radius-pill</code><p>Badges, filtros e estados.</p></article>
+        </div>
+      </section>
+
+      <section id="elevation">
+        <h2 data-number="10">Shadow & Elevation</h2>
+        <div class="grid-3">
+          <article class="card shadow-demo" style="box-shadow:var(--shadow-1)"><h3>Nível 1</h3><p>Cards repousados.</p></article>
+          <article class="card shadow-demo" style="box-shadow:var(--shadow-2)"><h3>Nível 2</h3><p>Dropdowns e elementos sticky.</p></article>
+          <article class="card shadow-demo" style="box-shadow:var(--shadow-3)"><h3>Nível 3</h3><p>Modal e drawer.</p></article>
+        </div>
+      </section>
+
+      <section id="motion">
+        <h2 data-number="11">Motion</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Token</th><th>Duração</th><th>Uso</th></tr></thead>
+            <tbody>
+              <tr><td>instant</td><td>0ms</td><td>Estado sem transição</td></tr>
+              <tr><td>fast</td><td>150ms</td><td>Hover, focus, microfeedback</td></tr>
+              <tr><td>base</td><td>250ms</td><td>Accordion, tooltip</td></tr>
+              <tr><td>slow</td><td>400ms</td><td>Modal, drawer, transições de layout</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><span class="badge success">Obrigatório</span> Respeitar <code>prefers-reduced-motion</code>.</p>
+      </section>
+
+      <section id="layers">
+        <h2 data-number="12">Z-index</h2>
+        <p>Escala fechada: base 0, dropdown 50, sticky 100, overlay 200, modal 300, toast 400, tooltip 500.</p>
+      </section>
+
+      <section id="density">
+        <h2 data-number="13">Density Modes</h2>
+        <div class="grid-3">
+          <article class="card"><span class="badge warning">Compact</span><h3>Dados densos</h3><p>Tabelas operacionais; touch target preservado.</p></article>
+          <article class="card"><span class="badge success">Comfortable</span><h3>Padrão</h3><p>Produtos web e fluxos de decisão.</p></article>
+          <article class="card"><span class="badge">Spacious</span><h3>Educacional</h3><p>Landing pages e conteúdo de orientação.</p></article>
+        </div>
+      </section>
+
+      <section id="icons">
+        <h2 data-number="14">Iconografia</h2>
+        <div class="grid-4">
+          <article class="card"><span class="icon-demo" aria-hidden="true">✓</span><h3>Confirmação</h3></article>
+          <article class="card"><span class="icon-demo" aria-hidden="true">!</span><h3>Alerta</h3></article>
+          <article class="card"><span class="icon-demo" aria-hidden="true">?</span><h3>Ajuda</h3></article>
+          <article class="card"><span class="icon-demo" aria-hidden="true">→</span><h3>Próximo</h3></article>
+        </div>
+        <p>Ícones decorativos usam <code>aria-hidden</code>. Ícones informativos recebem nome acessível. Não substituir texto essencial.</p>
+      </section>
+
+      <section id="components">
+        <h2 data-number="15">Atomic Design — Atoms</h2>
+        <h3>Button</h3>
+        <div class="grid-2">
+          <article class="card">
+            <div class="button-row">
+              <button class="btn" type="button">Continuar</button>
+              <button class="btn secondary" type="button">Saiba mais</button>
+              <button class="btn ghost" type="button">Cancelar</button>
+              <button class="btn danger" type="button">Excluir</button>
+              <button class="btn" type="button" disabled>Indisponível</button>
+            </div>
+          </article>
+          <article class="card">
+            <h4>Anatomia</h4>
+            <div class="anatomy"><span>Container</span><span>Label acionável</span><span>Ícone opcional</span><span>Estado</span></div>
+          </article>
+        </div>
+        <div class="grid-2">
+          <article class="card do"><h4>Faça</h4><p>Use verbo claro; uma ação primária por contexto; loading preserva largura.</p></article>
+          <article class="card dont"><h4>Não faça</h4><p>Não use “Clique aqui”; não dependa de cor; não esconda foco.</p></article>
+        </div>
+
+        <h3>Text Field</h3>
+        <div class="grid-2">
+          <article class="card">
+            <div class="field">
+              <label for="cpf">CPF <span class="required" aria-hidden="true">*</span></label>
+              <input class="input" id="cpf" inputmode="numeric" aria-describedby="cpf-help" required>
+              <span class="helper" id="cpf-help">Somente números.</span>
+            </div>
+            <div class="field">
+              <label for="email">E-mail <span class="required" aria-hidden="true">*</span></label>
+              <input class="input" id="email" type="email" value="nome@" aria-invalid="true" aria-describedby="email-error">
+              <span class="error" id="email-error">Informe um e-mail válido, como nome@empresa.com.</span>
+            </div>
+          </article>
+          <article class="card">
+            <h4>API mínima</h4>
+            <pre><code>interface TextFieldProps {
+  id: string;
+  label: string;
+  required?: boolean;
+  error?: string;
+  helperText?: string;
+  disabled?: boolean;
+}</code></pre>
+          </article>
+        </div>
+
+        <h3>Catálogo de átomos</h3>
+        <div class="table-wrap">
+          <table class="data-table status-table">
+            <thead><tr><th>Átomo</th><th>Status</th><th>Estados essenciais</th><th>A11y</th></tr></thead>
+            <tbody id="atoms-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="molecules">
+        <h2 data-number="16">Atomic Design — Molecules</h2>
+        <h3>Tabs</h3>
+        <article class="card">
+          <div class="demo-tabs" role="tablist" aria-label="Dados de crédito">
+            <button class="tab" role="tab" aria-selected="true" aria-controls="panel-score" id="tab-score">Score</button>
+            <button class="tab" role="tab" aria-selected="false" aria-controls="panel-report" id="tab-report" tabindex="-1">Relatório</button>
+            <button class="tab" role="tab" aria-selected="false" aria-controls="panel-alerts" id="tab-alerts" tabindex="-1">Alertas</button>
+          </div>
+          <div class="tab-panel" id="panel-score" role="tabpanel" aria-labelledby="tab-score">Visão resumida do score e fatores associados.</div>
+          <div class="tab-panel" id="panel-report" role="tabpanel" aria-labelledby="tab-report" hidden>Dados detalhados do relatório de crédito.</div>
+          <div class="tab-panel" id="panel-alerts" role="tabpanel" aria-labelledby="tab-alerts" hidden>Alterações recentes e alertas de identidade.</div>
+        </article>
+
+        <h3>Accordion</h3>
+        <article class="card accordion">
+          <button type="button" aria-expanded="true" aria-controls="faq-1">Consultar meu crédito afeta meu score?<span aria-hidden="true">−</span></button>
+          <div class="accordion-panel" id="faq-1">Não. Consultar o próprio relatório é uma consulta soft e não reduz o score.</div>
+          <button type="button" aria-expanded="false" aria-controls="faq-2">Como proteger meu relatório?<span aria-hidden="true">+</span></button>
+          <div class="accordion-panel" id="faq-2" hidden>Use controles de bloqueio, alertas e monitoramento disponíveis para sua região.</div>
+        </article>
+
+        <h3>Catálogo de moléculas</h3>
+        <div class="table-wrap">
+          <table class="data-table status-table">
+            <thead><tr><th>Molécula</th><th>Status</th><th>Composição</th><th>A11y-chave</th></tr></thead>
+            <tbody id="molecules-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="organisms">
+        <h2 data-number="17">Atomic Design — Organisms</h2>
+        <div class="grid-3">
+          <article class="card"><span class="badge success">Stable</span><h3>Global Header</h3><p>Logo, navegação primária, busca, região e autenticação.</p></article>
+          <article class="card"><span class="badge warning">Beta</span><h3>Product Comparison</h3><p>Planos lado a lado, preços, benefícios, CTA e disclosures.</p></article>
+          <article class="card"><span class="badge">Spec'd</span><h3>Notification Center</h3><p>Alertas agrupados, lido/não lido, ações e preferência.</p></article>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table status-table">
+            <thead><tr><th>Organismo</th><th>Status</th><th>Estados</th><th>Responsabilidade</th></tr></thead>
+            <tbody id="organisms-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="templates">
+        <h2 data-number="18">Templates & Pages</h2>
+        <div class="grid-3">
+          <article class="card"><h3>Consumer Landing</h3><p>Header → Hero → Benefícios → Planos → Educação → CTA → Disclosures → Footer.</p></article>
+          <article class="card"><h3>Authenticated Dashboard</h3><p>Shell → Score summary → Alertas → Recomendações → Atividade recente.</p></article>
+          <article class="card"><h3>Guided Resolution</h3><p>Stepper → Contexto → Identificação → Evidências → Revisão → Confirmação.</p></article>
+        </div>
+      </section>
+
+      <section id="feedback">
+        <h2 data-number="19">Sistema de Feedback</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Padrão</th><th>Quando usar</th><th>Duração</th><th>ARIA</th></tr></thead>
+            <tbody>
+              <tr><td>Toast</td><td>Resultado não bloqueante</td><td>5–8s</td><td>status</td></tr>
+              <tr><td>Snackbar</td><td>Ação reversível</td><td>Até 10s</td><td>status + ação</td></tr>
+              <tr><td>Banner</td><td>Contexto persistente</td><td>Persistente</td><td>region/alert</td></tr>
+              <tr><td>Inline error</td><td>Validação de campo</td><td>Até correção</td><td>aria-describedby</td></tr>
+              <tr><td>Confirm dialog</td><td>Ação destrutiva</td><td>Bloqueante</td><td>dialog + focus trap</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="forms">
+        <h2 data-number="20">Sistema de Formulários</h2>
+        <ul>
+          <li>Label persistente; placeholder nunca substitui label.</li>
+          <li>Obrigatoriedade indicada por texto/asterisco, não somente cor.</li>
+          <li>Validação após blur; submit revela resumo de erros e move foco.</li>
+          <li>Erros descrevem problema e correção; valores válidos são preservados.</li>
+          <li>Dados sensíveis exibem propósito, retenção e consentimento quando aplicável.</li>
+        </ul>
+      </section>
+
+      <section id="data">
+        <h2 data-number="21">Sistema de Data Display</h2>
+        <div class="grid-4">
+          <article class="card"><span class="metric">742</span><h3>Score</h3><p>Bom · atualizado hoje</p></article>
+          <article class="card"><span class="metric">3</span><h3>Alertas</h3><p>1 requer atenção</p></article>
+          <article class="card"><span class="metric">−4%</span><h3>Dívida</h3><p>vs. mês anterior</p></article>
+          <article class="card"><span class="metric">100%</span><h3>Monitoramento</h3><p>Ativo</p></article>
+        </div>
+        <p>Todo componente de dados inclui estados: loading, empty, no-results, partial e error.</p>
+      </section>
+
+      <section id="loading">
+        <h2 data-number="22">Loading & Skeletons</h2>
+        <div class="grid-3">
+          <article class="card"><h3>Spinner</h3><p>Ação pontual e curta, preferencialmente abaixo de 2s.</p></article>
+          <article class="card"><h3>Progress</h3><p>Processo com duração ou etapas conhecidas.</p></article>
+          <article class="card"><h3>Skeleton</h3><div class="skeleton" aria-hidden="true"></div><br><div class="skeleton" style="width:72%" aria-hidden="true"></div></article>
+        </div>
+      </section>
+
+      <section id="theming">
+        <h2 data-number="23">Multi-brand & Theming</h2>
+        <p>Tema troca apenas tokens semânticos. Componentes não acessam primitivas de marca diretamente.</p>
+        <pre><code>[data-theme="dark"] {
+  --color-bg: 24 30 35;
+  --color-surface: 46 57 68;
+  --color-text: 248 249 250;
+  --color-action: 0 172 230;
+}</code></pre>
+      </section>
+
+      <section id="notifications">
+        <h2 data-number="24">Sistema de Notificações</h2>
+        <p>Centro de notificações agrupa por tempo e criticidade. Alertas de fraude nunca desaparecem apenas por timeout. Badge usa “99+”; itens lidos permanecem recuperáveis.</p>
+      </section>
+
+      <section id="accessibility">
+        <h2 data-number="25">Acessibilidade WCAG 2.2 AA</h2>
+        <div class="grid-2">
+          <article class="card"><h3>Perceptível</h3><ul><li>Contraste 4.5:1 para texto normal</li><li>Informação não depende só de cor</li><li>Zoom 200% sem perda</li><li>Alt text orientado à função</li></ul></article>
+          <article class="card"><h3>Operável</h3><ul><li>100% por teclado</li><li>Foco visível e não obscurecido</li><li>Target recomendado 48×48</li><li>Sem armadilhas de foco</li></ul></article>
+          <article class="card"><h3>Compreensível</h3><ul><li>Labels claros</li><li>Erros acionáveis</li><li>Ajuda consistente</li><li>Confirmação destrutiva</li></ul></article>
+          <article class="card"><h3>Robusto</h3><ul><li>HTML semântico</li><li>ARIA somente quando necessário</li><li>Status anunciado</li><li>Testes NVDA, JAWS e VoiceOver</li></ul></article>
+        </div>
+      </section>
+
+      <section id="responsive">
+        <h2 data-number="26">Responsividade</h2>
+        <p>Mobile-first. Breakpoints por comportamento: conteúdo linear, grids 2 colunas, navegação lateral e largura expandida. Não projetar por dispositivo específico.</p>
+      </section>
+
+      <section id="i18n">
+        <h2 data-number="27">Internacionalização</h2>
+        <ul>
+          <li>Idioma e região separados: <code>pt-BR</code>, <code>en-US</code>, <code>es-MX</code>.</li>
+          <li>Datas, moeda e números via <code>Intl</code>; nenhum formato concatenado manualmente.</li>
+          <li>Layout suporta expansão textual de 30% e direção RTL.</li>
+          <li>Termos regulatórios variam por país; conteúdo não deve ser reutilizado sem revisão jurídica.</li>
+        </ul>
+      </section>
+
+      <section id="voice">
+        <h2 data-number="28">Voice & Tone Editorial</h2>
+        <div class="grid-2">
+          <article class="card do"><h3>Faça</h3><p><strong>Não foi possível atualizar seu alerta.</strong><br>Verifique sua conexão e tente novamente.</p></article>
+          <article class="card dont"><h3>Não faça</h3><p><strong>Erro 500.</strong><br>Operação inválida.</p></article>
+        </div>
+        <p>Voz: confiável, clara, protetiva e humana. Tom muda conforme risco: celebrativo em progresso; sereno e direto em fraude; neutro em disclosures.</p>
+      </section>
+
+      <section id="performance">
+        <h2 data-number="29">Performance Budgets</h2>
+        <div class="grid-4">
+          <article class="card"><span class="metric">&lt;50KB</span><h3>CSS gzip</h3></article>
+          <article class="card"><span class="metric">&lt;2.5s</span><h3>LCP p75</h3></article>
+          <article class="card"><span class="metric">&lt;200ms</span><h3>INP p75</h3></article>
+          <article class="card"><span class="metric">&lt;0.1</span><h3>CLS p75</h3></article>
+        </div>
+      </section>
+
+      <section id="browser">
+        <h2 data-number="30">Browser Support</h2>
+        <p>Chrome, Edge, Firefox e Safari: últimas 2 versões estáveis. iOS Safari e Samsung Internet: últimas 2. IE11: não suportado. Feature detection prevalece sobre UA sniffing.</p>
+      </section>
+
+      <section id="tooling">
+        <h2 data-number="31">Tooling, Testing & Storybook</h2>
+        <div class="grid-3">
+          <article class="card"><h3>Build</h3><p>Style Dictionary, CSS Variables, TypeScript, Vite/Rollup e tree-shaking.</p></article>
+          <article class="card"><h3>Tests</h3><p>Vitest/Jest, Testing Library, Playwright, axe-core e testes manuais assistivos.</p></article>
+          <article class="card"><h3>Docs</h3><p>Storybook Docs, Controls, Interactions, A11y e regressão visual.</p></article>
+        </div>
+      </section>
+
+      <section id="governance">
+        <h2 data-number="32">Governança & Status Matrix</h2>
+        <p>Status: <span class="badge success">Stable</span> produção; <span class="badge warning">Beta</span> API pode evoluir; <span class="badge">Spec'd</span> documentado; <span class="badge danger">Deprecated</span> remoção futura.</p>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Etapa RFC</th><th>Critério</th><th>Saída</th></tr></thead>
+            <tbody>
+              <tr><td>Proposta</td><td>Problema recorrente em ≥2 produtos</td><td>RFC e casos de uso</td></tr>
+              <tr><td>Spec'd</td><td>API, tokens, A11y e conteúdo aprovados</td><td>Spec canônica</td></tr>
+              <tr><td>Beta</td><td>Implementado e testado em piloto</td><td>Pacote prerelease</td></tr>
+              <tr><td>Stable</td><td>Validado em ≥2 produtos</td><td>Release semver</td></tr>
+              <tr><td>Deprecated</td><td>Substituto e migração disponíveis</td><td>Remoção após 2 minors e major</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="roadmap">
+        <h2 data-number="33">Roadmap & Migration Guide</h2>
+        <div class="grid-3">
+          <article class="card"><span class="badge success">v1.1</span><h3>Foundation hardening</h3><p>Tokens DTCG exportáveis, auditoria automatizada de contraste e pacote de ícones.</p></article>
+          <article class="card"><span class="badge warning">v1.2</span><h3>Data & identity</h3><p>Charts acessíveis, DataTable avançada e padrões de consentimento.</p></article>
+          <article class="card"><span class="badge">v2.0</span><h3>Multi-region</h3><p>Temas regionais, RTL e revisão de APIs após adoção real.</p></article>
+        </div>
+        <h3>Migração</h3>
+        <p>v1.0 é versão inicial; não existe migração anterior. Releases 1.x serão aditivas. Remoções somente em v2.0+, após depreciação mínima de dois minors.</p>
+        <h3>Changelog v1.0.0</h3>
+        <ul>
+          <li>Inventário de tokens observados no CSS público Equifax.</li>
+          <li>33 seções canônicas de Design System.</li>
+          <li>Temas light/dark, componentes demonstráveis e navegação responsiva.</li>
+          <li>Catálogo de 28 átomos, 18 moléculas e 13 organismos.</li>
+          <li>Governança, A11y, performance, editorial e roadmap.</li>
+        </ul>
+        <h3>Fontes públicas consultadas</h3>
+        <ul class="source-list">
+          <li><a href="https://www.equifax.com/">Equifax — site global/US</a></li>
+          <li><a href="https://assets.equifax.com/global/css/efx-gcs.css">Equifax Global Component Styles — CSS público</a></li>
+          <li><a href="https://assets.equifax.com/global/images/logos/equifax_150_28.svg">Logo Equifax — asset público</a></li>
+          <li><a href="https://developer.equifax.com/products/apiproducts/employer-settings-hq">Equifax Developer Portal — Employer Settings HQ</a></li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <footer class="footer">
+    <strong>Equifax Design System v1.0 · Estudo para Projeto Prisma</strong>
+    <p>Derivado de evidências públicas para prototipação. Equifax e suas marcas pertencem à Equifax Inc.</p>
+    <p>Produzido pelo Solution Center Foursys · 2026</p>
+  </footer>
+
+  <script>
+    const atoms = [
+      ["Button", "Stable", "default, hover, focus, active, disabled, loading", "Nome acessível; Enter/Space"],
+      ["IconButton", "Stable", "default, hover, focus, disabled", "aria-label obrigatório"],
+      ["TextField", "Stable", "empty, filled, focus, error, disabled", "label + describedby"],
+      ["Textarea", "Stable", "empty, filled, resize, error", "contagem anunciada"],
+      ["Select", "Stable", "closed, open, selected, error", "select nativo preferido"],
+      ["Combobox", "Beta", "idle, open, loading, no-results", "ARIA combobox pattern"],
+      ["Checkbox", "Stable", "unchecked, checked, mixed, disabled", "Space alterna"],
+      ["Radio", "Stable", "unchecked, checked, disabled", "Arrow navega grupo"],
+      ["Switch", "Stable", "off, on, disabled", "role switch"],
+      ["Slider", "Beta", "min, value, max, disabled", "setas e aria-valuenow"],
+      ["DatePicker", "Beta", "closed, open, selected, invalid", "grid keyboard"],
+      ["FileUpload", "Beta", "idle, drag, upload, error", "input file acessível"],
+      ["Avatar", "Stable", "image, initials, fallback", "alt contextual"],
+      ["Badge", "Stable", "info, success, warning, danger", "texto além da cor"],
+      ["Tag", "Stable", "static, removable, selected", "remoção nomeada"],
+      ["Tooltip", "Stable", "hidden, visible", "hover e focus"],
+      ["Divider", "Stable", "horizontal, vertical", "decorativo por padrão"],
+      ["Kbd", "Stable", "default", "texto equivalente"],
+      ["Code", "Stable", "inline, block", "lang quando aplicável"],
+      ["Link", "Stable", "default, hover, visited, focus", "propósito pelo texto"],
+      ["Spinner", "Stable", "sm, md, lg", "status e label"],
+      ["Progress", "Stable", "determinate, indeterminate", "aria-valuenow"],
+      ["ProgressCircle", "Beta", "determinate, complete", "valor anunciado"],
+      ["Skeleton", "Stable", "text, card, table, avatar", "aria-hidden"],
+      ["Label", "Stable", "default, required, disabled", "for/id"],
+      ["HelperText", "Stable", "default, warning", "aria-describedby"],
+      ["ErrorText", "Stable", "visible", "aria-live quando dinâmico"],
+      ["Logo", "Stable", "default, inverse", "alt Equifax"]
+    ];
+    const molecules = [
+      ["FormField", "Stable", "Label + Input + Helper/Error", "descrições conectadas"],
+      ["FormErrorSummary", "Stable", "Alert + ErrorLinks", "foco no submit inválido"],
+      ["InputGroup", "Stable", "Input + Prefix/Suffix", "unidade anunciada"],
+      ["SearchField", "Stable", "Input + Clear + Submit", "landmark search"],
+      ["MenuItem", "Stable", "Icon + Label + Shortcut", "roving tabindex"],
+      ["Breadcrumb", "Stable", "Nav + Links + Current", "aria-current page"],
+      ["Pagination", "Stable", "Previous + Pages + Next", "nav nomeada"],
+      ["StatusChip", "Stable", "Icon + Label", "não depender de cor"],
+      ["KpiCard", "Beta", "Label + Value + Trend", "ordem semântica"],
+      ["TrendIndicator", "Beta", "Icon + Delta + Period", "direção textual"],
+      ["FilterChips", "Beta", "Tag[] + Clear", "remoção explícita"],
+      ["ConfirmDialog", "Stable", "Dialog + Actions", "trap e retorno de foco"],
+      ["DropdownMenu", "Stable", "Trigger + MenuItems", "menu keyboard"],
+      ["Tabs", "Stable", "TabList + Tabs + Panels", "Arrow/Home/End"],
+      ["Accordion", "Stable", "Heading + Trigger + Panel", "aria-expanded"],
+      ["Tree", "Spec'd", "TreeItems hierárquicos", "ARIA tree pattern"],
+      ["Stepper", "Beta", "Steps + Progress", "etapa atual anunciada"],
+      ["PlanPrice", "Stable", "Price + Cadence + Disclosure", "preço completo"]
+    ];
+    const organisms = [
+      ["GlobalHeader", "Stable", "desktop/mobile/authenticated", "Navegação e conta"],
+      ["GlobalFooter", "Stable", "regional/legal", "Links e disclosures"],
+      ["NavigationMenu", "Stable", "closed/open/current", "Arquitetura global"],
+      ["Drawer", "Stable", "closed/open", "Conteúdo contextual"],
+      ["Modal", "Stable", "closed/open/busy", "Decisão bloqueante"],
+      ["DataTable", "Beta", "loading/empty/error/data", "Dados estruturados"],
+      ["ProductComparison", "Stable", "monthly/annual", "Comparação de planos"],
+      ["GuidedForm", "Beta", "editing/validating/submitting", "Fluxo sensível"],
+      ["EmptyState", "Stable", "first-use/no-results/error/success", "Orientação"],
+      ["ErrorBoundary", "Stable", "recoverable/fatal", "Recuperação"],
+      ["NotificationCenter", "Spec'd", "empty/unread/read/error", "Alertas"],
+      ["ToastContainer", "Stable", "stacked/polite/assertive", "Feedback global"],
+      ["SecurityBanner", "Beta", "info/warning/critical", "Risco e proteção"]
+    ];
+
+    function statusBadge(status) {
+      const className =
+        status === "Stable" ? "success" :
+        status === "Beta" ? "warning" :
+        status === "Deprecated" ? "danger" : "";
+      return `<span class="badge ${className}">${status}</span>`;
+    }
+
+    function fillTable(id, rows) {
+      document.getElementById(id).innerHTML = rows
+        .map(row => `<tr><td>${row[0]}</td><td>${statusBadge(row[1])}</td><td>${row[2]}</td><td>${row[3]}</td></tr>`)
+        .join("");
+    }
+
+    fillTable("atoms-body", atoms);
+    fillTable("molecules-body", molecules);
+    fillTable("organisms-body", organisms);
+
+    const root = document.documentElement;
+    const themeToggle = document.querySelector(".theme-toggle");
+    themeToggle.addEventListener("click", () => {
+      const dark = root.dataset.theme !== "dark";
+      root.dataset.theme = dark ? "dark" : "light";
+      themeToggle.setAttribute("aria-pressed", String(dark));
+    });
+
+    document.querySelector(".mobile-nav").addEventListener("change", event => {
+      document.querySelector(event.target.value)?.scrollIntoView();
+    });
+
+    const tabs = [...document.querySelectorAll('[role="tab"]')];
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => activateTab(index));
+      tab.addEventListener("keydown", event => {
+        if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+        event.preventDefault();
+        let next = index;
+        if (event.key === "ArrowRight") next = (index + 1) % tabs.length;
+        if (event.key === "ArrowLeft") next = (index - 1 + tabs.length) % tabs.length;
+        if (event.key === "Home") next = 0;
+        if (event.key === "End") next = tabs.length - 1;
+        activateTab(next);
+        tabs[next].focus();
+      });
+    });
+
+    function activateTab(index) {
+      tabs.forEach((tab, current) => {
+        const selected = current === index;
+        tab.setAttribute("aria-selected", String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+        document.getElementById(tab.getAttribute("aria-controls")).hidden = !selected;
+      });
+    }
+
+    document.querySelectorAll(".accordion button").forEach(button => {
+      button.addEventListener("click", () => {
+        const expanded = button.getAttribute("aria-expanded") === "true";
+        button.setAttribute("aria-expanded", String(!expanded));
+        document.getElementById(button.getAttribute("aria-controls")).hidden = expanded;
+        button.querySelector("span").textContent = expanded ? "+" : "−";
+      });
+    });
+
+    const navLinks = [...document.querySelectorAll(".sidebar a")];
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        navLinks.forEach(link => link.classList.toggle("active", link.hash === `#${entry.target.id}`));
+      });
+    }, { rootMargin: "-20% 0px -70% 0px" });
+    document.querySelectorAll("main section[id]").forEach(section => observer.observe(section));
+  </script>
+</body>
+</html>

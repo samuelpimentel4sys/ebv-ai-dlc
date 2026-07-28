@@ -1,0 +1,190 @@
+/* ============================================================
+   EQUIFAX DESIGN SYSTEM v1.0 — TOKENS
+   Portado de 99.DownStream/Resumo do UpStream/Equifax_Design_System_v1.0.html
+   Tier 1 (primitivos) · Tier 2 (semânticos) · Tier 3 (componentes)
+   ============================================================ */
+
+:root {
+  /* ----- Tier 1 — primitivos ----- */
+  --eqx-white: 255 255 255;
+  --eqx-black: 0 0 0;
+  --eqx-gray-50: 248 249 250;
+  --eqx-gray-100: 241 244 245;
+  --eqx-gray-200: 238 238 238;
+  --eqx-gray-300: 217 223 227;
+  --eqx-gray-400: 178 178 178;
+  --eqx-gray-500: 163 170 173;
+  --eqx-gray-600: 95 106 114;
+  --eqx-gray-700: 91 103 113;
+  --eqx-gray-800: 51 62 72;
+  --eqx-gray-900: 33 37 41;
+  --eqx-blue-100: 216 241 250;
+  --eqx-blue-300: 0 172 230;
+  --eqx-blue-500: 0 147 201;
+  --eqx-blue-600: 0 118 163;
+  --eqx-blue-700: 0 114 152;
+  --eqx-blue-800: 0 86 116;
+  --eqx-red-100: 246 217 207;
+  --eqx-red-500: 231 0 51;
+  --eqx-red-700: 158 27 50;
+  --eqx-red-800: 152 30 50;
+  --eqx-orange-100: 255 232 220;
+  --eqx-orange-500: 255 102 27;
+  --eqx-orange-700: 183 59 0;
+  --eqx-green-100: 225 244 219;
+  --eqx-green-600: 63 174 41;
+  --eqx-green-700: 39 140 16;
+  /* Extensão da escala: green-700 sobre green-100 rende 3,75:1 e reprova a
+     seção 25 do DS quando usado como tinta do badge de sucesso. */
+  --eqx-green-800: 28 122 12;
+  --eqx-yellow-100: 255 246 204;
+  --eqx-yellow-600: 237 183 0;
+  --eqx-yellow-700: 137 102 0;
+  --eqx-plum-600: 101 47 108;
+
+  --font-family-sans: 'Open Sans', Arial, Helvetica, sans-serif;
+  --font-family-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 2rem;
+  --font-size-4xl: clamp(2.25rem, 5vw, 4rem);
+  --line-height-tight: 1.15;
+  --line-height-snug: 1.35;
+  --line-height-normal: 1.6;
+  --font-weight-regular: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --space-0: 0;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: 6rem;
+  --size-target: 3rem;
+  --size-icon-sm: 1rem;
+  --size-icon-md: 1.25rem;
+  --size-icon-lg: 1.5rem;
+  --size-content: 75rem;
+  --size-sidebar: 17rem;
+
+  --border-width: 0.0625rem;
+  --border-width-strong: 0.125rem;
+  --radius-sm: 0.1875rem;
+  --radius-md: 0.25rem;
+  --radius-lg: 0.375rem;
+  --radius-pill: 999rem;
+  --shadow-1: 0 0.0625rem 0.1875rem rgb(var(--eqx-black) / 0.12);
+  --shadow-2: 0 0.25rem 0.875rem rgb(var(--eqx-black) / 0.12);
+  --shadow-3: 0 0.75rem 2.5rem rgb(var(--eqx-black) / 0.18);
+  --duration-instant: 0ms;
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 400ms;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-decelerate: cubic-bezier(0, 0, 0.2, 1);
+  /* Escala fechada da seção 12 do DS. */
+  --z-base: 0;
+  --z-dropdown: 50;
+  --z-sticky: 100;
+  --z-overlay: 200;
+  --z-modal: 300;
+  --z-toast: 400;
+  --z-tooltip: 500;
+
+  /* ----- Tier 2 — semânticos (tema claro) ----- */
+  /* `brand` preenche; `brand-text` escreve. Um único token não serve aos dois
+     papéis: no tema escuro o vermelho de preenchimento cai a 1,5:1 como tinta. */
+  --color-brand: var(--eqx-red-700);
+  --color-brand-strong: var(--eqx-red-800);
+  --color-brand-text: var(--eqx-red-700);
+  --color-action: var(--eqx-blue-700);
+  --color-action-hover: var(--eqx-blue-800);
+  --color-accent: var(--eqx-orange-500);
+  /* Laranja tipográfico: orange-500 rende 2,9:1 e reprova a seção 25 do DS
+     (4.5:1 para texto normal). orange-700 rende 5,9:1 sobre surface. */
+  --color-accent-text: var(--eqx-orange-700);
+  --color-bg: var(--eqx-white);
+  --color-surface: var(--eqx-white);
+  --color-surface-subtle: var(--eqx-gray-50);
+  --color-surface-strong: var(--eqx-gray-800);
+  --color-text: var(--eqx-gray-800);
+  --color-text-muted: var(--eqx-gray-600);
+  --color-text-inverse: var(--eqx-white);
+  --color-border: var(--eqx-gray-300);
+  --color-border-strong: var(--eqx-gray-600);
+  --color-focus: var(--eqx-blue-500);
+  --color-success: var(--eqx-green-800);
+  --color-success-bg: var(--eqx-green-100);
+  --color-warning: var(--eqx-yellow-700);
+  --color-warning-bg: var(--eqx-yellow-100);
+  --color-danger: var(--eqx-red-700);
+  --color-danger-bg: var(--eqx-red-100);
+  --color-info: var(--eqx-blue-700);
+  --color-info-bg: var(--eqx-blue-100);
+
+  /* ----- Tier 3 — componentes ----- */
+  --button-bg: var(--color-action);
+  --button-bg-hover: var(--color-action-hover);
+  --button-text: var(--color-text-inverse);
+  --input-bg: var(--color-surface);
+  --input-border: var(--color-border-strong);
+  --card-bg: var(--color-surface);
+  --card-border: var(--color-border);
+  --nav-bg: var(--color-surface-strong);
+
+  /* ----- Densidade (compact | comfortable | spacious) ----- */
+  --density-row-y: var(--space-3);
+  --density-card-p: var(--space-5);
+  --density-gap: var(--space-4);
+}
+
+[data-theme='dark'] {
+  --color-bg: 24 30 35;
+  --color-surface: 46 57 68;
+  --color-surface-subtle: 51 62 72;
+  --color-surface-strong: 20 26 31;
+  --color-text: 248 249 250;
+  --color-text-muted: 217 223 227;
+  --color-border: 95 106 114;
+  --color-border-strong: 178 178 178;
+  /* Tintas do tema escuro precisam clarear, não escurecer: os valores do tema
+     claro caem abaixo de 4.5:1 sobre as superfícies escuras. */
+  --color-action: 77 195 245;
+  --color-action-hover: 140 215 250;
+  --color-focus: 255 138 74;
+  --color-accent-text: 255 165 122;
+  --color-brand-text: 247 160 170;
+  --button-text: 0 0 0;
+  --color-success: 122 214 100;
+  --color-success-bg: 25 66 15;
+  --color-warning: 247 208 96;
+  --color-warning-bg: 74 55 0;
+  --color-danger: 245 158 158;
+  --color-danger-bg: 90 20 30;
+  --color-info: 129 213 240;
+  --color-info-bg: 12 60 78;
+  --shadow-1: 0 0.0625rem 0.1875rem rgb(var(--eqx-black) / 0.5);
+  --shadow-2: 0 0.25rem 0.875rem rgb(var(--eqx-black) / 0.5);
+  --shadow-3: 0 0.75rem 2.5rem rgb(var(--eqx-black) / 0.6);
+}
+
+[data-density='compact'] {
+  --density-row-y: var(--space-2);
+  --density-card-p: var(--space-4);
+  --density-gap: var(--space-3);
+}
+
+[data-density='spacious'] {
+  --density-row-y: var(--space-4);
+  --density-card-p: var(--space-6);
+  --density-gap: var(--space-5);
+}
