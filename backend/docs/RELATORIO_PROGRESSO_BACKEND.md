@@ -5,9 +5,9 @@
 | **Agente** | Noah · `dev-java-esp` |
 | **Produto** | EBV Prisma · Equifax/BoaVista |
 | **Repo** | `Prisma/backend` · [ebv-ai-dlc](https://github.com/samuelpimentel4sys/ebv-ai-dlc) |
-| **Atualizado em** | 2026-07-28 14:45 (America/Sao_Paulo) |
+| **Atualizado em** | 2026-07-28 14:55 (America/Sao_Paulo) |
 | **Ambiente** | Java 21 · Spring Boot 3.4 · profiles `supabase,infra` |
-| **Git** | S1–S3 em `origin/main` · EP-02/EP-05 lab local (**sem commit** neste slice) |
+| **Git** | S1–S3 em `origin/main` · EP-02/EP-05/EP-06 lab local (**sem commit** neste slice) |
 
 ---
 
@@ -32,10 +32,11 @@ Ver slice anterior. **DEV_RECORD:** [`DEV_RECORD_EP02_F06_F07_F08_F09.md`](./DEV
 
 | Dimensão | Planejado | DoD 100% | Em andamento lab | Não iniciado |
 |----------|----------:|---------:|-----------------:|-------------:|
-| Épicos | 6 | 0 | 3 (EP-01, EP-02, EP-05) | 3 |
+| Épicos | 6 | 0 | 4 (EP-01, EP-02, EP-05, EP-06) | 2 |
 | Features EP-01 | 10 | 0 | **10** | **0** |
 | Features EP-02 | 10 | 0 | **10** | **0** |
 | Features EP-05 | 9 | 0 | **9** | **0** |
+| Features EP-06 | 9 | 0 | **9** | **0** |
 
 ---
 
@@ -55,33 +56,33 @@ Ver slice anterior. **DEV_RECORD:** [`DEV_RECORD_EP02_F06_F07_F08_F09.md`](./DEV
 
 **DEV_RECORD:** [`DEV_RECORD_EP05_S5.md`](./DEV_RECORD_EP05_S5.md) · [`DEV_RECORD_EP05_F03_F04_F06_F07_F09.md`](./DEV_RECORD_EP05_F03_F04_F06_F07_F09.md)
 
-### Endpoints F03/F04/F06/F07/F09
+---
 
-| Método | Path |
-|--------|------|
-| GET | `/api/v1/sla/status` |
-| POST | `/api/v1/sla/policies` → **201** |
-| GET | `/api/v1/sla/escalations` |
-| POST | `/api/v1/onboarding/start` → **201** |
-| POST | `/api/v1/onboarding/{id}/verify` |
-| POST | `/api/v1/onboarding/{id}/complete` |
-| POST | `/api/v1/credentials` → **201** |
-| POST | `/api/v1/credentials/{id}/rotate` |
-| DELETE | `/api/v1/credentials/{id}` → **204** |
-| GET | `/api/v1/console/usage?tenantId=` |
-| GET | `/api/v1/console/invoices` |
-| GET | `/api/v1/console/contracts` |
-| GET | `/api/v1/analytics/deflection` |
-| GET | `/api/v1/analytics/sac-cost` |
-| GET | `/api/v1/analytics/baseline` |
+## 5. EP-06 Sprint 6b — lab **9/9**
+
+Consent → titularidade → ingest alt → thin-file → coach → gamificação → efeito → marketplace → drift.
+
+**DEV_RECORD:** [`DEV_RECORD_EP06.md`](./DEV_RECORD_EP06.md) · Flyway **V31–V39**
+
+| F | Âncora |
+|---|--------|
+| F04 | `POST /api/v1/consents` |
+| F08 | `POST /api/v1/utilities/link` |
+| F01 | `POST /api/v1/alternative-data/ingest` |
+| F02 | `POST /api/v1/thinfile/score` |
+| F03 | `GET /api/v1/coach/journey` |
+| F05 | `GET /api/v1/missions` |
+| F06 | `POST /api/v1/coach/simulate` |
+| F07 | `GET /api/v1/marketplace/offers` |
+| F09 | `POST /api/v1/thinfile/monitoring/evaluate` |
 
 ---
 
-## 5. Próximos passos
+## 6. Próximos passos
 
 1. `mvn test` confirmação local  
 2. Commit/push quando pedir  
-3. Sprint 6 hardening (OIDC CTs · Testcontainers · SLO)
+3. Sprint 6 hardening (OIDC CTs · Testcontainers · SLO) · EP-03/EP-04
 
 ---
 

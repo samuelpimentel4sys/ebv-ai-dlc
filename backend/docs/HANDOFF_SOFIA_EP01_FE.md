@@ -100,3 +100,24 @@ _Relatório: `backend/docs/RELATORIO_PROGRESSO_BACKEND.md`_
 | Analytics F09 | ?? | /analytics/deflection � /sac-cost � /baseline |
 
 EP-03/EP-04/EP-06 ainda **fora** (pr�ximo plano Noah = EP-06 ou EP-04).
+
+---
+
+## 6. EP-06 — Score Inclusão + Coach B2C (9/9 lab) — **NOVO**
+
+Auth lab: `OIDC_ENABLED=false`. Roles prod: `TITULAR_B2C` · `SYSTEM_INGEST` · `SCORE_CONSUMER` · `MODEL_OPS`.
+
+| F | Status | Endpoints |
+|---|--------|-----------|
+| F04 Consent | stub | `POST /api/v1/consents` · `GET /consents/{documento}` · `DELETE /consents/{consentId}` |
+| F08 Utilities | stub | `POST /utilities/link` · `GET /utilities/links?documento=` · `DELETE /utilities/links/{linkId}` |
+| F01 Alt data | stub | `POST /alternative-data/ingest` · `GET /coverage` · `GET /quality` |
+| F02 Thin-file | stub | `POST /thinfile/score` · `GET /thinfile/model-card` · `GET /thinfile/{documento}` |
+| F03 Coach | stub | `GET /coach/journey?documento=` · `POST /coach/goals` · `GET /coach/progress` |
+| F05 Missions | stub | `GET /missions?documento=` · `POST /missions/{id}/progress` · `GET /missions/achievements` |
+| F06 Simulate | stub | `POST /coach/simulate` · `GET /coach/simulations/history?documento=` |
+| F07 Marketplace | stub | `GET /marketplace/offers?documento=` · `POST /offers/{id}/apply` · `GET /eligibility` |
+| F09 Drift | stub | `GET /thinfile/monitoring` · `GET /thinfile/drift` · `POST /thinfile/monitoring/evaluate` |
+
+Ordem plug: F04 → F08 → F01 → F02 → F03 → F05 → F06 → F07 → F09.  
+DEV_RECORD: `docs/DEV_RECORD_EP06.md` · Flyway V31–V39.

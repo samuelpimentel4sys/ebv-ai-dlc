@@ -82,6 +82,15 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/subject-requests/**").hasAnyRole("SUBJECT", "PLATFORM")
                         .requestMatchers("/api/v1/disputes/**").hasAnyRole(
                                 "TITULAR", "ANALISTA_CONTESTACAO", "SUPERVISOR_CONTESTACAO", "JURIDICO", "PLATFORM")
+                        .requestMatchers("/api/v1/consents/**").hasAnyRole("TITULAR_B2C", "PLATFORM")
+                        .requestMatchers("/api/v1/utilities/**").hasAnyRole("TITULAR_B2C", "PLATFORM")
+                        .requestMatchers("/api/v1/alternative-data/**").hasAnyRole("SYSTEM_INGEST", "PLATFORM")
+                        .requestMatchers("/api/v1/thinfile/monitoring/**", "/api/v1/thinfile/drift")
+                                .hasAnyRole("MODEL_OPS", "PLATFORM")
+                        .requestMatchers("/api/v1/thinfile/**").hasAnyRole("SCORE_CONSUMER", "MODEL_OPS", "PLATFORM")
+                        .requestMatchers("/api/v1/coach/**").hasAnyRole("TITULAR_B2C", "PLATFORM")
+                        .requestMatchers("/api/v1/missions/**").hasAnyRole("TITULAR_B2C", "PLATFORM")
+                        .requestMatchers("/api/v1/marketplace/**").hasAnyRole("TITULAR_B2C", "PLATFORM")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> jwt.jwtAuthenticationConverter(keycloakRolesConverter())));

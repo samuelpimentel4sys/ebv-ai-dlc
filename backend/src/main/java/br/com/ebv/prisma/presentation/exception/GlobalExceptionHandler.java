@@ -29,6 +29,19 @@ import br.com.ebv.prisma.domain.dispute.exception.DisputeValidationException;
 import br.com.ebv.prisma.domain.onboarding.exception.OnboardingConflictException;
 import br.com.ebv.prisma.domain.onboarding.exception.OnboardingNotFoundException;
 import br.com.ebv.prisma.domain.onboarding.exception.OnboardingValidationException;
+import br.com.ebv.prisma.domain.consent.exception.ConsentNotFoundException;
+import br.com.ebv.prisma.domain.consent.exception.ConsentValidationException;
+import br.com.ebv.prisma.domain.utilitylink.exception.UtilityLinkNotFoundException;
+import br.com.ebv.prisma.domain.utilitylink.exception.UtilityLinkValidationException;
+import br.com.ebv.prisma.domain.altdata.exception.AltDataValidationException;
+import br.com.ebv.prisma.domain.thinfile.exception.ThinfileNotFoundException;
+import br.com.ebv.prisma.domain.thinfile.exception.ThinfileValidationException;
+import br.com.ebv.prisma.domain.coach.exception.CoachNotFoundException;
+import br.com.ebv.prisma.domain.coach.exception.CoachValidationException;
+import br.com.ebv.prisma.domain.mission.exception.MissionNotFoundException;
+import br.com.ebv.prisma.domain.mission.exception.MissionValidationException;
+import br.com.ebv.prisma.domain.marketplace.exception.MarketplaceNotFoundException;
+import br.com.ebv.prisma.domain.marketplace.exception.MarketplaceValidationException;
 import br.com.ebv.prisma.domain.sla.exception.SlaConflictException;
 import br.com.ebv.prisma.domain.sla.exception.SlaNotFoundException;
 import br.com.ebv.prisma.domain.sla.exception.SlaValidationException;
@@ -96,7 +109,13 @@ public class GlobalExceptionHandler {
             DisputeNotFoundException.class,
             SlaNotFoundException.class,
             OnboardingNotFoundException.class,
-            CredentialNotFoundException.class
+            CredentialNotFoundException.class,
+            ConsentNotFoundException.class,
+            UtilityLinkNotFoundException.class,
+            ThinfileNotFoundException.class,
+            CoachNotFoundException.class,
+            MissionNotFoundException.class,
+            MarketplaceNotFoundException.class
     })
     public ResponseEntity<Map<String, Object>> notFound(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.NOT_FOUND, ex.getMessage(), req, List.of());
@@ -122,7 +141,11 @@ public class GlobalExceptionHandler {
             AuditValidationException.class, ReviewValidationException.class, FairnessValidationException.class,
             SubjectRequestValidationException.class, PolicySimulationValidationException.class,
             DisputeValidationException.class, SlaValidationException.class,
-            OnboardingValidationException.class, CredentialValidationException.class})
+            OnboardingValidationException.class, CredentialValidationException.class,
+            ConsentValidationException.class, UtilityLinkValidationException.class,
+            AltDataValidationException.class, ThinfileValidationException.class,
+            CoachValidationException.class, MissionValidationException.class,
+            MarketplaceValidationException.class})
     public ResponseEntity<Map<String, Object>> unprocessable(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage(), req, List.of());
     }

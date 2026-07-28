@@ -1,0 +1,10 @@
+package br.com.ebv.prisma.infrastructure.adapter.persistence.mission;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+import java.util.UUID;
+
+public interface MissionAchievementJpaRepository extends JpaRepository<MissionAchievementEntity, UUID> {
+    List<MissionAchievementEntity> findByDocumentoHashOrderByEarnedAtDesc(String documentoHash);
+}

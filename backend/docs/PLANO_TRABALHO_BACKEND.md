@@ -115,6 +115,22 @@ F10 política → F04 trilha → F05 motivos → F01–F03 → **F06–F09 ✅ l
 
 F05 → F02 → F01 → F08 → F06 → F03 → F07 → F04 → F09 ✅ lab
 
+### Sprint 6b — EP-06 Score Inclusão + Coach B2C — ✅ lab 9/9 (2026-07-28)
+
+| US | Entrega | Status |
+|----|---------|--------|
+| F04 | Consentimento granular | 🟡 lab V31 · consents CRUD |
+| F08 | Titularidade utilities | 🟡 lab V32 · link/links/unlink |
+| F01 | Ingest alt data | 🟡 lab V33 · ingest/coverage/quality |
+| F02 | Score thin-file | 🟡 lab V34 · score/model-card/{doc} |
+| F03 | Coach journey | 🟡 lab V35 · journey/goals/progress |
+| F05 | Gamificação | 🟡 lab V36 · missions/progress/achievements |
+| F06 | Efeito estimado | 🟡 lab V37 · simulate/history |
+| F07 | Marketplace | 🟡 lab V38 · offers/apply/eligibility |
+| F09 | Monitoring/drift | 🟡 lab V39 · monitoring/drift/evaluate |
+
+F04 → F08 → F01 → F02 → F03 → F05 → F06 → F07 → F09 ✅ lab · [`DEV_RECORD_EP06.md`](./DEV_RECORD_EP06.md)
+
 ### Sprint 6 — Hardening R1
 EP-01 F08/F10 · Testcontainers · SLO · Fairlearn/Spark reais · OIDC CTs EP-05
 
