@@ -97,7 +97,7 @@ Stack daquela US era **Angular** — se reabrir, reescrever em **React + Equifax
 
 | Prio | O quê | Depende de | Esforço FE (ordem mag.) |
 |------|--------|------------|-------------------------|
-| **P0** | Plug EP-03 **F04 HITL** live (`ApprovalPage` + submit) | Noah ✅ | 0.5–1 d |
+| **P0** | Plug EP-03 **F04 HITL** live | Noah ✅ · Sofia ✅ `de5d422` | feito |
 | **P1** | Hardening live Score (gaps shape, erros reais) | Noah OpenAPI | 2–4 d |
 | **P2** | EP-03 GenAI live (F01–F03, F05–F09) | Emilly `:8090` | 5–10 d pós-contrato |
 | **P3** | OIDC login produto (P6) | Keycloak client UI | 3–5 d |
