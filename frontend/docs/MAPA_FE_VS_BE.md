@@ -39,7 +39,7 @@
 
 | US | Prefixo típico | BE | FE pasta |
 |----|----------------|----|----------|
-| F01…F09 | `/api/v1/pj/*` (+ GenAI Python) | ⚪ | `copiloto-pj/` |
+| F01…F09 | `/api/v1/pj/*` (GenAI Emilly + HITL Noah) | ✅ lab | `copiloto-pj/` · `api/pjGenai.ts` · `api/pjHitl.ts` |
 
 ---
 

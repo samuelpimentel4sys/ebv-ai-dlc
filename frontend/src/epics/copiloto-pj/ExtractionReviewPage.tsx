@@ -16,11 +16,14 @@ import {
   TextField,
   useToast,
 } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { isLiveMode } from '@/lib/config';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
+import { correctExtractionFieldLive, fetchExtractionLive } from '@/api/pjGenai';
 import { formatDateTime, formatPercent } from '@/lib/format';
 import { AURORA } from '@/app/story';
 import { extraction, type ExtractedField } from '@/epics/copiloto-pj/data';
 import { cn } from '@/lib/cn';
+import { toNumber } from '@/lib/number';
 
 const LOW_CONFIDENCE = 0.8;
 
@@ -33,11 +36,12 @@ function confidenceTone(value: number) {
 export function ExtractionReviewPage() {
   const toast = useToast();
   const navigate = useNavigate();
-  const query = useMockQuery(() => extraction, { latency: 420 });
+  const query = useDataQuery(() => extraction, fetchExtractionLive, { latency: 420 });
   const [fields, setFields] = useState<ExtractedField[] | null>(null);
   const [editing, setEditing] = useState<ExtractedField | null>(null);
   const [draft, setDraft] = useState('');
   const [page, setPage] = useState(4);
+  const [saving, setSaving] = useState(false);
 
   const current = fields ?? query.data?.fields ?? [];
   const lowConfidence = current.filter((field) => field.confidence < LOW_CONFIDENCE);
@@ -259,17 +263,32 @@ export function ExtractionReviewPage() {
               Cancelar
             </Button>
             <Button
+              loading={saving}
               onClick={() => {
-                if (!editing) return;
-                setFields(
-                  current.map((field) =>
-                    field.id === editing.id
-                      ? { ...field, value: draft, confidence: 1, corrected: true }
-                      : field,
-                  ),
-                );
-                toast.success('Campo corrigido', 'PATCH /api/v1/pj/documents/{docId}/correct');
-                setEditing(null);
+                void (async () => {
+                  if (!editing) return;
+                  setSaving(true);
+                  try {
+                    if (isLiveMode()) {
+                      const docId = query.data?.docId;
+                      if (!docId) throw new Error('Documento live sem docId (VITE_PJ_DOC_ID).');
+                      await correctExtractionFieldLive(docId, editing.id, toNumber(draft));
+                    }
+                    setFields(
+                      current.map((field) =>
+                        field.id === editing.id
+                          ? { ...field, value: draft, confidence: 1, corrected: true }
+                          : field,
+                      ),
+                    );
+                    toast.success('Campo corrigido', 'PATCH /api/v1/pj/documents/{docId}/correct');
+                    setEditing(null);
+                  } catch (error) {
+                    toast.error('Falha ao corrigir', errorMessage(error));
+                  } finally {
+                    setSaving(false);
+                  }
+                })();
               }}
             >
               Salvar correção

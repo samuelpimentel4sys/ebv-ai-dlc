@@ -14,14 +14,14 @@
 
 | Fonte | Contagem | Situação Sofia |
 |-------|----------|----------------|
-| Showcase React (nav) | **59** telas | UI mock + BIO lab |
+| Showcase React (nav) | **59** telas | UI mock Vitest + live lab |
 | US-FE Downstream md | **47** (EP-01…04 + EP-06) | EP-05 **sem** pasta md Downstream |
 | Telas EP-05 no FE | **12** | Contestação 9 + BIO 3 · live plug ✅ |
-| Live × Noah BE | EP-01/02/04/05/06 | ✅ (+ Liveness V51) |
-| EP-03 US-FE + telas | **9** | Mock · **F04 HITL** ✅ live · GenAI Emilly `:8090` |
+| Live × Noah BE | EP-01/02/04/05/06 + HITL | ✅ (+ Liveness V51) |
+| EP-03 US-FE + telas | **9** | ✅ GenAI Emilly `:8090` + HITL Noah `:8080` |
 | Nexus EP-05 antigo | 5 features · ~12 US-FE | Contestação Downstream + BIO reaberto lab |
 
-Conclusão: o que Sofia “deve” implementar no ciclo atual = **Downstream PRISMA**. O que Nexus especificou e **não** entrou no Downstream = backlog de produto (precisa decisão Walter), não bug de plug.
+Conclusão: lab **100% BE** nas telas de produto com `VITE_DATA_MODE=live` (Noah **ou** Emilly). Mock só Vitest. Fora do ciclo: Amplify Face Liveness / GetResults / OIDC PKCE.
 
 ---
 
@@ -31,7 +31,7 @@ Conclusão: o que Sofia “deve” implementar no ciclo atual = **Downstream PRI
 |-------|-----------------:|---------:|----------|
 | EP-01 Score | 10 | 10 | ✅ |
 | EP-02 Explicável | 10 | 10 | ✅ |
-| EP-03 Copiloto PJ | 9 | 9 | ⏸ mock (BE adiado) |
+| EP-03 Copiloto PJ | 9 | 9 | ✅ Emilly GenAI + Noah HITL |
 | EP-04 Sala de Risco | 9 | 9 | ✅ stub lab |
 | EP-05 Contestação + BIO | **0 md** / 9 BE + Liveness | 12 | ✅ (+ BIO lab) |
 | EP-06 Inclusão | 9 | 9 | ✅ |
@@ -68,10 +68,12 @@ API: `frontend/src/api/liveness.ts` → Noah `POST /api/v1/auth/biometric-consen
 | Item | Estado |
 |------|--------|
 | 9 US-FE Downstream | ✅ escritas |
-| 9 telas showcase | ✅ mock |
+| 9 telas showcase | ✅ |
 | **F04 HITL** Java Noah | ✅ lab + FE (`pjHitl.ts`) |
-| GenAI Python Emilly | ✅ `:8090` — FE GenAI quando contrato liberar |
-| Demais F01–F03/F05–F09 live | ⏸ GenAI Emilly (não Java) |
+| GenAI Python Emilly | ✅ `:8090` + FE (`pjGenai.ts`) · proxy Vite dual |
+| F01–F03 / F05–F09 live | ✅ `useDataQuery` → Emilly (sem fallback silencioso a fixture) |
+
+Lab: `VITE_PJ_OPINION_ID` · `VITE_PJ_DOC_ID` · `VITE_PJ_CNPJ` (ver `.env.example`). Vitest força `VITE_DATA_MODE=mock`.
 
 ### C. Transversal (não é US de épico, mas produto)
 
@@ -98,9 +100,9 @@ API: `frontend/src/api/liveness.ts` → Noah `POST /api/v1/auth/biometric-consen
 
 | Prio | O quê | Depende de | Esforço FE (ordem mag.) |
 |------|--------|------------|-------------------------|
-| **P0** | Plug EP-03 **F04 HITL** live | Noah ✅ · Sofia ✅ `de5d422` | feito |
+| **P0** | Plug EP-03 **F04 HITL** live | Noah ✅ · Sofia ✅ | feito |
 | **P1** | Hardening live Score (gaps shape, erros reais) | Noah OpenAPI | 2–4 d |
-| **P2** | EP-03 GenAI live (F01–F03, F05–F09) | Emilly `:8090` | 5–10 d pós-contrato |
+| **P2** | EP-03 GenAI live (F01–F03, F05–F09) | Emilly `:8090` · Sofia ✅ `pjGenai.ts` | feito |
 | **P3** | OIDC login produto (P6) | Keycloak client UI | 3–5 d |
 | **P4** | Biometria SCR-BIO-* lab (Noah V51) | ✅ FE `liveness.ts` + 3 telas | feito (Amplify/GetResults backlog) |
 | **P5** | OCR comprovantes GenAI (Nexus F04) | Textract/Bedrock | 5+ d |
@@ -110,10 +112,10 @@ API: `frontend/src/api/liveness.ts` → Noah `POST /api/v1/auth/biometric-consen
 
 ## 6. Resposta direta
 
-**Das US-FE Downstream Prisma:** showcase cobre as telas; live falta sobretudo **EP-03 GenAI** (Emilly).
+**Das US-FE Downstream Prisma:** showcase + live lab cobrem EP-01…06 (EP-03 via Emilly GenAI + Noah HITL). Mock permanece só para Vitest.
 
 **Das US-FE Nexus “reabertas”:** **biometria/liveness/MFA** pluggada no lab (stub/WireMock) — Amplify AWS + GetResults ainda backlog. **OCR GenAI** e SLA SSE continuam fora.
 
-**Próximo passo sugerido:** (A) P1 hardening Score, (B) GenAI Emilly, (C) Amplify quando `LIVENESS_MODE=aws`, (D) docs US-FE EP-05 Downstream.
+**Próximo passo sugerido:** (A) P1 hardening Score, (B) Amplify quando `LIVENESS_MODE=aws`, (C) OIDC PKCE produto, (D) docs US-FE EP-05 Downstream.
 
 _Sofia · gap US-FE · 2026-07-28_

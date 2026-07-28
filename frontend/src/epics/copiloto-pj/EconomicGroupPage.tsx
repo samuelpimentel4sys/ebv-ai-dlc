@@ -15,7 +15,8 @@ import {
   useToast,
 } from '@/ds';
 import type { Column, GraphNode } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { useDataQuery } from '@/lib/useDataQuery';
+import { fetchEconomicGroupLive } from '@/api/pjGenai';
 import { formatCurrency, formatDateTime, formatPercent } from '@/lib/format';
 import { sumBy } from '@/lib/number';
 import { groupResponse, type GroupMember } from '@/epics/copiloto-pj/data';
@@ -36,7 +37,7 @@ const positions: Record<string, { x: number; y: number }> = {
 
 export function EconomicGroupPage() {
   const toast = useToast();
-  const query = useMockQuery(() => groupResponse, { latency: 400 });
+  const query = useDataQuery(() => groupResponse, fetchEconomicGroupLive, { latency: 400 });
   const [selected, setSelected] = useState<string | null>('12.345.678/0001-90');
 
   const nodes: GraphNode[] = useMemo(

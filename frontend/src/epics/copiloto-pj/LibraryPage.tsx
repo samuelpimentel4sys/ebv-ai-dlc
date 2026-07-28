@@ -17,7 +17,8 @@ import {
   useToast,
 } from '@/ds';
 import type { Column } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { useDataQuery } from '@/lib/useDataQuery';
+import { fetchLibraryLive } from '@/api/pjGenai';
 import { formatDate, formatDateTime, formatNumber } from '@/lib/format';
 import { AURORA } from '@/app/story';
 import { library, type LibraryDocument } from '@/epics/copiloto-pj/data';
@@ -40,7 +41,7 @@ const typeLabel = {
 
 export function LibraryPage() {
   const toast = useToast();
-  const query = useMockQuery(() => library, { latency: 340 });
+  const query = useDataQuery(() => library, fetchLibraryLive, { latency: 340 });
   const [docs, setDocs] = useState<LibraryDocument[] | null>(null);
   const [type, setType] = useState('todos');
   const [uploadOpen, setUploadOpen] = useState(false);

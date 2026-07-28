@@ -15,7 +15,8 @@ import {
   TextField,
   useToast,
 } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { useDataQuery } from '@/lib/useDataQuery';
+import { queryRagLive } from '@/api/pjGenai';
 import { formatNumber, formatPercent } from '@/lib/format';
 import { AURORA } from '@/app/story';
 import { ragQuery, ragSuggestions } from '@/epics/copiloto-pj/data';
@@ -27,7 +28,7 @@ export function GroundingPage() {
   const [asked, setAsked] = useState(ragSuggestions[0]);
   const [citationId, setCitationId] = useState<string | null>(null);
 
-  const query = useMockQuery(() => ragQuery(asked), {
+  const query = useDataQuery(() => ragQuery(asked), () => queryRagLive(asked), {
     latency: 620,
     deps: [asked],
     isEmpty: (data) => data.citations.length === 0,

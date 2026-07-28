@@ -18,7 +18,8 @@ import {
   useToast,
 } from '@/ds';
 import type { Column } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { useDataQuery } from '@/lib/useDataQuery';
+import { fetchRatiosLive } from '@/api/pjGenai';
 import { formatNumber } from '@/lib/format';
 import { AURORA } from '@/app/story';
 import { ratios, type FinancialRatio } from '@/epics/copiloto-pj/data';
@@ -38,7 +39,7 @@ function display(ratio: FinancialRatio) {
 export function RatiosPage() {
   const toast = useToast();
   const [searchParams] = useSearchParams();
-  const query = useMockQuery(() => ratios, { latency: 360 });
+  const query = useDataQuery(() => ratios, fetchRatiosLive, { latency: 360 });
   const [detail, setDetail] = useState<FinancialRatio | null>(null);
 
   const sourceDocument = searchParams.get('documento');

@@ -25,6 +25,7 @@ import {
   lastHitlOpinionId,
   type HitlTrailEntry,
 } from '@/api/pjHitl';
+import { fetchApprovalQueueLive } from '@/api/pjGenai';
 import { formatCurrency, formatDateTime } from '@/lib/format';
 import { sumBy } from '@/lib/number';
 import {
@@ -52,7 +53,7 @@ function mapLiveTrail(entries: HitlTrailEntry[]): TrailEntry[] {
 
 export function ApprovalPage() {
   const toast = useToast();
-  const query = useDataQuery(() => approvalQueue, async () => approvalQueue, { latency: 340 });
+  const query = useDataQuery(() => approvalQueue, fetchApprovalQueueLive, { latency: 340 });
   const [items, setItems] = useState<ApprovalItem[] | null>(null);
   const [selected, setSelected] = useState<ApprovalItem | null>(null);
   const [decision, setDecision] = useState<'aprovado' | 'reprovado' | null>(null);

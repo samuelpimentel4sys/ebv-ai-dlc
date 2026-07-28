@@ -12,6 +12,16 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
+      // HITL (Noah Java) — mais específico primeiro
+      '^/api/v1/pj/opinions/.*/(submit|approve|trail)': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+      },
+      // GenAI Copiloto PJ (Emilly Python)
+      '/api/v1/pj': {
+        target: 'http://localhost:8090',
+        changeOrigin: true,
+      },
       '/api': {
         target: 'http://localhost:8080',
         changeOrigin: true,

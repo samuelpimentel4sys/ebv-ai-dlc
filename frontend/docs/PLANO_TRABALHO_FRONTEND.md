@@ -6,8 +6,8 @@
 | **Produto** | **Prisma Equifax** (EBV · Equifax / BoaVista) |
 | **Repo FE** | `Prisma/frontend` |
 | **Repo BE** | `Prisma/backend` (Noah) |
-| **Atualizado em** | 2026-07-28 19:45 |
-| **Fase atual** | BIO Liveness ✅ lab · HITL ✅ · GenAI Emilly · Amplify aws backlog · P1/P6 |
+| **Atualizado em** | 2026-07-28 20:45 |
+| **Fase atual** | FE 100% BE lab ✅ · Amplify/OIDC backlog · P1 Score |
 
 ---
 
@@ -24,9 +24,9 @@
 | Auth lab (`OIDC_ENABLED=false`) | ✅ | Sem login — `httpClient` direto (Noah) |
 | Auth demo JWT (`VITE_API_BEARER`) | ✅ pronto | Atalho smoke; não é login de produto |
 | Login OIDC produto (PKCE) | ❌ backlog P6 | Client `prisma-steward-ui` |
-| EP-02…06 live | ✅ 01+02+04+05+06 | EP-03 adiado (GenAI Python) |
+| EP-02…06 live | ✅ 01–06 | EP-03 GenAI Emilly + HITL Noah |
 
-**Conclusão:** plug live dos épicos Noah **fechado** (exceto EP-03). Próximo: **P1** hardening contrato Score · **P6** login OIDC só quando produto exigir JWT no browser.
+**Conclusão:** plug live lab **fechado** (Noah + Emilly). Mock só Vitest. Próximo: **P1** hardening Score · Amplify aws · **P6** OIDC PKCE produto.
 
 ---
 
@@ -105,7 +105,7 @@ Noah lab 9/9 (stubs Neptune/Trino) · handoff 15:40 · **9/9 telas live**
 |-------|--------|
 | **F04 HITL** (Noah `:8080`) | ✅ BE lab · ✅ FE plug (`pjHitl.ts`) |
 | **F01 BIO Liveness** (Noah `:8080`) | ✅ BE V51 · ✅ FE (`liveness.ts` + 3 telas) · Amplify fora |
-| GenAI F01–F03/F05–F09 (Emilly `:8090`) | Aguarda contrato FE↔Python |
+| GenAI F01–F03/F05–F09 (Emilly `:8090`) | ✅ FE (`pjGenai.ts`) · proxy Vite dual · lab 100% BE |
 
 ### P6 — Login OIDC produto (backlog · desenho Noah 2026-07-28)
 
@@ -194,12 +194,12 @@ Sofia (browser)
 
 Inventário completo: [`GAP_US_FE_FORA_DO_ESCOPO.md`](./GAP_US_FE_FORA_DO_ESCOPO.md)
 
-1. **Feito:** F04 HITL + BIO Liveness lab (Noah V51 · `liveness.ts`)
+1. **Feito:** F04 HITL + BIO Liveness lab + **EP-03 GenAI** Emilly (`pjGenai.ts`)
 2. **Em paralelo:** P1 hardening contrato Score & Plataforma
 3. **Quando OIDC on em demo:** colar JWT em `VITE_API_BEARER`
 4. **Quando produto:** autorizar sprint **P6** (PKCE + login UI)
-5. **EP-03 GenAI:** Emilly `:8090` — Sofia pluga quando contrato FE liberar
-6. **Amplify Face Liveness:** só com `LIVENESS_MODE=aws` · GetResults / IAL3 backlog
-7. **Docs:** gerar US-FE md EP-05 Downstream
+5. **Amplify Face Liveness:** só com `LIVENESS_MODE=aws` · GetResults / IAL3 backlog
+6. **Docs:** gerar US-FE md EP-05 Downstream
+7. **Ops lab:** Emilly `:8090` + Noah `:8080` obrigatórios para GenAI live
 
 _Sofia · Prisma Equifax_

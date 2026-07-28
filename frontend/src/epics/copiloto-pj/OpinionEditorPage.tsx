@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RefreshCw, Send, ShieldCheck, Timer } from 'lucide-react';
 import { ScreenLayout } from '@/shell/ScreenLayout';
@@ -15,9 +15,9 @@ import {
   TextAreaField,
   useToast,
 } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
 import { isLiveMode } from '@/lib/config';
-import { errorMessage } from '@/lib/useDataQuery';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
+import { ensureOpinionLive, patchOpinionLive, queryRagLive } from '@/api/pjGenai';
 import { submitOpinionLive } from '@/api/pjHitl';
 import { formatCurrency, formatDateTime, formatNumber } from '@/lib/format';
 import { AURORA } from '@/app/story';
@@ -28,11 +28,20 @@ const SLA_SECONDS = 180;
 export function OpinionEditorPage() {
   const toast = useToast();
   const navigate = useNavigate();
-  const query = useMockQuery(() => opinion, { latency: 400 });
+  const query = useDataQuery(() => opinion, ensureOpinionLive, { latency: 400 });
   const [sections, setSections] = useState<OpinionSection[] | null>(null);
   const [verified, setVerified] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const citations = ragQuery('alavancagem').citations;
+  const [citations, setCitations] = useState(ragQuery('alavancagem').citations);
+
+  useEffect(() => {
+    if (!isLiveMode()) return;
+    void queryRagLive('alavancagem')
+      .then((res) => setCitations(res.citations))
+      .catch(() => {
+        /* citações opcionais no editor */
+      });
+  }, []);
 
   const current = sections ?? query.data?.sections ?? [];
 
@@ -44,8 +53,16 @@ export function OpinionEditorPage() {
   async function submitToAuthority() {
     setSubmitting(true);
     try {
+      const opinionId = query.data?.opinionId ?? opinion.opinionId;
       if (isLiveMode()) {
-        await submitOpinionLive(opinion.opinionId, {
+        await patchOpinionLive(
+          opinionId,
+          current.map((section) => ({
+            code: section.id.toUpperCase(),
+            contentMd: section.body,
+          })),
+        );
+        await submitOpinionLive(opinionId, {
           comment: 'Submissão FE · editor de minuta',
         });
       }

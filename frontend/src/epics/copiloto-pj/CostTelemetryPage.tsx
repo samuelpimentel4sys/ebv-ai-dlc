@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Coins, Route } from 'lucide-react';
 import { ScreenLayout } from '@/shell/ScreenLayout';
 import {
@@ -16,7 +16,8 @@ import {
   useToast,
 } from '@/ds';
 import type { Column } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { useDataQuery } from '@/lib/useDataQuery';
+import { fetchCostTelemetryLive } from '@/api/pjGenai';
 import { formatCurrency, formatNumber, formatPercent } from '@/lib/format';
 import { sumBy } from '@/lib/number';
 import {
@@ -30,11 +31,21 @@ import {
 
 export function CostTelemetryPage() {
   const toast = useToast();
-  const query = useMockQuery(
-    () => ({ models: costByModel, analysts: costByAnalyst, budget: costBudget }),
+  const query = useDataQuery(
+    () => ({
+      models: costByModel,
+      analysts: costByAnalyst,
+      budget: costBudget,
+      routingRule: routingPolicy.rule,
+    }),
+    fetchCostTelemetryLive,
     { latency: 380 },
   );
   const [rule, setRule] = useState(routingPolicy.rule);
+
+  useEffect(() => {
+    if (query.data?.routingRule) setRule(query.data.routingRule);
+  }, [query.data?.routingRule]);
 
   const modelColumns: Column<CostByModel>[] = [
     { key: 'model', header: 'Modelo', render: (row) => <code className="text-xs">{row.model}</code> },

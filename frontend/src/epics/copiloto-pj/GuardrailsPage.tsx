@@ -15,9 +15,9 @@ import {
   QueryBoundary,
   useToast,
 } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
 import { isLiveMode } from '@/lib/config';
-import { errorMessage } from '@/lib/useDataQuery';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
+import { fetchGuardrailReportLive, verifyGuardrailsLive } from '@/api/pjGenai';
 import { submitOpinionLive } from '@/api/pjHitl';
 import { formatDateTime, formatPercent } from '@/lib/format';
 import { guardrailReport, type GuardrailFinding } from '@/epics/copiloto-pj/data';
@@ -39,10 +39,11 @@ const typeLabel = {
 export function GuardrailsPage() {
   const toast = useToast();
   const navigate = useNavigate();
-  const query = useMockQuery(() => guardrailReport, { latency: 380 });
+  const query = useDataQuery(() => guardrailReport, fetchGuardrailReportLive, { latency: 380 });
   const [findings, setFindings] = useState<GuardrailFinding[] | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [confirming, setConfirming] = useState(false);
+  const [rechecking, setRechecking] = useState(false);
 
   const list = findings ?? query.data?.findings ?? [];
   const blocking = list.filter((item) => item.status === 'aberto' && item.severity === 'critico');
@@ -74,10 +75,26 @@ export function GuardrailsPage() {
             size="sm"
             variant="secondary"
             icon={<ShieldCheck size={16} aria-hidden="true" />}
+            loading={rechecking}
             onClick={() => {
-              setFindings(null);
-              query.reload();
-              toast.info('Verificação reexecutada', 'POST /api/v1/pj/guardrails/verify');
+              void (async () => {
+                setFindings(null);
+                if (isLiveMode()) {
+                  setRechecking(true);
+                  try {
+                    await verifyGuardrailsLive(query.data?.opinionId);
+                    query.reload();
+                    toast.info('Verificação reexecutada', 'POST /api/v1/pj/guardrails/verify');
+                  } catch (error) {
+                    toast.error('Falha na verificação', errorMessage(error));
+                  } finally {
+                    setRechecking(false);
+                  }
+                  return;
+                }
+                query.reload();
+                toast.info('Verificação reexecutada', 'POST /api/v1/pj/guardrails/verify');
+              })();
             }}
           >
             Verificar novamente
@@ -265,7 +282,7 @@ export function GuardrailsPage() {
                   setConfirming(true);
                   try {
                     if (isLiveMode()) {
-                      await submitOpinionLive(AURORA.opinionId, {
+                      await submitOpinionLive(query.data?.opinionId ?? AURORA.opinionId, {
                         comment: 'Submissão FE · pós-guardrails',
                       });
                     }
