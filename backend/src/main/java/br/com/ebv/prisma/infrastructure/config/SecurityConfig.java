@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -39,8 +41,10 @@ public class SecurityConfig {
             return permitAll(http);
         }
         http.csrf(csrf -> csrf.disable())
+                .cors(Customizer.withDefaults())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(
                                 "/actuator/health",
                                 "/actuator/health/**",
@@ -60,6 +64,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/decisions/**").hasAnyRole("COMPLIANCE", "B2B", "PLATFORM")
                         .requestMatchers("/api/v1/observability/**").hasAnyRole("SRE", "B2B", "PLATFORM")
                         .requestMatchers("/api/v1/replay/**").hasAnyRole("DATA_ENG", "PLATFORM")
+                        .requestMatchers("/api/v1/policy/**").hasAnyRole("POLICY_ANALYST", "PLATFORM")
+                        .requestMatchers("/api/v1/reasons/**").hasAnyRole("LEGAL_EDITOR", "PLATFORM")
+                        .requestMatchers("/api/v1/audit/**").hasAnyRole("COMPLIANCE_AUDITOR", "PLATFORM")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> jwt.jwtAuthenticationConverter(keycloakRolesConverter())));
@@ -68,7 +75,10 @@ public class SecurityConfig {
 
     private static SecurityFilterChain permitAll(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+                .cors(Customizer.withDefaults())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .anyRequest().permitAll());
         return http.build();
     }
 

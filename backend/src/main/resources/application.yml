@@ -49,6 +49,11 @@ prisma:
   worm:
     base-path: ${PRISMA_WORM_BASE_PATH:./data/worm}
     fail: ${PRISMA_WORM_FAIL:false}
+  audit-worm:
+    base-path: ${PRISMA_AUDIT_WORM_BASE_PATH:./data/audit-worm}
+    fail: ${PRISMA_AUDIT_WORM_FAIL:false}
+  cors:
+    allowed-origins: ${PRISMA_CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:3000}
 
 logging:
   level:

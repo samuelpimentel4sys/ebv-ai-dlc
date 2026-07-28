@@ -1,5 +1,7 @@
 package br.com.ebv.prisma.application.decision;
 
+import br.com.ebv.prisma.application.audit.AppendAuditEventService;
+import br.com.ebv.prisma.domain.audit.port.in.AppendAuditEventUseCase;
 import br.com.ebv.prisma.domain.decision.exception.SnapshotUnavailableException;
 import br.com.ebv.prisma.domain.decision.exception.WormWriteException;
 import br.com.ebv.prisma.domain.decision.port.in.CreateDecisionUseCase;
@@ -44,6 +46,7 @@ public class CreateDecisionService implements CreateDecisionUseCase {
     private final WormStoragePort wormStorage;
     private final DecisionRepositoryPort decisionRepo;
     private final ObservabilityRepositoryPort observabilityRepo;
+    private final AppendAuditEventUseCase appendAuditEvent;
     private final ObjectMapper objectMapper;
 
     public CreateDecisionService(
@@ -53,6 +56,7 @@ public class CreateDecisionService implements CreateDecisionUseCase {
             WormStoragePort wormStorage,
             DecisionRepositoryPort decisionRepo,
             ObservabilityRepositoryPort observabilityRepo,
+            AppendAuditEventUseCase appendAuditEvent,
             ObjectMapper objectMapper
     ) {
         this.scoreRepo = scoreRepo;
@@ -61,6 +65,7 @@ public class CreateDecisionService implements CreateDecisionUseCase {
         this.wormStorage = wormStorage;
         this.decisionRepo = decisionRepo;
         this.observabilityRepo = observabilityRepo;
+        this.appendAuditEvent = appendAuditEvent;
         this.objectMapper = objectMapper;
     }
 
@@ -172,6 +177,20 @@ public class CreateDecisionService implements CreateDecisionUseCase {
 
         // F08 RN001 — correlação decision_id + spans lab (features, score, worm, persist)
         persistTrace(decisionId, cmd.clientId(), now, latencyMs);
+
+        // EP-02 F04 — trilha WORM encadeada (fail-closed via AuditWormWriteException → 503)
+        Map<String, Object> auditPayload = new LinkedHashMap<>();
+        auditPayload.put("decisionId", decisionId.toString());
+        auditPayload.put("outcome", outcome);
+        auditPayload.put("score", scoreBundle.score());
+        auditPayload.put("modelVersion", scoreBundle.modelVersion());
+        auditPayload.put("sha256", sha256);
+        appendAuditEvent.execute(new AppendAuditEventUseCase.Command(
+                doc,
+                cmd.clientId() != null ? cmd.clientId() : "system",
+                AppendAuditEventService.EVENT_DECISION_ISSUED,
+                auditPayload
+        ));
 
         return new Result(
                 decisionId,

@@ -1,5 +1,6 @@
 package br.com.ebv.prisma.application.decision;
 
+import br.com.ebv.prisma.domain.audit.port.in.AppendAuditEventUseCase;
 import br.com.ebv.prisma.domain.decision.exception.ChainBrokenException;
 import br.com.ebv.prisma.domain.decision.exception.WormWriteException;
 import br.com.ebv.prisma.domain.decision.port.in.CreateDecisionUseCase;
@@ -43,6 +44,7 @@ class CreateDecisionServiceTest {
     @Mock WormStoragePort wormStorage;
     @Mock DecisionRepositoryPort decisionRepo;
     @Mock br.com.ebv.prisma.domain.observability.port.out.ObservabilityRepositoryPort observabilityRepo;
+    @Mock AppendAuditEventUseCase appendAuditEvent;
 
     ObjectMapper objectMapper = new ObjectMapper();
     CreateDecisionService service;
@@ -51,7 +53,8 @@ class CreateDecisionServiceTest {
     @BeforeEach
     void setUp() {
         service = new CreateDecisionService(
-                scoreRepo, recalculateScore, getFeatures, wormStorage, decisionRepo, observabilityRepo, objectMapper
+                scoreRepo, recalculateScore, getFeatures, wormStorage, decisionRepo, observabilityRepo,
+                appendAuditEvent, objectMapper
         );
         verifyService = new VerifyDecisionService(decisionRepo, wormStorage);
     }

@@ -1,5 +1,8 @@
 package br.com.ebv.prisma.presentation.exception;
 
+import br.com.ebv.prisma.domain.audit.exception.AuditNotFoundException;
+import br.com.ebv.prisma.domain.audit.exception.AuditValidationException;
+import br.com.ebv.prisma.domain.audit.exception.AuditWormWriteException;
 import br.com.ebv.prisma.domain.decision.exception.ChainBrokenException;
 import br.com.ebv.prisma.domain.decision.exception.DecisionNotFoundException;
 import br.com.ebv.prisma.domain.decision.exception.SnapshotUnavailableException;
@@ -15,6 +18,12 @@ import br.com.ebv.prisma.domain.identity.exception.MergeUndoNotAllowedException;
 import br.com.ebv.prisma.domain.ingest.exception.ConsentDeniedException;
 import br.com.ebv.prisma.domain.observability.exception.TraceForbiddenException;
 import br.com.ebv.prisma.domain.observability.exception.TraceNotFoundException;
+import br.com.ebv.prisma.domain.policy.exception.PolicyConflictException;
+import br.com.ebv.prisma.domain.policy.exception.PolicyNotFoundException;
+import br.com.ebv.prisma.domain.policy.exception.PolicyValidationException;
+import br.com.ebv.prisma.domain.reason.exception.ReasonConflictException;
+import br.com.ebv.prisma.domain.reason.exception.ReasonNotFoundException;
+import br.com.ebv.prisma.domain.reason.exception.ReasonValidationException;
 import br.com.ebv.prisma.domain.replay.exception.ReplayConflictException;
 import br.com.ebv.prisma.domain.replay.exception.ReplayForbiddenException;
 import br.com.ebv.prisma.domain.replay.exception.ReplayNotFoundException;
@@ -45,7 +54,10 @@ public class GlobalExceptionHandler {
             FeatureNotFoundException.class,
             DecisionNotFoundException.class,
             TraceNotFoundException.class,
-            ReplayNotFoundException.class
+            ReplayNotFoundException.class,
+            PolicyNotFoundException.class,
+            ReasonNotFoundException.class,
+            AuditNotFoundException.class
     })
     public ResponseEntity<Map<String, Object>> notFound(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.NOT_FOUND, ex.getMessage(), req, List.of());
@@ -53,7 +65,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({CyclicMergeException.class, MergeUndoNotAllowedException.class,
             ModelImmutableException.class, AmbiguousIdentityException.class, ChainBrokenException.class,
-            ReplayConflictException.class})
+            ReplayConflictException.class, PolicyConflictException.class, ReasonConflictException.class})
     public ResponseEntity<Map<String, Object>> conflict(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.CONFLICT, ex.getMessage(), req, List.of());
     }
@@ -64,7 +76,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({UnprocessableEventException.class, MetricsGateException.class, FeatureLeakageException.class,
-            ReplayValidationException.class})
+            ReplayValidationException.class, PolicyValidationException.class, ReasonValidationException.class,
+            AuditValidationException.class})
     public ResponseEntity<Map<String, Object>> unprocessable(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage(), req, List.of());
     }
@@ -74,7 +87,8 @@ public class GlobalExceptionHandler {
         return error(HttpStatus.FORBIDDEN, ex.getMessage(), req, List.of());
     }
 
-    @ExceptionHandler({ModelUnavailableException.class, WormWriteException.class, SnapshotUnavailableException.class})
+    @ExceptionHandler({ModelUnavailableException.class, WormWriteException.class, SnapshotUnavailableException.class,
+            AuditWormWriteException.class})
     public ResponseEntity<Map<String, Object>> serviceUnavailable(RuntimeException ex, HttpServletRequest req) {
         return error(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage(), req, List.of());
     }
