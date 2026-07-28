@@ -24,7 +24,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/pj/opinions")
-@Tag(name = "PJ HITL", description = "PRISMA-EP-03-F04 Alçada e trilha — Java only (GenAI = Python :8090)")
+@Tag(name = "PJ HITL", description = "PRISMA-EP-03-F04 Alçada — Java. GenAI via BFF mesmo host :8080")
 public class PjHitlController {
 
     private final SubmitPjOpinionUseCase submit;

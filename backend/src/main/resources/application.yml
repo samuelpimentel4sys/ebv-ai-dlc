@@ -87,6 +87,11 @@ prisma:
     mode: ${LIVENESS_MODE:stub}
     mock-url: ${LIVENESS_MOCK_URL:http://localhost:8093}
     term-version: ${BIOMETRIC_TERM_VERSION:v1.0}
+  genai:
+    # BFF Noah → Emilly. FE NÃO chama :8090.
+    enabled: ${PRISMA_GENAI_ENABLED:true}
+    base-url: ${PRISMA_GENAI_BASE_URL:http://localhost:8090}
+    read-timeout-seconds: ${PRISMA_GENAI_READ_TIMEOUT:180}
   lab:
     # OBS-04/06 — lab markers + actor fallback (desligar em staging/prod)
     mark-responses: ${PRISMA_LAB_MARK:true}

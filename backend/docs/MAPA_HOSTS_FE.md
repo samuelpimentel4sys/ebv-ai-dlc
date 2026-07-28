@@ -2,9 +2,8 @@
 
 | Serviço | Host lab | Porta | Dono | Escopo FE |
 |---------|----------|------:|------|-----------|
-| **Prisma BE Java** | `localhost` ou IP do notebook | **8080** | Noah | Contestação, score, portfolio, **HITL F04**, **Liveness**, OIDC |
-| **GenAI Python** | `localhost` | **8090** | Emilly | RAG, parecer, ratios, guardrails, library (EP-03 GenAI) |
-| **WireMock Liveness** | `192.168.31.47` | **8093** | Ops/Noah | Mock Rekognition (`LIVENESS_MODE=http`) |
+| **Prisma BE Java** | `localhost` ou IP do notebook | **8080** | Noah | **Único** backend FE: contestação, score, portfolio, HITL, Liveness, **BFF GenAI** |
+| **GenAI Python** | `localhost` (interno) | **8090** | Emilly | **Só via BFF Java** — FE não chama || **WireMock Liveness** | `192.168.31.47` | **8093** | Ops/Noah | Mock Rekognition (`LIVENESS_MODE=http`) |
 | **Keycloak** | `192.168.31.47` | **8180** | Ops | Realm `prisma` (OIDC) |
 | **Neo4j** | `192.168.31.47` | **7687** | Ops | Grafo portfolio lab |
 | **ONNX scorer** | `192.168.31.47` | **8091** | Ops | Score lab |
@@ -22,13 +21,16 @@
 ## EP-03 — regra de ouro
 
 ```
-FE ──► GenAI (parecer/RAG/guardrails) ──► Python :8090
-FE ──► HITL (submit/approve/trail)    ──► Java   :8080
+FE ──► Java :8080 ──► HITL (submit/approve/trail)
+FE ──► Java :8080 ──► BFF ──► Python :8090 (GenAI Emilly)
 ```
+
+**Proibido FE → `:8090`.** Python só rede interna / lab.
 
 Java **não** embute LLM. Python **não** decide alçada.
 
-Contrato: [`HANDOFF_EMILLY_NOAH_EP03_F04.md`](./HANDOFF_EMILLY_NOAH_EP03_F04.md)
+Contrato HITL: [`HANDOFF_EMILLY_NOAH_EP03_F04.md`](./HANDOFF_EMILLY_NOAH_EP03_F04.md)  
+BFF Sofia: [`HANDOFF_SOFIA_BFF_GENAI.md`](./HANDOFF_SOFIA_BFF_GENAI.md)
 
 ## Headers lab (OBS-04)
 

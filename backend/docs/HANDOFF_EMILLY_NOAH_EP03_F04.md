@@ -28,15 +28,14 @@
 ```
 FE / Analista
     │
-    ├─ GenAI (gerar parecer, RAG, ratios) ──► Python :8090
-    │
-    └─ HITL (submit / approve / trail) ─────► Java :8080
+    └─ TUDO EP-03 ──────────────────────────► Java :8080
                                               │
-                                              └─ port out (opcional) ──► Python
-                                                 (ler parecer / patch status)
+                                              ├─ HITL submit/approve/trail (JDBC)
+                                              └─ BFF GenAI ──► Python :8090 (Emilly)
 ```
 
-Java **não** embute LLM. Python **não** decide alçada.
+Java **não** embute LLM. Python **não** decide alçada.  
+**FE não chama `:8090`** — ver [`HANDOFF_SOFIA_BFF_GENAI.md`](./HANDOFF_SOFIA_BFF_GENAI.md).
 
 ---
 
@@ -402,7 +401,7 @@ Confirmado por Noah (para constar neste handoff + `HANDOFF_SOFIA_EP01_FE.md`):
 |---|---------|--------|
 | D1 | Java lê opinion via **JDBC** mesmo DB | ✅ |
 | D2 | Submit exige **READY_FOR_REVIEW** | ✅ |
-| D3 | FE HITL aponta **`:8080` direto** | ✅ |
+| D3 | FE **só** `:8080` (BFF GenAI + HITL) | ✅ BFF Noah 2026-07-28 |
 | D4 | F04 Java reaberto (sem Bedrock) | ✅ `0b537cd` |
 
 ---

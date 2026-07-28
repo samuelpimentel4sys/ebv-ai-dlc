@@ -49,16 +49,16 @@ Auditoria: [`AUDITORIA_US_BE_vs_NOAH.md`](./AUDITORIA_US_BE_vs_NOAH.md) · Ack O
 
 ---
 
-## 3. EP-03 — Java = somente F04 HITL (OBS-02)
+## 3. EP-03 — Java = F04 HITL + BFF GenAI
 
 | Parte | Host | Status |
 |-------|------|--------|
 | HITL submit/approve/trail | Java `:8080` | Lab OK · V50 |
-| GenAI | Python `:8090` | Emilly |
+| GenAI (proxy) | Java `:8080` -> Python `:8090` | FE **nao** chama Python |
+| GenAI core | Emilly interno | — |
 
-Mapa: [`MAPA_HOSTS_FE.md`](./MAPA_HOSTS_FE.md)
+Mapa: [`MAPA_HOSTS_FE.md`](./MAPA_HOSTS_FE.md) · BFF: [`HANDOFF_SOFIA_BFF_GENAI.md`](./HANDOFF_SOFIA_BFF_GENAI.md)
 
----
 
 ## 4. EP-05 Contestação (lab 9/9) + BIO separado (OBS-22)
 

@@ -97,6 +97,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/pj/opinions/*/trail")
                                 .hasAnyRole("ANALISTA_PJ", "APROVADOR_PJ_L1", "APROVADOR_PJ_L2",
                                         "APROVADOR_PJ_L3", "AUDIT", "PLATFORM")
+                        .requestMatchers("/api/v1/pj/**")
+                                .hasAnyRole("ANALISTA_PJ", "APROVADOR_PJ_L1", "APROVADOR_PJ_L2",
+                                        "APROVADOR_PJ_L3", "PLATFORM")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> jwt.jwtAuthenticationConverter(keycloakRolesConverter())));
