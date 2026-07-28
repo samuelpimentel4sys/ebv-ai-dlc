@@ -16,8 +16,12 @@ import {
   useToast,
 } from '@/ds';
 import { useMockQuery } from '@/lib/useMockQuery';
+import { isLiveMode } from '@/lib/config';
+import { errorMessage } from '@/lib/useDataQuery';
+import { submitOpinionLive } from '@/api/pjHitl';
 import { formatDateTime, formatPercent } from '@/lib/format';
 import { guardrailReport, type GuardrailFinding } from '@/epics/copiloto-pj/data';
+import { AURORA } from '@/app/story';
 
 const severityTone = {
   critico: 'danger',
@@ -38,6 +42,7 @@ export function GuardrailsPage() {
   const query = useMockQuery(() => guardrailReport, { latency: 380 });
   const [findings, setFindings] = useState<GuardrailFinding[] | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [confirming, setConfirming] = useState(false);
 
   const list = findings ?? query.data?.findings ?? [];
   const blocking = list.filter((item) => item.status === 'aberto' && item.severity === 'critico');
@@ -254,10 +259,25 @@ export function GuardrailsPage() {
             </Button>
             <Button
               icon={<Send size={16} aria-hidden="true" />}
+              loading={confirming}
               onClick={() => {
-                setSubmitting(false);
-                toast.success('Parecer submetido', 'POST /api/v1/pj/opinions/{id}/submit');
-                navigate('/pj/pareceres/aprovacao');
+                void (async () => {
+                  setConfirming(true);
+                  try {
+                    if (isLiveMode()) {
+                      await submitOpinionLive(AURORA.opinionId, {
+                        comment: 'Submissão FE · pós-guardrails',
+                      });
+                    }
+                    setSubmitting(false);
+                    toast.success('Parecer submetido', 'POST /api/v1/pj/opinions/{id}/submit');
+                    navigate('/pj/pareceres/aprovacao');
+                  } catch (error) {
+                    toast.error('Falha ao submeter', errorMessage(error));
+                  } finally {
+                    setConfirming(false);
+                  }
+                })();
               }}
             >
               Confirmar submissão

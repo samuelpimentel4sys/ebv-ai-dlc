@@ -17,13 +17,21 @@ import {
   useToast,
 } from '@/ds';
 import type { Column } from '@/ds';
-import { useMockQuery } from '@/lib/useMockQuery';
+import { isLiveMode } from '@/lib/config';
+import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
+import {
+  decideOpinionLive,
+  fetchApprovalTrailLive,
+  lastHitlOpinionId,
+  type HitlTrailEntry,
+} from '@/api/pjHitl';
 import { formatCurrency, formatDateTime } from '@/lib/format';
 import {
   approvalQueue,
   approvalTrail,
   authorityMatrix,
   type ApprovalItem,
+  type TrailEntry,
 } from '@/epics/copiloto-pj/data';
 
 const authorityTone = {
@@ -32,15 +40,39 @@ const authorityTone = {
   comite: 'danger',
 } as const;
 
+function mapLiveTrail(entries: HitlTrailEntry[]): TrailEntry[] {
+  return entries.map((entry) => ({
+    at: entry.at,
+    actor: entry.actorId || 'sistema',
+    action: entry.action,
+    note: entry.comment || entry.levelCode || undefined,
+  }));
+}
+
 export function ApprovalPage() {
   const toast = useToast();
-  const query = useMockQuery(() => approvalQueue, { latency: 340 });
+  const query = useDataQuery(() => approvalQueue, async () => approvalQueue, { latency: 340 });
   const [items, setItems] = useState<ApprovalItem[] | null>(null);
   const [selected, setSelected] = useState<ApprovalItem | null>(null);
   const [decision, setDecision] = useState<'aprovado' | 'reprovado' | null>(null);
   const [note, setNote] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [liveTrail, setLiveTrail] = useState<TrailEntry[] | null>(null);
 
   const rows = items ?? query.data ?? [];
+  const labOpinionId = lastHitlOpinionId();
+
+  async function loadTrail(item: ApprovalItem) {
+    setSelected(item);
+    setLiveTrail(null);
+    if (!isLiveMode()) return;
+    try {
+      const res = await fetchApprovalTrailLive(item.opinionId);
+      setLiveTrail(mapLiveTrail(res.trail ?? []));
+    } catch {
+      setLiveTrail(null);
+    }
+  }
 
   const columns: Column<ApprovalItem>[] = [
     {
@@ -96,16 +128,33 @@ export function ApprovalPage() {
       toast.error('Parecer da alçada obrigatório', 'Descreva a fundamentação da decisão');
       return;
     }
-    setItems(
-      rows.map((row) => (row.opinionId === selected.opinionId ? { ...row, status: decision } : row)),
-    );
-    toast.success(
-      decision === 'aprovado' ? 'Parecer aprovado' : 'Parecer reprovado',
-      `POST /api/v1/pj/opinions/${selected.opinionId}/approve`,
-    );
-    setDecision(null);
-    setSelected(null);
-    setNote('');
+    void (async () => {
+      setSaving(true);
+      try {
+        if (isLiveMode()) {
+          await decideOpinionLive(selected.opinionId, {
+            decision: decision === 'aprovado' ? 'APPROVE' : 'REJECT',
+            comment: note.trim(),
+          });
+          const trail = await fetchApprovalTrailLive(selected.opinionId);
+          setLiveTrail(mapLiveTrail(trail.trail ?? []));
+        }
+        setItems(
+          rows.map((row) => (row.opinionId === selected.opinionId ? { ...row, status: decision } : row)),
+        );
+        toast.success(
+          decision === 'aprovado' ? 'Parecer aprovado' : 'Parecer reprovado',
+          `POST /api/v1/pj/opinions/{id}/approve`,
+        );
+        setDecision(null);
+        setSelected(null);
+        setNote('');
+      } catch (error) {
+        toast.error('Falha na decisão de alçada', errorMessage(error));
+      } finally {
+        setSaving(false);
+      }
+    })();
   }
 
   return (
@@ -120,6 +169,13 @@ export function ApprovalPage() {
         <Badge key="route" tone="neutral" className="font-mono">
           /pj/pareceres/aprovacao
         </Badge>,
+        ...(labOpinionId
+          ? [
+              <Badge key="lab" tone="info" className="font-mono">
+                HITL {labOpinionId.slice(0, 8)}…
+              </Badge>,
+            ]
+          : []),
       ]}
       wide
     >
@@ -135,8 +191,15 @@ export function ApprovalPage() {
         {(data) => {
           const queue = items ?? data;
           const pending = queue.filter((row) => row.status === 'aguardando');
+          const trailEntries = liveTrail ?? approvalTrail;
           return (
             <div className="grid gap-5">
+              {isLiveMode() && !labOpinionId ? (
+                <Notice tone="warning" title="UUID do parecer HITL não definido">
+                  Em live, submit/approve usam UUID real (seed Emilly ou `VITE_PJ_OPINION_ID`). A fila
+                  mock permanece para navegação; a decisão chama Noah `:8080`.
+                </Notice>
+              ) : null}
               <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 <Metric value={pending.length} label="Aguardando decisão" tone="warning" />
                 <Metric
@@ -170,7 +233,9 @@ export function ApprovalPage() {
                   columns={columns}
                   rows={queue}
                   rowKey={(row) => row.opinionId}
-                  onRowClick={setSelected}
+                  onRowClick={(row) => {
+                    void loadTrail(row);
+                  }}
                   isRowActive={(row) => row.opinionId === selected?.opinionId}
                   footer={`${pending.length} pareceres aguardando decisão de alçada`}
                 />
@@ -223,8 +288,8 @@ export function ApprovalPage() {
                     />
                     <h3 className="mb-2 mt-5 text-base">Trilha do parecer</h3>
                     <ol className="grid gap-3 border-l border-eqx-border pl-4">
-                      {approvalTrail.map((entry) => (
-                        <li key={entry.at} className="relative">
+                      {trailEntries.map((entry) => (
+                        <li key={`${entry.at}-${entry.action}`} className="relative">
                           <span
                             aria-hidden="true"
                             className="absolute -left-[1.4rem] top-1.5 h-2.5 w-2.5 rounded-pill bg-eqx-action"
@@ -276,7 +341,11 @@ export function ApprovalPage() {
             <Button variant="secondary" onClick={() => setDecision(null)}>
               Cancelar
             </Button>
-            <Button variant={decision === 'reprovado' ? 'danger' : 'primary'} onClick={submit}>
+            <Button
+              loading={saving}
+              variant={decision === 'reprovado' ? 'danger' : 'primary'}
+              onClick={submit}
+            >
               Confirmar decisão
             </Button>
           </>

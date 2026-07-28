@@ -103,7 +103,7 @@ Noah lab 9/9 (stubs Neptune/Trino) · handoff 15:40 · **9/9 telas live**
 
 | Parte | Estado |
 |-------|--------|
-| **F04 HITL** (Noah `:8080`) | ✅ BE lab · **Sofia plugar** (`pjHitl` / `ApprovalPage` + submit) |
+| **F04 HITL** (Noah `:8080`) | ✅ BE lab · ✅ FE plug (`pjHitl.ts`) |
 | GenAI F01–F03/F05–F09 (Emilly `:8090`) | Aguarda contrato FE↔Python |
 
 ### P6 — Login OIDC produto (backlog · desenho Noah 2026-07-28)

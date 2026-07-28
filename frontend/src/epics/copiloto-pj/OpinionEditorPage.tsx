@@ -16,6 +16,9 @@ import {
   useToast,
 } from '@/ds';
 import { useMockQuery } from '@/lib/useMockQuery';
+import { isLiveMode } from '@/lib/config';
+import { errorMessage } from '@/lib/useDataQuery';
+import { submitOpinionLive } from '@/api/pjHitl';
 import { formatCurrency, formatDateTime, formatNumber } from '@/lib/format';
 import { AURORA } from '@/app/story';
 import { opinion, ragQuery, type OpinionSection } from '@/epics/copiloto-pj/data';
@@ -28,6 +31,7 @@ export function OpinionEditorPage() {
   const query = useMockQuery(() => opinion, { latency: 400 });
   const [sections, setSections] = useState<OpinionSection[] | null>(null);
   const [verified, setVerified] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const citations = ragQuery('alavancagem').citations;
 
   const current = sections ?? query.data?.sections ?? [];
@@ -35,6 +39,23 @@ export function OpinionEditorPage() {
   function update(id: string, body: string) {
     setSections(current.map((section) => (section.id === id ? { ...section, body } : section)));
     setVerified(false);
+  }
+
+  async function submitToAuthority() {
+    setSubmitting(true);
+    try {
+      if (isLiveMode()) {
+        await submitOpinionLive(opinion.opinionId, {
+          comment: 'Submissão FE · editor de minuta',
+        });
+      }
+      toast.success('Parecer submetido', 'POST /api/v1/pj/opinions/{id}/submit');
+      navigate('/pj/pareceres/aprovacao');
+    } catch (error) {
+      toast.error('Falha ao submeter', errorMessage(error));
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -69,9 +90,9 @@ export function OpinionEditorPage() {
             size="sm"
             icon={<Send size={16} aria-hidden="true" />}
             disabled={!verified}
+            loading={submitting}
             onClick={() => {
-              toast.success('Parecer submetido', 'POST /api/v1/pj/opinions/{id}/submit');
-              navigate('/pj/pareceres/aprovacao');
+              void submitToAuthority();
             }}
           >
             Submeter à alçada
