@@ -13,7 +13,7 @@
 | EP-01…02…04…05…06 lab APIs | ✅ | Sofia pode plugar |
 | EP-03 GenAI | ⏭ ADIADO | Sem HITL GenAI neste ciclo |
 | Handoff Sofia atualizado | ✅ | `HANDOFF_SOFIA_EP01_FE.md` |
-| OIDC CTs (`OIDC_ENABLED=true`) | ✅ CT + 🟡 smoke lab | `OidcSecurityWebMvcTest` (JWT mock); smoke Keycloak § abaixo |
+| OIDC CTs (`OIDC_ENABLED=true`) | ✅ CT + ✅ smoke lab | `OidcSecurityWebMvcTest` + smoke Keycloak real 2026-07-28 (§ abaixo) |
 | Testcontainers Postgres Flyway | ✅ CI | `FlywayPostgresIT` + `.github/workflows/backend-ci.yml` |
 | S3 Object Lock WORM | ✅ | `prisma.worm.backend=fs\|s3` — COMPLIANCE + unit tests |
 | Neptune / ONNX / Fairlearn | ❌ | stubs documentados |
@@ -37,8 +37,28 @@
 
 1. ~~IT Testcontainers no CI~~ ✅ `backend-ci.yml`
 2. ~~Adapter S3 WORM~~ ✅ (lab `fs`; prod `s3` + Object Lock)
-3. ~~OIDC CTs automatizados~~ ✅; smoke manual Keycloak lab (token real) ainda pendente
+3. ~~OIDC CTs + smoke Keycloak lab~~ ✅ (2026-07-28)
 4. Reabrir EP-03 só se existir contrato Java HITL **sem** Bedrock no mesmo sprint
+5. Neptune / ONNX / Fairlearn (stubs → adapters reais)
+
+### Smoke OIDC lab (resultado 2026-07-28)
+
+Keycloak `http://192.168.31.47:8180/realms/prisma` · client `prisma-backend` (client_credentials).
+
+Roles no token (`realm_access.roles`): `ROLE_DATA_STEWARD`, `ROLE_PLATFORM`, `ROLE_EVENT_PRODUCER`, `ROLE_SRE`, `ROLE_SCORE_SERVICE`.
+
+| Caso | Resultado |
+|------|-----------|
+| `GET /actuator/health` sem token | **200** |
+| `GET /api/v1/identity/{doc}` sem token | **401** |
+| `GET /api/v1/identity/{doc}` + Bearer SA | **200** |
+| `GET /api/v1/identity/candidates` + Bearer SA | **200** |
+| `GET /api/v1/portfolio/stress/scenarios` + Bearer SA | **200** |
+| Bearer JWT inválido | **401** |
+
+Nota: SA tem várias roles → **403** negativo não exercitado neste smoke (usar user só-`ML` se precisar). Lab default: `OIDC_ENABLED=false` (Sofia).
+
+Side-fix: Flyway `V49__align_sha256_char_to_varchar.sql` (CHAR→VARCHAR `tb_decision` / attachment).
 
 ### Ativar S3 WORM
 

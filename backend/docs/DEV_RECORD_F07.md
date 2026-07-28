@@ -14,6 +14,6 @@
 
 ## Pendente DoD
 
-- [ ] CT-08 smoke com Keycloak real (`OIDC_ENABLED=true` + role DATA_STEWARD)
+- [x] CT-08 smoke com Keycloak real (`OIDC_ENABLED=true` + role DATA_STEWARD) — 2026-07-28
 - [ ] Splink real (confidence informada na API)
 - [ ] Commit/push
