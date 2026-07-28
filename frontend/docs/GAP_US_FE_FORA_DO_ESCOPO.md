@@ -56,9 +56,9 @@ Explorer Nexus tinha **5 features**; Downstream Prisma fechou **9 features** de 
 
 | US Nexus | Tela | Estado Sofia |
 |----------|------|--------------|
-| `EP05-F01-US-FE-01` | SCR-BIO-01 | ✅ `/titular/biometria` · consent + session + guia |
-| `EP05-F01-US-FE-02` | SCR-MFA-01 | ✅ `/titular/biometria/mfa` · OTP lab |
-| `EP05-F01-US-FE-03` | SCR-BIO-02 | ✅ `/titular/biometria/resultado` |
+| `EP05-F01-US-FE-01` → `PRISMA-EP-05-F10-US-FE-01` | SCR-BIO-01 | ✅ `/titular/biometria` · consent + session + guia |
+| `EP05-F01-US-FE-02` → `PRISMA-EP-05-F11-US-FE-01` | SCR-MFA-01 | ✅ `/titular/biometria/mfa` · OTP lab |
+| `EP05-F01-US-FE-03` → `PRISMA-EP-05-F12-US-FE-01` | SCR-BIO-02 | ✅ `/titular/biometria/resultado` |
 
 API: `frontend/src/api/liveness.ts` → Noah `POST /api/v1/auth/biometric-consent` + `…/liveness/session`.  
 **Ainda fora:** Amplify FaceLivenessDetector · GetFaceLivenessSessionResults · JWT IAL3.
