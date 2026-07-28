@@ -132,16 +132,18 @@ Workflow agente: menu **DS** (8 fases).
 
 ## 6. O que falta do usuário / ambiente
 
-| Item | Por quê |
-|------|---------|
-| Credenciais GitHub push (se remoto protegido) | Publicar branch limpa |
-| Decisão Open Finance (ADR até M2) | Não bloqueia núcleo; define adapter |
-| Keycloak realm / client IDs | OIDC real |
-| Escopo R1 fechado (cortar EP-06 parcial?) | Capacidade time |
-| Onde vive serviço Python EP-03 | Mesmo monorepo `backend-py/` ou repo separado |
+| Item | Por quê | Doc |
+|------|---------|------|
+| **Redis · Kafka · Keycloak** | F01+JWT+cache | [`PROVISIONAMENTO_REDIS_KAFKA_KEYCLOAK.md`](./PROVISIONAMENTO_REDIS_KAFKA_KEYCLOAK.md) |
+| Credenciais GitHub push | Publicar incremento | — |
+| Decisão Open Finance (ADR até M2) | Adapter F06 | — |
+| Escopo R1 (EP-06?) | Capacidade | — |
+| Serviço Python EP-03 | Monorepo vs repo | — |
 
 ---
 
 ## 7. Próximo comando Noah
 
-Após OK do plano: **`DS`** na US `PRISMA-EP-01-F07-US-BE-01` (Golden Record) — fundação do caminho quente.
+- F07 núcleo ok · F01 em stub local (sem Kafka) — ver progress report  
+- Ao provisionar infra: preencher `.env` + `SPRING_PROFILES_ACTIVE=supabase,infra`  
+- Spec: [`PROVISIONAMENTO_REDIS_KAFKA_KEYCLOAK.md`](./PROVISIONAMENTO_REDIS_KAFKA_KEYCLOAK.md)

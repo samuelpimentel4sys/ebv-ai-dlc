@@ -1,0 +1,60 @@
+# Ativa com: SPRING_PROFILES_ACTIVE=supabase,infra
+
+spring:
+  config:
+    activate:
+      on-profile: infra
+  autoconfigure:
+    exclude: []
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      username: ${REDIS_USERNAME:}
+      password: ${REDIS_PASSWORD:}
+      database: ${REDIS_DB:0}
+      ssl:
+        enabled: ${REDIS_SSL:false}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP:localhost:9092}
+    properties:
+      "[security.protocol]": ${KAFKA_SECURITY_PROTOCOL:PLAINTEXT}
+    consumer:
+      group-id: ${KAFKA_CONSUMER_GROUP:prisma-backend}
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      missing-topics-fatal: false
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+      properties:
+        enable.idempotence: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${OIDC_ISSUER_URI:}
+          jwk-set-uri: ${OIDC_JWK_SET_URI:}
+
+management:
+  health:
+    redis:
+      enabled: true
+  endpoint:
+    health:
+      show-details: when_authorized
+
+prisma:
+  kafka:
+    topic-credit-events: ${KAFKA_TOPIC_CREDIT:prisma.credit.events}
+    topic-credit-dlq: ${KAFKA_TOPIC_CREDIT_DLQ:prisma.credit.events.dlq}
+    topic-identity-corrections: ${KAFKA_TOPIC_IDENTITY:prisma.identity.corrections}
+    partition-count: ${KAFKA_PARTITION_COUNT:6}
+  security:
+    # false = APIs abertas (smoke); true = JWT Keycloak obrigatório
+    enabled: ${OIDC_ENABLED:false}
+  schema-registry:
+    url: ${SCHEMA_REGISTRY_URL:}

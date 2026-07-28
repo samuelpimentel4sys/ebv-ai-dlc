@@ -1,0 +1,16 @@
+# Profile: Supabase Prisma Equifax (sem secrets no git)
+# Uso:
+#   set SPRING_DATASOURCE_PASSWORD=<database password do dashboard>
+#   mvn spring-boot:run -Dspring-boot.run.profiles=supabase
+
+spring:
+  config:
+    activate:
+      on-profile: supabase
+  datasource:
+    url: jdbc:postgresql://db.jrpjrvttiqustpfedxdz.supabase.co:5432/postgres?sslmode=require
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  flyway:
+    # Tabelas já aplicadas via MCP; IF NOT EXISTS torna reexecução segura
+    baseline-on-migrate: true
