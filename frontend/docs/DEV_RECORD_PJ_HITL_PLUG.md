@@ -22,7 +22,7 @@
 
 ## Lab
 
-- GenAI continua Emilly `:8090` (não plugar neste commit)
+- GenAI agora via BFF Noah `:8080` (`HANDOFF_SOFIA_BFF_GENAI.md`) — FE não chama `:8090`
 - Mock ids `op-*` ≠ UUID → `VITE_PJ_OPINION_ID` ou UUID da última submissão (sessionStorage)
 - Fila de alçada permanece mock para UX; decisão chama Noah
 

@@ -1,6 +1,6 @@
 /**
  * API client — EP-03 F04 HITL / alçada (Noah Java :8080).
- * GenAI (parecer/RAG/…) continua Emilly Python :8090 — não misturar.
+ * GenAI (parecer/RAG/…) via `pjGenai.ts` no mesmo host :8080 (BFF Noah → Emilly).
  */
 import { httpClient } from '@/lib/httpClient';
 

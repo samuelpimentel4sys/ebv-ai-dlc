@@ -18,10 +18,10 @@
 | US-FE Downstream md | **47** (EP-01…04 + EP-06) | EP-05 **sem** pasta md Downstream |
 | Telas EP-05 no FE | **12** | Contestação 9 + BIO 3 · live plug ✅ |
 | Live × Noah BE | EP-01/02/04/05/06 + HITL | ✅ (+ Liveness V51) |
-| EP-03 US-FE + telas | **9** | ✅ GenAI Emilly `:8090` + HITL Noah `:8080` |
+| EP-03 US-FE + telas | **9** | ✅ GenAI + HITL via Noah `:8080` (BFF → Emilly) |
 | Nexus EP-05 antigo | 5 features · ~12 US-FE | Contestação Downstream + BIO reaberto lab |
 
-Conclusão: lab **100% BE** nas telas de produto com `VITE_DATA_MODE=live` (Noah **ou** Emilly). Mock só Vitest. Fora do ciclo: Amplify Face Liveness / GetResults / OIDC PKCE.
+Conclusão: lab **100% BE** com `VITE_DATA_MODE=live` — **único** host FE = Noah `:8080`. Mock só Vitest. Fora: Amplify / GetResults / OIDC PKCE.
 
 ---
 
@@ -31,7 +31,7 @@ Conclusão: lab **100% BE** nas telas de produto com `VITE_DATA_MODE=live` (Noah
 |-------|-----------------:|---------:|----------|
 | EP-01 Score | 10 | 10 | ✅ |
 | EP-02 Explicável | 10 | 10 | ✅ |
-| EP-03 Copiloto PJ | 9 | 9 | ✅ Emilly GenAI + Noah HITL |
+| EP-03 Copiloto PJ | 9 | 9 | ✅ Noah `:8080` (HITL + BFF GenAI) |
 | EP-04 Sala de Risco | 9 | 9 | ✅ stub lab |
 | EP-05 Contestação + BIO | **0 md** / 9 BE + Liveness | 12 | ✅ (+ BIO lab) |
 | EP-06 Inclusão | 9 | 9 | ✅ |
@@ -63,17 +63,17 @@ Explorer Nexus tinha **5 features**; Downstream Prisma fechou **9 features** de 
 API: `frontend/src/api/liveness.ts` → Noah `POST /api/v1/auth/biometric-consent` + `…/liveness/session`.  
 **Ainda fora:** Amplify FaceLivenessDetector · GetFaceLivenessSessionResults · JWT IAL3.
 
-### B. EP-03 Copiloto PJ (US-FE existem; GenAI Emilly · HITL Noah)
+### B. EP-03 Copiloto PJ (US-FE · entrada única Noah)
 
 | Item | Estado |
 |------|--------|
 | 9 US-FE Downstream | ✅ escritas |
 | 9 telas showcase | ✅ |
 | **F04 HITL** Java Noah | ✅ lab + FE (`pjHitl.ts`) |
-| GenAI Python Emilly | ✅ `:8090` + FE (`pjGenai.ts`) · proxy Vite dual |
-| F01–F03 / F05–F09 live | ✅ `useDataQuery` → Emilly (sem fallback silencioso a fixture) |
+| GenAI via BFF Noah | ✅ `pjGenai.ts` → `:8080` → Emilly interno (`HANDOFF_SOFIA_BFF_GENAI.md`) |
+| F01–F03 / F05–F09 live | ✅ paths Emilly, host só `:8080` |
 
-Lab: `VITE_PJ_OPINION_ID` · `VITE_PJ_DOC_ID` · `VITE_PJ_CNPJ` (ver `.env.example`). Vitest força `VITE_DATA_MODE=mock`.
+Lab: `VITE_PJ_OPINION_ID` · `VITE_PJ_DOC_ID` · `VITE_PJ_CNPJ`. **Proibido** FE → `:8090`. Vitest = `VITE_DATA_MODE=mock`.
 
 ### C. Transversal (não é US de épico, mas produto)
 
@@ -102,7 +102,7 @@ Lab: `VITE_PJ_OPINION_ID` · `VITE_PJ_DOC_ID` · `VITE_PJ_CNPJ` (ver `.env.examp
 |------|--------|------------|-------------------------|
 | **P0** | Plug EP-03 **F04 HITL** live | Noah ✅ · Sofia ✅ | feito |
 | **P1** | Hardening live Score (gaps shape, erros reais) | Noah OpenAPI | 2–4 d |
-| **P2** | EP-03 GenAI live (F01–F03, F05–F09) | Emilly `:8090` · Sofia ✅ `pjGenai.ts` | feito |
+| **P2** | EP-03 GenAI live (F01–F03, F05–F09) | Noah BFF `4bd7f82` · Sofia ✅ `pjGenai.ts` | feito |
 | **P3** | OIDC login produto (P6) | Keycloak client UI | 3–5 d |
 | **P4** | Biometria SCR-BIO-* lab (Noah V51) | ✅ FE `liveness.ts` + 3 telas | feito (Amplify/GetResults backlog) |
 | **P5** | OCR comprovantes GenAI (Nexus F04) | Textract/Bedrock | 5+ d |

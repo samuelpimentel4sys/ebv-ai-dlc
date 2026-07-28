@@ -24,9 +24,9 @@
 | Auth lab (`OIDC_ENABLED=false`) | ✅ | Sem login — `httpClient` direto (Noah) |
 | Auth demo JWT (`VITE_API_BEARER`) | ✅ pronto | Atalho smoke; não é login de produto |
 | Login OIDC produto (PKCE) | ❌ backlog P6 | Client `prisma-steward-ui` |
-| EP-02…06 live | ✅ 01–06 | EP-03 GenAI Emilly + HITL Noah |
+| EP-02…06 live | ✅ 01–06 | EP-03 via Noah `:8080` (HITL + BFF GenAI) |
 
-**Conclusão:** plug live lab **fechado** (Noah + Emilly). Mock só Vitest. Próximo: **P1** hardening Score · Amplify aws · **P6** OIDC PKCE produto.
+**Conclusão:** plug live lab **fechado** — FE só Noah `:8080`. Mock só Vitest. Próximo: **P1** hardening Score · Amplify aws · **P6** OIDC PKCE produto.
 
 ---
 
@@ -105,7 +105,7 @@ Noah lab 9/9 (stubs Neptune/Trino) · handoff 15:40 · **9/9 telas live**
 |-------|--------|
 | **F04 HITL** (Noah `:8080`) | ✅ BE lab · ✅ FE plug (`pjHitl.ts`) |
 | **F01 BIO Liveness** (Noah `:8080`) | ✅ BE V51 · ✅ FE (`liveness.ts` + 3 telas) · Amplify fora |
-| GenAI F01–F03/F05–F09 (Emilly `:8090`) | ✅ FE (`pjGenai.ts`) · proxy Vite dual · lab 100% BE |
+| GenAI F01–F03/F05–F09 (BFF Noah → Emilly) | ✅ FE (`pjGenai.ts`) · host só `:8080` · `HANDOFF_SOFIA_BFF_GENAI.md` |
 
 ### P6 — Login OIDC produto (backlog · desenho Noah 2026-07-28)
 
@@ -194,12 +194,12 @@ Sofia (browser)
 
 Inventário completo: [`GAP_US_FE_FORA_DO_ESCOPO.md`](./GAP_US_FE_FORA_DO_ESCOPO.md)
 
-1. **Feito:** F04 HITL + BIO Liveness lab + **EP-03 GenAI** Emilly (`pjGenai.ts`)
+1. **Feito:** F04 HITL + BIO + EP-03 GenAI via BFF Noah (`pjGenai.ts` · host `:8080`)
 2. **Em paralelo:** P1 hardening contrato Score & Plataforma
 3. **Quando OIDC on em demo:** colar JWT em `VITE_API_BEARER`
 4. **Quando produto:** autorizar sprint **P6** (PKCE + login UI)
 5. **Amplify Face Liveness:** só com `LIVENESS_MODE=aws` · GetResults / IAL3 backlog
 6. **Docs:** gerar US-FE md EP-05 Downstream
-7. **Ops lab:** Emilly `:8090` + Noah `:8080` obrigatórios para GenAI live
+7. **Ops lab:** Noah `:8080` público; Emilly `:8090` **interno** (só BFF)
 
 _Sofia · Prisma Equifax_

@@ -1,6 +1,8 @@
 /**
- * API client — EP-03 Copiloto GenAI PJ (Emilly Python :8090).
- * HITL (submit/approve/trail) permanece em `pjHitl.ts` → Noah :8080.
+ * API client — EP-03 Copiloto GenAI PJ.
+ * Paths Emilly intactos (`/api/v1/pj/**`); host público = Noah :8080 (BFF → Emilly).
+ * HITL (submit/approve/trail) em `pjHitl.ts` — Java JDBC, não BFF.
+ * @see backend/docs/HANDOFF_SOFIA_BFF_GENAI.md
  */
 import { httpClient } from '@/lib/httpClient';
 import { toNumber } from '@/lib/number';

@@ -12,16 +12,8 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      // HITL (Noah Java) — mais específico primeiro
-      '^/api/v1/pj/opinions/.*/(submit|approve|trail)': {
-        target: 'http://localhost:8080',
-        changeOrigin: true,
-      },
-      // GenAI Copiloto PJ (Emilly Python)
-      '/api/v1/pj': {
-        target: 'http://localhost:8090',
-        changeOrigin: true,
-      },
+      // Único backend público = Noah Java :8080 (BFF GenAI → Emilly interno)
+      // HITL + GenAI paths iguais; Java roteia. Ver HANDOFF_SOFIA_BFF_GENAI.md
       '/api': {
         target: 'http://localhost:8080',
         changeOrigin: true,
