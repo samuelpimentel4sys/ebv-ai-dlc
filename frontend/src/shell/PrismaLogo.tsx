@@ -6,7 +6,7 @@ export function PrismaLogo({ size = 28 }: { size?: number }) {
         height={size}
         viewBox="0 0 32 32"
         role="img"
-        aria-label="EBV Prisma"
+        aria-label="Prisma Equifax"
         className="shrink-0"
       >
         <defs>
@@ -24,8 +24,11 @@ export function PrismaLogo({ size = 28 }: { size?: number }) {
         <path d="M17 17 L30 14" stroke="rgb(var(--eqx-green-600))" strokeWidth="1.6" />
         <path d="M17 19 L30 19" stroke="rgb(var(--eqx-blue-300))" strokeWidth="1.6" />
       </svg>
-      <span className="text-base font-bold tracking-tight">
-        EBV <span className="text-eqx-accent-text">Prisma</span>
+      <span className="flex flex-col leading-tight">
+        <span className="text-base font-bold tracking-tight">Prisma</span>
+        <span className="text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-eqx-text-muted">
+          Equifax
+        </span>
       </span>
     </span>
   );

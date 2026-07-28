@@ -4,14 +4,15 @@ import { useEffect, useMemo, useState } from 'react';
 import { cn } from '@/lib/cn';
 import { PrismaLogo } from '@/shell/PrismaLogo';
 import { NAV_ITEMS } from '@/app/navigation';
-import { JOURNEYS, journeyPersona, journeyPosition, journeyItems } from '@/app/journeys';
+import {
+  navItemsForModule,
+  productModuleForPathname,
+  resolvedProductModules,
+} from '@/app/modules';
+import { isDemoMode } from '@/lib/productMode';
 import { EPICS } from '@/app/epics';
+import { JOURNEYS, journeyPersona, journeyPosition, journeyItems } from '@/app/journeys';
 
-/**
- * Item de navegação da seção 17 do DS: fundo claro, texto de corpo e barra
- * lateral da marca no estado ativo. A versão anterior usava texto branco a 40%
- * de opacidade sobre fundo escuro, que reprovava o contraste mínimo.
- */
 const itemLink =
   'flex min-h-[2.5rem] items-center gap-2 border-l-2 border-transparent px-2 py-1.5 text-sm ' +
   'text-eqx-text transition-colors duration-fast ease-standard ' +
@@ -30,25 +31,26 @@ function readCollapsed(): Record<string, boolean> {
   }
 }
 
-/** Navegação por épico e, dentro dele, por trilha de persona. */
+/** Navegação por módulo de produto (default) ou por épico/trilha (?demo=1). */
 export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const home = useMemo(() => NAV_ITEMS.find((item) => item.path === '/'), []);
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
+  const demo = isDemoMode(search);
+  const activeModule = useMemo(() => productModuleForPathname(pathname)?.id, [pathname]);
   const activeEpic = useMemo(() => journeyPosition(pathname)?.journey.epic, [pathname]);
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>(readCollapsed);
+  const modules = useMemo(() => resolvedProductModules(), []);
 
   useEffect(() => {
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(collapsed));
     } catch {
-      // Navegação privada sem storage: o estado vale só para a sessão.
+      /* ignore */
     }
   }, [collapsed]);
 
-  // Épico sem escolha explícita do operador fica fechado quando não é o atual,
-  // para que a lista não abra com 56 telas de uma vez.
-  function isCollapsed(epicId: string) {
-    return collapsed[epicId] ?? (activeEpic ? epicId !== activeEpic : epicId !== EPICS[0].id);
+  function isCollapsed(key: string, fallbackOpenKey: string | undefined) {
+    return collapsed[key] ?? (fallbackOpenKey ? key !== fallbackOpenKey : key !== modules[0]?.id);
   }
 
   return (
@@ -61,7 +63,9 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
         <PrismaLogo />
       </div>
       <p className="px-4 pb-3 text-xs text-eqx-text-muted">
-        {EPICS.length} épicos · {JOURNEYS.length} trilhas · 56 telas
+        {demo
+          ? `${EPICS.length} épicos · ${JOURNEYS.length} trilhas · demo`
+          : `${modules.length} módulos · Prisma Equifax`}
       </p>
 
       <div className="flex-1 overflow-y-auto eqx-scrollbar px-2 pb-6">
@@ -74,90 +78,129 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
                 end
                 className={({ isActive }) => cn(itemLink, isActive && itemActive)}
               >
-                {home.label}
+                Início
               </NavLink>
             </li>
-            <li>
-              <NavLink
-                to="/roteiro"
-                onClick={onNavigate}
-                className={({ isActive }) => cn(itemLink, isActive && itemActive)}
-              >
-                Roteiro da demo
-              </NavLink>
-            </li>
+            {demo ? (
+              <li>
+                <NavLink
+                  to="/roteiro"
+                  onClick={onNavigate}
+                  className={({ isActive }) => cn(itemLink, isActive && itemActive)}
+                >
+                  Roteiro da demo
+                </NavLink>
+              </li>
+            ) : null}
           </ul>
         ) : null}
 
-        {EPICS.map((epic) => {
-          const folded = isCollapsed(epic.id);
-          const journeys = JOURNEYS.filter((journey) => journey.epic === epic.id);
-          return (
-            <section key={epic.id} className="mb-1">
-              <button
-                type="button"
-                onClick={() => setCollapsed((prev) => ({ ...prev, [epic.id]: !folded }))}
-                aria-expanded={!folded}
-                className="flex min-h-[2.5rem] w-full items-center justify-between gap-2 rounded-sm px-2 text-left text-[0.7rem] font-bold uppercase tracking-[0.12em] text-eqx-text-muted hover:bg-eqx-surface hover:text-eqx-text"
-              >
-                <span className="min-w-0 truncate">
-                  {epic.id} · {epic.shortName}
-                </span>
-                <ChevronDown
-                  size={14}
-                  aria-hidden="true"
-                  className={cn('shrink-0 transition-transform duration-fast', folded && '-rotate-90')}
-                />
-              </button>
-
-              {!folded ? (
-                <div className="mb-2 grid gap-2">
-                  <NavLink
-                    to={`/epicos/${epic.id}`}
-                    onClick={onNavigate}
-                    className={({ isActive }) =>
-                      cn(
-                        'mx-2 min-h-[2rem] text-xs text-eqx-action underline-offset-2 hover:underline',
-                        isActive && 'font-bold',
-                      )
-                    }
+        {demo
+          ? EPICS.map((epic) => {
+              const folded = isCollapsed(epic.id, activeEpic);
+              const journeys = JOURNEYS.filter((journey) => journey.epic === epic.id);
+              return (
+                <section key={epic.id} className="mb-1">
+                  <button
+                    type="button"
+                    onClick={() => setCollapsed((prev) => ({ ...prev, [epic.id]: !folded }))}
+                    aria-expanded={!folded}
+                    className="flex w-full min-h-11 items-center justify-between gap-2 rounded-sm px-2 py-2 text-left text-xs font-bold uppercase tracking-wide text-eqx-text-muted hover:bg-eqx-surface hover:text-eqx-text"
                   >
-                    Ver trilhas do épico
-                  </NavLink>
-
-                  {journeys.map((journey) => (
-                    <div key={journey.id}>
-                      <p className="px-2 pb-1 text-[0.65rem] uppercase tracking-[0.1em] text-eqx-text-muted">
-                        {journey.title} · {journeyPersona(journey).name.split(' ')[0]}
-                      </p>
-                      <ul className="grid gap-0.5">
-                        {journeyItems(journey).map((item, step) => (
-                          <li key={item.href}>
-                            <NavLink
-                              to={item.href}
-                              onClick={onNavigate}
-                              className={({ isActive }) => cn(itemLink, isActive && itemActive)}
-                            >
-                              <span className="w-4 shrink-0 font-mono text-[0.65rem] text-eqx-text-muted">
-                                {step + 1}
-                              </span>
-                              <span className="min-w-0 flex-1 truncate">{item.label}</span>
-                            </NavLink>
-                          </li>
-                        ))}
-                      </ul>
+                    <span className="truncate">
+                      {epic.id} · {epic.shortName}
+                    </span>
+                    <ChevronDown
+                      size={16}
+                      aria-hidden="true"
+                      className={cn('shrink-0 transition-transform', !folded && 'rotate-180')}
+                    />
+                  </button>
+                  {!folded ? (
+                    <div className="mb-2 ml-1 border-l border-eqx-border pl-1">
+                      {journeys.map((journey) => (
+                        <div key={journey.id} className="mb-2">
+                          <p className="px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-wide text-eqx-text-muted">
+                            {journeyPersona(journey).name} · {journey.title}
+                          </p>
+                          <ul className="grid gap-0.5">
+                            {journeyItems(journey).map((item) => (
+                              <li key={item.href}>
+                                <NavLink
+                                  to={item.href}
+                                  onClick={onNavigate}
+                                  className={({ isActive }) => cn(itemLink, isActive && itemActive)}
+                                >
+                                  <span className="truncate">{item.label}</span>
+                                </NavLink>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                      <NavLink
+                        to={`/epicos/${epic.id}`}
+                        onClick={onNavigate}
+                        className={({ isActive }) =>
+                          cn(itemLink, 'text-xs text-eqx-text-muted', isActive && itemActive)
+                        }
+                      >
+                        Ver trilhas do épico
+                      </NavLink>
                     </div>
-                  ))}
-                </div>
-              ) : null}
-            </section>
-          );
-        })}
+                  ) : null}
+                </section>
+              );
+            })
+          : modules.map((mod) => {
+              const folded = isCollapsed(mod.id, activeModule);
+              const items = navItemsForModule(mod);
+              return (
+                <section key={mod.id} className="mb-1">
+                  <button
+                    type="button"
+                    onClick={() => setCollapsed((prev) => ({ ...prev, [mod.id]: !folded }))}
+                    aria-expanded={!folded}
+                    className="flex w-full min-h-11 items-center justify-between gap-2 rounded-sm px-2 py-2 text-left text-xs font-bold uppercase tracking-wide text-eqx-text-muted hover:bg-eqx-surface hover:text-eqx-text"
+                  >
+                    <span className="truncate">{mod.label}</span>
+                    <ChevronDown
+                      size={16}
+                      aria-hidden="true"
+                      className={cn('shrink-0 transition-transform', !folded && 'rotate-180')}
+                    />
+                  </button>
+                  {!folded ? (
+                    <ul className="mb-2 ml-1 grid gap-0.5 border-l border-eqx-border pl-1">
+                      {items.map((item) => (
+                        <li key={item.href}>
+                          <NavLink
+                            to={item.href}
+                            onClick={onNavigate}
+                            className={({ isActive }) => cn(itemLink, isActive && itemActive)}
+                          >
+                            <span className="truncate">{item.label}</span>
+                          </NavLink>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </section>
+              );
+            })}
       </div>
 
-      <footer className="border-t border-eqx-border px-4 py-3 text-[0.7rem] text-eqx-text-muted">
-        Equifax · Prisma Showcase
-      </footer>
+      <div className="border-t border-eqx-border px-4 py-3 text-[0.65rem] text-eqx-text-muted">
+        Equifax · Prisma
+        {!demo ? (
+          <span className="mt-1 block">
+            Demo:{' '}
+            <a className="text-eqx-action underline" href="?demo=1">
+              ?demo=1
+            </a>
+          </span>
+        ) : null}
+      </div>
     </nav>
   );
 }

@@ -3,10 +3,12 @@ import { ChevronLeft, ChevronRight, Menu, Moon, Rows3, Search, Sun } from 'lucid
 import { useTheme } from '@/app/ThemeContext';
 import { navItemByPathname } from '@/app/navigation';
 import { journeyPosition } from '@/app/journeys';
+import { productModuleForPathname } from '@/app/modules';
 import { cn } from '@/lib/cn';
 import { Badge } from '@/ds/Badge';
 import { DemoStateMenu } from '@/shell/DemoStateMenu';
 import { dataMode } from '@/lib/config';
+import { isDemoMode, isDevMode } from '@/lib/productMode';
 
 const iconButton =
   'grid h-11 w-11 place-items-center rounded-sm text-eqx-text-muted transition-colors duration-fast ' +
@@ -22,10 +24,12 @@ export function TopBar({
   const location = useLocation();
   const navigate = useNavigate();
   const current = navItemByPathname(location.pathname);
-  // Anterior/próximo seguem a trilha da persona, nunca a ordem de registro das telas.
+  const demo = isDemoMode(location.search);
+  const dev = isDevMode(location.search);
   const position = journeyPosition(location.pathname);
   const previous = position?.previous;
   const next = position?.next;
+  const module = productModuleForPathname(location.pathname);
 
   return (
     <header
@@ -46,22 +50,8 @@ export function TopBar({
           <li className="hidden text-eqx-text-muted sm:block" aria-hidden="true">
             /
           </li>
-          {current?.epic ? (
-            <>
-              <li className="md:hidden">
-                <Link
-                  to={`/epicos/${current.epic}`}
-                  className="font-mono text-xs text-eqx-text-muted hover:text-eqx-action"
-                >
-                  {current.epic}
-                </Link>
-              </li>
-              <li className="hidden md:block">
-                <Link to={`/epicos/${current.epic}`} className="text-eqx-text-muted hover:text-eqx-action">
-                  {current.group}
-                </Link>
-              </li>
-            </>
+          {module ? (
+            <li className="hidden text-eqx-text-muted md:block">{module.label}</li>
           ) : (
             <li className="hidden text-eqx-text-muted md:block">{current?.group ?? 'Início'}</li>
           )}
@@ -69,14 +59,14 @@ export function TopBar({
             /
           </li>
           <li className="min-w-0 truncate font-semibold">{current?.label ?? 'Início'}</li>
-          {position ? (
+          {demo && position ? (
             <li className="hidden lg:block">
               <Badge tone="accent">
                 Passo {position.index + 1}/{position.total}
               </Badge>
             </li>
           ) : null}
-          {current?.usId ? (
+          {dev && current?.usId ? (
             <li className="hidden xl:block">
               <Badge tone="neutral" className="font-mono">
                 {current.usId}
@@ -97,35 +87,39 @@ export function TopBar({
         className="mr-1 hidden min-h-[2.25rem] items-center gap-2 rounded-sm border border-eqx-border px-3 text-sm text-eqx-text-muted hover:border-eqx-action hover:text-eqx-text md:flex"
       >
         <Search size={15} aria-hidden="true" />
-        Buscar telas
+        Buscar
         <kbd className="rounded-sm border border-eqx-border px-1 font-mono text-[0.65rem]">Ctrl K</kbd>
       </button>
-      <button type="button" onClick={onOpenSearch} className={cn(iconButton, 'md:hidden')} aria-label="Buscar telas">
+      <button type="button" onClick={onOpenSearch} className={cn(iconButton, 'md:hidden')} aria-label="Buscar">
         <Search size={18} aria-hidden="true" />
       </button>
 
-      {current?.usId ? <DemoStateMenu /> : null}
+      {demo || dev ? <DemoStateMenu /> : null}
 
-      <button
-        type="button"
-        onClick={() => previous && navigate(previous.href)}
-        disabled={!previous}
-        className={iconButton}
-        aria-label={previous ? `Passo anterior da jornada: ${previous.label}` : 'Passo anterior da jornada'}
-        title={previous?.label}
-      >
-        <ChevronLeft size={18} aria-hidden="true" />
-      </button>
-      <button
-        type="button"
-        onClick={() => next && navigate(next.href)}
-        disabled={!next}
-        className={iconButton}
-        aria-label={next ? `Próximo passo da jornada: ${next.label}` : 'Próximo passo da jornada'}
-        title={next?.label}
-      >
-        <ChevronRight size={18} aria-hidden="true" />
-      </button>
+      {demo ? (
+        <>
+          <button
+            type="button"
+            onClick={() => previous && navigate(previous.href)}
+            disabled={!previous}
+            className={iconButton}
+            aria-label={previous ? `Passo anterior da jornada: ${previous.label}` : 'Passo anterior da jornada'}
+            title={previous?.label}
+          >
+            <ChevronLeft size={18} aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            onClick={() => next && navigate(next.href)}
+            disabled={!next}
+            className={iconButton}
+            aria-label={next ? `Próximo passo da jornada: ${next.label}` : 'Próximo passo da jornada'}
+            title={next?.label}
+          >
+            <ChevronRight size={18} aria-hidden="true" />
+          </button>
+        </>
+      ) : null}
 
       <DensityToggle />
       <ThemeToggle />

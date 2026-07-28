@@ -4,8 +4,10 @@ import { motion } from 'framer-motion';
 import { SectionWrapper } from '@/shell/SectionWrapper';
 import { JourneyNav } from '@/shell/JourneyNav';
 import { journeyPosition } from '@/app/journeys';
+import { productModuleForPathname } from '@/app/modules';
 import { demoStateFromUrl } from '@/lib/useMockQuery';
-import { buttonClass, Notice, PageHeader } from '@/ds';
+import { isDemoMode, isDevMode } from '@/lib/productMode';
+import { Badge, buttonClass, Notice, PageHeader } from '@/ds';
 
 const demoLabel = {
   error: 'falha de serviço',
@@ -33,14 +35,28 @@ export function ScreenLayout({
   const { pathname, search } = useLocation();
   const position = useMemo(() => journeyPosition(pathname), [pathname]);
   const demo = useMemo(() => demoStateFromUrl(search), [search]);
+  const demoUi = isDemoMode(search);
+  const devUi = isDevMode(search);
+  const module = useMemo(() => productModuleForPathname(pathname), [pathname]);
+
+  const headerMeta =
+    demoUi || devUi
+      ? meta
+      : [
+          module ? (
+            <Badge key="module" tone="accent">
+              {module.label}
+            </Badge>
+          ) : null,
+        ].filter(Boolean);
 
   return (
     <SectionWrapper wide={wide}>
       <PageHeader
-        usId={usId}
+        usId={devUi ? usId : undefined}
         title={title}
         description={description}
-        meta={meta}
+        meta={headerMeta}
         actions={actions}
       />
 
@@ -55,14 +71,11 @@ export function ScreenLayout({
             </Link>
           }
         >
-          Esta tela está simulando o cenário de exceção previsto na US-FE. O seletor de estado no
-          cabeçalho alterna entre resposta normal, vazia, parcial e falha de serviço em qualquer
-          rota.
+          Esta tela está simulando o cenário de exceção. O seletor de estado (modo demo/dev) alterna
+          entre resposta normal, vazia, parcial e falha de serviço.
         </Notice>
       ) : null}
 
-      {/* Entrada curta e única por tela: dá vida ao conteúdo sem competir com a
-          leitura, e o token `slow` do DS já é neutralizado por reduced-motion. */}
       <motion.div
         key={pathname}
         initial={{ opacity: 0, y: 8 }}
@@ -72,7 +85,7 @@ export function ScreenLayout({
         {children}
       </motion.div>
 
-      {position ? <JourneyNav position={position} /> : null}
+      {demoUi && position ? <JourneyNav position={position} /> : null}
     </SectionWrapper>
   );
 }

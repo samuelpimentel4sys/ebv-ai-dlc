@@ -63,12 +63,14 @@ describe('trilhas de jornada', () => {
 
 function mountJourneyScreen(href: string) {
   const item = NAV_ITEMS.find((entry) => entry.href === href)!;
+  const entry = href.includes('?') ? `${href}&demo=1` : `${href}?demo=1`;
   return render(
     <ThemeProvider>
       <ToastProvider>
-        <MemoryRouter initialEntries={[href]}>
+        <MemoryRouter initialEntries={[entry]}>
           <Routes>
             <Route element={<AppShell />}>
+              <Route path={item.path} element={item.element} />
               <Route path={href} element={item.element} />
             </Route>
           </Routes>

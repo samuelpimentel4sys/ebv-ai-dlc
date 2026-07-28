@@ -97,7 +97,7 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
                   setQuery(event.target.value);
                   setCursor(0);
                 }}
-                placeholder="Buscar tela, épico, US-FE ou rota…"
+                placeholder="Buscar tela, módulo ou rota…"
                 aria-label="Termo de busca"
                 role="combobox"
                 aria-expanded={results.length > 0}

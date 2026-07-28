@@ -13,7 +13,7 @@ function NotFound() {
     <SectionWrapper>
       <EmptyState
         title="Tela não encontrada"
-        description="A rota acessada não faz parte das telas publicadas neste showcase. Use Ctrl+K para buscar."
+        description="A rota acessada não faz parte do Prisma. Use Ctrl+K para buscar uma tela."
       />
     </SectionWrapper>
   );

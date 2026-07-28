@@ -5,11 +5,13 @@ import { TopBar } from '@/shell/TopBar';
 import { SearchOverlay } from '@/shell/SearchOverlay';
 import { WelcomeTour } from '@/shell/WelcomeTour';
 import { cn } from '@/lib/cn';
+import { isDemoMode } from '@/lib/productMode';
 
 export function AppShell() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const location = useLocation();
+  const demo = isDemoMode(location.search);
 
   useEffect(() => {
     setMenuOpen(false);
@@ -64,7 +66,7 @@ export function AppShell() {
       </div>
 
       <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
-      <WelcomeTour />
+      {demo ? <WelcomeTour /> : null}
     </div>
   );
 }
