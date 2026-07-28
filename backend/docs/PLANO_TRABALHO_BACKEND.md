@@ -147,8 +147,13 @@ F04 → F08 → F01 → F02 → F03 → F05 → F06 → F07 → F09 ✅ lab · [
 
 F01 → F09 ✅ lab · [`DEV_RECORD_EP04.md`](./DEV_RECORD_EP04.md) · **Neptune/Trino/Iceberg/Spark fora (stubs)**
 
-### Sprint 6 — Hardening R1
-EP-01 F08/F10 · Testcontainers · SLO · Fairlearn/Spark reais · OIDC CTs EP-05
+### Sprint 6 — Hardening R1 (EP-03 GenAI **ADIADO**)
+- [ ] OIDC smoke CTs (steward / SRE / B2B) com `OIDC_ENABLED=true`
+- [ ] Testcontainers (Postgres/Kafka) smoke suite
+- [ ] WORM port S3 (substituir FS lab onde crítico F04/F08)
+- [ ] Documentar gap Neptune/ONNX/Fairlearn (sem GenAI EP-03)
+
+> **EP-03 Copiloto PJ:** pulado — núcleo Python/Bedrock fora do escopo Noah neste ciclo.
 
 ---
 
