@@ -17,6 +17,7 @@ import {
 import type { Column, GraphNode } from '@/ds';
 import { useMockQuery } from '@/lib/useMockQuery';
 import { formatCurrency, formatDateTime, formatPercent } from '@/lib/format';
+import { sumBy } from '@/lib/number';
 import { groupResponse, type GroupMember } from '@/epics/copiloto-pj/data';
 
 const roleTone = {
@@ -163,7 +164,7 @@ export function EconomicGroupPage() {
                 />
                 <Metric
                   value={formatCurrency(
-                    data.members.reduce((sum, item) => sum + item.overdue, 0),
+                    sumBy(data.members, (item) => item.overdue),
                     0,
                   )}
                   label="Total em atraso"

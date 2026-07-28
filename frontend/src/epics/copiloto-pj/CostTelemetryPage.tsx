@@ -18,6 +18,7 @@ import {
 import type { Column } from '@/ds';
 import { useMockQuery } from '@/lib/useMockQuery';
 import { formatCurrency, formatNumber, formatPercent } from '@/lib/format';
+import { sumBy } from '@/lib/number';
 import {
   costBudget,
   costByAnalyst,
@@ -240,7 +241,7 @@ export function CostTelemetryPage() {
                   rows={data.models}
                   rowKey={(row) => row.model}
                   footer={`Total ${formatCurrency(
-                    data.models.reduce((sum, row) => sum + row.cost, 0),
+                    sumBy(data.models, (row) => row.cost),
                   )}`}
                 />
               </Card>

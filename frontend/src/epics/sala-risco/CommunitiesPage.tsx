@@ -20,6 +20,7 @@ import { isLiveMode } from '@/lib/config';
 import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
 import { detectCommunitiesLive, fetchCommunitiesLive } from '@/api/portfolio';
 import { formatCurrency, formatNumber, formatPercent } from '@/lib/format';
+import { sumBy } from '@/lib/number';
 import { communities } from '@/epics/sala-risco/data';
 import { cn } from '@/lib/cn';
 
@@ -96,14 +97,14 @@ export function CommunitiesPage() {
               <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 <Metric value={list.length} label="Comunidades detectadas" />
                 <Metric
-                  value={formatNumber(list.reduce((sum, row) => sum + row.members, 0))}
+                  value={formatNumber(sumBy(list, (row) => row.members))}
                   label="Clientes agrupados"
                   tone="action"
                   icon={<Boxes size={18} aria-hidden="true" />}
                 />
                 <Metric
                   value={formatCurrency(
-                    list.reduce((sum, row) => sum + row.exposure, 0),
+                    sumBy(list, (row) => row.exposure),
                     0,
                   )}
                   label="Exposição em comunidades"

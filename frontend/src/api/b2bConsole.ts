@@ -2,6 +2,7 @@
  * API client — Console B2B (onboarding, credenciais, consumo, analytics).
  */
 import { httpClient } from '@/lib/httpClient';
+import { toNumber } from '@/lib/number';
 import type {
   ContractItem,
   Credential,
@@ -205,18 +206,18 @@ export async function fetchConsoleLive(): Promise<{
       items: {
         productCode: string;
         environment: string;
-        callCount: number;
-        amount: number;
+        callCount: number | string;
+        amount: number | string;
         currency: string;
       }[];
-      totals: { callCount: number; amount: number };
+      totals: { callCount: number | string; amount: number | string };
     }>(`/api/v1/console/usage${qs}`),
     httpClient<{
       items: {
         id: string;
         invoiceNumber: string;
         periodLabel: string;
-        amount: number;
+        amount: number | string;
         currency: string;
         status: string;
         issuedAt: string;
@@ -235,15 +236,15 @@ export async function fetchConsoleLive(): Promise<{
 
   const usagePoints: UsagePoint[] = (usage.items ?? []).map((item) => ({
     label: item.productCode || item.environment || 'uso',
-    calls: item.callCount,
-    cost: item.amount,
+    calls: toNumber(item.callCount),
+    cost: toNumber(item.amount),
   }));
 
   if (!usagePoints.length && usage.totals) {
     usagePoints.push({
       label: 'Total',
-      calls: usage.totals.callCount,
-      cost: usage.totals.amount,
+      calls: toNumber(usage.totals.callCount),
+      cost: toNumber(usage.totals.amount),
     });
   }
 
@@ -255,7 +256,7 @@ export async function fetchConsoleLive(): Promise<{
     return {
       invoiceId: item.invoiceNumber || item.id,
       period: item.periodLabel,
-      amount: item.amount,
+      amount: toNumber(item.amount),
       status,
       dueDate: item.issuedAt?.slice(0, 10) ?? '',
       calls: 0,

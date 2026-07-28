@@ -3,6 +3,7 @@
  * (self-service, fila, tracking, anexos, SLA).
  */
 import { httpClient, HttpError } from '@/lib/httpClient';
+import { toNumber } from '@/lib/number';
 import { MARIA } from '@/app/story';
 import type {
   Attachment,
@@ -140,7 +141,7 @@ async function listTitularRecords(token: string): Promise<TitularRecord[]> {
       recordRef: string;
       type: string;
       creditor: string;
-      amount: number;
+      amount: number | string;
       status: string;
     }[];
   }>(`/api/v1/self-service/records?sessionToken=${encodeURIComponent(token)}`);
@@ -154,12 +155,13 @@ async function listTitularRecords(token: string): Promise<TitularRecord[]> {
     const open =
       (item.status || '').toUpperCase().includes('OPEN') ||
       (item.status || '').toUpperCase().includes('ACTIVE');
+    const amount = toNumber(item.amount);
     return {
       recordId: item.recordRef,
       type,
       title: `${item.type || 'Registro'} · ${item.creditor || '—'}`,
       detail: `Ref ${item.recordRef} · status ${item.status}`,
-      amount: item.amount,
+      amount: amount > 0 ? amount : undefined,
       source: item.creditor || '—',
       occurredAt: new Date().toISOString(),
       disputable: open,

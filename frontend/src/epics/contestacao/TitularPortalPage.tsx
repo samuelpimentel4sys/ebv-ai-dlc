@@ -20,6 +20,7 @@ import { openSelfServiceDisputeLive, fetchTitularRecordsLive } from '@/api/dispu
 import { isLiveMode } from '@/lib/config';
 import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
 import { formatCurrency, formatDateTime } from '@/lib/format';
+import { sumBy } from '@/lib/number';
 import { disputeReasons, titularRecords, type TitularRecord } from '@/epics/contestacao/data';
 import { focusFirstInvalid } from '@/lib/focusFirstInvalid';
 
@@ -129,9 +130,10 @@ export function TitularPortalPage() {
             type,
             records: records.filter((record) => record.type === type),
           }));
-          const totalDebt = records
-            .filter((record) => record.type === 'apontamento')
-            .reduce((sum, record) => sum + (record.amount ?? 0), 0);
+          const totalDebt = sumBy(
+            records.filter((record) => record.type === 'apontamento'),
+            (record) => record.amount,
+          );
 
           return (
             <div className="grid gap-5">

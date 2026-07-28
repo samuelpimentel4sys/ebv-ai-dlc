@@ -22,6 +22,7 @@ import { fetchCoverageLive, ingestAltDataLive } from '@/api/inclusion';
 import { isLiveMode } from '@/lib/config';
 import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
 import { formatDateTime, formatNumber } from '@/lib/format';
+import { sumBy, toNumber } from '@/lib/number';
 import {
   ingestBatches,
   partnerCoverage,
@@ -229,11 +230,13 @@ export function CoveragePage() {
         }}
       >
         {(data) => {
-          const records = data.partners.reduce((sum, item) => sum + item.records, 0);
+          const records = sumBy(data.partners, (item) => item.records);
           const weighted =
             records > 0
-              ? data.partners.reduce((sum, item) => sum + item.coveragePct * item.records, 0) /
-                records
+              ? data.partners.reduce(
+                  (sum, item) => sum + toNumber(item.coveragePct) * toNumber(item.records),
+                  0,
+                ) / records
               : 0;
           const active = data.partners.filter((item) => item.status === 'ativo').length;
 

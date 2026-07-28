@@ -24,6 +24,7 @@ import {
 import { isLiveMode } from '@/lib/config';
 import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
 import { formatDateTime, formatNumber } from '@/lib/format';
+import { sumBy } from '@/lib/number';
 import { MARIA } from '@/app/story';
 import { attachments, type Attachment } from '@/epics/contestacao/data';
 import { focusFirstInvalid } from '@/lib/focusFirstInvalid';
@@ -237,7 +238,7 @@ export function AttachmentsPage() {
       >
         {(list) => {
           const current = list.find((item) => item.attachmentId === selected) ?? list[0];
-          const totalKb = list.reduce((sum, item) => sum + item.sizeKb, 0);
+          const totalKb = sumBy(list, (item) => item.sizeKb);
           return (
             <div className="grid gap-5">
               {list.some((item) => item.scanStatus === 'bloqueado') ? (

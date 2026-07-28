@@ -26,6 +26,7 @@ import {
   type HitlTrailEntry,
 } from '@/api/pjHitl';
 import { formatCurrency, formatDateTime } from '@/lib/format';
+import { sumBy } from '@/lib/number';
 import {
   approvalQueue,
   approvalTrail,
@@ -209,10 +210,7 @@ export function ApprovalPage() {
                   icon={<ShieldAlert size={18} aria-hidden="true" />}
                 />
                 <Metric
-                  value={formatCurrency(
-                    pending.reduce((sum, row) => sum + row.suggestedLimit, 0),
-                    0,
-                  )}
+                  value={formatCurrency(sumBy(pending, (row) => row.suggestedLimit), 0)}
                   label="Volume em análise"
                 />
                 <Metric

@@ -21,6 +21,7 @@ import type { Column } from '@/ds';
 import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
 import { isLiveMode } from '@/lib/config';
 import { formatDateTime, formatNumber } from '@/lib/format';
+import { sumBy } from '@/lib/number';
 import { streamHealth, type QuarantineEvent, type TopicHealth } from '@/epics/score-vivo/data';
 import { fetchStreamHealthLive, republishCreditEventLive } from '@/api/scorePlatform';
 import { MARIA } from '@/app/story';
@@ -196,15 +197,13 @@ export function StreamHealthPage() {
 
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
               <Metric
-                value={formatNumber(
-                  data.topics.reduce((sum, topic) => sum + topic.throughputPerMin, 0),
-                )}
+                value={formatNumber(sumBy(data.topics, (topic) => topic.throughputPerMin))}
                 label="Mensagens por minuto"
                 hint="soma de todos os tópicos"
                 icon={<Activity size={18} aria-hidden="true" />}
               />
               <Metric
-                value={formatNumber(data.topics.reduce((sum, topic) => sum + topic.lagMessages, 0))}
+                value={formatNumber(sumBy(data.topics, (topic) => topic.lagMessages))}
                 label="Lag acumulado (msg)"
                 tone="warning"
               />

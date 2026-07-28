@@ -22,6 +22,7 @@ import { isLiveMode } from '@/lib/config';
 import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
 import { fetchStressScenariosLive, runStressLive } from '@/api/portfolio';
 import { formatCurrency, formatNumber, formatPercent, formatSigned } from '@/lib/format';
+import { sumBy } from '@/lib/number';
 import {
   runStress,
   stressScenarios,
@@ -280,9 +281,7 @@ export function StressPage() {
                       icon={<GaugeIcon size={18} aria-hidden="true" />}
                     />
                     <Metric
-                      value={formatNumber(
-                        result.ratingMigration.reduce((sum, row) => sum + row.volume, 0),
-                      )}
+                      value={formatNumber(sumBy(result.ratingMigration, (row) => row.volume))}
                       label="Clientes rebaixados"
                     />
                   </div>

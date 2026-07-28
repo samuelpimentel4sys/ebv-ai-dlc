@@ -1,3 +1,5 @@
+import { toNumber } from '@/lib/number';
+
 const dateTime = new Intl.DateTimeFormat('pt-BR', {
   dateStyle: 'short',
   timeStyle: 'short',
@@ -23,25 +25,31 @@ export function formatDate(iso: string | null | undefined): string {
   return dateOnly.format(parsed);
 }
 
-export function formatNumber(value: number | null | undefined, digits = 0): string {
-  if (value === null || value === undefined || Number.isNaN(value)) return '—';
-  return value.toLocaleString('pt-BR', {
+export function formatNumber(value: unknown, digits = 0): string {
+  if (value === null || value === undefined) return '—';
+  const n = typeof value === 'number' ? value : toNumber(value, Number.NaN);
+  if (Number.isNaN(n)) return '—';
+  return n.toLocaleString('pt-BR', {
     minimumFractionDigits: digits,
     maximumFractionDigits: digits,
   });
 }
 
-export function formatPercent(value: number | null | undefined, digits = 1): string {
-  if (value === null || value === undefined || Number.isNaN(value)) return '—';
-  return `${value.toLocaleString('pt-BR', {
+export function formatPercent(value: unknown, digits = 1): string {
+  if (value === null || value === undefined) return '—';
+  const n = typeof value === 'number' ? value : toNumber(value, Number.NaN);
+  if (Number.isNaN(n)) return '—';
+  return `${n.toLocaleString('pt-BR', {
     minimumFractionDigits: digits,
     maximumFractionDigits: digits,
   })}%`;
 }
 
-export function formatCurrency(value: number | null | undefined, digits = 2): string {
-  if (value === null || value === undefined || Number.isNaN(value)) return '—';
-  return value.toLocaleString('pt-BR', {
+export function formatCurrency(value: unknown, digits = 2): string {
+  if (value === null || value === undefined) return '—';
+  const n = typeof value === 'number' ? value : toNumber(value, Number.NaN);
+  if (Number.isNaN(n)) return '—';
+  return n.toLocaleString('pt-BR', {
     style: 'currency',
     currency: 'BRL',
     minimumFractionDigits: digits,
@@ -49,11 +57,13 @@ export function formatCurrency(value: number | null | undefined, digits = 2): st
   });
 }
 
-export function formatSigned(value: number | null | undefined, digits = 0): string {
-  if (value === null || value === undefined || Number.isNaN(value)) return '—';
-  const formatted = formatNumber(Math.abs(value), digits);
-  if (value > 0) return `+${formatted}`;
-  if (value < 0) return `−${formatted}`;
+export function formatSigned(value: unknown, digits = 0): string {
+  if (value === null || value === undefined) return '—';
+  const n = typeof value === 'number' ? value : toNumber(value, Number.NaN);
+  if (Number.isNaN(n)) return '—';
+  const formatted = formatNumber(Math.abs(n), digits);
+  if (n > 0) return `+${formatted}`;
+  if (n < 0) return `−${formatted}`;
   return formatted;
 }
 

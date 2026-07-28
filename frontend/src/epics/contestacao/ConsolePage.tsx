@@ -22,6 +22,7 @@ import type { Column } from '@/ds';
 import { fetchConsoleLive } from '@/api/b2bConsole';
 import { useDataQuery } from '@/lib/useDataQuery';
 import { formatCurrency, formatDate, formatDateTime, formatNumber } from '@/lib/format';
+import { sumBy } from '@/lib/number';
 import { VEGA } from '@/app/story';
 import {
   contracts,
@@ -204,8 +205,8 @@ export function ConsolePage() {
         {(data) => {
           const last = data.usage.at(-1);
           const previous = data.usage.at(-2);
-          const calls = data.usage.reduce((sum, point) => sum + point.calls, 0);
-          const cost = data.usage.reduce((sum, point) => sum + point.cost, 0);
+          const calls = sumBy(data.usage, (point) => point.calls);
+          const cost = sumBy(data.usage, (point) => point.cost);
           const growth =
             last && previous ? ((last.calls - previous.calls) / previous.calls) * 100 : 0;
 
