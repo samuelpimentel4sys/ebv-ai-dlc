@@ -167,7 +167,21 @@ Nao plugar. Nucleo Bedrock/RAG = Python. Noah nao implementa neste ciclo.
 
 ---
 
-## 8. Commits ancora
+## 9. Alinhamento Sofia (2026-07-28) ? o que ainda "fica"
+
+Sofia confirma: **nao e API Noah faltando** no plug lab.
+
+| Item | Dono | Nota |
+|------|------|------|
+| **P1** hardening FE ? gaps shape OpenAPI x mappers, empty/error reais | **Sofia** | Noah so age se FE listar campo/contrato divergente (sem inventar) |
+| **P6** login OIDC produto (PKCE) | **Sofia** backlog | Lab agora aberto (`OIDC_ENABLED=false`); Keycloak pronto quando FE plugar |
+| Stubs lab (Neptune/SHAP/DiCE/ONNX/Fairlearn) | **BE stub / FE ja consome** | Walter provisionando Neo4j + Fairlearn API (+ ONNX artefato); Noah pluga adapters quando host/URL voltarem |
+
+EP-03 GenAI: **Emilly**. Noah conecta HITL Java quando Walter avisar.
+
+---
+
+## 10. Commits ancora
 
 | Commit | Escopo |
 |--------|--------|
@@ -175,6 +189,6 @@ Nao plugar. Nucleo Bedrock/RAG = Python. Noah nao implementa neste ciclo.
 | `e4e9a64` | WORM S3 switch |
 | `d531e0f` | OIDC CTs + Backend CI |
 | `582f710` | Flyway V49 + doc smoke OIDC |
-| `23f1bbd` | Handoff Sofia Auth / 401 |
+| `c852a76` | Handoff Sofia Auth / 401 |
 
-_Noah: Sprint 6 hardening OK. GenAI continua adiado. FE: se 401, checar OIDC do processo vivo._
+_Noah: Sprint 6 hardening OK. Aguarda provision Neo4j/Fairlearn/ONNX. GenAI = Emilly._

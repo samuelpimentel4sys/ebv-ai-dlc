@@ -16,7 +16,7 @@
 | OIDC CTs (`OIDC_ENABLED=true`) | ✅ CT + ✅ smoke lab | `OidcSecurityWebMvcTest` + smoke Keycloak real 2026-07-28 (§ abaixo) |
 | Testcontainers Postgres Flyway | ✅ CI | `FlywayPostgresIT` + `.github/workflows/backend-ci.yml` |
 | S3 Object Lock WORM | ✅ | `prisma.worm.backend=fs\|s3` — COMPLIANCE + unit tests |
-| Neptune / ONNX / Fairlearn | ❌ | stubs documentados |
+| Neptune / ONNX / Fairlearn | 🟡 wait infra | Walter provisionando lab (Neo4j + Fairlearn API + `.onnx`); stubs FE já consomem |
 
 ## OIDC smoke (manual)
 
