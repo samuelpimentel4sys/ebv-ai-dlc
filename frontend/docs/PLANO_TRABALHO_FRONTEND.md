@@ -6,8 +6,8 @@
 | **Produto** | **Prisma Equifax** (EBV · Equifax / BoaVista) |
 | **Repo FE** | `Prisma/frontend` |
 | **Repo BE** | `Prisma/backend` (Noah) |
-| **Atualizado em** | 2026-07-28 16:00 |
-| **Fase atual** | Portfólio live 9/9 · R1+R2 plugável (01/02/04/05/06) · EP-03 adiado GenAI |
+| **Atualizado em** | 2026-07-28 16:30 |
+| **Fase atual** | Plug R1+R2 fechado (01/02/04/05/06) · Auth lab OK · OIDC produto = backlog P6 · EP-03 adiado |
 
 ---
 
@@ -21,10 +21,12 @@
 | **IA / navegação de produto** | ✅ P0 | Domínios produto · demo/dev gated · `index.html` Prisma Equifax |
 | **DS hardening (targets/inverse/overlay)** | ✅ P0.1 | `min-h-target` · `text-eqx-text-inverse` · `--color-overlay` |
 | Contratos FE = OpenAPI (sem mapper frouxo) | 🟡 | Mappers compensam gap mock×BE |
-| Login OIDC / papéis | ❌ | Lab aberto |
+| Auth lab (`OIDC_ENABLED=false`) | ✅ | Sem login — `httpClient` direto (Noah) |
+| Auth demo JWT (`VITE_API_BEARER`) | ✅ pronto | Atalho smoke; não é login de produto |
+| Login OIDC produto (PKCE) | ❌ backlog P6 | Client `prisma-steward-ui` |
 | EP-02…06 live | ✅ 01+02+04+05+06 | EP-03 adiado (GenAI Python) |
 
-**Conclusão:** o FE está **conectado**, mas ainda **parece demo**. Próximo passo obrigatório = **virar Prisma Equifax** (navegação, copy, hierarquia), sem perder as rotas das US.
+**Conclusão:** plug live dos épicos Noah **fechado** (exceto EP-03). Próximo: **P1** hardening contrato Score · **P6** login OIDC só quando produto exigir JWT no browser.
 
 ---
 
@@ -101,6 +103,60 @@ Noah lab 9/9 (stubs Neptune/Trino) · handoff 15:40 · **9/9 telas live**
 
 EP-03 adiado no handoff Noah — **não plugar** enquanto núcleo for Python/Bedrock.
 
+### P6 — Login OIDC produto (backlog · desenho Noah 2026-07-28)
+
+Só quando lab deixar de ser aberto **e** demo precisar de usuário humano no browser.
+
+- [ ] Client Keycloak **`prisma-steward-ui`** (público · PKCE)
+- [ ] Authorization Code + PKCE no browser → guardar `access_token`
+- [ ] Injetar `Authorization: Bearer` em toda chamada (evoluir além de `VITE_API_BEARER` estático)
+- [ ] Tela login / redirect Keycloak · roles `realm_access.roles` alinhadas aos paths BE
+- [ ] **Não** embutir `prisma-backend` + `client_secret` no FE
+- [ ] **Não** inventar `POST /api/v1/login` no Spring
+
+---
+
+## 2.1 Auth — como Sofia autentica (Noah · arquitetura atual)
+
+Fonte: handoff + resposta Noah 2026-07-28. Keycloak lab: `http://192.168.31.47:8180/realms/prisma`.
+
+### Fluxo oficial (OIDC on)
+
+```
+Sofia (browser)
+  → Keycloak (login / token)
+  → Prisma BE com Authorization: Bearer <JWT>
+```
+
+### Modos operacionais
+
+| Modo | O que fazer | Estado Sofia |
+|------|-------------|--------------|
+| **Lab aberto** (`OIDC_ENABLED=false`) | Nada — APIs liberadas; `httpClient` chama direto | **Default agora** |
+| **Demo com JWT** | Token Keycloak (password / client_credentials só lab) → `VITE_API_BEARER` ou header | Já cabe no `httpClient` |
+| **Produto** | Client `prisma-steward-ui` + PKCE + tela login (redirect Keycloak) | Backlog **P6** |
+
+### Já no código
+
+- `src/lib/httpClient.ts` — se `VITE_API_BEARER` setado, envia Bearer em toda request
+- `.env.example` — documenta a variável
+
+### Não fazer
+
+| Proibido | Motivo |
+|----------|--------|
+| Chamar `prisma-backend` + `client_secret` **do browser** | Secret vaza |
+| Esperar `POST /api/v1/login` no Spring | Fora do desenho Noah |
+| Tratar `VITE_API_BEARER` como login de produto | Só atalho lab/smoke |
+
+### Diagnóstico 401 (handoff Noah)
+
+1. `GET /actuator/health` → 200 (público)
+2. `GET /api/v1/identity/candidates` sem Bearer:
+   - **401** → OIDC on no processo vivo (restart com `OIDC_ENABLED=false` **ou** Bearer)
+   - **200** → lab aberto, plugar sem auth
+3. Só alterar `.env` do BE **não** muda processo já rodando — precisa **reiniciar** Spring
+
 ---
 
 ## 3. Sprints técnicos já feitos
@@ -124,12 +180,17 @@ EP-03 adiado no handoff Noah — **não plugar** enquanto núcleo for Python/Bed
 - `VITE_DATA_MODE=mock|live`
 - Rotas das US-FE **estáveis** (deep links / contratos)
 - Tokens `rgb(var(--color-*))` — zero HEX
-- Noah CORS: `localhost:5173`
+- Noah CORS: `localhost:5173` · `localhost:3000`
+- Auth: lab aberto default · demo via `VITE_API_BEARER` · produto = PKCE `prisma-steward-ui` (P6)
+- Secrets Keycloak / BE **nunca** no FE versionado
 
 ---
 
 ## 5. Decisão pedida ao stakeholder
 
-Próximo: P1 gaps contrato Score & Plataforma · P3 Contestação quando Noah fechar handoff.
+1. **Agora:** P1 hardening contrato Score & Plataforma (gaps OpenAPI × mappers)
+2. **Quando OIDC on em demo:** colar JWT em `VITE_API_BEARER` (sem tela login)
+3. **Quando produto:** autorizar sprint **P6** (PKCE + login UI)
+4. **EP-03:** só se Walter reabrir sem GenAI Python
 
 _Sofia · Prisma Equifax_
