@@ -1,0 +1,22 @@
+{
+  "cnpj": "98765432000155",
+  "fiscalYear": 2025,
+  "document": {
+    "filename": "balanco_beta_2025.txt",
+    "mimeType": "text/plain"
+  },
+  "fields": [
+    {"fieldKey": "receita_liquida", "valueNum": 45000000.0, "confidence": 0.96},
+    {"fieldKey": "lucro_liquido", "valueNum": 1800000.0, "confidence": 0.90},
+    {"fieldKey": "ativo_circulante", "valueNum": 12000000.0, "confidence": 0.89},
+    {"fieldKey": "passivo_circulante", "valueNum": 9500000.0, "confidence": 0.87},
+    {"fieldKey": "divida_liquida", "valueNum": 22000000.0, "confidence": 0.84},
+    {"fieldKey": "ebitda", "valueNum": 6500000.0, "confidence": 0.91},
+    {"fieldKey": "patrimonio_liquido", "valueNum": 18000000.0, "confidence": 0.93},
+    {"fieldKey": "estoque", "valueNum": 7800000.0, "confidence": 0.55}
+  ],
+  "ragPages": [
+    "Beta Industria Metalurgica SA CNPJ 98.765.432/0001-55. DRE 2025. Receita liquida R$ 45.000.000,00. Lucro liquido R$ 1.800.000,00.",
+    "Balanco 2025. Ativo circulante R$ 12.000.000,00. Passivo circulante R$ 9.500.000,00. Divida liquida R$ 22.000.000,00. EBITDA R$ 6.500.000,00. PL R$ 18.000.000,00. Estoque R$ 7.800.000,00 (baixa legibilidade OCR)."
+  ]
+}

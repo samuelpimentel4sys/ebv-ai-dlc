@@ -1,0 +1,24 @@
+{
+  "companies": [
+    {
+      "cnpj": "12345678000199",
+      "name": "Alpha Tech Solucoes LTDA",
+      "cnae": "6201-5/00",
+      "fiscalYear": 2025
+    },
+    {
+      "cnpj": "98765432000155",
+      "name": "Beta Industria Metalurgica SA",
+      "cnae": "2511-0/00",
+      "fiscalYear": 2025
+    },
+    {
+      "cnpj": "11222333000181",
+      "name": "Gamma Comercio Atacadista LTDA",
+      "cnae": "4691-5/00",
+      "fiscalYear": 2024
+    }
+  ],
+  "threshold": 0.85,
+  "engine": "synthetic-stub-v1"
+}

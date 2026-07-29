@@ -1,0 +1,22 @@
+{
+  "cnpj": "11222333000181",
+  "fiscalYear": 2024,
+  "document": {
+    "filename": "balanco_gamma_2024.txt",
+    "mimeType": "text/plain"
+  },
+  "fields": [
+    {"fieldKey": "receita_liquida", "valueNum": 8200000.0, "confidence": 0.94},
+    {"fieldKey": "lucro_liquido", "valueNum": 246000.0, "confidence": 0.86},
+    {"fieldKey": "ativo_circulante", "valueNum": 2100000.0, "confidence": 0.90},
+    {"fieldKey": "passivo_circulante", "valueNum": 1900000.0, "confidence": 0.88},
+    {"fieldKey": "divida_liquida", "valueNum": 1500000.0, "confidence": 0.80},
+    {"fieldKey": "ebitda", "valueNum": 980000.0, "confidence": 0.85},
+    {"fieldKey": "patrimonio_liquido", "valueNum": 3200000.0, "confidence": 0.92},
+    {"fieldKey": "contas_a_receber", "valueNum": 1100000.0, "confidence": 0.48}
+  ],
+  "ragPages": [
+    "Gamma Comercio Atacadista LTDA CNPJ 11.222.333/0001-81. Exercicio 2024. Receita liquida R$ 8.200.000,00. Lucro liquido R$ 246.000,00.",
+    "BP 31/12/2024. AC R$ 2.100.000,00. PC R$ 1.900.000,00. Divida liquida R$ 1.500.000,00. EBITDA R$ 980.000,00. PL R$ 3.200.000,00. Contas a receber ilegivel parcial."
+  ]
+}
