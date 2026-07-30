@@ -69,8 +69,19 @@ curl -s http://localhost:8080/api/v1/pj/genai/health
 
 Se `PRISMA_SHOWCASE=true` e profile `infra` estiver no `.env`, o `ShowcaseEnvironmentPostProcessor` **remove** `infra` no boot.
 
-## Lab ≠ DoD
+## Troubleshooting — `UnknownHostException: db.*.supabase.co`
 
-Showcase = demo FE. Não declarar US Done / DoD.
+O host **direto** `db.<ref>.supabase.co` neste projeto resolve **só IPv6**.  
+Java no Windows frequentemente falha (`UnknownHostException`) mesmo com DNS OK no PowerShell.
 
-_Noah · 2026-07-30_
+**Fix:** use o **Connection Pooler** (IPv4) do Dashboard Supabase → Database → Connect:
+
+```env
+# Session mode (porta 5432) — troque REGION (ex. sa-east-1, us-east-1)
+SPRING_DATASOURCE_URL=jdbc:postgresql://aws-0-REGION.pooler.supabase.com:5432/postgres?sslmode=require
+SPRING_DATASOURCE_USERNAME=postgres.jrpjrvttiqustpfedxdz
+SPRING_DATASOURCE_PASSWORD=...
+```
+
+Confirme no boot: `[SHOWCASE] ativo — profiles=[supabase, showcase]`  
+Se só aparecer `supabase`, o EnvironmentPostProcessor não carregou — rode `mvn clean compile` e confira `PRISMA_SHOWCASE=true` no `.env`.

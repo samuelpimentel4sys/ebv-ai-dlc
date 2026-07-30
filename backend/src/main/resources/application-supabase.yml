@@ -8,8 +8,9 @@ spring:
     activate:
       on-profile: supabase
   datasource:
-    url: jdbc:postgresql://db.jrpjrvttiqustpfedxdz.supabase.co:5432/postgres?sslmode=require
-    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    # Pooler IPv4 — db.* direto é IPv6-only (Java Windows: UnknownHostException)
+    url: jdbc:postgresql://aws-0-ca-central-1.pooler.supabase.com:5432/postgres?sslmode=require
+    username: ${SPRING_DATASOURCE_USERNAME:postgres.jrpjrvttiqustpfedxdz}
     password: ${SPRING_DATASOURCE_PASSWORD}
   flyway:
     # Tabelas já aplicadas via MCP; IF NOT EXISTS torna reexecução segura

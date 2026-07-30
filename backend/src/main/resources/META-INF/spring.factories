@@ -1,1 +1,2 @@
+org.springframework.boot.env.EnvironmentPostProcessor=\
 br.com.ebv.prisma.infrastructure.config.ShowcaseEnvironmentPostProcessor
