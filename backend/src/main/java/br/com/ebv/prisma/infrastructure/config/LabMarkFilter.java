@@ -13,18 +13,24 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 /**
- * OBS-04 — marca respostas lab para FE não assumir produção.
+ * OBS-04 — marca respostas lab / showcase para FE não assumir produção.
  */
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE + 25)
 public class LabMarkFilter extends OncePerRequestFilter {
 
     public static final String HEADER = "X-Prisma-Lab";
+    public static final String SHOWCASE_HEADER = "X-Prisma-Showcase";
 
     private final boolean markResponses;
+    private final boolean showcase;
 
-    public LabMarkFilter(@Value("${prisma.lab.mark-responses:true}") boolean markResponses) {
+    public LabMarkFilter(
+            @Value("${prisma.lab.mark-responses:true}") boolean markResponses,
+            @Value("${prisma.showcase.enabled:false}") boolean showcase
+    ) {
         this.markResponses = markResponses;
+        this.showcase = showcase;
     }
 
     @Override
@@ -33,8 +39,11 @@ public class LabMarkFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
-        if (markResponses) {
+        if (markResponses || showcase) {
             response.setHeader(HEADER, "true");
+        }
+        if (showcase) {
+            response.setHeader(SHOWCASE_HEADER, "true");
         }
         filterChain.doFilter(request, response);
     }

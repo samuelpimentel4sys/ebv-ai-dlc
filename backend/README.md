@@ -17,6 +17,16 @@ mvn spring-boot:run
 | Health | http://localhost:8080/actuator/health |
 | Swagger | http://localhost:8080/swagger-ui.html |
 | API docs | http://localhost:8080/api-docs |
+| Showcase status | http://localhost:8080/api/v1/showcase/status |
+
+## Showcase (só Supabase)
+
+```env
+PRISMA_SHOWCASE=true
+SPRING_PROFILES_ACTIVE=supabase
+```
+
+Sem Redis/Kafka/Neo4j/MinIO/Python — stubs. Doc: [docs/MODO_SHOWCASE.md](docs/MODO_SHOWCASE.md) · [`.env.showcase.example`](../.env.showcase.example)
 
 ## Layout Hexagonal
 
@@ -35,14 +45,15 @@ presentation/    → REST controllers, DTOs, exception handler
 - [User Stories BE](docs/user-stories/) — 56 US (EP-01…EP-06)
 - [Arquitetura Hexagonal](docs/architecture/HEXAGONAL.md)
 
-### EP-03 (congelado no Java)
+### EP-03
 
 | Parte | Onde |
 |-------|------|
 | HITL F04 (submit/approve/trail) | **Este BE** `:8080` |
-| GenAI (RAG/parecer/guardrails) | `Prisma/backend-python` `:8090` |
+| GenAI (RAG/parecer/guardrails) | `backend-python` `:8090` via **BFF** neste BE |
+| FE | **Só** `:8080` — não chama Python |
 
-Java **não** embute LLM. Ver [`docs/HANDOFF_EMILLY_NOAH_EP03_F04.md`](docs/HANDOFF_EMILLY_NOAH_EP03_F04.md).
+Java **não** embute LLM. Ver [`docs/HANDOFF_EMILLY_NOAH_EP03_F04.md`](docs/HANDOFF_EMILLY_NOAH_EP03_F04.md) · [`docs/HANDOFF_SOFIA_BFF_GENAI.md`](docs/HANDOFF_SOFIA_BFF_GENAI.md).
 
 ## Graphify
 

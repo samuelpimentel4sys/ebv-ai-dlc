@@ -1,0 +1,40 @@
+# Profile showcase — Java + Supabase only (sem Redis/Kafka/Neo4j/MinIO/Keycloak/Python)
+# Uso:
+#   PRISMA_SHOWCASE=true
+#   SPRING_PROFILES_ACTIVE=supabase
+#   (EnvironmentPostProcessor adiciona profile "showcase" e remove "infra" se presente)
+#
+# Ou explícito: SPRING_PROFILES_ACTIVE=supabase,showcase
+
+spring:
+  config:
+    activate:
+      on-profile: showcase
+
+prisma:
+  showcase:
+    enabled: true
+  graph:
+    backend: stub
+  onnx:
+    mode: stub
+  liveness:
+    mode: stub
+  worm:
+    backend: fs
+  audit-worm:
+    backend: fs
+  fairlearn:
+    enabled: false
+  genai:
+    # BFF responde stub JSON — FE continua em :8080 sem Emilly
+    enabled: false
+  lab:
+    mark-responses: true
+    actor-fallback: true
+  security:
+    enabled: false
+
+logging:
+  level:
+    br.com.ebv.prisma: INFO

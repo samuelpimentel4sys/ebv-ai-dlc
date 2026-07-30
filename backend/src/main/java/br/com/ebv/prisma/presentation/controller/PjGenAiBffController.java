@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,8 +28,7 @@ import java.util.Set;
  */
 @RestController
 @RequestMapping("/api/v1/pj")
-@Tag(name = "PJ GenAI BFF", description = "Ponte Noah → Emilly Python (FE não chama :8090)")
-@ConditionalOnProperty(name = "prisma.genai.enabled", havingValue = "true", matchIfMissing = true)
+@Tag(name = "PJ GenAI BFF", description = "Ponte Noah → Emilly Python (ou stub em showcase)")
 public class PjGenAiBffController {
 
     private static final Set<String> HOP_BY_HOP = Set.of(
