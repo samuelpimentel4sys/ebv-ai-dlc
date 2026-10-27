@@ -17,6 +17,8 @@ graphify-out/
 .graphify_python
 .tools/
 backend/.env
-docs/qa/setup/credenciais.json
-docs/qa/setup/.qa-falha-pendente.json
-docs/qa/setup/.qa-preparada.json
+# QA artefacts / esteira local — nao versionar
+docs/qa/
+docs/qa_old/
+docs/playwright-report/
+docs/test-results/

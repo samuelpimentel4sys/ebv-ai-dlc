@@ -1,8 +1,0 @@
-﻿{
-    "evidencias":  "C:\\Users\\WalterAraujodeMoura\\Foursys\\Solution Center Un2 - 00_SOLUTION AGENTS\\QA Agents\\outputs\\evidencias\\runs\\v1-live-20260729T190224Z",
-    "exit_code":  0,
-    "note":  "FE VITE_DATA_MODE=live; BE partially up (health hung, some API respond)",
-    "finished_at":  "2026-07-29T19:04:12.8107831Z",
-    "mode":  "live",
-    "base_url":  "http://localhost:5173"
-}

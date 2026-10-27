@@ -1,8 +1,0 @@
-{
-  "name": "prisma-qa-playwright-template",
-  "private": true,
-  "description": "Runner Playwright da esteira QA Prisma. Specs ficam em ../{modulo}/specs.",
-  "devDependencies": {
-    "@playwright/test": "^1.55.0"
-  }
-}

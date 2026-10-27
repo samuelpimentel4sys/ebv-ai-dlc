@@ -1,7 +1,0 @@
-setup/credenciais.json
-setup/.qa-falha-pendente.json
-setup/.qa-preparada.json
-setup/vite-dev.log
-outputs/playwright/**/test-results/
-outputs/playwright/**/node_modules/
-**/*.log
