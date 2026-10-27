@@ -2,8 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { ThemeProvider } from '@/app/ThemeContext';
-import { ToastProvider } from '@/ds/Toast';
+import { AllProviders } from '@/test/providers';
 import { AppShell } from '@/shell/AppShell';
 import { NAV_ITEMS } from '@/app/navigation';
 import { JOURNEYS, journeyItems, journeyPersona, journeyPosition } from '@/app/journeys';
@@ -65,8 +64,7 @@ function mountJourneyScreen(href: string) {
   const item = NAV_ITEMS.find((entry) => entry.href === href)!;
   const entry = href.includes('?') ? `${href}&demo=1` : `${href}?demo=1`;
   return render(
-    <ThemeProvider>
-      <ToastProvider>
+    <AllProviders>
         <MemoryRouter initialEntries={[entry]}>
           <Routes>
             <Route element={<AppShell />}>
@@ -75,8 +73,7 @@ function mountJourneyScreen(href: string) {
             </Route>
           </Routes>
         </MemoryRouter>
-      </ToastProvider>
-    </ThemeProvider>,
+      </AllProviders>,
   );
 }
 

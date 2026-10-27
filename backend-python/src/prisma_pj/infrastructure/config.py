@@ -1,10 +1,10 @@
 from functools import lru_cache
-from typing import Literal
+from typing import Literal, Self
 
-from pydantic import Field
+from pydantic import Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-InferenceProvider = Literal["local", "bedrock", "openai", "gemini"]
+InferenceProvider = Literal["local", "bedrock", "openai", "gemini", "stub"]
 
 
 class Settings(BaseSettings):
@@ -18,6 +18,8 @@ class Settings(BaseSettings):
 
     app_name: str = "prisma-pj"
     environment: str = "local"
+    # Showcase: só Supabase real — LLM/embed/OIDC/Neptune simulados
+    showcase_mode: bool = False
     inference_provider: InferenceProvider = "local"
 
     database_url: str = "postgresql+asyncpg://prisma:prisma@localhost:5433/prisma_pj"
@@ -61,19 +63,35 @@ class Settings(BaseSettings):
 
     http_timeout_s: float = Field(default=60.0, ge=1.0)
 
-    # OIDC / Keycloak — espelho Noah (Java). Lab: oidc_enabled=false
-    oidc_enabled: bool = False
+    # OIDC / Keycloak — espelho Noah (Java). Default on; lab: ENVIRONMENT=local + OIDC_ENABLED=false
+    oidc_enabled: bool = True
     oidc_issuer_uri: str = "http://192.168.31.47:8180/realms/prisma"
     oidc_jwk_set_uri: str = (
         "http://192.168.31.47:8180/realms/prisma/protocol/openid-connect/certs"
     )
-    oidc_audience: str = ""  # vazio = não valida aud (tokens Keycloak costumam aud=account)
+    oidc_audience: str = "prisma-backend"  # verify_aud on; lab pode esvaziar só em local
     oidc_client_id: str = "prisma-backend"
 
     # F08 grupo economico (stub Neptune ate EP-04)
     group_graph_backend: Literal["stub"] = "stub"
     group_max_nodes: int = Field(default=50, ge=2, le=500)
     group_stale_days: int = Field(default=7, ge=1, le=90)
+
+    @model_validator(mode="after")
+    def _apply_showcase(self) -> Self:
+        """SHOWCASE_MODE=true → força stubs (só Postgres/Supabase real).
+
+        Isolado: defaults de produção/lab continuam seguros (OIDC on + audience).
+        Showcase com OIDC off só é usável com ENVIRONMENT=local (senão deps → 503).
+        """
+        if not self.showcase_mode:
+            return self
+        self.oidc_enabled = False
+        self.inference_provider = "stub"
+        self.group_graph_backend = "stub"
+        if self.rag_index_version in {"v1-local-nomic-768pad", ""}:
+            self.rag_index_version = "v1-showcase-stub"
+        return self
 
 
 @lru_cache

@@ -7,8 +7,9 @@
 ## Decisão
 
 Expor inferência via ports `LlmGateway` e `EmbeddingGateway` (`typing.Protocol`).  
-Adapters: `local` (Ollama), `bedrock`, `openai`, `gemini`.  
+Adapters: `local` (Ollama), `bedrock`, `openai`, `gemini`, `stub` (SHOWCASE).  
 Seleção por `INFERENCE_PROVIDER` (pydantic-settings).  
+`SHOWCASE_MODE=true` força `stub` + OIDC off — só Supabase real (demo/pitch).  
 Domain/application nunca importam httpx/boto3/SDKs de cloud.
 
 ## Consequências

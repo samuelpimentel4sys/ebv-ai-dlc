@@ -1,0 +1,48 @@
+{
+  "tela": "EP-05 Contestação & Console B2B",
+  "geradoEm": "18/08/2026",
+  "fonte": "Análise estática — nav.tsx + páginas F01–F04 (seletores por role+label)",
+  "paginas": [
+    {
+      "nome": "Acompanhar contestação",
+      "url": "/titular/contestacoes/CT-2026-448120",
+      "prefixo": "T",
+      "elementos": [
+        { "tipo": "heading", "label": "contestação", "role": "heading", "testId": null },
+        { "tipo": "region", "label": "etapas / prazo", "role": null, "testId": null }
+      ]
+    },
+    {
+      "nome": "Fila de tratativas",
+      "url": "/disputas/fila",
+      "prefixo": "Q",
+      "elementos": [
+        { "tipo": "table", "label": "fila", "role": "table", "testId": null },
+        { "tipo": "button", "label": "decisão / desfecho", "role": "button", "testId": null }
+      ]
+    },
+    {
+      "nome": "Contratação self-service",
+      "url": "/b2b/onboarding",
+      "prefixo": "O",
+      "elementos": [
+        { "tipo": "input", "label": "CNPJ", "role": "textbox", "testId": null, "obrigatorio": true },
+        { "tipo": "button", "label": "continuar / contratar", "role": "button", "testId": null }
+      ]
+    },
+    {
+      "nome": "Console de consumo",
+      "url": "/b2b/console",
+      "prefixo": "C",
+      "elementos": [
+        { "tipo": "select", "label": "Janela", "role": "combobox", "testId": null },
+        { "tipo": "button", "label": "CSV", "role": "button", "testId": null },
+        { "tipo": "link", "label": "Testar nova consulta", "role": "link", "href": "/integracao/playground/decisoes" },
+        { "tipo": "link", "label": "Gerenciar credenciais", "role": "link", "href": "/b2b/credenciais", "cenarioSelfHealing": "C-04" },
+        { "tipo": "tab", "label": "Faturas", "role": "tab", "testId": null },
+        { "tipo": "tab", "label": "Contratos", "role": "tab", "testId": null },
+        { "tipo": "tab", "label": "Usuários", "role": "tab", "testId": null }
+      ]
+    }
+  ]
+}

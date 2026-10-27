@@ -82,6 +82,9 @@ export function clearSelfServiceSession() {
   }
 }
 
+/** Lab FIX-02: BE aceita qualquer birthDate não-nulo como fator extra; fixture canónica. */
+const LAB_BIRTH_DATE = '1990-01-01';
+
 export async function identifyTitularLive(input: {
   documento: string;
   birthDate?: string;
@@ -100,9 +103,9 @@ export async function identifyTitularLive(input: {
     method: 'POST',
     body: {
       documento,
-      birthDate: input.birthDate,
-      // Noah: 4 finais do CPF. Omitir também funciona (só documento); se enviar, tem de bater.
-      lastDigits: lastDigits || undefined,
+      // FIX-02 / Argos: sempre enviar birthDate + lastDigits (4) no identify.
+      birthDate: input.birthDate ?? LAB_BIRTH_DATE,
+      lastDigits: lastDigits || last4Digits(documento),
     },
   });
   setSelfServiceSession(res.sessionToken);
@@ -116,6 +119,7 @@ async function ensureSelfServiceSession(force = false): Promise<string> {
   }
   const id = await identifyTitularLive({
     documento: MARIA.document,
+    birthDate: LAB_BIRTH_DATE,
     lastDigits: last4Digits(MARIA.document),
   });
   return id.sessionToken;
@@ -335,6 +339,78 @@ export async function fetchDisputeTrackingLive(
 /* -------------------------------------------------------------------------- */
 /* Attachments                                                                */
 /* -------------------------------------------------------------------------- */
+
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+function isUuid(value: string | null | undefined): value is string {
+  return Boolean(value && UUID_RE.test(value));
+}
+
+function rememberDisputeId(protocol: string, disputeId: string) {
+  if (!isUuid(disputeId)) return;
+  try {
+    sessionStorage.setItem('prisma.lastDisputeId', disputeId);
+    if (protocol) sessionStorage.setItem(`prisma.disputeId.${protocol}`, disputeId);
+  } catch {
+    /* ignore */
+  }
+}
+
+/**
+ * Anexos exigem UUID no Noah (`GET /disputes/{uuid}/attachments`).
+ * O menu FE tem protocolo (`DSP-…` lab / `CT-…` mock). Resolve via fila; senão sessionStorage.
+ */
+export async function resolveDisputeIdLive(
+  protocol: string,
+  hint?: string | null,
+): Promise<string> {
+  // 0) Seed lab canónico — nunca depende de fila/session (demo Evidências).
+  if (protocol === MARIA.disputeProtocol && isUuid(MARIA.disputeId)) {
+    if (!hint || !isUuid(hint) || hint === MARIA.disputeId) {
+      rememberDisputeId(protocol, MARIA.disputeId);
+      return MARIA.disputeId;
+    }
+  }
+
+  // 1) UUID na query — atalho explícito (fila → evidências).
+  if (isUuid(hint)) {
+    rememberDisputeId(protocol, hint);
+    return hint;
+  }
+
+  // 2) Cache por protocolo (não usar lastDisputeId global — troca de caso quebra).
+  try {
+    const stored = sessionStorage.getItem(`prisma.disputeId.${protocol}`);
+    if (isUuid(stored)) return stored;
+  } catch {
+    /* ignore */
+  }
+
+  // 3) Resolve protocolo → id via fila live.
+  const queue = await fetchDisputeQueueLive().catch(() => [] as DisputeQueueItem[]);
+  const match = queue.find((item) => item.protocol === protocol);
+  if (match?.id && isUuid(match.id)) {
+    rememberDisputeId(protocol, match.id);
+    return match.id;
+  }
+
+  throw new HttpError({
+    status: 404,
+    error: 'Not Found',
+    message: `Protocolo ${protocol} não encontrado na fila. Use DSP-2026-0001001 (lab) ou abra o caso em Contestações → Fila de tratativa.`,
+    path: `/api/v1/disputes/queue`,
+    correlationId: `prisma-resolve-${protocol}`,
+  });
+}
+
+export async function fetchAttachmentsForCaseLive(
+  protocol: string,
+  hint?: string | null,
+): Promise<Attachment[]> {
+  const disputeId = await resolveDisputeIdLive(protocol, hint);
+  return fetchAttachmentsLive(disputeId);
+}
 
 export async function fetchAttachmentsLive(disputeId: string): Promise<Attachment[]> {
   const res = await httpClient<{

@@ -47,10 +47,15 @@ async def get_principal(
     settings: Annotated[Settings, Depends(get_settings)],
 ) -> Principal:
     """
-    Espelho Noah: `OIDC_ENABLED=false` -> lab aberto.
-    Com OIDC on -> Bearer JWT obrigatorio (401 sem token / invalido).
+    OIDC on -> Bearer JWT obrigatorio (401 sem token / invalido).
+    OIDC off so permitido em ENVIRONMENT=local (lab bypass); fora disso 503 fail-closed.
     """
     if not settings.oidc_enabled:
+        if settings.environment != "local":
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="OIDC obrigatório fora de local",
+            )
         return _lab_principal()
 
     token = _bearer_token(request)

@@ -1,6 +1,7 @@
 package br.com.ebv.prisma.infrastructure.adapter.persistence.audit;
 
 import br.com.ebv.prisma.domain.audit.port.out.AuditTrailRepositoryPort;
+import br.com.ebv.prisma.infrastructure.adapter.persistence.PgNullableTime;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,8 +49,8 @@ public class AuditTrailRepositoryAdapter implements AuditTrailRepositoryPort {
             String documento, String actorId, String eventType,
             java.time.Instant from, java.time.Instant to, int page, int size
     ) {
-        OffsetDateTime fromTs = from == null ? null : OffsetDateTime.ofInstant(from, ZoneOffset.UTC);
-        OffsetDateTime toTs = to == null ? null : OffsetDateTime.ofInstant(to, ZoneOffset.UTC);
+        OffsetDateTime fromTs = PgNullableTime.lowerBound(from);
+        OffsetDateTime toTs = PgNullableTime.upperBound(to);
         List<AuditEventEntity> all = eventJpa.search(
                 blankToNull(documento), blankToNull(actorId), blankToNull(eventType), fromTs, toTs
         );

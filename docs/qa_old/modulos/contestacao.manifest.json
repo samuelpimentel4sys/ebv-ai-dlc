@@ -1,0 +1,223 @@
+{
+  "id": "contestacao",
+  "nome": "EP-05 · Contestação & Console B2B",
+  "padrao": true,
+  "descricao": "Módulo padrão da esteira QA Prisma. F01 Tracking, F02 Fila, F03 Onboarding, F04 Console. Reuse o mesmo elenco para qualquer outra tela via manifesto novo.",
+  "comandosAtivacao": [
+    "qa contestacao",
+    "qa prisma",
+    "esteira qa",
+    "esteira e2e",
+    "demo prisma",
+    "qa"
+  ],
+  "telas": [
+    {
+      "id": "tracking",
+      "nome": "Acompanhar contestação",
+      "rota": "/titular/contestacoes/CT-2026-448120",
+      "prefixoCenario": "T",
+      "prioridade": "alta",
+      "feature": "F01",
+      "arquivos": [
+        "frontend/src/epics/contestacao/DisputeTrackingPage.tsx",
+        "frontend/src/api/dispute.ts"
+      ]
+    },
+    {
+      "id": "fila",
+      "nome": "Fila de tratativas",
+      "rota": "/disputas/fila",
+      "prefixoCenario": "Q",
+      "prioridade": "alta",
+      "feature": "F02",
+      "arquivos": [
+        "frontend/src/epics/contestacao/DisputeQueuePage.tsx",
+        "frontend/src/api/dispute.ts"
+      ]
+    },
+    {
+      "id": "onboarding",
+      "nome": "Contratação self-service",
+      "rota": "/b2b/onboarding",
+      "prefixoCenario": "O",
+      "prioridade": "alta",
+      "feature": "F03",
+      "arquivos": [
+        "frontend/src/epics/contestacao/OnboardingPage.tsx",
+        "frontend/src/api/b2bConsole.ts"
+      ]
+    },
+    {
+      "id": "console",
+      "nome": "Console de consumo",
+      "rota": "/b2b/console",
+      "prefixoCenario": "C",
+      "prioridade": "alta",
+      "feature": "F04",
+      "arquivos": [
+        "frontend/src/epics/contestacao/ConsolePage.tsx",
+        "frontend/src/api/b2bConsole.ts"
+      ]
+    },
+    {
+      "id": "portal",
+      "nome": "Portal do titular",
+      "rota": "/titular/registros",
+      "prefixoCenario": "P",
+      "prioridade": "media",
+      "feature": "F05",
+      "arquivos": [
+        "frontend/src/epics/contestacao/TitularPortalPage.tsx"
+      ]
+    },
+    {
+      "id": "credenciais",
+      "nome": "Credenciais de API",
+      "rota": "/b2b/credenciais",
+      "prefixoCenario": "K",
+      "prioridade": "media",
+      "feature": "F07",
+      "arquivos": [
+        "frontend/src/epics/contestacao/CredentialsPage.tsx"
+      ]
+    }
+  ],
+  "apis": [
+    "frontend/src/api/dispute.ts",
+    "frontend/src/api/b2bConsole.ts"
+  ],
+  "dominio": [
+    "frontend/src/epics/contestacao/data.ts",
+    "frontend/src/epics/contestacao/nav.tsx"
+  ],
+  "dataforge": {
+    "estrategia": "constantes-js-alinhadas-api",
+    "descricao": "Massa JS por cenário BDD (protocolo, CNPJ, fatura, usuário). Live: BFF Java :8080 via proxy Vite. Mock FE: VITE_DATA_MODE=mock.",
+    "apisPrincipais": [
+      "frontend/src/api/dispute.ts",
+      "frontend/src/api/b2bConsole.ts"
+    ],
+    "formulario": "frontend/src/epics/contestacao/OnboardingPage.tsx"
+  },
+  "outputs": {
+    "bdd": {
+      "dir": "docs/qa/outputs/gherkinflow/contestacao",
+      "arquivo": "CONTESTACAO-BDD-v{N}.md"
+    },
+    "data": {
+      "dir": "docs/qa/outputs/dataforge/contestacao",
+      "arquivo": "contestacao.data.v{N}.js"
+    },
+    "spec": {
+      "dir": "docs/qa/outputs/playwright/contestacao/specs",
+      "arquivo": "contestacao-qa-v{N}.spec.ts"
+    },
+    "relatorio": {
+      "dir": "docs/qa/outputs/playwright/contestacao/relatorios",
+      "arquivo": "qa-contestacao-v{N}.html"
+    }
+  },
+  "inputs": {
+    "uiJson": "docs/qa/inputs/ui-elements/contestacao-ui.json"
+  },
+  "playwright": {
+    "baseUrl": "http://localhost:5173",
+    "headed": true,
+    "slowMo": 150,
+    "executarTodos": true,
+    "cenarioSelfHealingExemplo": "C-04"
+  },
+  "selfHealing": {
+    "habilitado": true,
+    "humanInTheLoop": true,
+    "maxTentativas": 2,
+    "protocolo": "docs/qa/agentes/self-healing/protocolo.md",
+    "skill": "docs/qa/agentes/self-healing/self-healing.md",
+    "agenteDev": {
+      "id": "dev-kernel",
+      "bridge": "docs/qa/agentes/dev-kernel/bridge.md",
+      "rotaPorStack": {
+        "frontend": "Sofia / Kernel React",
+        "backend": "Noah / Kernel Java",
+        "backend-python": "Emilly / Kernel Python"
+      }
+    },
+    "auditLog": "docs/qa/setup/self-healing-audit.jsonl",
+    "falhaPendente": "docs/qa/setup/.qa-falha-pendente.json",
+    "script": "docs/qa/scripts/qa-self-healing.cjs",
+    "bugManual": "docs/qa/bug-self-healing/ConsolePage.tsx",
+    "nota": "Bug injetado manualmente pelo apresentador — a esteira NAO injeta bug. Gate GO/NOGO obrigatorio antes do Dev."
+  },
+  "ambiente": {
+    "nome": "lab",
+    "frontLocal": "http://localhost:5173",
+    "backend": "http://localhost:8080",
+    "python": "http://localhost:8090",
+    "dataMode": "mock|live",
+    "nota": "Browser nunca chama :8090. Live exige VITE_DATA_MODE=live + Java UP."
+  },
+  "versionamento": {
+    "maxVersoes": 99,
+    "bddPattern": "^CONTESTACAO-BDD-v(\\d+)\\.md$",
+    "dataPattern": "^contestacao\\.data\\.v(\\d+)\\.js$",
+    "specPattern": "^contestacao-qa-v(\\d+)\\.spec\\.ts$"
+  },
+  "agentes": {
+    "ativacaoDoc": "docs/qa/agentes/README.md",
+    "orquestrador": {
+      "id": "orquestrador",
+      "icone": "🎬",
+      "skill": "docs/qa/agentes/orquestrador/orquestrador.md"
+    },
+    "etapas": [
+      {
+        "etapa": 0,
+        "id": "orquestrador",
+        "nome": "Orquestrador",
+        "icone": "🎬",
+        "ativacao": "docs/qa/agentes/orquestrador/orquestrador.md"
+      },
+      {
+        "etapa": 1,
+        "id": "gherkinflow",
+        "nome": "GherkinFlow",
+        "icone": "🎭",
+        "ativacao": "docs/qa/agentes/gherkinflow/gherkinflow.md",
+        "comandoShowcase": "qa gherkinflow"
+      },
+      {
+        "etapa": 2,
+        "id": "dataforge",
+        "nome": "DataForge",
+        "icone": "🧪",
+        "ativacao": "docs/qa/agentes/dataforge/dataforge.md",
+        "comandoShowcase": "qa dataforge"
+      },
+      {
+        "etapa": 3,
+        "id": "playwright",
+        "nome": "Playwright",
+        "icone": "🎬",
+        "ativacao": "docs/qa/agentes/playwright/playwright.md",
+        "comandoShowcase": "qa playwright"
+      },
+      {
+        "etapa": "3b-detect",
+        "id": "playwright",
+        "nome": "Playwright (Self-Healing detect + GO/NOGO)",
+        "icone": "🔴",
+        "ativacao": "docs/qa/agentes/playwright/playwright.md",
+        "skill": "docs/qa/agentes/self-healing/self-healing.md"
+      },
+      {
+        "etapa": "3b-fix",
+        "id": "dev-kernel",
+        "nome": "Dev Kernel",
+        "icone": "⚛️",
+        "ativacao": "docs/qa/agentes/dev-kernel/bridge.md",
+        "comandoShowcase": "self-healing"
+      }
+    ]
+  }
+}

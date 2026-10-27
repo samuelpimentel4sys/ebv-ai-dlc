@@ -1,0 +1,99 @@
+{
+  "id": "ep05-auth",
+  "nome": "PRISMA-EP-05-AUTH · Portal Contestação (OTP + Liveness)",
+  "padrao": true,
+  "descricao": "Pacote BDD do HTML AUTH. Agentes = cópia DEMO QA. Lab FE: captura, MFA, resultado.",
+  "fonteBddHtml": "11_BDD_PRISMA-EP-05-AUTH_PortalContestacao.html",
+  "comandosAtivacao": ["qa ep05-auth", "esteira qa", "demo prisma"],
+  "telas": [
+    {
+      "id": "scr-01-otp",
+      "nome": "SCR-01 — Login & OTP (lab: MFA step-up)",
+      "rota": "/titular/biometria/mfa",
+      "prefixoCenario": "AUTH",
+      "prioridade": "alta",
+      "arquivos": [
+        "frontend/src/epics/contestacao/LivenessMfaPage.tsx",
+        "frontend/src/epics/contestacao/LivenessCapturePage.tsx"
+      ]
+    },
+    {
+      "id": "scr-02-liveness",
+      "nome": "SCR-02 — Biometria facial & liveness",
+      "rota": "/titular/biometria",
+      "prefixoCenario": "AUTH",
+      "prioridade": "alta",
+      "arquivos": [
+        "frontend/src/epics/contestacao/LivenessCapturePage.tsx",
+        "frontend/src/epics/contestacao/LivenessResultPage.tsx",
+        "frontend/src/api/liveness.ts"
+      ]
+    }
+  ],
+  "apis": ["frontend/src/api/liveness.ts"],
+  "dominio": ["frontend/src/epics/contestacao/nav.tsx"],
+  "dataforge": {
+    "estrategia": "constantes-js-alinhadas-api",
+    "descricao": "Constantes JS por cenário BDD. Sem SQL no E2E.",
+    "apisPrincipais": ["frontend/src/api/liveness.ts"],
+    "formulario": "frontend/src/epics/contestacao/LivenessMfaPage.tsx"
+  },
+  "outputs": {
+    "bdd": {
+      "dir": "docs/qa/outputs/gherkinflow/ep05-auth",
+      "arquivo": "EP05-AUTH-BDD-v{N}.md"
+    },
+    "data": {
+      "dir": "docs/qa/outputs/dataforge/ep05-auth",
+      "arquivo": "ep05-auth.data.v{N}.js"
+    },
+    "spec": {
+      "dir": "docs/qa/outputs/playwright/ep05-auth/specs",
+      "arquivo": "ep05-auth-demo-v{N}.spec.ts"
+    },
+    "relatorio": {
+      "dir": "docs/qa/outputs/playwright/ep05-auth/relatorios",
+      "arquivo": "demo-ep05-auth-v{N}.html"
+    }
+  },
+  "inputs": {
+    "uiJson": "docs/qa/inputs/ui-elements/ep05-auth-ui.json"
+  },
+  "playwright": {
+    "pageObject": "docs/qa/outputs/playwright/ep05-auth/support/AuthPortalPage.ts",
+    "baseUrl": "http://localhost:5173",
+    "headed": true,
+    "slowMo": 150,
+    "executarTodos": true
+  },
+  "selfHealing": {
+    "habilitado": true,
+    "humanInTheLoop": true,
+    "maxTentativas": 2,
+    "protocolo": "docs/qa/agentes/self-healing/protocolo.md",
+    "skill": "docs/qa/agentes/self-healing/self-healing.md",
+    "agenteDev": {
+      "id": "dev-fourblox",
+      "bridge": "docs/qa/agentes/dev-fourblox/bridge.md"
+    },
+    "auditLog": "docs/qa/setup/self-healing-audit.jsonl",
+    "falhaPendente": "docs/qa/setup/.qa-falha-pendente.json",
+    "script": "docs/qa/scripts/qa-self-healing.cjs"
+  },
+  "ambiente": {
+    "nome": "lab",
+    "frontLocal": "http://localhost:5173",
+    "backend": "http://localhost:8080"
+  },
+  "versionamento": {
+    "maxVersoes": 99,
+    "bddPattern": "^EP05-AUTH-BDD-v(\\d+)\\.md$",
+    "dataPattern": "^ep05-auth\\.data\\.v(\\d+)\\.js$",
+    "specPattern": "^ep05-auth-demo-v(\\d+)\\.spec\\.ts$"
+  },
+  "agentes": {
+    "ativacaoDoc": "docs/qa/agentes/README.md",
+    "fonte": "DEMO QA/agentes",
+    "binding": "docs/qa/agentes/PRISMA-BINDING.md"
+  }
+}

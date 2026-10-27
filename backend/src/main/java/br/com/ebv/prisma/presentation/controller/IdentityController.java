@@ -6,6 +6,7 @@ import br.com.ebv.prisma.domain.identity.port.in.GetIdentityUseCase;
 import br.com.ebv.prisma.domain.identity.port.in.ListCandidatesUseCase;
 import br.com.ebv.prisma.domain.identity.port.in.MergeIdentityUseCase;
 import br.com.ebv.prisma.domain.identity.port.in.UndoMergeUseCase;
+import br.com.ebv.prisma.infrastructure.config.LabActorResolver;
 import br.com.ebv.prisma.presentation.dto.identity.CandidateResponse;
 import br.com.ebv.prisma.presentation.dto.identity.IdentityResponse;
 import br.com.ebv.prisma.presentation.dto.identity.MergeIdentityRequest;
@@ -15,6 +16,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,23 +32,24 @@ import java.util.UUID;
 @Tag(name = "Identity", description = "PRISMA-EP-01-F07 Golden Record")
 public class IdentityController {
 
-    private static final UUID DEFAULT_ACTOR = UUID.fromString("00000000-0000-4000-8000-000000000099");
-
     private final GetIdentityUseCase getIdentityUseCase;
     private final MergeIdentityUseCase mergeIdentityUseCase;
     private final UndoMergeUseCase undoMergeUseCase;
     private final ListCandidatesUseCase listCandidatesUseCase;
+    private final LabActorResolver labActorResolver;
 
     public IdentityController(
             GetIdentityUseCase getIdentityUseCase,
             MergeIdentityUseCase mergeIdentityUseCase,
             UndoMergeUseCase undoMergeUseCase,
-            ListCandidatesUseCase listCandidatesUseCase
+            ListCandidatesUseCase listCandidatesUseCase,
+            LabActorResolver labActorResolver
     ) {
         this.getIdentityUseCase = getIdentityUseCase;
         this.mergeIdentityUseCase = mergeIdentityUseCase;
         this.undoMergeUseCase = undoMergeUseCase;
         this.listCandidatesUseCase = listCandidatesUseCase;
+        this.labActorResolver = labActorResolver;
     }
 
     @GetMapping("/{documento}")
@@ -57,8 +60,11 @@ public class IdentityController {
 
     @PostMapping("/merge")
     @Operation(summary = "Mescla identidades (humano / steward)")
-    public IdentityResponse merge(@Valid @RequestBody MergeIdentityRequest request) {
-        UUID actor = request.actorId() != null ? request.actorId() : DEFAULT_ACTOR;
+    public IdentityResponse merge(
+            @Valid @RequestBody MergeIdentityRequest request,
+            Authentication authentication
+    ) {
+        UUID actor = labActorResolver.resolve(null, authentication);
         GoldenRecord result = mergeIdentityUseCase.execute(new MergeIdentityUseCase.MergeCommand(
                 GoldenRecordId.of(request.survivorGrId()),
                 GoldenRecordId.of(request.mergedGrId()),
@@ -71,8 +77,11 @@ public class IdentityController {
 
     @PostMapping("/merge/undo")
     @Operation(summary = "Desfaz merge e publica correção (CA-04 / RN002)")
-    public UndoMergeResponse undo(@Valid @RequestBody UndoMergeRequest request) {
-        UUID actor = request.actorId() != null ? request.actorId() : DEFAULT_ACTOR;
+    public UndoMergeResponse undo(
+            @Valid @RequestBody UndoMergeRequest request,
+            Authentication authentication
+    ) {
+        UUID actor = labActorResolver.resolve(null, authentication);
         UndoMergeUseCase.UndoResult result = undoMergeUseCase.execute(new UndoMergeUseCase.UndoCommand(
                 GoldenRecordId.of(request.survivorGrId()),
                 GoldenRecordId.of(request.mergedGrId()),

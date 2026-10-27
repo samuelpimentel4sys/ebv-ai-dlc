@@ -1,5 +1,5 @@
 ﻿import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom';
 import { FileArchive, FileImage, FileText, ShieldCheck, Upload } from 'lucide-react';
 import { ScreenLayout } from '@/shell/ScreenLayout';
 import {
@@ -17,8 +17,9 @@ import {
   useToast,
 } from '@/ds';
 import {
-  fetchAttachmentsLive,
+  fetchAttachmentsForCaseLive,
   fetchEvidencePackLive,
+  resolveDisputeIdLive,
   uploadAttachmentLive,
 } from '@/api/dispute';
 import { isLiveMode } from '@/lib/config';
@@ -44,30 +45,38 @@ function iconFor(mime: string) {
   return FileText;
 }
 
-function readLastDisputeId(): string | null {
+function readStoredDisputeId(protocol: string): string | null {
   try {
-    return sessionStorage.getItem('prisma.lastDisputeId');
+    const byProtocol = sessionStorage.getItem(`prisma.disputeId.${protocol}`);
+    if (byProtocol) return byProtocol;
   } catch {
-    return null;
+    /* ignore */
   }
+  return null;
 }
+
+/** Showcase antigo — seed Noah usa DSP-*. */
+const LEGACY_PROTOCOLS = new Set(['CT-2026-448120', 'CT-2026-448094', 'CT-2026-448061']);
 
 export function AttachmentsPage() {
   const params = useParams();
   const [searchParams] = useSearchParams();
   const protocolo = params.protocolo ?? MARIA.disputeProtocol;
-  const disputeId = useMemo(
-    () => searchParams.get('disputeId') ?? readLastDisputeId(),
-    [searchParams],
-  );
+  const isLegacyProtocol = LEGACY_PROTOCOLS.has(protocolo) || /^CT-2026-/i.test(protocolo);
+  const disputeId = useMemo(() => {
+    const fromQuery = searchParams.get('disputeId');
+    if (fromQuery) return fromQuery;
+    if (protocolo === MARIA.disputeProtocol) return MARIA.disputeId;
+    return readStoredDisputeId(protocolo) ?? MARIA.disputeId;
+  }, [searchParams, protocolo]);
   const toast = useToast();
   const query = useDataQuery(
     () => attachments,
-    () => fetchAttachmentsLive(disputeId!),
+    () => fetchAttachmentsForCaseLive(protocolo, disputeId),
     {
       latency: 320,
       deps: [protocolo, disputeId],
-      enabled: isLiveMode() ? Boolean(disputeId) : true,
+      enabled: !isLegacyProtocol,
     },
   );
   const { setData } = query;
@@ -89,6 +98,16 @@ export function AttachmentsPage() {
     focusFirstInvalid(formRef.current);
   }, [focusNonce]);
 
+  // Bookmark / menu em cache com CT-* → redireciona para o caso lab.
+  if (isLegacyProtocol) {
+    return (
+      <Navigate
+        to={`/disputas/${MARIA.disputeProtocol}/evidencias?disputeId=${encodeURIComponent(MARIA.disputeId)}`}
+        replace
+      />
+    );
+  }
+
   function simulateUpload(mime: string, sizeKb: number, fileName: string) {
     const found: Record<string, string> = {};
     if (note.trim().length < 10) {
@@ -109,15 +128,9 @@ export function AttachmentsPage() {
     void (async () => {
       try {
         if (isLiveMode()) {
-          if (!disputeId) {
-            toast.error(
-              'Contestação não identificada',
-              'Abra o caso pela fila ou informe disputeId na URL.',
-            );
-            return;
-          }
+          const id = await resolveDisputeIdLive(protocolo, disputeId);
           const created = await uploadAttachmentLive({
-            disputeId,
+            disputeId: id,
             filename: fileName,
             contentBase64: btoa(`${fileName}:${note.trim()}`),
             contentType: mime,
@@ -166,20 +179,14 @@ export function AttachmentsPage() {
   }
 
   function generateEvidencePack() {
-    if (!disputeId) {
-      toast.error(
-        'Contestação não identificada',
-        'Abra o caso pela fila ou informe disputeId na URL.',
-      );
-      return;
-    }
     void (async () => {
       try {
         if (isLiveMode()) {
-          const pack = await fetchEvidencePackLive(disputeId);
+          const id = await resolveDisputeIdLive(protocolo, disputeId);
+          const pack = await fetchEvidencePackLive(id);
           toast.success(
             'Pacote de evidências gerado',
-            `GET /api/v1/disputes/${disputeId}/evidence-pack · hash ${pack.manifestHash.slice(0, 16)}…`,
+            `GET /api/v1/disputes/${id}/evidence-pack · hash ${pack.manifestHash.slice(0, 16)}…`,
           );
           return;
         }
@@ -221,11 +228,8 @@ export function AttachmentsPage() {
         query={query}
         loadingRows={5}
         empty={{
-          title: isLiveMode() && !disputeId ? 'Contestação não identificada' : 'Este caso ainda não tem documentos.',
-          description:
-            isLiveMode() && !disputeId
-              ? 'Informe disputeId na URL ou abra o cofre a partir da fila de tratativa para carregar anexos reais.'
-              : `Nenhuma evidência foi anexada ao protocolo ${protocolo}. O comprovante do credor em PDF ou uma foto legível do documento já é suficiente para a análise seguir — e enquanto não houver documento, o prazo continua contando a favor do titular.`,
+          title: 'Este caso ainda não tem documentos.',
+          description: `Nenhuma evidência foi anexada ao protocolo ${protocolo}. O comprovante do credor em PDF ou uma foto legível do documento já é suficiente para a análise seguir — e enquanto não houver documento, o prazo continua contando a favor do titular.`,
           action: (
             <Link
               to={`/titular/contestacoes/${protocolo}`}

@@ -32,7 +32,7 @@ class MissionServiceTest {
                 new MissionRepositoryPort.EnrollmentRecord(UUID.randomUUID(), mid, "hash", "ACTIVE", new BigDecimal("80.00"))));
         var svc = new ProgressMissionService(repo);
         var r = svc.execute(new ProgressMissionUseCase.Command(
-                mid, "12345678901", "UTILITY_PAYMENT_ON_TIME", UUID.randomUUID(), new BigDecimal("25.00")));
+                mid, "12345678901", "UTILITY_PAYMENT_ON_TIME", "evt-lab", new BigDecimal("25.00")));
         assertThat(r.status()).isEqualTo("COMPLETED");
         assertThat(r.achievementEarned()).isTrue();
         verify(repo).saveAchievement(any());

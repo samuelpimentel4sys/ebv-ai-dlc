@@ -3,7 +3,8 @@
 | Serviço | Host lab | Porta | Dono | Escopo FE |
 |---------|----------|------:|------|-----------|
 | **Prisma BE Java** | `localhost` ou IP do notebook | **8080** | Noah | **Único** backend FE: contestação, score, portfolio, HITL, Liveness, **BFF GenAI** |
-| **GenAI Python** | `localhost` (interno) | **8090** | Emilly | **Só via BFF Java** — FE não chama || **WireMock Liveness** | `192.168.31.47` | **8093** | Ops/Noah | Mock Rekognition (`LIVENESS_MODE=http`) |
+| **GenAI Python** | `localhost` (interno) | **8090** | Emilly | **Só via BFF Java** — FE não chama |
+| **WireMock Liveness** | `192.168.31.47` | **8093** | Ops/Noah | Mock Rekognition (`LIVENESS_MODE=http`) |
 | **Keycloak** | `192.168.31.47` | **8180** | Ops | Realm `prisma` (OIDC) |
 | **Neo4j** | `192.168.31.47` | **7687** | Ops | Grafo portfolio lab |
 | **ONNX scorer** | `192.168.31.47` | **8091** | Ops | Score lab |

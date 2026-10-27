@@ -18,6 +18,7 @@ export const MARIA = {
   score: 486,
   scoreBand: 'Baixo',
   previousScore: 512,
+  /** Showcase mock (modo offline). Live: `LAB_DECISIONS.primary`. */
   decisionId: 'dec-2026-07-27-1104',
   decision: 'recusada' as const,
   decisionLabel: 'Crédito recusado',
@@ -30,7 +31,8 @@ export const MARIA = {
       amount: 1284.9,
       openedAt: '12/03/2026',
       disputed: true,
-      protocol: 'CT-2026-448120',
+      // Alinhado ao seed lab Noah (DSP-*, não CT-* do showcase antigo).
+      protocol: 'DSP-2026-0001001',
     },
     {
       id: 'REG-91574',
@@ -41,9 +43,21 @@ export const MARIA = {
       protocol: null,
     },
   ],
-  disputeProtocol: 'CT-2026-448120',
+  /** Fila live: OPEN · documento Maria · id e1000000-…0001 */
+  disputeProtocol: 'DSP-2026-0001001',
+  disputeId: 'e1000000-0000-4000-8000-000000000001',
   /** Ganho projetado no simulador do coach quando a contestação procede. */
   scoreAfterDispute: 548,
+} as const;
+
+/**
+ * Decisões do seed lab Noah (`scripts/seed_lab_demo.sql`).
+ * Comparar / fatores / contrafactual usam estes UUIDs em API live.
+ */
+export const LAB_DECISIONS = {
+  primary: 'd1000000-0000-4000-8000-000000000001',
+  secondary: 'd1000000-0000-4000-8000-000000000002',
+  tertiary: 'd1000000-0000-4000-8000-000000000003',
 } as const;
 
 /** Cliente PJ de EP-03 que reaparece como nó de maior contágio em EP-04. */

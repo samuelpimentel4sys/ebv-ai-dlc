@@ -29,9 +29,16 @@ public class LocalDisputeEvidenceStoreAdapter implements DisputeEvidenceStorePor
     @Override
     public String store(UUID disputeId, UUID attachmentId, byte[] content) {
         try {
-            Path dir = basePath.resolve(disputeId.toString());
+            Path root = basePath.toAbsolutePath().normalize();
+            Path dir = root.resolve(disputeId.toString()).normalize();
+            if (!dir.startsWith(root)) {
+                throw new SecurityException("path fora do WORM root");
+            }
             Files.createDirectories(dir);
-            Path file = dir.resolve(attachmentId.toString());
+            Path file = dir.resolve(attachmentId.toString()).normalize();
+            if (!file.startsWith(root)) {
+                throw new SecurityException("path fora do WORM root");
+            }
             if (Files.exists(file)) {
                 throw new DisputeConflictException("WORM: recusa overwrite de " + file);
             }
@@ -39,7 +46,7 @@ public class LocalDisputeEvidenceStoreAdapter implements DisputeEvidenceStorePor
             return file.toAbsolutePath().normalize().toUri().toString();
         } catch (FileAlreadyExistsException e) {
             throw new DisputeConflictException("WORM: recusa overwrite de " + attachmentId);
-        } catch (DisputeConflictException e) {
+        } catch (DisputeConflictException | SecurityException e) {
             throw e;
         } catch (IOException e) {
             throw new IllegalStateException("Falha gravação evidência: " + e.getMessage(), e);
@@ -49,8 +56,14 @@ public class LocalDisputeEvidenceStoreAdapter implements DisputeEvidenceStorePor
     @Override
     public byte[] read(String storageUri) {
         try {
-            Path path = Path.of(java.net.URI.create(storageUri));
-            return Files.readAllBytes(path);
+            Path target = Path.of(java.net.URI.create(storageUri)).toAbsolutePath().normalize();
+            Path root = basePath.toAbsolutePath().normalize();
+            if (!target.startsWith(root)) {
+                throw new SecurityException("storageUri fora do WORM root");
+            }
+            return Files.readAllBytes(target);
+        } catch (SecurityException e) {
+            throw e;
         } catch (IOException e) {
             throw new IllegalStateException("Falha leitura evidência: " + e.getMessage(), e);
         }

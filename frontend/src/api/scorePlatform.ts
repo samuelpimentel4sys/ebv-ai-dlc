@@ -352,6 +352,25 @@ function toDecisionMeta(d: BeDecision): DecisionMeta {
   };
 }
 
+async function fetchSnapshotOrEmpty(decisionId: string): Promise<BeSnapshot> {
+  try {
+    return await httpClient<BeSnapshot>(
+      `/api/v1/decisions/${encodeURIComponent(decisionId)}/snapshot`,
+    );
+  } catch {
+    // Seed lab sem arquivo WORM: ainda dá para comparar metadados da decisão.
+    return {
+      decisionId,
+      documento: '',
+      score: 0,
+      modelVersion: '',
+      outcome: '',
+      features: {},
+      createdAt: '',
+    };
+  }
+}
+
 export async function fetchDecisionCompareLive(
   leftId: string,
   rightId: string,
@@ -359,15 +378,15 @@ export async function fetchDecisionCompareLive(
   const [leftDec, rightDec, leftSnap, rightSnap] = await Promise.all([
     httpClient<BeDecision>(`/api/v1/decisions/${encodeURIComponent(leftId)}`),
     httpClient<BeDecision>(`/api/v1/decisions/${encodeURIComponent(rightId)}`),
-    httpClient<BeSnapshot>(`/api/v1/decisions/${encodeURIComponent(leftId)}/snapshot`),
-    httpClient<BeSnapshot>(`/api/v1/decisions/${encodeURIComponent(rightId)}/snapshot`),
+    fetchSnapshotOrEmpty(leftId),
+    fetchSnapshotOrEmpty(rightId),
   ]);
 
   const keys = new Set([
     ...Object.keys(leftSnap.features ?? {}),
     ...Object.keys(rightSnap.features ?? {}),
   ]);
-  const diff: AttributeDiff[] = [...keys].map((attribute) => {
+  let diff: AttributeDiff[] = [...keys].map((attribute) => {
     const lv = leftSnap.features?.[attribute]?.value;
     const rv = rightSnap.features?.[attribute]?.value;
     const left = lv == null ? '—' : String(lv);
@@ -380,6 +399,41 @@ export async function fetchDecisionCompareLive(
       contribution: 0,
     };
   });
+
+  // Sem features no WORM: diff mínimo a partir dos campos da decisão.
+  if (diff.length === 0) {
+    const scoreDelta = Number(rightDec.score) - Number(leftDec.score);
+    diff = [
+      {
+        attribute: 'score',
+        left: String(leftDec.score),
+        right: String(rightDec.score),
+        changed: leftDec.score !== rightDec.score,
+        contribution: Number.isFinite(scoreDelta) ? Math.round(scoreDelta) : 0,
+      },
+      {
+        attribute: 'outcome',
+        left: leftDec.outcome,
+        right: rightDec.outcome,
+        changed: leftDec.outcome !== rightDec.outcome,
+        contribution: 0,
+      },
+      {
+        attribute: 'modelVersion',
+        left: leftDec.modelVersion,
+        right: rightDec.modelVersion,
+        changed: leftDec.modelVersion !== rightDec.modelVersion,
+        contribution: 0,
+      },
+      {
+        attribute: 'documento',
+        left: leftDec.documento,
+        right: rightDec.documento,
+        changed: leftDec.documento !== rightDec.documento,
+        contribution: 0,
+      },
+    ];
+  }
 
   return {
     left: toDecisionMeta(leftDec),

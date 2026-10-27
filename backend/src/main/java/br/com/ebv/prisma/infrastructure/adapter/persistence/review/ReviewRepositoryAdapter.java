@@ -1,6 +1,7 @@
 package br.com.ebv.prisma.infrastructure.adapter.persistence.review;
 
 import br.com.ebv.prisma.domain.review.port.out.ReviewRepositoryPort;
+import br.com.ebv.prisma.infrastructure.adapter.persistence.PgNullableTime;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,7 +49,7 @@ public class ReviewRepositoryAdapter implements ReviewRepositoryPort {
     @Override
     @Transactional(readOnly = true)
     public PageResult search(String status, String assignee, java.time.Instant dueBefore, int page, int size) {
-        OffsetDateTime due = dueBefore == null ? null : OffsetDateTime.ofInstant(dueBefore, ZoneOffset.UTC);
+        OffsetDateTime due = PgNullableTime.upperBound(dueBefore);
         List<ReviewEntity> all = jpa.search(blankToNull(status), blankToNull(assignee), due);
         long total = all.size();
         int fromIdx = Math.min(page * size, all.size());

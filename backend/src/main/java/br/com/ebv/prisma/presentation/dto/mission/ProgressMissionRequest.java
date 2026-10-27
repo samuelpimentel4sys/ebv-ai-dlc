@@ -3,11 +3,13 @@ package br.com.ebv.prisma.presentation.dto.mission;
 import jakarta.validation.constraints.NotBlank;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
+/**
+ * Contrato FE (inclusion.ts): verifiedEventId aceita UUID ou id lab "evt-{epoch}".
+ */
 public record ProgressMissionRequest(
         @NotBlank String documento,
         String verifiedEventType,
-        UUID verifiedEventId,
+        String verifiedEventId,
         BigDecimal deltaPct
 ) {}

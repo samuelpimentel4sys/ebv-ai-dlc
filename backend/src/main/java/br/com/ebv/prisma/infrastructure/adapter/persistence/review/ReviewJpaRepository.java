@@ -14,7 +14,7 @@ public interface ReviewJpaRepository extends JpaRepository<ReviewEntity, UUID> {
             SELECT r FROM ReviewEntity r
             WHERE (:status IS NULL OR r.status = :status)
               AND (:assignee IS NULL OR r.assignee = :assignee)
-              AND (:dueBefore IS NULL OR r.dueAt <= :dueBefore)
+              AND r.dueAt <= :dueBefore
             ORDER BY r.dueAt ASC
             """)
     List<ReviewEntity> search(

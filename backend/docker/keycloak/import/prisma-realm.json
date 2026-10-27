@@ -1,0 +1,142 @@
+{
+  "realm": "prisma",
+  "enabled": true,
+  "displayName": "Prisma",
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "roles": {
+    "realm": [
+      { "name": "PLATFORM" },
+      { "name": "ANALISTA" },
+      { "name": "TITULAR" },
+      { "name": "TITULAR_B2C" },
+      { "name": "CITIZEN" },
+      { "name": "SUBJECT" },
+      { "name": "USER" },
+      { "name": "ONBOARDING" },
+      { "name": "ANALISTA_CONTESTACAO" },
+      { "name": "SUPERVISOR_CONTESTACAO" },
+      { "name": "JURIDICO" },
+      { "name": "OPS_ADMIN" },
+      { "name": "B2B_ADMIN" },
+      { "name": "B2B_BILLING" },
+      { "name": "OPS_ANALYTICS" },
+      { "name": "GESTOR_SAC" },
+      { "name": "DATA_STEWARD" },
+      { "name": "EVENT_PRODUCER" },
+      { "name": "SRE" },
+      { "name": "DATA_ENG" },
+      { "name": "DATA_ENGINEER" },
+      { "name": "ML" },
+      { "name": "ML_OPS" },
+      { "name": "ANALISTA_RISCO" },
+      { "name": "RISCO" },
+      { "name": "RISK_ANALYST" },
+      { "name": "RISK_DIRECTOR" },
+      { "name": "PORTFOLIO_MANAGER" },
+      { "name": "COMMITTEE_SECRETARY" },
+      { "name": "COMPLIANCE" },
+      { "name": "COMPLIANCE_AUDITOR" },
+      { "name": "B2B" },
+      { "name": "POLICY_ANALYST" },
+      { "name": "LEGAL_EDITOR" },
+      { "name": "DPO" },
+      { "name": "MODEL_GOVERNANCE" },
+      { "name": "MODEL_OPS" },
+      { "name": "SYSTEM_INGEST" },
+      { "name": "SCORE_CONSUMER" },
+      { "name": "ANALISTA_PJ" },
+      { "name": "APROVADOR_PJ_L1" },
+      { "name": "APROVADOR_PJ_L2" },
+      { "name": "APROVADOR_PJ_L3" },
+      { "name": "AUDIT" }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "prisma-steward-ui",
+      "name": "Prisma FE",
+      "enabled": true,
+      "publicClient": true,
+      "protocol": "openid-connect",
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "redirectUris": ["http://localhost:5173/*", "http://127.0.0.1:5173/*"],
+      "webOrigins": ["http://localhost:5173", "http://127.0.0.1:5173"],
+      "attributes": {
+        "pkce.code.challenge.method": "S256"
+      }
+    },
+    {
+      "clientId": "prisma-lab",
+      "name": "Prisma lab token",
+      "enabled": true,
+      "publicClient": true,
+      "protocol": "openid-connect",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": ["http://localhost:5173/*", "http://127.0.0.1:5173/*"],
+      "webOrigins": ["http://localhost:5173", "http://127.0.0.1:5173", "+"]
+    }
+  ],
+  "users": [
+    {
+      "username": "platform",
+      "enabled": true,
+      "email": "platform@prisma.lab",
+      "firstName": "Platform",
+      "lastName": "Lab",
+      "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "prisma", "temporary": false }],
+      "realmRoles": ["PLATFORM"]
+    },
+    {
+      "username": "analista",
+      "enabled": true,
+      "email": "analista@prisma.lab",
+      "firstName": "Analista",
+      "lastName": "Lab",
+      "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "prisma", "temporary": false }],
+      "realmRoles": ["ANALISTA", "DATA_ENG"]
+    },
+    {
+      "username": "titular",
+      "enabled": true,
+      "email": "titular@prisma.lab",
+      "firstName": "Titular",
+      "lastName": "Lab",
+      "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "prisma", "temporary": false }],
+      "realmRoles": ["TITULAR", "TITULAR_B2C", "CITIZEN", "SUBJECT"]
+    },
+    {
+      "username": "steward",
+      "enabled": true,
+      "email": "steward@prisma.lab",
+      "firstName": "Steward",
+      "lastName": "Full",
+      "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "prisma", "temporary": false }],
+      "realmRoles": [
+        "PLATFORM", "ANALISTA", "DATA_ENG",
+        "TITULAR", "TITULAR_B2C", "CITIZEN", "SUBJECT"
+      ]
+    },
+    {
+      "username": "noah",
+      "enabled": true,
+      "email": "noah@prisma.lab",
+      "firstName": "Noah",
+      "lastName": "Lab",
+      "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "prisma", "temporary": false }],
+      "realmRoles": [
+        "PLATFORM", "ANALISTA", "DATA_ENG",
+        "TITULAR", "TITULAR_B2C", "CITIZEN", "SUBJECT"
+      ]
+    }
+  ]
+}

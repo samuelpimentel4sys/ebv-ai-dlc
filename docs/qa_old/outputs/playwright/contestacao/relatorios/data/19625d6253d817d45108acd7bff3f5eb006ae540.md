@@ -1,0 +1,182 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - link "Ir para o conteúdo" [ref=e4] [cursor=pointer]:
+      - /url: "#conteudo"
+    - navigation "Navegação principal" [ref=e6]:
+      - generic [ref=e9]:
+        - img "Prisma Equifax" [ref=e10]
+        - generic [ref=e16]:
+          - generic [ref=e17]: Prisma
+          - generic [ref=e18]: Equifax
+      - paragraph [ref=e19]: 10 módulos · Prisma Equifax
+      - generic [ref=e20]:
+        - list [ref=e21]:
+          - listitem [ref=e22]:
+            - link "Início" [ref=e23] [cursor=pointer]:
+              - /url: /
+        - button "Plataforma" [ref=e25] [cursor=pointer]:
+          - generic [ref=e26] [cursor=pointer]: Plataforma
+          - img [ref=e27] [cursor=pointer]
+        - button "Dados" [ref=e30] [cursor=pointer]:
+          - generic [ref=e31] [cursor=pointer]: Dados
+          - img [ref=e32] [cursor=pointer]
+        - button "Risco & Score" [ref=e35] [cursor=pointer]:
+          - generic [ref=e36] [cursor=pointer]: Risco & Score
+          - img [ref=e37] [cursor=pointer]
+        - button "Integração" [ref=e40] [cursor=pointer]:
+          - generic [ref=e41] [cursor=pointer]: Integração
+          - img [ref=e42] [cursor=pointer]
+        - button "Modelos" [ref=e45] [cursor=pointer]:
+          - generic [ref=e46] [cursor=pointer]: Modelos
+          - img [ref=e47] [cursor=pointer]
+        - button "Compliance" [ref=e50] [cursor=pointer]:
+          - generic [ref=e51] [cursor=pointer]: Compliance
+          - img [ref=e52] [cursor=pointer]
+        - button "Crédito PJ" [ref=e55] [cursor=pointer]:
+          - generic [ref=e56] [cursor=pointer]: Crédito PJ
+          - img [ref=e57] [cursor=pointer]
+        - button "Portfólio" [ref=e60] [cursor=pointer]:
+          - generic [ref=e61] [cursor=pointer]: Portfólio
+          - img [ref=e62] [cursor=pointer]
+        - generic [ref=e64]:
+          - button "Contestações" [expanded] [ref=e65] [cursor=pointer]:
+            - generic [ref=e66] [cursor=pointer]: Contestações
+            - img [ref=e67] [cursor=pointer]
+          - list [ref=e69]:
+            - listitem [ref=e70]:
+              - link "Captura biométrica" [ref=e71] [cursor=pointer]:
+                - /url: /titular/biometria
+                - generic [ref=e72] [cursor=pointer]: Captura biométrica
+            - listitem [ref=e73]:
+              - link "MFA step-up" [ref=e74] [cursor=pointer]:
+                - /url: /titular/biometria/mfa
+                - generic [ref=e75] [cursor=pointer]: MFA step-up
+            - listitem [ref=e76]:
+              - link "Resultado da biometria" [ref=e77] [cursor=pointer]:
+                - /url: /titular/biometria/resultado
+                - generic [ref=e78] [cursor=pointer]: Resultado da biometria
+            - listitem [ref=e79]:
+              - link "Acompanhar contestação" [ref=e80] [cursor=pointer]:
+                - /url: /titular/contestacoes/CT-2026-448120
+                - generic [ref=e81] [cursor=pointer]: Acompanhar contestação
+            - listitem [ref=e82]:
+              - link "Fila de tratativas" [ref=e83] [cursor=pointer]:
+                - /url: /disputas/fila
+                - generic [ref=e84] [cursor=pointer]: Fila de tratativas
+            - listitem [ref=e85]:
+              - link "Contratação self-service" [ref=e86] [cursor=pointer]:
+                - /url: /b2b/onboarding
+                - generic [ref=e87] [cursor=pointer]: Contratação self-service
+            - listitem [ref=e88]:
+              - link "Console de consumo" [ref=e89] [cursor=pointer]:
+                - /url: /b2b/console
+                - generic [ref=e90] [cursor=pointer]: Console de consumo
+            - listitem [ref=e91]:
+              - link "Portal do titular" [ref=e92] [cursor=pointer]:
+                - /url: /titular/registros
+                - generic [ref=e93] [cursor=pointer]: Portal do titular
+            - listitem [ref=e94]:
+              - link "Risco de SLA" [ref=e95] [cursor=pointer]:
+                - /url: /disputas/sla
+                - generic [ref=e96] [cursor=pointer]: Risco de SLA
+            - listitem [ref=e97]:
+              - link "Credenciais de API" [ref=e98] [cursor=pointer]:
+                - /url: /b2b/credenciais
+                - generic [ref=e99] [cursor=pointer]: Credenciais de API
+            - listitem [ref=e100]:
+              - link "Evidências do caso" [ref=e101] [cursor=pointer]:
+                - /url: /disputas/CT-2026-448120/evidencias
+                - generic [ref=e102] [cursor=pointer]: Evidências do caso
+            - listitem [ref=e103]:
+              - link "Desvio de atendimento" [ref=e104] [cursor=pointer]:
+                - /url: /disputas/indicadores
+                - generic [ref=e105] [cursor=pointer]: Desvio de atendimento
+        - button "Inclusão" [ref=e107] [cursor=pointer]:
+          - generic [ref=e108] [cursor=pointer]: Inclusão
+          - img [ref=e109] [cursor=pointer]
+      - generic [ref=e111]:
+        - text: Equifax · Prisma
+        - generic [ref=e112]:
+          - text: "Demo:"
+          - link "?demo=1" [ref=e113] [cursor=pointer]:
+            - /url: "?demo=1"
+    - generic [ref=e114]:
+      - banner [ref=e115]:
+        - navigation "Trilha de navegação" [ref=e116]:
+          - list [ref=e117]:
+            - listitem [ref=e118]:
+              - link "Prisma" [ref=e119] [cursor=pointer]:
+                - /url: /
+            - listitem [ref=e120]: /
+            - listitem [ref=e121]: Contestações
+            - listitem [ref=e122]: /
+            - listitem [ref=e123]: Contratação self-service
+            - listitem [ref=e124]:
+              - generic [ref=e125]: API live
+        - button "Buscar Ctrl K" [ref=e126] [cursor=pointer]:
+          - img [ref=e127] [cursor=pointer]
+          - text: Buscar
+          - generic [ref=e130] [cursor=pointer]: Ctrl K
+        - 'button "Densidade atual: comfortable. Alternar densidade." [ref=e131] [cursor=pointer]':
+          - img [ref=e132] [cursor=pointer]
+        - button "Ativar tema escuro" [ref=e134] [cursor=pointer]:
+          - img [ref=e135] [cursor=pointer]
+      - main [ref=e137]:
+        - generic [ref=e138]:
+          - generic [ref=e142]:
+            - heading "Contratação self-service B2B" [level=1] [ref=e143]
+            - paragraph [ref=e144]: "Fluxo de contratação sem intervenção comercial: validação de CNPJ, verificação do representante legal, aceite eletrônico do contrato e liberação imediata de credencial de sandbox."
+            - generic [ref=e146]: Contestações
+          - generic [ref=e148]:
+            - list [ref=e149]:
+              - listitem [ref=e150]:
+                - generic [ref=e151]: "1"
+                - generic [ref=e152]:
+                  - generic [ref=e153]: Identificação da empresa
+                  - generic [ref=e154]: CNPJ e segmento
+              - listitem [ref=e155]:
+                - generic [ref=e156]: "2"
+                - generic [ref=e157]:
+                  - generic [ref=e158]: Representante legal
+                  - generic [ref=e159]: dados e verificação
+              - listitem [ref=e160]:
+                - generic [ref=e161]: "3"
+                - generic [ref=e162]:
+                  - generic [ref=e163]: Contrato e plano
+                  - generic [ref=e164]: aceite eletrônico
+              - listitem [ref=e165]:
+                - generic [ref=e166]: "4"
+                - generic [ref=e167]:
+                  - generic [ref=e168]: Credencial sandbox
+                  - generic [ref=e169]: acesso imediato
+            - generic [ref=e170]:
+              - generic [ref=e172]:
+                - paragraph [ref=e173]: etapa 1
+                - heading "Identificação da empresa" [level=2] [ref=e174]
+                - paragraph [ref=e175]: Consultamos a situação cadastral na Receita Federal automaticamente.
+              - generic [ref=e176]:
+                - generic [ref=e177]:
+                  - generic [ref=e178]:
+                    - text: CNPJ
+                    - generic [ref=e179]: "*"
+                    - generic [ref=e180]: (obrigatório)
+                  - textbox "CNPJ (obrigatório)" [ref=e181]: "45998211000133"
+                - generic [ref=e182]:
+                  - generic [ref=e183]:
+                    - text: Razão social
+                    - generic [ref=e184]: "*"
+                    - generic [ref=e185]: (obrigatório)
+                  - textbox "Razão social (obrigatório)" [ref=e186]: Fintech Vega
+                - generic [ref=e187]:
+                  - generic [ref=e188]: Segmento
+                  - combobox "Segmento" [ref=e189]:
+                    - option "Banco ou financeira"
+                    - option "Fintech" [selected]
+                    - option "Varejo"
+                    - option "Serviços"
+                - button "Validar CNPJ e continuar" [active] [ref=e190] [cursor=pointer]
+  - status
+```

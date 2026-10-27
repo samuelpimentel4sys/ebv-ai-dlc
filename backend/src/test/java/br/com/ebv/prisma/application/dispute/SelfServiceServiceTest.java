@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,13 +45,22 @@ class SelfServiceServiceTest {
     }
 
     @Test
-    @DisplayName("F05 identify CPF 11 dígitos → sessionToken")
+    @DisplayName("F05 identify CPF + birthDate + lastDigits → sessionToken")
     void identifyOk() {
         var r = identify.execute(new IdentifySelfServiceUseCase.Command(
-                "12345678901", null, null
+                "12345678901", LocalDate.of(1990, 1, 1), "8901"
         ));
         assertThat(r.verified()).isTrue();
         assertThat(r.sessionToken()).startsWith("ss-");
+    }
+
+    @Test
+    @DisplayName("F05 identify só documento → validation")
+    void identifyRequiresKbaFactors() {
+        assertThatThrownBy(() -> identify.execute(new IdentifySelfServiceUseCase.Command(
+                "12345678901", null, null
+        ))).isInstanceOf(DisputeValidationException.class)
+                .hasMessageContaining("birthDate");
     }
 
     @Test
@@ -58,11 +68,11 @@ class SelfServiceServiceTest {
     void identifyLockout() {
         for (int i = 0; i < 2; i++) {
             assertThatThrownBy(() -> identify.execute(new IdentifySelfServiceUseCase.Command(
-                    "123", null, null
+                    "12345678901", LocalDate.of(1990, 1, 1), "0000"
             ))).isInstanceOf(DisputeValidationException.class);
         }
         assertThatThrownBy(() -> identify.execute(new IdentifySelfServiceUseCase.Command(
-                "123", null, null
+                "12345678901", LocalDate.of(1990, 1, 1), "0000"
         ))).isInstanceOf(DisputeLockoutException.class);
     }
 
@@ -70,7 +80,7 @@ class SelfServiceServiceTest {
     @DisplayName("F05 identify → records stub 2 itens")
     void identifyThenRecords() {
         var id = identify.execute(new IdentifySelfServiceUseCase.Command(
-                "12345678901", null, "8901"
+                "12345678901", LocalDate.of(1990, 1, 1), "8901"
         ));
         var items = listRecords.execute(new ListSelfServiceRecordsUseCase.Query(id.sessionToken()));
         assertThat(items).hasSize(2);

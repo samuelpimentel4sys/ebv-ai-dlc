@@ -1,6 +1,7 @@
 package br.com.ebv.prisma.infrastructure.adapter.persistence.subjectrequest;
 
 import br.com.ebv.prisma.domain.subjectrequest.port.out.SubjectRequestRepositoryPort;
+import br.com.ebv.prisma.infrastructure.adapter.persistence.PgNullableTime;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,7 +47,7 @@ public class SubjectRequestRepositoryAdapter implements SubjectRequestRepository
     @Override
     @Transactional(readOnly = true)
     public PageResult search(String rightType, String status, java.time.Instant dueBefore, int page, int size) {
-        OffsetDateTime due = dueBefore == null ? null : OffsetDateTime.ofInstant(dueBefore, ZoneOffset.UTC);
+        OffsetDateTime due = PgNullableTime.upperBound(dueBefore);
         List<SubjectRequestEntity> all = jpa.search(blankToNull(rightType), blankToNull(status), due);
         long total = all.size();
         int fromIdx = Math.min(page * size, all.size());

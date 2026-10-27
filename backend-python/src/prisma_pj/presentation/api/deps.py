@@ -276,6 +276,14 @@ def get_correct_extraction(
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
+    settings = get_settings()
+    if settings.showcase_mode:
+        print(  # boot banner showcase
+            f"[prisma-pj] SHOWCASE_MODE=on provider={settings.inference_provider} "
+            f"oidc={settings.oidc_enabled} index={settings.rag_index_version} "
+            "(somente Supabase real; LLM/embed/OIDC/Neptune simulados)",
+            flush=True,
+        )
     get_session_factory()
     yield
     reset_db_caches()

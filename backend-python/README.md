@@ -37,10 +37,35 @@ uv run ruff check src tests
 uv run mypy src
 ```
 
+## Showcase (só Supabase)
+
+Demo/pitch **sem** Ollama, Redis, Keycloak, Neptune ou cloud LLM:
+
+```env
+SHOWCASE_MODE=true
+DATABASE_URL=postgresql+asyncpg://postgres:...@db....supabase.co:5432/postgres
+DATABASE_SSL=require
+```
+
+Efeito:
+- `INFERENCE_PROVIDER` forçado a `stub` (LLM + embeddings determinísticos)
+- `OIDC_ENABLED=false` (principal lab)
+- Neptune/F01 já stub
+- Health: `"mode":"showcase"` · Ready: `"mode":"showcase"`
+
+```powershell
+# .venv
+.\.venv\Scripts\Activate.ps1
+$env:PYTHONPATH = "src"
+uvicorn prisma_pj.presentation.main:app --host 0.0.0.0 --port 8090
+```
+
+Desligar: `SHOWCASE_MODE=false` e configurar Ollama/API key de novo.
+
 ## Providers
 
-`INFERENCE_PROVIDER=local|bedrock|openai|gemini` — ver [docs/ADR-001-llm-provider-multi.md](docs/ADR-001-llm-provider-multi.md).  
-Voz/STT/TTS **não** entram neste serviço.
+`INFERENCE_PROVIDER=local|bedrock|openai|gemini|stub` — ver [docs/ADR-001-llm-provider-multi.md](docs/ADR-001-llm-provider-multi.md).  
+Voz/STT/TTS **não** entram neste serviço. `SHOWCASE_MODE=true` equivale a `stub`.
 
 ## Plano
 

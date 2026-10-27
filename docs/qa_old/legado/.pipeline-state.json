@@ -1,0 +1,24 @@
+﻿{
+  "pipeline_id": "ebv-prisma-ep05-f01-f04",
+  "status": "passed",
+  "current_step": 6,
+  "last_run": {
+    "mode": "live",
+    "exit_code": 0,
+    "passed": 8,
+    "failed": 0,
+    "duration_ms": 43400,
+    "base_url": "http://localhost:5173",
+    "proxy_queue": 200,
+    "evidencias": "QA Agents/outputs/evidencias/runs/v1-live-20260729T190224Z",
+    "finished_at": "2026-07-29T19:02:24Z"
+  },
+  "features": ["F01", "F02", "F03", "F04"],
+  "self_healing_cycles": 0,
+  "notes": [
+    "FE restarted with VITE_DATA_MODE=live",
+    "BE disputes/queue responds 200; actuator/health timeouts",
+    "Python :8090 health 200",
+    "Massa DataForge recriada após pasta ausente"
+  ]
+}

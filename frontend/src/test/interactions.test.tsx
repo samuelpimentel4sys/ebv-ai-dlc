@@ -2,8 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
-import { ThemeProvider } from '@/app/ThemeContext';
-import { ToastProvider } from '@/ds/Toast';
+import { AllProviders } from '@/test/providers';
 import { ConsentPage } from '@/epics/thinfile/ConsentPage';
 import { SimulatorPage } from '@/epics/thinfile/SimulatorPage';
 import { simulationActions } from '@/epics/thinfile/data';
@@ -11,11 +10,9 @@ import { OnboardingPage } from '@/epics/contestacao/OnboardingPage';
 
 function mount(ui: React.ReactElement) {
   return render(
-    <ThemeProvider>
-      <ToastProvider>
+    <AllProviders>
         <MemoryRouter>{ui}</MemoryRouter>
-      </ToastProvider>
-    </ThemeProvider>,
+      </AllProviders>,
   );
 }
 

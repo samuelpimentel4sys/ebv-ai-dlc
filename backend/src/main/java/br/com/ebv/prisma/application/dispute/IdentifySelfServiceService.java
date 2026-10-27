@@ -36,17 +36,15 @@ public class IdentifySelfServiceService implements IdentifySelfServiceUseCase {
                     "Bloqueado por tentativas inválidas até " + lockout.lockedUntil(lockKey));
         }
 
+        if (command.birthDate() == null || command.lastDigits() == null || command.lastDigits().isBlank()) {
+            throw new DisputeValidationException("birthDate e lastDigits obrigatórios");
+        }
+
         boolean lengthOk = digits.length() == 11 || digits.length() == 14;
-        boolean factorOk = true;
-        if (command.lastDigits() != null && !command.lastDigits().isBlank()) {
-            String last4 = command.lastDigits().replaceAll("\\D", "");
-            factorOk = digits.length() >= 4 && digits.substring(digits.length() - 4).equals(last4);
-        }
-        // birthDate: lab accepts any non-null date as additional factor present
-        if (command.birthDate() == null && (command.lastDigits() == null || command.lastDigits().isBlank())) {
-            // still OK if length valid — factor optional when only documento provided
-            factorOk = lengthOk;
-        }
+        String last4 = command.lastDigits().replaceAll("\\D", "");
+        boolean factorOk = last4.length() == 4
+                && digits.length() >= 4
+                && digits.substring(digits.length() - 4).equals(last4);
 
         if (!lengthOk || !factorOk) {
             int attempts = lockout.registerFailure(lockKey);

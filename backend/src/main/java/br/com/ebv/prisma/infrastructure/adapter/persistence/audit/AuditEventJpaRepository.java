@@ -19,8 +19,8 @@ public interface AuditEventJpaRepository extends JpaRepository<AuditEventEntity,
             WHERE (:documento IS NULL OR e.documento = :documento)
               AND (:actorId IS NULL OR e.actorId = :actorId)
               AND (:eventType IS NULL OR e.eventType = :eventType)
-              AND (:fromTs IS NULL OR e.createdAt >= :fromTs)
-              AND (:toTs IS NULL OR e.createdAt <= :toTs)
+              AND e.createdAt >= :fromTs
+              AND e.createdAt <= :toTs
             ORDER BY e.createdAt DESC
             """)
     List<AuditEventEntity> search(

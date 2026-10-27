@@ -16,7 +16,7 @@ const GROUP = 'EP-02 · Explicabilidade';
 export const explicabilidadeNav: NavItem[] = [
   {
     path: '/explicabilidade/decisoes/:decisionId/fatores',
-    href: '/explicabilidade/decisoes/dec-2026-07-27-1104/fatores',
+    href: '/explicabilidade/decisoes/d1000000-0000-4000-8000-000000000001/fatores',
     label: 'Fatores da decisão',
     epic: 'EP-02',
     usId: 'PRISMA-EP-02-F01-US-FE-01',
@@ -27,7 +27,7 @@ export const explicabilidadeNav: NavItem[] = [
   },
   {
     path: '/explicabilidade/decisoes/:decisionId/acoes',
-    href: '/explicabilidade/decisoes/dec-2026-07-27-1104/acoes',
+    href: '/explicabilidade/decisoes/d1000000-0000-4000-8000-000000000001/acoes',
     label: 'Ações recomendadas',
     epic: 'EP-02',
     usId: 'PRISMA-EP-02-F02-US-FE-01',

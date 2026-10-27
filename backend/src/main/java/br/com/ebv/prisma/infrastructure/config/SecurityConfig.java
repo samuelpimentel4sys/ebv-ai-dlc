@@ -3,7 +3,6 @@ package br.com.ebv.prisma.infrastructure.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.http.HttpMethod;
@@ -15,29 +14,30 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
+/**
+ * Fail-closed com OIDC on (roles). Lab {@code OIDC_ENABLED=false}: permitAll.
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     @Bean
-    @Profile("!infra")
-    SecurityFilterChain openLocal(HttpSecurity http) throws Exception {
-        return permitAll(http);
-    }
-
-    @Bean
-    @Profile("infra")
-    SecurityFilterChain infraSecurity(
+    SecurityFilterChain api(
             HttpSecurity http,
-            @Value("${prisma.security.enabled:false}") boolean oidcEnabled
+            @Value("${prisma.security.enabled:true}") boolean oidcEnabled
     ) throws Exception {
-        if (!oidcEnabled) {
-            return permitAll(http);
-        }
         http.csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
-                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        if (!oidcEnabled) {
+            http.authorizeHttpRequests(auth -> auth
+                    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                    .anyRequest().permitAll());
+            return http.build();
+        }
+
+        http.authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(
                                 "/actuator/health",
@@ -52,7 +52,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/biometric-consent", "/api/v1/auth/liveness/**")
                             .hasAnyRole("CITIZEN", "USER", "ONBOARDING", "TITULAR_B2C", "PLATFORM")
                         .requestMatchers("/api/v1/onboarding/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/disputes/*/tracking", "/api/v1/disputes/*/timeline").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/disputes/*/tracking", "/api/v1/disputes/*/timeline")
+                            .hasAnyRole("TITULAR", "ANALISTA_CONTESTACAO", "SUPERVISOR_CONTESTACAO", "JURIDICO", "PLATFORM")
                         .requestMatchers("/api/v1/sla/**").hasAnyRole("SUPERVISOR_CONTESTACAO", "OPS_ADMIN", "PLATFORM")
                         .requestMatchers("/api/v1/credentials/**").hasAnyRole("B2B_ADMIN", "PLATFORM")
                         .requestMatchers("/api/v1/console/**").hasAnyRole("B2B_ADMIN", "B2B_BILLING", "PLATFORM")
@@ -102,16 +103,8 @@ public class SecurityConfig {
                                         "APROVADOR_PJ_L3", "PLATFORM")
                         .anyRequest().authenticated()
                 )
+                .exceptionHandling(ex -> ex.accessDeniedHandler(new LoggingAccessDeniedHandler()))
                 .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> jwt.jwtAuthenticationConverter(keycloakRolesConverter())));
-        return http.build();
-    }
-
-    private static SecurityFilterChain permitAll(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
-                .cors(Customizer.withDefaults())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .anyRequest().permitAll());
         return http.build();
     }
 

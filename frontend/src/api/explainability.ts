@@ -3,6 +3,7 @@
  * (explain, contrafactual, dossiê, auditoria, motivos, revisão, fairness, direitos, política).
  */
 import { httpClient, HttpError } from '@/lib/httpClient';
+import { LAB_DECISIONS } from '@/app/story';
 import type {
   AuditEvent,
   CounterfactualAction,
@@ -38,19 +39,15 @@ export function lastDecisionId(): string | null {
   }
 }
 
-/** Em live, usa UUID da rota ou o último decisionId do Playground. */
+/**
+ * Em live: UUID da rota → último do Playground → seed lab.
+ * IDs mock `dec-AAAA-…` do showcase viram o seed canónico.
+ */
 export function resolveLiveDecisionId(param?: string): string {
   if (param && isUuid(param)) return param;
   const last = lastDecisionId();
   if (last) return last;
-  throw new HttpError({
-    status: 404,
-    error: 'DecisionNotFound',
-    message:
-      'Sem decisionId UUID. Emita uma decisão no Playground (API live) e abra fatores/ações com esse id.',
-    path: '/api/v1/explain',
-    correlationId: 'local',
-  });
+  return LAB_DECISIONS.primary;
 }
 
 function maskDocumento(doc: string | null | undefined): string {
@@ -262,13 +259,15 @@ interface BeExplain {
   generated_at: string;
 }
 
-function mapFactor(f: BeFactor): DecisionFactor {
+function mapFactor(f: BeFactor): DecisionFactor | null {
+  const code = f.attribute_code;
+  if (!code || code === 'null' || code === 'undefined') return null;
   const shap = Number(f.shap_value) || 0;
   const dir = (f.direction || '').toUpperCase();
   const positive = dir.includes('POS') || (!dir.includes('NEG') && shap > 0);
   return {
-    attribute: f.attribute_code,
-    label: f.business_label || f.attribute_code,
+    attribute: code,
+    label: f.business_label && f.business_label !== 'null' ? f.business_label : code,
     contribution: Math.round(shap),
     value: f.value == null ? '—' : String(f.value),
     direction: positive ? 'positivo' : 'negativo',
@@ -297,7 +296,7 @@ export async function fetchExplainLive(decisionId: string): Promise<ExplainRespo
     policyVersion: res.policy_version,
     decidedAt: res.generated_at,
     baseValue: res.base_value,
-    factors: (res.factors ?? []).map(mapFactor),
+    factors: (res.factors ?? []).map(mapFactor).filter((f): f is DecisionFactor => f != null),
   };
 }
 

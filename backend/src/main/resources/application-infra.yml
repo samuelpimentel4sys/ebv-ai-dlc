@@ -40,6 +40,10 @@ spring:
           jwk-set-uri: ${OIDC_JWK_SET_URI:}
 
 management:
+  endpoints:
+    web:
+      exposure:
+        include: health
   health:
     redis:
       enabled: true
@@ -50,7 +54,7 @@ management:
 prisma:
   lab:
     mark-responses: ${PRISMA_LAB_MARK:true}
-    actor-fallback: ${PRISMA_LAB_ACTOR_FALLBACK:true}
+    actor-fallback: ${PRISMA_LAB_ACTOR_FALLBACK:false}
   liveness:
     mode: ${LIVENESS_MODE:stub}
     mock-url: ${LIVENESS_MOCK_URL:http://localhost:8093}
@@ -61,7 +65,7 @@ prisma:
     topic-identity-corrections: ${KAFKA_TOPIC_IDENTITY:prisma.identity.corrections}
     partition-count: ${KAFKA_PARTITION_COUNT:6}
   security:
-    # false = APIs abertas (smoke); true = JWT Keycloak obrigatório
-    enabled: ${OIDC_ENABLED:false}
+    # default true — fail-closed. Lab host 47: OIDC_ENABLED=false no .env mesmo com profile infra
+    enabled: ${OIDC_ENABLED:true}
   schema-registry:
     url: ${SCHEMA_REGISTRY_URL:}

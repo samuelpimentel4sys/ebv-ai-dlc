@@ -1,0 +1,12 @@
+{
+  "ambiente": "lab",
+  "frontLocal": "http://localhost:5173",
+  "backend": "http://localhost:8080",
+  "python": "http://localhost:8090",
+  "dataMode": "mock",
+  "notas": [
+    "Não commitar credenciais reais.",
+    "Browser nunca chama :8090.",
+    "Live E2E exige Java UP e VITE_DATA_MODE=live."
+  ]
+}

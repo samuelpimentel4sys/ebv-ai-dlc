@@ -55,8 +55,8 @@ export const JOURNEYS: Journey[] = [
     goal: 'Transformar a decisão do modelo em explicação compreensível e dossiê LGPD.',
     payoff: 'Maria recebe motivo, caminho de melhoria e dossiê — sem depender do time de dados.',
     steps: [
-      '/explicabilidade/decisoes/dec-2026-07-27-1104/fatores',
-      '/explicabilidade/decisoes/dec-2026-07-27-1104/acoes',
+      '/explicabilidade/decisoes/d1000000-0000-4000-8000-000000000001/fatores',
+      '/explicabilidade/decisoes/d1000000-0000-4000-8000-000000000001/acoes',
       '/compliance/motivos/catalogo',
       '/compliance/dossies/emissao',
     ],
@@ -152,8 +152,8 @@ export const JOURNEYS: Journey[] = [
       '/titular/biometria/mfa',
       '/titular/biometria/resultado',
       '/titular/registros',
-      '/titular/contestacoes/CT-2026-448120',
-      '/disputas/CT-2026-448120/evidencias',
+      '/titular/contestacoes/DSP-2026-0001001',
+      '/disputas/DSP-2026-0001001/evidencias?disputeId=e1000000-0000-4000-8000-000000000001',
     ],
   },
   {

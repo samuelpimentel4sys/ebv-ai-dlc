@@ -16,6 +16,8 @@ depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
+    # Local Postgres (compose Prisma) não tem schema extensions do Supabase
+    op.execute("CREATE SCHEMA IF NOT EXISTS extensions")
     op.execute("CREATE EXTENSION IF NOT EXISTS vector WITH SCHEMA extensions")
     op.execute(
         """

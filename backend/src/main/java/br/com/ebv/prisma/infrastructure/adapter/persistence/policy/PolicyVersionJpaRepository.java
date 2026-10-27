@@ -14,8 +14,8 @@ public interface PolicyVersionJpaRepository extends JpaRepository<PolicyVersionE
             SELECT p FROM PolicyVersionEntity p
             WHERE (:status IS NULL OR p.status = :status)
               AND (:author IS NULL OR p.author = :author)
-              AND (:fromTs IS NULL OR p.createdAt >= :fromTs)
-              AND (:toTs IS NULL OR p.createdAt <= :toTs)
+              AND p.createdAt >= :fromTs
+              AND p.createdAt <= :toTs
             ORDER BY p.createdAt DESC
             """)
     List<PolicyVersionEntity> search(

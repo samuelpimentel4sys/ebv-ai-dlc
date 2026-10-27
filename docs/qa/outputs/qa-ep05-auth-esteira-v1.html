@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Relatório Esteira QA — ep05-auth v1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root { --navy:#222239; --navy-2:#2e2e4a; --orange:#FF5315; --mint:#89BAB1; --vanilla:#FFE2A9; --off-white:#F7F6F2; --muted:#5c5c72; }
+    body { margin:0; font-family:Nunito,sans-serif; background:var(--off-white); color:#181828; font-size:11pt; }
+    .brand-bar { height:6px; background:linear-gradient(90deg,var(--navy),var(--orange)); }
+    .cover { background:linear-gradient(145deg,var(--navy) 0%,var(--navy-2) 55%,#3a2a35 100%); color:#fff; padding:2.2rem 2.5rem; }
+    .logo { font-weight:900; font-size:1.3rem; }
+    .logo .chev { color:var(--orange); }
+    .cover h1 { margin:0.4rem 0 0; font-size:1.8rem; }
+    .badge { display:inline-block; padding:0.2rem 0.7rem; border-radius:999px; font-weight:700; font-size:0.72rem; margin:0.2rem 0.2rem 0 0; }
+    .badge-orange { background:var(--orange); color:#fff; }
+    .badge-mint { background:var(--mint); color:var(--navy); }
+    .badge-ghost { background:rgba(255,255,255,0.12); color:#fff; }
+    main { max-width:1100px; margin:0 auto; padding:1.5rem 2rem 3rem; }
+    h2 { color:var(--navy); border-bottom:3px solid var(--navy); padding-bottom:0.35rem; }
+    table { width:100%; border-collapse:collapse; background:#fff; font-size:0.8rem; box-shadow:0 2px 12px rgba(34,34,57,0.08); }
+    th { background:var(--navy); color:#fff; text-align:left; padding:0.55rem; border-bottom:3px solid var(--orange); }
+    td { padding:0.45rem; border-bottom:1px solid #e8e6e0; vertical-align:top; }
+    .pass { color:#1a6b5a; font-weight:800; }
+    .fail { color:#b42318; font-weight:800; }
+    .skip { color:var(--muted); font-weight:700; }
+    .id { color:var(--orange); font-weight:800; font-family:ui-monospace,Consolas,monospace; }
+    .gallery { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    figure { margin:0; background:#fff; border-left:4px solid var(--orange); overflow:hidden; }
+    figure img, figure video { width:100%; display:block; }
+    figcaption { padding:0.6rem; font-size:0.78rem; color:var(--muted); }
+    pre { white-space:pre-wrap; max-height:8rem; overflow:auto; margin:0; font-size:0.7rem; }
+    a { color:var(--orange); }
+    footer { text-align:center; padding:1.2rem; border-top:3px solid var(--orange); color:var(--muted); font-size:0.78rem; }
+    @media (max-width:720px) { .gallery { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <div class="brand-bar"></div>
+  <header class="cover">
+    <div class="logo">foursys <span class="chev">&gt;&gt;</span></div>
+    <p style="color:var(--orange);font-weight:800;letter-spacing:0.08em;text-transform:uppercase;font-size:0.75rem;">Solution Center · Esteira QA · consolidado completo</p>
+    <h1>Relatório Final — PRISMA-EP-05-AUTH · Portal Contestação (OTP + Liveness)</h1>
+    <p>Módulo <strong>ep05-auth</strong> · versão <strong>v1</strong> · 2026-08-19T19:36:41.918Z</p>
+    <div>
+      <span class="badge badge-orange">14 passed</span>
+      <span class="badge badge-ghost">0 failed</span>
+      <span class="badge badge-mint">0 skipped</span>
+    </div>
+  </header>
+  <main>
+    <section>
+      <h2>01 · Veredito</h2>
+      <p>GO lab: 14 passed · 0 skipped. Artefatos Playwright anexados.</p>
+      <p>
+        Excel: <a href="qa-ep05-auth-esteira-v1.xlsx">qa-ep05-auth-esteira-v1.xlsx</a><br />
+        Playwright HTML: <a href="playwright/ep05-auth/relatorios/index.html">playwright/ep05-auth/relatorios/index.html</a><br />
+        JSON: <a href="playwright/ep05-auth/relatorios/qa-ep05-auth-v1.json">playwright/ep05-auth/relatorios/qa-ep05-auth-v1.json</a>
+        <br />JUnit: <a href="playwright/ep05-auth/relatorios/qa-ep05-auth-v1.junit.xml">playwright/ep05-auth/relatorios/qa-ep05-auth-v1.junit.xml</a>
+      </p>
+    </section>
+    <section>
+      <h2>02 · Cenários e logs</h2>
+      <table>
+        <thead><tr><th>ID</th><th>Cenário</th><th>Status</th><th>ms</th><th>Log / erro</th></tr></thead>
+        <tbody><tr><td class="id">AUTH-01</td><td>AUTH-01 [Positivo] Autenticação inicial e emissão de OTP</td><td class="pass">passed</td><td>3705</td><td><pre>╔══════════════════════════════════════════════════════╗
+
+║  🎬 DEMO QA — PRISMA EP-05-AUTH (v1)                 ║
+
+╚══════════════════════════════════════════════════════╝
+
+
+🧪 TESTANDO: AUTH-01 [Positivo] Autenticação inicial e emissão de OTP
+
+   → Abrindo captura biométrica (lab AUTH)...
+
+   ✅ Consentimento ACTIVE — sessão disponível
+
+🏁 AUTH-01 [Positivo] Autenticação inicial e emissão de OTP CONCLUÍDO</pre></td></tr>
+<tr><td class="id">AUTH-02</td><td>AUTH-02 [Positivo] Validação bem-sucedida do OTP</td><td class="pass">passed</td><td>5846</td><td><pre>🧪 TESTANDO: AUTH-02 [Positivo] Validação bem-sucedida do OTP
+
+   → Indo ao MFA e submetendo OTP válido...
+
+   ✅ Identidade verificada (score lab 92)
+
+🏁 AUTH-02 [Positivo] Validação bem-sucedida do OTP CONCLUÍDO</pre></td></tr>
+<tr><td class="id">AUTH-03</td><td>AUTH-03 [Positivo] Validação biométrica facial e prova de vida</td><td class="pass">passed</td><td>4910</td><td><pre>🧪 TESTANDO: AUTH-03 [Positivo] Validação biométrica facial e prova de vida
+
+   → Sessão + guia oval...
+
+   ✅ Moldura pronta para captura lab
+
+🏁 AUTH-03 [Positivo] Validação biométrica facial e prova de vida CONCLUÍDO</pre></td></tr>
+<tr><td class="id">AUTH-04</td><td>AUTH-04 [Positivo] Reenvio / temporizador (lab TTL)</td><td class="pass">passed</td><td>4321</td><td><pre>🧪 TESTANDO: AUTH-04 [Positivo] Reenvio / temporizador (lab TTL)
+
+   → Conferindo temporizador de sessão...
+
+   ✅ TTL visível
+
+🏁 AUTH-04 [Positivo] Reenvio / temporizador (lab TTL) CONCLUÍDO</pre></td></tr>
+<tr><td class="id">AUTH-05</td><td>AUTH-05 [Positivo] Ajuste de iluminação / guia oval</td><td class="pass">passed</td><td>5059</td><td><pre>🧪 TESTANDO: AUTH-05 [Positivo] Ajuste de iluminação / guia oval
+
+   → Conferindo instrução de enquadramento...
+
+   ✅ Guia de captura visível
+
+🏁 AUTH-05 [Positivo] Ajuste de iluminação / guia oval CONCLUÍDO</pre></td></tr>
+<tr><td class="id">AUTH-06</td><td>AUTH-06 [Positivo] Conclusão MFA e acesso ao portal</td><td class="pass">passed</td><td>6514</td><td><pre>🧪 TESTANDO: AUTH-06 [Positivo] Conclusão MFA e acesso ao portal
+
+   → MFA ok e avanço ao portal do titular...
+
+   ✅ Portal do titular
+
+🏁 AUTH-06 [Positivo] Conclusão MFA e acesso ao portal CONCLUÍDO</pre></td></tr>
+<tr><td class="id">AUTH-07</td><td>AUTH-07 [Negativo] Código de verificação em formato inválido</td><td class="pass">passed</td><td>5628</td><td><pre>🧪 TESTANDO: AUTH-07 [Negativo] Código de verificação em formato inválido
+
+   → OTP incompleto deve bloquear...
+
+   ✅ Alerta de código inválido
+
+🏁 AUTH-07 [Negativo] Código de verificação em formato inválido CONCLUÍDO</pre></td></tr>
+<tr><td class="id">AUTH-08</td><td>AUTH-08 [Negativo] Falha de vivacidade / bloqueio lab</td><td class="pass">passed</td><td>5205</td><td><pre>🧪 TESTANDO: AUTH-08 [Negativo] Falha de vivacidade / bloqueio lab
+
+   → OTP de falha de vivacidade...
+
+   ✅ Vivacidade insuficiente
+
+🏁 AUTH-08 [Negativo] Falha de vivacidade / bloqueio lab CONCLUÍDO</pre></td></tr>
+<tr><td class="id">AUTH-09</td><td>AUTH-09 [Negativo] Similaridade abaixo do patamar</td><td class="pass">passed</td><td>5716</td><td><pre>🧪 TESTANDO: AUTH-09 [Negativo] Similaridade abaixo do patamar
+
+   → Score lab abaixo do patamar...
+
+   ✅ Score 42
+
+🏁 AUTH-09 [Negativo] Similaridade abaixo do patamar CONCLUÍDO</pre></td></tr>
+<tr><td class="id">AUTH-10</td><td>AUTH-10 [Negativo] Prova de vida lab sem Amplify</td><td class="pass">passed</td><td>2146</td><td><pre>🧪 TESTANDO: AUTH-10 [Negativo] Prova de vida lab sem Amplify
+
+   → Aviso de prova de vida fora do slice...
+
+   ✅ Contingência lab visível
+
+🏁 AUTH-10 [Negativo] Prova de vida lab sem Amplify CONCLUÍDO</pre></td></tr>
+<tr><td class="id">AUTH-11</td><td>AUTH-11 [Negativo] Recusa de permissão da câmera</td><td class="pass">passed</td><td>5131</td><td><pre>🧪 TESTANDO: AUTH-11 [Negativo] Recusa de permissão da câmera
+
+   → Câmera recusada...
+
+   ✅ Orientação de câmera
+
+🏁 AUTH-11 [Negativo] Recusa de permissão da câmera CONCLUÍDO</pre></td></tr>
+<tr><td class="id">AUTH-12</td><td>AUTH-12 [Regressivo] Sessão expirada (TTL)</td><td class="pass">passed</td><td>2923</td><td><pre>🧪 TESTANDO: AUTH-12 [Regressivo] Sessão expirada (TTL)
+
+   → Injetando sessão vencida...
+
+   ✅ Sessão expirada
+
+🏁 AUTH-12 [Regressivo] Sessão expirada (TTL) CONCLUÍDO</pre></td></tr>
+<tr><td class="id">AUTH-13</td><td>AUTH-13 [Regressivo] Termo e purga LGPD (consentimento)</td><td class="pass">passed</td><td>1835</td><td><pre>🧪 TESTANDO: AUTH-13 [Regressivo] Termo e purga LGPD (consentimento)
+
+   → Termo biométrico...
+
+   ✅ Termo v1.0 / RN006
+
+🏁 AUTH-13 [Regressivo] Termo e purga LGPD (consentimento) CONCLUÍDO</pre></td></tr>
+<tr><td class="id">AUTH-14</td><td>AUTH-14 [Regressivo] Contingência do serviço biométrico</td><td class="pass">passed</td><td>1987</td><td><pre>🧪 TESTANDO: AUTH-14 [Regressivo] Contingência do serviço biométrico
+
+   → Notice de contingência lab...
+
+   ✅ Indisponibilidade lab sem detalhe interno
+
+🏁 AUTH-14 [Regressivo] Contingência do serviço biométrico CONCLUÍDO</pre></td></tr></tbody>
+      </table>
+    </section>
+    <section>
+      <h2>03 · Evidências Playwright (imagens, vídeos, traces, anexos)</h2>
+      <div class="gallery"><p><a href="playwright/ep05-auth/screenshots/.last-run.json">JSON · .last-run.json</a></p>
+<figure><img src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-01--be81a-ão-inicial-e-emissão-de-OTP-chromium/test-finished-1.png" alt="test-finished-1.png" /><figcaption><strong>test-finished-1.png</strong>playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-01--be81a-ão-inicial-e-emissão-de-OTP-chromium/test-finished-1.png</figcaption></figure>
+<p><a href="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-01--be81a-ão-inicial-e-emissão-de-OTP-chromium/trace.zip">ZIP · trace.zip</a></p>
+<figure><video controls src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-01--be81a-ão-inicial-e-emissão-de-OTP-chromium/video.webm"></video><figcaption><strong>video.webm</strong> vídeo Playwright</figcaption></figure>
+<figure><img src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-02--cbc19-lidação-bem-sucedida-do-OTP-chromium/test-finished-1.png" alt="test-finished-1.png" /><figcaption><strong>test-finished-1.png</strong>playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-02--cbc19-lidação-bem-sucedida-do-OTP-chromium/test-finished-1.png</figcaption></figure>
+<p><a href="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-02--cbc19-lidação-bem-sucedida-do-OTP-chromium/trace.zip">ZIP · trace.zip</a></p>
+<figure><video controls src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-02--cbc19-lidação-bem-sucedida-do-OTP-chromium/video.webm"></video><figcaption><strong>video.webm</strong> vídeo Playwright</figcaption></figure>
+<figure><img src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-03--e2942-rica-facial-e-prova-de-vida-chromium/test-finished-1.png" alt="test-finished-1.png" /><figcaption><strong>test-finished-1.png</strong>playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-03--e2942-rica-facial-e-prova-de-vida-chromium/test-finished-1.png</figcaption></figure>
+<p><a href="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-03--e2942-rica-facial-e-prova-de-vida-chromium/trace.zip">ZIP · trace.zip</a></p>
+<figure><video controls src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-03--e2942-rica-facial-e-prova-de-vida-chromium/video.webm"></video><figcaption><strong>video.webm</strong> vídeo Playwright</figcaption></figure>
+<figure><img src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-04--5407d-envio-temporizador-lab-TTL--chromium/test-finished-1.png" alt="test-finished-1.png" /><figcaption><strong>test-finished-1.png</strong>playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-04--5407d-envio-temporizador-lab-TTL--chromium/test-finished-1.png</figcaption></figure>
+<p><a href="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-04--5407d-envio-temporizador-lab-TTL--chromium/trace.zip">ZIP · trace.zip</a></p>
+<figure><video controls src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-04--5407d-envio-temporizador-lab-TTL--chromium/video.webm"></video><figcaption><strong>video.webm</strong> vídeo Playwright</figcaption></figure>
+<figure><img src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-05--cca50-ste-de-iluminação-guia-oval-chromium/test-finished-1.png" alt="test-finished-1.png" /><figcaption><strong>test-finished-1.png</strong>playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-05--cca50-ste-de-iluminação-guia-oval-chromium/test-finished-1.png</figcaption></figure>
+<p><a href="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-05--cca50-ste-de-iluminação-guia-oval-chromium/trace.zip">ZIP · trace.zip</a></p>
+<figure><video controls src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-05--cca50-ste-de-iluminação-guia-oval-chromium/video.webm"></video><figcaption><strong>video.webm</strong> vídeo Playwright</figcaption></figure>
+<figure><img src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-06--96446-usão-MFA-e-acesso-ao-portal-chromium/test-finished-1.png" alt="test-finished-1.png" /><figcaption><strong>test-finished-1.png</strong>playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-06--96446-usão-MFA-e-acesso-ao-portal-chromium/test-finished-1.png</figcaption></figure>
+<p><a href="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-06--96446-usão-MFA-e-acesso-ao-portal-chromium/trace.zip">ZIP · trace.zip</a></p>
+<figure><video controls src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-06--96446-usão-MFA-e-acesso-ao-portal-chromium/video.webm"></video><figcaption><strong>video.webm</strong> vídeo Playwright</figcaption></figure>
+<figure><img src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-07--d1841-ficação-em-formato-inválido-chromium/test-finished-1.png" alt="test-finished-1.png" /><figcaption><strong>test-finished-1.png</strong>playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-07--d1841-ficação-em-formato-inválido-chromium/test-finished-1.png</figcaption></figure>
+<p><a href="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-07--d1841-ficação-em-formato-inválido-chromium/trace.zip">ZIP · trace.zip</a></p>
+<figure><video controls src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-07--d1841-ficação-em-formato-inválido-chromium/video.webm"></video><figcaption><strong>video.webm</strong> vídeo Playwright</figcaption></figure>
+<figure><img src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-08--12e59--de-vivacidade-bloqueio-lab-chromium/test-finished-1.png" alt="test-finished-1.png" /><figcaption><strong>test-finished-1.png</strong>playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-08--12e59--de-vivacidade-bloqueio-lab-chromium/test-finished-1.png</figcaption></figure>
+<p><a href="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-08--12e59--de-vivacidade-bloqueio-lab-chromium/trace.zip">ZIP · trace.zip</a></p>
+<figure><video controls src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-08--12e59--de-vivacidade-bloqueio-lab-chromium/video.webm"></video><figcaption><strong>video.webm</strong> vídeo Playwright</figcaption></figure>
+<figure><img src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-09--26eb1-ilaridade-abaixo-do-patamar-chromium/test-finished-1.png" alt="test-finished-1.png" /><figcaption><strong>test-finished-1.png</strong>playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-09--26eb1-ilaridade-abaixo-do-patamar-chromium/test-finished-1.png</figcaption></figure>
+<p><a href="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-09--26eb1-ilaridade-abaixo-do-patamar-chromium/trace.zip">ZIP · trace.zip</a></p>
+<figure><video controls src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-09--26eb1-ilaridade-abaixo-do-patamar-chromium/video.webm"></video><figcaption><strong>video.webm</strong> vídeo Playwright</figcaption></figure>
+<figure><img src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-10--38309-ova-de-vida-lab-sem-Amplify-chromium/test-finished-1.png" alt="test-finished-1.png" /><figcaption><strong>test-finished-1.png</strong>playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-10--38309-ova-de-vida-lab-sem-Amplify-chromium/test-finished-1.png</figcaption></figure>
+<p><a href="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-10--38309-ova-de-vida-lab-sem-Amplify-chromium/trace.zip">ZIP · trace.zip</a></p>
+<figure><video controls src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-10--38309-ova-de-vida-lab-sem-Amplify-chromium/video.webm"></video><figcaption><strong>video.webm</strong> vídeo Playwright</figcaption></figure>
+<figure><img src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-11--13f11-cusa-de-permissão-da-câmera-chromium/test-finished-1.png" alt="test-finished-1.png" /><figcaption><strong>test-finished-1.png</strong>playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-11--13f11-cusa-de-permissão-da-câmera-chromium/test-finished-1.png</figcaption></figure>
+<p><a href="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-11--13f11-cusa-de-permissão-da-câmera-chromium/trace.zip">ZIP · trace.zip</a></p>
+<figure><video controls src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-11--13f11-cusa-de-permissão-da-câmera-chromium/video.webm"></video><figcaption><strong>video.webm</strong> vídeo Playwright</figcaption></figure>
+<figure><img src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-12-Regressivo-Sessão-expirada-TTL--chromium/test-finished-1.png" alt="test-finished-1.png" /><figcaption><strong>test-finished-1.png</strong>playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-12-Regressivo-Sessão-expirada-TTL--chromium/test-finished-1.png</figcaption></figure>
+<p><a href="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-12-Regressivo-Sessão-expirada-TTL--chromium/trace.zip">ZIP · trace.zip</a></p>
+<figure><video controls src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-12-Regressivo-Sessão-expirada-TTL--chromium/video.webm"></video><figcaption><strong>video.webm</strong> vídeo Playwright</figcaption></figure>
+<figure><img src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-13--74b7d-e-purga-LGPD-consentimento--chromium/test-finished-1.png" alt="test-finished-1.png" /><figcaption><strong>test-finished-1.png</strong>playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-13--74b7d-e-purga-LGPD-consentimento--chromium/test-finished-1.png</figcaption></figure>
+<p><a href="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-13--74b7d-e-purga-LGPD-consentimento--chromium/trace.zip">ZIP · trace.zip</a></p>
+<figure><video controls src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-13--74b7d-e-purga-LGPD-consentimento--chromium/video.webm"></video><figcaption><strong>video.webm</strong> vídeo Playwright</figcaption></figure>
+<figure><img src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-14--381dc-ência-do-serviço-biométrico-chromium/test-finished-1.png" alt="test-finished-1.png" /><figcaption><strong>test-finished-1.png</strong>playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-14--381dc-ência-do-serviço-biométrico-chromium/test-finished-1.png</figcaption></figure>
+<p><a href="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-14--381dc-ência-do-serviço-biométrico-chromium/trace.zip">ZIP · trace.zip</a></p>
+<figure><video controls src="playwright/ep05-auth/screenshots/ep05-auth-demo-v1-AUTH-14--381dc-ência-do-serviço-biométrico-chromium/video.webm"></video><figcaption><strong>video.webm</strong> vídeo Playwright</figcaption></figure>
+<p><a href="playwright/ep05-auth/relatorios/data/024b084969eb0fb1b81a5e303b6366e78ac81e8b.zip">ZIP · 024b084969eb0fb1b81a5e303b6366e78ac81e8b.zip</a></p>
+<figure><img src="playwright/ep05-auth/relatorios/data/0a9f10b495746775382cca260b0fcf48f2a8434f.png" alt="0a9f10b495746775382cca260b0fcf48f2a8434f.png" /><figcaption><strong>0a9f10b495746775382cca260b0fcf48f2a8434f.png</strong>playwright/ep05-auth/relatorios/data/0a9f10b495746775382cca260b0fcf48f2a8434f.png</figcaption></figure>
+<figure><img src="playwright/ep05-auth/relatorios/data/0f27df76e86eabb004cf467ba763e94ee971aebe.png" alt="0f27df76e86eabb004cf467ba763e94ee971aebe.png" /><figcaption><strong>0f27df76e86eabb004cf467ba763e94ee971aebe.png</strong>playwright/ep05-auth/relatorios/data/0f27df76e86eabb004cf467ba763e94ee971aebe.png</figcaption></figure>
+<figure><img src="playwright/ep05-auth/relatorios/data/1a4c657613d23a046d7fae8ed1764e41021672b8.png" alt="1a4c657613d23a046d7fae8ed1764e41021672b8.png" /><figcaption><strong>1a4c657613d23a046d7fae8ed1764e41021672b8.png</strong>playwright/ep05-auth/relatorios/data/1a4c657613d23a046d7fae8ed1764e41021672b8.png</figcaption></figure>
+<figure><video controls src="playwright/ep05-auth/relatorios/data/1cbe28839c0cf715ec7a3be9fdddf63ebe82646d.webm"></video><figcaption><strong>1cbe28839c0cf715ec7a3be9fdddf63ebe82646d.webm</strong> vídeo Playwright</figcaption></figure>
+<figure><video controls src="playwright/ep05-auth/relatorios/data/27c4121cdd0075fac533f73c9f6c9285bdfe72b2.webm"></video><figcaption><strong>27c4121cdd0075fac533f73c9f6c9285bdfe72b2.webm</strong> vídeo Playwright</figcaption></figure>
+<figure><video controls src="playwright/ep05-auth/relatorios/data/2b240649022702677021c39b6342a431b044cac5.webm"></video><figcaption><strong>2b240649022702677021c39b6342a431b044cac5.webm</strong> vídeo Playwright</figcaption></figure>
+<p><a href="playwright/ep05-auth/relatorios/data/2b81b5e83c10451208d31f4946b199d2e5c1e939.zip">ZIP · 2b81b5e83c10451208d31f4946b199d2e5c1e939.zip</a></p>
+<figure><video controls src="playwright/ep05-auth/relatorios/data/2ec7f01095dc025963e62172f1b32b921ba9860c.webm"></video><figcaption><strong>2ec7f01095dc025963e62172f1b32b921ba9860c.webm</strong> vídeo Playwright</figcaption></figure>
+<figure><img src="playwright/ep05-auth/relatorios/data/307c630aa945786046c028bdbc050cc445fa8a6f.png" alt="307c630aa945786046c028bdbc050cc445fa8a6f.png" /><figcaption><strong>307c630aa945786046c028bdbc050cc445fa8a6f.png</strong>playwright/ep05-auth/relatorios/data/307c630aa945786046c028bdbc050cc445fa8a6f.png</figcaption></figure>
+<p><a href="playwright/ep05-auth/relatorios/data/3152acea19feda65c3e6f3666159064064742140.zip">ZIP · 3152acea19feda65c3e6f3666159064064742140.zip</a></p>
+<figure><video controls src="playwright/ep05-auth/relatorios/data/3cd3569aeef32d65561adb7a40f62a0ba624ad2d.webm"></video><figcaption><strong>3cd3569aeef32d65561adb7a40f62a0ba624ad2d.webm</strong> vídeo Playwright</figcaption></figure>
+<figure><video controls src="playwright/ep05-auth/relatorios/data/3f61c3d934ce937bc754278fdd57821194d19344.webm"></video><figcaption><strong>3f61c3d934ce937bc754278fdd57821194d19344.webm</strong> vídeo Playwright</figcaption></figure>
+<figure><video controls src="playwright/ep05-auth/relatorios/data/446b8b434ee7f4ce9d89ca3183c12f67cc24eae6.webm"></video><figcaption><strong>446b8b434ee7f4ce9d89ca3183c12f67cc24eae6.webm</strong> vídeo Playwright</figcaption></figure>
+<p><a href="playwright/ep05-auth/relatorios/data/470c0c3cabd85d30b0c46e759b8b910b91e072f7.zip">ZIP · 470c0c3cabd85d30b0c46e759b8b910b91e072f7.zip</a></p>
+<figure><img src="playwright/ep05-auth/relatorios/data/55f27201dd689799d80883d9ec2a0d917544de97.png" alt="55f27201dd689799d80883d9ec2a0d917544de97.png" /><figcaption><strong>55f27201dd689799d80883d9ec2a0d917544de97.png</strong>playwright/ep05-auth/relatorios/data/55f27201dd689799d80883d9ec2a0d917544de97.png</figcaption></figure>
+<figure><img src="playwright/ep05-auth/relatorios/data/58424b8d76daf11874e0b4d60fbdf1ec4c7ffe3d.png" alt="58424b8d76daf11874e0b4d60fbdf1ec4c7ffe3d.png" /><figcaption><strong>58424b8d76daf11874e0b4d60fbdf1ec4c7ffe3d.png</strong>playwright/ep05-auth/relatorios/data/58424b8d76daf11874e0b4d60fbdf1ec4c7ffe3d.png</figcaption></figure>
+<figure><img src="playwright/ep05-auth/relatorios/data/5b318a331afd7a7c2423f768def6c7cab776a6e7.png" alt="5b318a331afd7a7c2423f768def6c7cab776a6e7.png" /><figcaption><strong>5b318a331afd7a7c2423f768def6c7cab776a6e7.png</strong>playwright/ep05-auth/relatorios/data/5b318a331afd7a7c2423f768def6c7cab776a6e7.png</figcaption></figure>
+<p><a href="playwright/ep05-auth/relatorios/data/5b50ecaee5857a738e1af1bcb2679166cee8acb0.zip">ZIP · 5b50ecaee5857a738e1af1bcb2679166cee8acb0.zip</a></p>
+<figure><video controls src="playwright/ep05-auth/relatorios/data/60c47c10f4be007efec8980a13064ea8d8b0fb2c.webm"></video><figcaption><strong>60c47c10f4be007efec8980a13064ea8d8b0fb2c.webm</strong> vídeo Playwright</figcaption></figure>
+<figure><img src="playwright/ep05-auth/relatorios/data/632128cffb09a7156bf4e9418c251cd63db47c54.png" alt="632128cffb09a7156bf4e9418c251cd63db47c54.png" /><figcaption><strong>632128cffb09a7156bf4e9418c251cd63db47c54.png</strong>playwright/ep05-auth/relatorios/data/632128cffb09a7156bf4e9418c251cd63db47c54.png</figcaption></figure>
+<figure><video controls src="playwright/ep05-auth/relatorios/data/6ba2e4c875f42511692eaf249de3b3f3cc14e02d.webm"></video><figcaption><strong>6ba2e4c875f42511692eaf249de3b3f3cc14e02d.webm</strong> vídeo Playwright</figcaption></figure>
+<figure><video controls src="playwright/ep05-auth/relatorios/data/6ef88dc0cd7c5b9da9d10f74c1e9344cd5c5e003.webm"></video><figcaption><strong>6ef88dc0cd7c5b9da9d10f74c1e9344cd5c5e003.webm</strong> vídeo Playwright</figcaption></figure>
+<p><a href="playwright/ep05-auth/relatorios/data/73c568e96b226648b1b6828f8ae22587ad6b8e45.zip">ZIP · 73c568e96b226648b1b6828f8ae22587ad6b8e45.zip</a></p>
+<p><a href="playwright/ep05-auth/relatorios/data/7402cac660a6fc81b144cffe024036c994fd1562.zip">ZIP · 7402cac660a6fc81b144cffe024036c994fd1562.zip</a></p>
+<figure><video controls src="playwright/ep05-auth/relatorios/data/8e430fc29a972504e0d6336c74244b666712762d.webm"></video><figcaption><strong>8e430fc29a972504e0d6336c74244b666712762d.webm</strong> vídeo Playwright</figcaption></figure>
+<figure><img src="playwright/ep05-auth/relatorios/data/90fdf03291cd9281c8693cf9ec4ef2ae470faa7d.png" alt="90fdf03291cd9281c8693cf9ec4ef2ae470faa7d.png" /><figcaption><strong>90fdf03291cd9281c8693cf9ec4ef2ae470faa7d.png</strong>playwright/ep05-auth/relatorios/data/90fdf03291cd9281c8693cf9ec4ef2ae470faa7d.png</figcaption></figure>
+<p><a href="playwright/ep05-auth/relatorios/data/a219c4cc4433b5b9badba0779f29e317e450dfd0.zip">ZIP · a219c4cc4433b5b9badba0779f29e317e450dfd0.zip</a></p>
+<p><a href="playwright/ep05-auth/relatorios/data/a3f18ba1696aac87398ff63e3e8c69e8b78dfa07.zip">ZIP · a3f18ba1696aac87398ff63e3e8c69e8b78dfa07.zip</a></p>
+<figure><img src="playwright/ep05-auth/relatorios/data/a667d9496b6d86c88a2f28d6101128aeebbe443f.png" alt="a667d9496b6d86c88a2f28d6101128aeebbe443f.png" /><figcaption><strong>a667d9496b6d86c88a2f28d6101128aeebbe443f.png</strong>playwright/ep05-auth/relatorios/data/a667d9496b6d86c88a2f28d6101128aeebbe443f.png</figcaption></figure>
+<p><a href="playwright/ep05-auth/relatorios/data/b34d9793aa78ed46528d682242afb6a0c35deaa3.zip">ZIP · b34d9793aa78ed46528d682242afb6a0c35deaa3.zip</a></p>
+<figure><video controls src="playwright/ep05-auth/relatorios/data/b51a0a60c7cbd0c3dffefd9ec32e9262d3f0e416.webm"></video><figcaption><strong>b51a0a60c7cbd0c3dffefd9ec32e9262d3f0e416.webm</strong> vídeo Playwright</figcaption></figure>
+<figure><img src="playwright/ep05-auth/relatorios/data/b7f14d61c316c22c88461ac983ecfe87f629dfac.png" alt="b7f14d61c316c22c88461ac983ecfe87f629dfac.png" /><figcaption><strong>b7f14d61c316c22c88461ac983ecfe87f629dfac.png</strong>playwright/ep05-auth/relatorios/data/b7f14d61c316c22c88461ac983ecfe87f629dfac.png</figcaption></figure>
+<figure><video controls src="playwright/ep05-auth/relatorios/data/b868f9a80d3f227ff0d9dc6087e87042ea46088f.webm"></video><figcaption><strong>b868f9a80d3f227ff0d9dc6087e87042ea46088f.webm</strong> vídeo Playwright</figcaption></figure>
+<p><a href="playwright/ep05-auth/relatorios/data/b90a83764d69d271f36d7fdb4268deedaf12d677.zip">ZIP · b90a83764d69d271f36d7fdb4268deedaf12d677.zip</a></p>
+<figure><img src="playwright/ep05-auth/relatorios/data/ce23a6e009dc173997626ada90ec2962c1fc6a76.png" alt="ce23a6e009dc173997626ada90ec2962c1fc6a76.png" /><figcaption><strong>ce23a6e009dc173997626ada90ec2962c1fc6a76.png</strong>playwright/ep05-auth/relatorios/data/ce23a6e009dc173997626ada90ec2962c1fc6a76.png</figcaption></figure>
+<p><a href="playwright/ep05-auth/relatorios/data/d3ba6cceadab59c7a5522cc20c1321cf288339c1.zip">ZIP · d3ba6cceadab59c7a5522cc20c1321cf288339c1.zip</a></p>
+<figure><video controls src="playwright/ep05-auth/relatorios/data/db1ba7b2e7f6eb2f851d88a957656ecef7ada50b.webm"></video><figcaption><strong>db1ba7b2e7f6eb2f851d88a957656ecef7ada50b.webm</strong> vídeo Playwright</figcaption></figure>
+<p><a href="playwright/ep05-auth/relatorios/data/e53aa149343a63a2c11d4cc15b5947111271c297.zip">ZIP · e53aa149343a63a2c11d4cc15b5947111271c297.zip</a></p>
+<figure><img src="playwright/ep05-auth/relatorios/data/e5e7490927d41a02df337f7f29e9b26db3aa29c0.png" alt="e5e7490927d41a02df337f7f29e9b26db3aa29c0.png" /><figcaption><strong>e5e7490927d41a02df337f7f29e9b26db3aa29c0.png</strong>playwright/ep05-auth/relatorios/data/e5e7490927d41a02df337f7f29e9b26db3aa29c0.png</figcaption></figure>
+<figure><img src="playwright/ep05-auth/relatorios/data/eb234baf9b12422c72d5fed5e701393f905c5eb4.png" alt="eb234baf9b12422c72d5fed5e701393f905c5eb4.png" /><figcaption><strong>eb234baf9b12422c72d5fed5e701393f905c5eb4.png</strong>playwright/ep05-auth/relatorios/data/eb234baf9b12422c72d5fed5e701393f905c5eb4.png</figcaption></figure>
+<p><a href="playwright/ep05-auth/relatorios/data/f6993a52085001d05f8092758fed20e42ea481fd.zip">ZIP · f6993a52085001d05f8092758fed20e42ea481fd.zip</a></p>
+<p><a href="playwright/ep05-auth/relatorios/index.html">HTML · index.html</a></p>
+<p><a href="playwright/ep05-auth/relatorios/qa-ep05-auth-v1.json">JSON · qa-ep05-auth-v1.json</a></p>
+<p><a href="playwright/ep05-auth/relatorios/qa-ep05-auth-v1.junit.xml">XML · qa-ep05-auth-v1.junit.xml</a></p>
+<p><a href="playwright/ep05-auth/relatorios/trace/index.html">HTML · index.html</a></p>
+<p><a href="playwright/ep05-auth/relatorios/trace/snapshot.html">HTML · snapshot.html</a></p>
+<p><a href="playwright/ep05-auth/relatorios/trace/uiMode.html">HTML · uiMode.html</a></p></div>
+    </section>
+  </main>
+  <footer>Foursys Solution Center · QA Master · ep05-auth v1</footer>
+</body>
+</html>

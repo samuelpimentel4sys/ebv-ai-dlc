@@ -1,0 +1,619 @@
+{
+  "config": {
+    "configFile": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\_template\\playwright.config.ts",
+    "rootDir": "C:/Users/WalterAraujodeMoura/Documents/AI-DLC/Prisma/docs/qa/outputs/playwright/contestacao/specs",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\contestacao\\relatorios",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\contestacao\\relatorios\\qa-contestacao-v4.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "C:/Users/WalterAraujodeMoura/Documents/AI-DLC/Prisma/docs/qa/outputs/playwright/contestacao/screenshots",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/WalterAraujodeMoura/Documents/AI-DLC/Prisma/docs/qa/outputs/playwright/contestacao/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "contestacao-qa-v4.spec.ts",
+      "file": "contestacao-qa-v4.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "T-01 · protocolo demo ausente no banco live não abre acompanhamento",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3057,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "🧪 TESTANDO T-01\n"
+                    },
+                    {
+                      "text": "→ gate CPF + Consultar (href estático não seta :protocolo)\n"
+                    },
+                    {
+                      "text": "→ tracking live (protocolo inexistente no banco)\n"
+                    },
+                    {
+                      "text": "✅ T-01\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-19T13:16:31.413Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f5e3b84586a94e2e18c9-ba9f3da6d29686730092",
+          "file": "contestacao-qa-v4.spec.ts",
+          "line": 24,
+          "column": 5
+        },
+        {
+          "title": "Q-01 · fila live sem casos pendentes informa fila zerada",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2372,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "🧪 TESTANDO Q-01\n"
+                    },
+                    {
+                      "text": "→ fila live vazia\n"
+                    },
+                    {
+                      "text": "✅ Q-01\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-19T13:16:35.123Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f5e3b84586a94e2e18c9-d01e31d76eab35687c93",
+          "file": "contestacao-qa-v4.spec.ts",
+          "line": 39,
+          "column": 5
+        },
+        {
+          "title": "O-01 · contratação self-service até credencial sandbox",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 17471,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Verificar representante' })\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Verificar representante' })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Verificar representante' })\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Verificar representante' })\u001b[22m\n\n    at C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\contestacao\\specs\\contestacao-qa-v4.spec.ts:56:79",
+                    "location": {
+                      "file": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\contestacao\\specs\\contestacao-qa-v4.spec.ts",
+                      "column": 79,
+                      "line": 56
+                    },
+                    "snippet": "  54 |   await page.getByRole('button', { name: 'Validar CNPJ e continuar' }).click();\n  55 |   console.log('→ etapa representante');\n> 56 |   await expect(page.getByRole('button', { name: 'Verificar representante' })).toBeVisible({\n     |                                                                               ^\n  57 |     timeout: 15_000,\n  58 |   });\n  59 |   await page.getByRole('button', { name: 'Verificar representante' }).click();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\contestacao\\specs\\contestacao-qa-v4.spec.ts",
+                        "column": 79,
+                        "line": 56
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Verificar representante' })\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Verificar representante' })\u001b[22m\n\n\n  54 |   await page.getByRole('button', { name: 'Validar CNPJ e continuar' }).click();\n  55 |   console.log('→ etapa representante');\n> 56 |   await expect(page.getByRole('button', { name: 'Verificar representante' })).toBeVisible({\n     |                                                                               ^\n  57 |     timeout: 15_000,\n  58 |   });\n  59 |   await page.getByRole('button', { name: 'Verificar representante' }).click();\n    at C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\contestacao\\specs\\contestacao-qa-v4.spec.ts:56:79"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "🧪 TESTANDO O-01\n"
+                    },
+                    {
+                      "text": "→ etapa CNPJ (POST /api/v1/onboarding/start)\n"
+                    },
+                    {
+                      "text": "→ etapa representante\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-19T13:16:37.510Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\contestacao\\screenshots\\contestacao-qa-v4-O-01-·-c-bd217-vice-até-credencial-sandbox-chromium\\test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\contestacao\\screenshots\\contestacao-qa-v4-O-01-·-c-bd217-vice-até-credencial-sandbox-chromium\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\contestacao\\screenshots\\contestacao-qa-v4-O-01-·-c-bd217-vice-até-credencial-sandbox-chromium\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\contestacao\\specs\\contestacao-qa-v4.spec.ts",
+                    "column": 79,
+                    "line": 56
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "f5e3b84586a94e2e18c9-190c11b27d0feff8acce",
+          "file": "contestacao-qa-v4.spec.ts",
+          "line": 49,
+          "column": 5
+        },
+        {
+          "title": "C-04 · atalho Gerenciar credenciais abre gestão de API",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2888,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "🧪 TESTANDO C-04\n"
+                    },
+                    {
+                      "text": "→ console live carregado, acionando credenciais\n"
+                    },
+                    {
+                      "text": "✅ C-04\n"
+                    },
+                    {
+                      "text": "🏁\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-19T13:16:57.092Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f5e3b84586a94e2e18c9-7a65c246a5285369bb74",
+          "file": "contestacao-qa-v4.spec.ts",
+          "line": 68,
+          "column": 5
+        },
+        {
+          "title": "T-02 · protocolo/CPF inválidos bloqueiam consulta",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\contestacao\\specs\\contestacao-qa-v4.spec.ts",
+                    "line": 82,
+                    "column": 6
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-19T13:17:00.625Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\contestacao\\specs\\contestacao-qa-v4.spec.ts",
+                        "line": 82,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "f5e3b84586a94e2e18c9-456fb0d2d4e281ec02b1",
+          "file": "contestacao-qa-v4.spec.ts",
+          "line": 82,
+          "column": 6
+        },
+        {
+          "title": "Q-02 · fundamentação curta impede concluir",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\contestacao\\specs\\contestacao-qa-v4.spec.ts",
+                    "line": 86,
+                    "column": 6
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-19T13:17:00.626Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\contestacao\\specs\\contestacao-qa-v4.spec.ts",
+                        "line": 86,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "f5e3b84586a94e2e18c9-d6fee7590d4ed4fd9864",
+          "file": "contestacao-qa-v4.spec.ts",
+          "line": 86,
+          "column": 6
+        },
+        {
+          "title": "Q-03 · filtro de canal sem casos",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\contestacao\\specs\\contestacao-qa-v4.spec.ts",
+                    "line": 90,
+                    "column": 6
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-19T13:17:00.626Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\contestacao\\specs\\contestacao-qa-v4.spec.ts",
+                        "line": 90,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "f5e3b84586a94e2e18c9-9d3cfd7f34c10a8e1e71",
+          "file": "contestacao-qa-v4.spec.ts",
+          "line": 90,
+          "column": 6
+        },
+        {
+          "title": "O-02 · CNPJ incompleto bloqueia etapa 1",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\contestacao\\specs\\contestacao-qa-v4.spec.ts",
+                    "line": 94,
+                    "column": 6
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-19T13:17:00.627Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\contestacao\\specs\\contestacao-qa-v4.spec.ts",
+                        "line": 94,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "f5e3b84586a94e2e18c9-142058731d242b29e911",
+          "file": "contestacao-qa-v4.spec.ts",
+          "line": 94,
+          "column": 6
+        },
+        {
+          "title": "C-01 · métricas de consumo no console",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\contestacao\\specs\\contestacao-qa-v4.spec.ts",
+                    "line": 98,
+                    "column": 6
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-19T13:17:00.627Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\contestacao\\specs\\contestacao-qa-v4.spec.ts",
+                        "line": 98,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "f5e3b84586a94e2e18c9-eb029021271c3dbbe373",
+          "file": "contestacao-qa-v4.spec.ts",
+          "line": 98,
+          "column": 6
+        },
+        {
+          "title": "C-02 · alerta de fatura vencida",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\contestacao\\specs\\contestacao-qa-v4.spec.ts",
+                    "line": 102,
+                    "column": 6
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-19T13:17:00.627Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\contestacao\\specs\\contestacao-qa-v4.spec.ts",
+                        "line": 102,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "f5e3b84586a94e2e18c9-116f0e46a0ebb1471650",
+          "file": "contestacao-qa-v4.spec.ts",
+          "line": 102,
+          "column": 6
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-08-19T13:16:29.803Z",
+    "duration": 31206.784999999996,
+    "expected": 3,
+    "skipped": 6,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

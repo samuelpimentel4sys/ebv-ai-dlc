@@ -1,5 +1,5 @@
 ﻿import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Menu, Moon, Rows3, Search, Sun } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LogOut, Menu, Moon, Rows3, Search, Sun } from 'lucide-react';
 import { useTheme } from '@/app/ThemeContext';
 import { navItemByPathname } from '@/app/navigation';
 import { journeyPosition } from '@/app/journeys';
@@ -9,6 +9,8 @@ import { Badge } from '@/ds/Badge';
 import { DemoStateMenu } from '@/shell/DemoStateMenu';
 import { dataMode } from '@/lib/config';
 import { isDemoMode, isDevMode } from '@/lib/productMode';
+import { useAuth } from '@/lib/auth/AuthContext';
+import { isOidcRequired } from '@/lib/auth/oidcConfig';
 
 const iconButton =
   'grid h-target w-target place-items-center rounded-sm text-eqx-text-muted transition-colors duration-fast ' +
@@ -30,6 +32,8 @@ export function TopBar({
   const previous = position?.previous;
   const next = position?.next;
   const module = productModuleForPathname(location.pathname);
+  const { session, logout } = useAuth();
+  const showSession = isOidcRequired() || Boolean(session?.username);
 
   return (
     <header
@@ -119,6 +123,23 @@ export function TopBar({
             <ChevronRight size={18} aria-hidden="true" />
           </button>
         </>
+      ) : null}
+
+      {showSession && session?.username ? (
+        <div className="mr-1 hidden items-center gap-2 sm:flex">
+          <span className="max-w-[8rem] truncate text-xs font-semibold text-eqx-text-muted" title={session.username}>
+            {session.username}
+          </span>
+          <button
+            type="button"
+            onClick={() => logout()}
+            className={iconButton}
+            aria-label="Sair da sessão"
+            title="Sair"
+          >
+            <LogOut size={18} aria-hidden="true" />
+          </button>
+        </div>
       ) : null}
 
       <DensityToggle />

@@ -1,0 +1,232 @@
+<testsuites id="" name="" tests="14" failures="0" skipped="0" errors="0" time="101.05888">
+<testsuite name="ep05-auth-demo-v2.spec.ts" timestamp="2026-08-20T17:11:44.467Z" hostname="chromium" tests="14" failures="0" skipped="0" time="88.877" errors="0">
+<testcase name="AUTH-01 [Positivo] Autenticação inicial e emissão de OTP" classname="ep05-auth-demo-v2.spec.ts" time="6.559">
+<system-out>
+<![CDATA[
+╔══════════════════════════════════════════════════════╗
+║  🎬 DEMO QA — PRISMA EP-05-AUTH (v2)                 ║
+╚══════════════════════════════════════════════════════╝
+
+🧪 TESTANDO: AUTH-01 [Positivo] Autenticação inicial e emissão de OTP
+   → Abrindo captura biométrica (lab AUTH)...
+   ✅ Consentimento ACTIVE — sessão disponível
+🏁 AUTH-01 [Positivo] Autenticação inicial e emissão de OTP CONCLUÍDO
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-01--b34da-ão-inicial-e-emissão-de-OTP-chromium\test-finished-1.png]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-01--b34da-ão-inicial-e-emissão-de-OTP-chromium\video.webm]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-01--b34da-ão-inicial-e-emissão-de-OTP-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="AUTH-02 [Positivo] Validação bem-sucedida do OTP" classname="ep05-auth-demo-v2.spec.ts" time="7.789">
+<system-out>
+<![CDATA[
+🧪 TESTANDO: AUTH-02 [Positivo] Validação bem-sucedida do OTP
+   → Indo ao MFA e submetendo OTP válido...
+   ✅ Identidade verificada (score lab 92)
+🏁 AUTH-02 [Positivo] Validação bem-sucedida do OTP CONCLUÍDO
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-02--e831a-lidação-bem-sucedida-do-OTP-chromium\test-finished-1.png]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-02--e831a-lidação-bem-sucedida-do-OTP-chromium\video.webm]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-02--e831a-lidação-bem-sucedida-do-OTP-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="AUTH-03 [Positivo] Validação biométrica facial e prova de vida" classname="ep05-auth-demo-v2.spec.ts" time="5.134">
+<system-out>
+<![CDATA[
+🧪 TESTANDO: AUTH-03 [Positivo] Validação biométrica facial e prova de vida
+   → Sessão + guia oval...
+   ✅ Moldura pronta para captura lab
+🏁 AUTH-03 [Positivo] Validação biométrica facial e prova de vida CONCLUÍDO
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-03--6d768-rica-facial-e-prova-de-vida-chromium\test-finished-1.png]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-03--6d768-rica-facial-e-prova-de-vida-chromium\video.webm]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-03--6d768-rica-facial-e-prova-de-vida-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="AUTH-04 [Positivo] Reenvio / temporizador (lab TTL)" classname="ep05-auth-demo-v2.spec.ts" time="5.508">
+<system-out>
+<![CDATA[
+🧪 TESTANDO: AUTH-04 [Positivo] Reenvio / temporizador (lab TTL)
+   → Conferindo temporizador de sessão...
+   ✅ TTL visível
+🏁 AUTH-04 [Positivo] Reenvio / temporizador (lab TTL) CONCLUÍDO
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-04--2ea51-envio-temporizador-lab-TTL--chromium\test-finished-1.png]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-04--2ea51-envio-temporizador-lab-TTL--chromium\video.webm]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-04--2ea51-envio-temporizador-lab-TTL--chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="AUTH-05 [Positivo] Ajuste de iluminação / guia oval" classname="ep05-auth-demo-v2.spec.ts" time="6.376">
+<system-out>
+<![CDATA[
+🧪 TESTANDO: AUTH-05 [Positivo] Ajuste de iluminação / guia oval
+   → Conferindo instrução de enquadramento...
+   ✅ Guia de captura visível
+🏁 AUTH-05 [Positivo] Ajuste de iluminação / guia oval CONCLUÍDO
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-05--b519e-ste-de-iluminação-guia-oval-chromium\test-finished-1.png]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-05--b519e-ste-de-iluminação-guia-oval-chromium\video.webm]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-05--b519e-ste-de-iluminação-guia-oval-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="AUTH-06 [Positivo] Conclusão MFA e acesso ao portal" classname="ep05-auth-demo-v2.spec.ts" time="9.321">
+<system-out>
+<![CDATA[
+🧪 TESTANDO: AUTH-06 [Positivo] Conclusão MFA e acesso ao portal
+   → MFA ok e avanço ao portal do titular...
+   ✅ Portal do titular
+🏁 AUTH-06 [Positivo] Conclusão MFA e acesso ao portal CONCLUÍDO
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-06--41d91-usão-MFA-e-acesso-ao-portal-chromium\test-finished-1.png]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-06--41d91-usão-MFA-e-acesso-ao-portal-chromium\video.webm]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-06--41d91-usão-MFA-e-acesso-ao-portal-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="AUTH-07 [Negativo] Código de verificação em formato inválido" classname="ep05-auth-demo-v2.spec.ts" time="8.026">
+<system-out>
+<![CDATA[
+🧪 TESTANDO: AUTH-07 [Negativo] Código de verificação em formato inválido
+   → OTP incompleto deve bloquear...
+   ✅ Alerta de código inválido
+🏁 AUTH-07 [Negativo] Código de verificação em formato inválido CONCLUÍDO
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-07--07de1-ficação-em-formato-inválido-chromium\test-finished-1.png]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-07--07de1-ficação-em-formato-inválido-chromium\video.webm]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-07--07de1-ficação-em-formato-inválido-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="AUTH-08 [Negativo] Falha de vivacidade / bloqueio lab" classname="ep05-auth-demo-v2.spec.ts" time="7.508">
+<system-out>
+<![CDATA[
+🧪 TESTANDO: AUTH-08 [Negativo] Falha de vivacidade / bloqueio lab
+   → OTP de falha de vivacidade...
+   ✅ Vivacidade insuficiente
+🏁 AUTH-08 [Negativo] Falha de vivacidade / bloqueio lab CONCLUÍDO
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-08--1a19b--de-vivacidade-bloqueio-lab-chromium\test-finished-1.png]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-08--1a19b--de-vivacidade-bloqueio-lab-chromium\video.webm]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-08--1a19b--de-vivacidade-bloqueio-lab-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="AUTH-09 [Negativo] Similaridade abaixo do patamar" classname="ep05-auth-demo-v2.spec.ts" time="6.936">
+<system-out>
+<![CDATA[
+🧪 TESTANDO: AUTH-09 [Negativo] Similaridade abaixo do patamar
+   → Score lab abaixo do patamar...
+   ✅ Score 42
+🏁 AUTH-09 [Negativo] Similaridade abaixo do patamar CONCLUÍDO
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-09--f4e41-ilaridade-abaixo-do-patamar-chromium\test-finished-1.png]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-09--f4e41-ilaridade-abaixo-do-patamar-chromium\video.webm]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-09--f4e41-ilaridade-abaixo-do-patamar-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="AUTH-10 [Negativo] Prova de vida lab sem Amplify" classname="ep05-auth-demo-v2.spec.ts" time="3.053">
+<system-out>
+<![CDATA[
+🧪 TESTANDO: AUTH-10 [Negativo] Prova de vida lab sem Amplify
+   → Aviso de prova de vida fora do slice...
+   ✅ Contingência lab visível
+🏁 AUTH-10 [Negativo] Prova de vida lab sem Amplify CONCLUÍDO
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-10--5fabe-ova-de-vida-lab-sem-Amplify-chromium\test-finished-1.png]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-10--5fabe-ova-de-vida-lab-sem-Amplify-chromium\video.webm]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-10--5fabe-ova-de-vida-lab-sem-Amplify-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="AUTH-11 [Negativo] Recusa de permissão da câmera" classname="ep05-auth-demo-v2.spec.ts" time="6.217">
+<system-out>
+<![CDATA[
+🧪 TESTANDO: AUTH-11 [Negativo] Recusa de permissão da câmera
+   → Câmera recusada...
+   ✅ Orientação de câmera
+🏁 AUTH-11 [Negativo] Recusa de permissão da câmera CONCLUÍDO
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-11--a3a9c-cusa-de-permissão-da-câmera-chromium\test-finished-1.png]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-11--a3a9c-cusa-de-permissão-da-câmera-chromium\video.webm]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-11--a3a9c-cusa-de-permissão-da-câmera-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="AUTH-12 [Regressivo] Sessão expirada (TTL)" classname="ep05-auth-demo-v2.spec.ts" time="7.105">
+<system-out>
+<![CDATA[
+🧪 TESTANDO: AUTH-12 [Regressivo] Sessão expirada (TTL)
+   → Injetando sessão vencida...
+   ✅ Sessão expirada
+🏁 AUTH-12 [Regressivo] Sessão expirada (TTL) CONCLUÍDO
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-12-Regressivo-Sessão-expirada-TTL--chromium\test-finished-1.png]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-12-Regressivo-Sessão-expirada-TTL--chromium\video.webm]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-12-Regressivo-Sessão-expirada-TTL--chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="AUTH-13 [Regressivo] Termo e purga LGPD (consentimento)" classname="ep05-auth-demo-v2.spec.ts" time="5.198">
+<system-out>
+<![CDATA[
+🧪 TESTANDO: AUTH-13 [Regressivo] Termo e purga LGPD (consentimento)
+   → Termo biométrico...
+   ✅ Termo v1.0 / RN006
+🏁 AUTH-13 [Regressivo] Termo e purga LGPD (consentimento) CONCLUÍDO
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-13--1ca47-e-purga-LGPD-consentimento--chromium\test-finished-1.png]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-13--1ca47-e-purga-LGPD-consentimento--chromium\video.webm]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-13--1ca47-e-purga-LGPD-consentimento--chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="AUTH-14 [Regressivo] Contingência do serviço biométrico" classname="ep05-auth-demo-v2.spec.ts" time="4.147">
+<system-out>
+<![CDATA[
+🧪 TESTANDO: AUTH-14 [Regressivo] Contingência do serviço biométrico
+   → Notice de contingência lab...
+   ✅ Indisponibilidade lab sem detalhe interno
+🏁 AUTH-14 [Regressivo] Contingência do serviço biométrico CONCLUÍDO
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-14--95f36-ência-do-serviço-biométrico-chromium\test-finished-1.png]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-14--95f36-ência-do-serviço-biométrico-chromium\video.webm]]
+
+[[ATTACHMENT|..\screenshots\ep05-auth-demo-v2-AUTH-14--95f36-ência-do-serviço-biométrico-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

@@ -22,6 +22,7 @@ import { useDataQuery, errorMessage } from '@/lib/useDataQuery';
 import { formatCurrency, formatDateTime } from '@/lib/format';
 import { sumBy } from '@/lib/number';
 import { disputeReasons, titularRecords, type TitularRecord } from '@/epics/contestacao/data';
+import { MARIA } from '@/app/story';
 import { focusFirstInvalid } from '@/lib/focusFirstInvalid';
 
 const typeLabel: Record<TitularRecord['type'], string> = {
@@ -88,8 +89,8 @@ export function TitularPortalPage() {
         // Evita colidir com o protocolo canónico CT-2026-448120 da demo.
         let protocolo: string;
         do {
-          protocolo = `CT-2026-448${Math.floor(Math.random() * 900 + 100)}`;
-        } while (protocolo === 'CT-2026-448120');
+          protocolo = `DSP-2026-${String(Math.floor(Math.random() * 900000 + 100000))}`;
+        } while (protocolo === MARIA.disputeProtocol);
         toast.success('Contestação registrada', `Protocolo ${protocolo} · prazo de 5 dias úteis`);
         setDisputing(null);
         setDetail('');

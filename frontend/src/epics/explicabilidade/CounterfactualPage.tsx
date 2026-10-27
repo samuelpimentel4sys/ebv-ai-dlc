@@ -23,6 +23,7 @@ import {
   lastDecisionId,
   simulateCounterfactualLive,
 } from '@/api/explainability';
+import { LAB_DECISIONS, MARIA } from '@/app/story';
 import { cn } from '@/lib/cn';
 
 const feasibilityTone = {
@@ -33,7 +34,8 @@ const feasibilityTone = {
 
 export function CounterfactualPage() {
   const params = useParams();
-  const fallback = lastDecisionId() ?? 'dec-2026-07-27-1104';
+  const fallback =
+    lastDecisionId() ?? (isLiveMode() ? LAB_DECISIONS.primary : MARIA.decisionId);
   const decisionId = params.decisionId ?? fallback;
   const toast = useToast();
   const [selected, setSelected] = useState<string[]>([]);

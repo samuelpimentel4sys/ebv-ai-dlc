@@ -1,6 +1,7 @@
 package br.com.ebv.prisma.infrastructure.adapter.persistence.policy;
 
 import br.com.ebv.prisma.domain.policy.port.out.PolicyVersionRepositoryPort;
+import br.com.ebv.prisma.infrastructure.adapter.persistence.PgNullableTime;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,8 +30,8 @@ public class PolicyVersionRepositoryAdapter implements PolicyVersionRepositoryPo
     @Override
     @Transactional(readOnly = true)
     public PageResult search(String status, String author, java.time.Instant from, java.time.Instant to, int page, int size) {
-        OffsetDateTime fromTs = from == null ? null : OffsetDateTime.ofInstant(from, ZoneOffset.UTC);
-        OffsetDateTime toTs = to == null ? null : OffsetDateTime.ofInstant(to, ZoneOffset.UTC);
+        OffsetDateTime fromTs = PgNullableTime.lowerBound(from);
+        OffsetDateTime toTs = PgNullableTime.upperBound(to);
         List<PolicyVersionEntity> all = jpa.search(
                 blankToNull(status),
                 blankToNull(author),

@@ -1,3 +1,5 @@
+name: prisma
+
 services:
   rekognition-mock:
     image: wiremock/wiremock:3.9.1

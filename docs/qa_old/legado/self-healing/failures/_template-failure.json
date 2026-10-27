@@ -1,0 +1,20 @@
+{
+  "test_id": "[MOD-XX]",
+  "scenario": "Título do cenário BDD",
+  "failure_type": "app_bug",
+  "confidence": 0.0,
+  "timestamp": "YYYY-MM-DDTHH:mm:ssZ",
+  "module": "{modulo}",
+  "stack": "react",
+  "recommended_dev": "dev-reactjs-esp",
+  "evidence": {
+    "error": "Mensagem Playwright",
+    "screenshot": "outputs/evidencias/screenshots/MOD-XX-fail.png",
+    "trace": "outputs/evidencias/traces/MOD-XX.zip",
+    "spec": "outputs/automacao/{modulo}/{modulo}.spec.ts",
+    "gherkin_ref": "outputs/cenarios-bdd/{projeto}/v1-YYYYMMDD/{MODULO}-BDD.html#MOD-XX",
+    "code_ref": "src/path/file.tsx:line"
+  },
+  "cycles": 0,
+  "max_cycles": 3
+}

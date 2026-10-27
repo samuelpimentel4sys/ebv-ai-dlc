@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EP05-F02 — Fila de Contestações · Cenários BDD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root { --navy: #222239; --navy-2: #2e2e4a; --orange: #FF5315; --mint: #89BAB1; --vanilla: #FFE2A9; --off-white: #F7F6F2; --text: #181828; --muted: #5c5c72; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Nunito', sans-serif; background: var(--off-white); color: var(--text); font-size: 11pt; line-height: 1.45; }
+    .brand-bar { height: 6px; background: linear-gradient(90deg, var(--navy), var(--orange)); }
+    header { background: var(--navy); color: #fff; padding: 1.5rem 2rem 1.25rem; }
+    header .eyebrow { color: var(--orange); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+    header h1 { margin: 0.35rem 0 0; font-size: 1.5rem; font-weight: 800; }
+    header .meta { margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem; font-size: 0.8rem; }
+    .badge { display: inline-block; padding: 0.2rem 0.65rem; border-radius: 999px; font-weight: 700; font-size: 0.72rem; }
+    .badge-gherkin { background: var(--orange); color: #fff; }
+    .badge-project { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+    main { padding: 1.25rem 2rem 2rem; max-width: 1200px; margin: 0 auto; }
+    .stats { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem; }
+    .stat { background: #fff; border-left: 4px solid var(--orange); padding: 0.65rem 1rem; border-radius: 0 8px 8px 0; box-shadow: 0 2px 8px rgba(34,34,57,0.06); min-width: 120px; }
+    .stat strong { display: block; font-size: 1.25rem; color: var(--navy); }
+    .stat span { font-size: 0.78rem; color: var(--muted); }
+    .table-wrapper { overflow-x: auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 12px rgba(34,34,57,0.08); border-left: 4px solid var(--orange); }
+    table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 0.82rem; }
+    thead th { background: var(--navy); color: #fff; padding: 0.65rem 0.5rem; text-align: left; font-weight: 700; border-bottom: 3px solid var(--orange); vertical-align: bottom; }
+    tbody tr:nth-child(even) { background: rgba(137,186,177,0.08); }
+    tbody tr:hover { background: rgba(255,83,21,0.06); }
+    td { padding: 0.55rem 0.5rem; vertical-align: top; border-bottom: 1px solid #e8e6e0; word-break: break-word; }
+    .col-id { width: 4%; font-weight: 800; color: var(--orange); font-family: ui-monospace, monospace; font-size: 0.75rem; }
+    .col-feature { width: 14%; font-weight: 700; }
+    .col-given, .col-when, .col-then, .col-and { width: 16%; }
+    .col-ref { width: 16%; font-size: 0.72rem; color: var(--muted); font-family: ui-monospace, monospace; }
+    .pill { display: inline-block; padding: 0.12rem 0.45rem; border-radius: 4px; font-size: 0.68rem; font-weight: 800; margin-bottom: 0.35rem; text-transform: uppercase; }
+    .pill-pos { background: var(--mint); color: var(--navy); }
+    .pill-neg { background: var(--vanilla); color: var(--navy); }
+    .pill-reg { background: var(--navy-2); color: #fff; }
+    .reg-note { margin-top: 0.35rem; padding: 0.35rem 0.5rem; background: rgba(255,226,169,0.35); border-left: 3px solid var(--vanilla); font-size: 0.72rem; color: var(--muted); }
+    footer { margin-top: 2rem; padding: 1rem 2rem; border-top: 3px solid var(--orange); color: var(--muted); font-size: 0.78rem; text-align: center; }
+    @media print { @page { size: A4 portrait; margin: 12mm 10mm 10mm 10mm; } html, body { width: 190mm; max-width: 190mm; } .table-wrapper { overflow: visible; } table { table-layout: fixed; width: 190mm; font-size: 7.5pt; } td { min-width: 0; word-break: break-word; overflow-wrap: break-word; } }
+  </style>
+</head>
+<body>
+  <div class="brand-bar"></div>
+  <header>
+    <div class="eyebrow">Foursys · GherkinFlow</div>
+    <h1>EP05-F02 — Fila de Contestações · Cenários BDD</h1>
+    <div class="meta">
+      <span class="badge badge-project">EBV Prisma</span>
+      <span class="badge badge-project">DisputeQueuePage</span>
+      <span class="badge badge-gherkin">v1-20260729</span>
+      <span class="badge badge-project">29/07/2026</span>
+      <span class="badge badge-project">GherkinFlow</span>
+    </div>
+  </header>
+  <main>
+    <div class="stats">
+      <div class="stat"><strong>12</strong><span>Total</span></div>
+      <div class="stat"><strong>6</strong><span>Positivo</span></div>
+      <div class="stat"><strong>4</strong><span>Negativo</span></div>
+      <div class="stat"><strong>2</strong><span>Regressivo</span></div>
+    </div>
+    <div class="table-wrapper">
+      <table aria-label="Cenários BDD">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Funcionalidade (Feature)</th>
+            <th>Dado (Given)</th>
+            <th>Quando (When)</th>
+            <th>Então (Then)</th>
+            <th>E… (And)</th>
+            <th>Referência do Código</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-id">EP05-F02-01</td>
+            <td class="col-feature"><span class="pill pill-pos">Positivo</span> Fila ordenada por SLA</td>
+            <td class="col-given">Dado que o analista possui ROLE_ANALISTA_CONTESTACAO e existem contestações em andamento com prazos distintos</td>
+            <td class="col-when">Quando acessa a fila operacional em `/disputas/fila`</td>
+            <td class="col-then">Então a tabela lista as contestações ordenadas pelo prazo SLA mais próximo</td>
+            <td class="col-and">E o protocolo CT-2026-448120 aparece conforme criticidade do due_at</td>
+            <td class="col-ref">DisputeQueuePage.tsx · GET /api/v1/disputes/queue</td>
+          </tr>
+          <tr>
+            <td class="col-id">EP05-F02-02</td>
+            <td class="col-feature"><span class="pill pill-pos">Positivo</span> Filtro por canal portal</td>
+            <td class="col-given">Dado que a fila contém contestações dos canais portal, SAC e B2B</td>
+            <td class="col-when">Quando o analista seleciona o filtro de canal Portal</td>
+            <td class="col-then">Então apenas contestações originadas no portal são exibidas</td>
+            <td class="col-and">E a contagem de linhas reflete o filtro aplicado</td>
+            <td class="col-ref">DisputeQueuePage.tsx · channel-filter</td>
+          </tr>
+          <tr>
+            <td class="col-id">EP05-F02-03</td>
+            <td class="col-feature"><span class="pill pill-pos">Positivo</span> Filtro por canal SAC</td>
+            <td class="col-given">Dado que existem contestações abertas pelo canal SAC</td>
+            <td class="col-when">Quando o analista seleciona o filtro de canal SAC</td>
+            <td class="col-then">Então somente registros do canal SAC permanecem visíveis na fila</td>
+            <td class="col-and">E a ordenação por SLA due é preservada no resultado filtrado</td>
+            <td class="col-ref">DisputeQueuePage.tsx · channel-filter</td>
+          </tr>
+          <tr>
+            <td class="col-id">EP05-F02-04</td>
+            <td class="col-feature"><span class="pill pill-pos">Positivo</span> Tratar linha da fila</td>
+            <td class="col-given">Dado que o analista visualiza a contestação CT-2026-448120 na fila</td>
+            <td class="col-when">Quando aciona o botão Tratar na linha correspondente</td>
+            <td class="col-then">Então o drawer de tratamento é aberto com dados da contestação</td>
+            <td class="col-and">E os campos de desfecho e fundamentação ficam disponíveis</td>
+            <td class="col-ref">DisputeQueuePage.tsx · tratar-row</td>
+          </tr>
+          <tr>
+            <td class="col-id">EP05-F02-05</td>
+            <td class="col-feature"><span class="pill pill-pos">Positivo</span> Desfecho PROCEDENTE com fundamentação</td>
+            <td class="col-given">Dado que o analista abriu o tratamento da contestação CT-2026-448120</td>
+            <td class="col-when">Quando seleciona desfecho PROCEDENTE, informa fundamentação com no mínimo 50 caracteres e registra o desfecho</td>
+            <td class="col-then">Então o sistema conclui a contestação com sucesso</td>
+            <td class="col-and">E a fila deixa de exibir o protocolo como pendente</td>
+            <td class="col-ref">DisputeQueuePage.tsx · PATCH /api/v1/disputes/{id}/resolve</td>
+          </tr>
+          <tr>
+            <td class="col-id">EP05-F02-06</td>
+            <td class="col-feature"><span class="pill pill-pos">Positivo</span> Desfecho IMPROCEDENTE</td>
+            <td class="col-given">Dado que o analista está tratando contestação em diligência concluída</td>
+            <td class="col-when">Quando registra desfecho IMPROCEDENTE com fundamentação válida</td>
+            <td class="col-then">Então a API retorna status CONCLUIDA com outcome IMPROCEDENTE</td>
+            <td class="col-and">E a linha do tempo recebe evento de conclusão auditável</td>
+            <td class="col-ref">DisputeQueuePage.tsx · PATCH /api/v1/disputes/{id}/resolve</td>
+          </tr>
+          <tr>
+            <td class="col-id">EP05-F02-07</td>
+            <td class="col-feature"><span class="pill pill-neg">Negativo</span> Fundamentação ausente</td>
+            <td class="col-given">Dado que o analista abriu o drawer de desfecho para uma contestação em andamento</td>
+            <td class="col-when">Quando tenta registrar desfecho PROCEDENTE sem preencher fundamentação</td>
+            <td class="col-then">Então o sistema bloqueia o envio com validação de campo obrigatório</td>
+            <td class="col-and">E a API retorna HTTP 422 quando submetido sem rationale</td>
+            <td class="col-ref">DisputeQueuePage.tsx · RN003</td>
+          </tr>
+          <tr>
+            <td class="col-id">EP05-F02-08</td>
+            <td class="col-feature"><span class="pill pill-neg">Negativo</span> Transição inválida de estado</td>
+            <td class="col-given">Dado que a contestação CT-2026-448120 já está CONCLUIDA</td>
+            <td class="col-when">Quando o analista tenta registrar novo desfecho via PATCH resolve</td>
+            <td class="col-then">Então a API retorna HTTP 409 de transição inválida</td>
+            <td class="col-and">E a tela exibe mensagem de conflito de estado</td>
+            <td class="col-ref">PATCH /api/v1/disputes/{id}/resolve · RN005</td>
+          </tr>
+          <tr>
+            <td class="col-id">EP05-F02-09</td>
+            <td class="col-feature"><span class="pill pill-neg">Negativo</span> Analista sem permissão</td>
+            <td class="col-given">Dado que o usuário autenticado não possui ROLE_ANALISTA_CONTESTACAO</td>
+            <td class="col-when">Quando tenta acessar GET /api/v1/disputes/queue</td>
+            <td class="col-then">Então a API retorna HTTP 403 de acesso negado</td>
+            <td class="col-and">E a fila operacional não é renderizada na interface</td>
+            <td class="col-ref">DisputeQueuePage.tsx · SecurityConfig</td>
+          </tr>
+          <tr>
+            <td class="col-id">EP05-F02-10</td>
+            <td class="col-feature"><span class="pill pill-neg">Negativo</span> Fila vazia após filtro</td>
+            <td class="col-given">Dado que não existem contestações em andamento para o canal Procon</td>
+            <td class="col-when">Quando o analista aplica filtro de canal Procon</td>
+            <td class="col-then">Então a tabela exibe estado vazio com mensagem informativa</td>
+            <td class="col-and">E nenhuma linha clicável de Tratar é apresentada</td>
+            <td class="col-ref">DisputeQueuePage.tsx · dispute-queue-table</td>
+          </tr>
+          <tr>
+            <td class="col-id">EP05-F02-11</td>
+            <td class="col-feature"><span class="pill pill-reg">Regressivo</span> Exclusão de concluídas</td>
+            <td class="col-given">Dado que existem contestações CONCLUIDAS e EM_ANDAMENTO na base</td>
+            <td class="col-when">Quando o analista carrega a fila sem filtros adicionais</td>
+            <td class="col-then">Então contestações concluídas não aparecem na listagem operacional</td>
+            <td class="col-and">E apenas registros elegíveis para tratamento permanecem visíveis</td>
+            <td class="col-ref">DisputeQueuePage.tsx · GET /api/v1/disputes/queue<div class="reg-note">validar após resolve EP05-F02-05</div></td>
+          </tr>
+          <tr>
+            <td class="col-id">EP05-F02-12</td>
+            <td class="col-feature"><span class="pill pill-reg">Regressivo</span> Ordenação SLA após refresh</td>
+            <td class="col-given">Dado que a fila exibe múltiplas contestações com due_at distintos</td>
+            <td class="col-when">Quando o analista recarrega a página ou atualiza a fila</td>
+            <td class="col-then">Então a ordenação por prazo SLA ascendente é mantida</td>
+            <td class="col-and">E o protocolo mais crítico permanece no topo da lista</td>
+            <td class="col-ref">DisputeQueuePage.tsx · GET /api/v1/disputes/queue<div class="reg-note">smoke pós-deploy fila</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+  <footer>Foursys · GherkinFlow · 29/07/2026</footer>
+</body>
+</html>

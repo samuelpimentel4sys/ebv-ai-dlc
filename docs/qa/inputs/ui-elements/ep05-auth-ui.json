@@ -1,0 +1,32 @@
+{
+  "modulo": "ep05-auth",
+  "pageObject": "docs/qa/outputs/playwright/ep05-auth/support/AuthPortalPage.ts",
+  "rotas": {
+    "captura": "/titular/biometria",
+    "mfa": "/titular/biometria/mfa",
+    "resultado": "/titular/biometria/resultado",
+    "portal": "/titular/registros"
+  },
+  "scr01": {
+    "tituloMfa": "MFA step-up",
+    "campoOtp": { "tipo": "textbox", "label": "OTP", "role": "textbox" },
+    "botaoConfirmar": { "tipo": "button", "label": "Confirmar MFA", "role": "button" },
+    "botaoVoltar": { "tipo": "button", "label": "Voltar à captura", "role": "button" },
+    "msgOtpInvalido": "Informe o código de 6 dígitos enviado ao canal cadastrado.",
+    "avisoLabOtp": "OTP simulado"
+  },
+  "scr02": {
+    "tituloCaptura": "Captura biométrica",
+    "checkboxTermo": { "tipo": "checkbox", "role": "checkbox" },
+    "botaoConsentimento": { "tipo": "button", "label": "Registrar consentimento", "role": "button" },
+    "botaoSessao": { "tipo": "button", "label": "Criar sessão", "role": "button" },
+    "botaoConcluir": { "tipo": "button", "label": "Concluir captura (lab) → MFA", "role": "button" },
+    "guia": "Centralize o rosto no oval",
+    "cameraAria": "Pré-visualização da câmera",
+    "msgCamera": "Câmera indisponível neste ambiente",
+    "tituloResultadoOk": "Identidade verificada",
+    "tituloResultadoFail": "Vivacidade insuficiente",
+    "tituloExpirado": "Sessão expirada",
+    "ctaPortal": "Seguir ao portal do titular"
+  }
+}

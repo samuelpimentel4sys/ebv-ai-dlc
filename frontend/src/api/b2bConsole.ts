@@ -89,7 +89,8 @@ export async function completeOnboardingLive(input: {
   }>(`/api/v1/onboarding/${encodeURIComponent(input.id)}/complete`, {
     method: 'POST',
     body: {
-      contractVersion: input.contractVersion,
+      // BE CompleteOnboardingService.CONTRACT_VERSION — plano UI (escala/growth/starter) não é a versão contratual.
+      contractVersion: 'API-CREDITO-2026.07',
       accepted: true,
       billingEmail: input.billingEmail,
     },

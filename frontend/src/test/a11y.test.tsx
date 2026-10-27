@@ -2,8 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import axe from 'axe-core';
-import { ThemeProvider } from '@/app/ThemeContext';
-import { ToastProvider } from '@/ds/Toast';
+import { AllProviders } from '@/test/providers';
 import { NAV_ITEMS } from '@/app/navigation';
 import { EPICS } from '@/app/epics';
 import { EpicLandingPage } from '@/app/EpicLandingPage';
@@ -55,15 +54,13 @@ async function auditScreen(href: string) {
   if (!item) throw new Error(`Tela não encontrada no registro: ${href}`);
 
   const { container, unmount } = render(
-    <ThemeProvider>
-      <ToastProvider>
+    <AllProviders>
         <MemoryRouter initialEntries={[item.href]}>
           <Routes>
             <Route path={item.path} element={item.element} />
           </Routes>
         </MemoryRouter>
-      </ToastProvider>
-    </ThemeProvider>,
+      </AllProviders>,
   );
 
   await screen.findAllByRole('heading', { level: 1 }, { timeout: 5_000 });
@@ -83,15 +80,13 @@ async function auditScreen(href: string) {
 
 async function auditEpicLanding(epicId: string) {
   const { container, unmount } = render(
-    <ThemeProvider>
-      <ToastProvider>
+    <AllProviders>
         <MemoryRouter initialEntries={[`/epicos/${epicId}`]}>
           <Routes>
             <Route path="/epicos/:epicId" element={<EpicLandingPage />} />
           </Routes>
         </MemoryRouter>
-      </ToastProvider>
-    </ThemeProvider>,
+      </AllProviders>,
   );
 
   await screen.findAllByRole('heading', { level: 1 });
@@ -123,8 +118,7 @@ describe('acessibilidade WCAG 2.2 AA', () => {
 
   it('o shell posiciona todo conteúdo dentro de marcos e sem armadilha de foco', async () => {
     const { container, unmount } = render(
-      <ThemeProvider>
-        <ToastProvider>
+      <AllProviders>
           <MemoryRouter initialEntries={['/']}>
             <Routes>
               <Route element={<AppShell />}>
@@ -132,8 +126,7 @@ describe('acessibilidade WCAG 2.2 AA', () => {
               </Route>
             </Routes>
           </MemoryRouter>
-        </ToastProvider>
-      </ThemeProvider>,
+        </AllProviders>,
     );
 
     await screen.findByRole('main');

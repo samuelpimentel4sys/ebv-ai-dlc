@@ -1,3 +1,4 @@
+import { getAccessToken } from '@/lib/auth/oidc';
 import { apiBaseUrl } from '@/lib/config';
 import type { ApiErrorShape } from '@/lib/useMockQuery';
 
@@ -26,6 +27,7 @@ export interface HttpOptions extends Omit<RequestInit, 'body'> {
 
 /**
  * Único ponto HTTP do FE. Sempre envia `X-Correlation-ID`.
+ * Bearer: sessão PKCE (`prisma-steward-ui`) ou atalho `VITE_API_BEARER`.
  * Nunca usar fetch direto nas pages.
  */
 export async function httpClient<T>(path: string, options: HttpOptions = {}): Promise<T> {
@@ -35,9 +37,11 @@ export async function httpClient<T>(path: string, options: HttpOptions = {}): Pr
   if (options.body !== undefined && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json');
   }
-  const bearer = import.meta.env.VITE_API_BEARER;
-  if (bearer && !headers.has('Authorization')) {
-    headers.set('Authorization', `Bearer ${bearer}`);
+  if (!headers.has('Authorization')) {
+    const bearer = await getAccessToken();
+    if (bearer) {
+      headers.set('Authorization', `Bearer ${bearer}`);
+    }
   }
 
   const url = `${apiBaseUrl()}${path.startsWith('/') ? path : `/${path}`}`;

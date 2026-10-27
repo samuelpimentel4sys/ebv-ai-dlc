@@ -14,7 +14,7 @@ public interface SubjectRequestJpaRepository extends JpaRepository<SubjectReques
             SELECT s FROM SubjectRequestEntity s
             WHERE (:rightType IS NULL OR s.rightType = :rightType)
               AND (:status IS NULL OR s.status = :status)
-              AND (:dueBefore IS NULL OR s.dueAt <= :dueBefore)
+              AND s.dueAt <= :dueBefore
             ORDER BY s.dueAt ASC
             """)
     List<SubjectRequestEntity> search(

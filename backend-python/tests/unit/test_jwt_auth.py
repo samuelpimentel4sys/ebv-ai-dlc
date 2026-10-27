@@ -62,12 +62,14 @@ def _sign(private: Any, claims: dict[str, Any]) -> str:
 def test_validate_access_token_ok(rsa_pair: tuple[Any, Any]) -> None:
     private, public = rsa_pair
     issuer = "http://test/realms/prisma"
+    audience = "prisma-backend"
     now = int(time.time())
     token = _sign(
         private,
         {
             "sub": "user-1",
             "iss": issuer,
+            "aud": audience,
             "exp": now + 3600,
             "iat": now,
             "azp": "prisma-backend",
@@ -75,10 +77,11 @@ def test_validate_access_token_ok(rsa_pair: tuple[Any, Any]) -> None:
         },
     )
     settings = Settings(
+        showcase_mode=False,
         oidc_enabled=True,
         oidc_issuer_uri=issuer,
         oidc_jwk_set_uri="https://example.invalid/jwks",
-        oidc_audience="",
+        oidc_audience=audience,
     )
     signing = MagicMock()
     signing.key = public
@@ -95,21 +98,25 @@ def test_validate_access_token_ok(rsa_pair: tuple[Any, Any]) -> None:
 def test_validate_access_token_expired(rsa_pair: tuple[Any, Any]) -> None:
     private, public = rsa_pair
     issuer = "http://test/realms/prisma"
+    audience = "prisma-backend"
     now = int(time.time())
     token = _sign(
         private,
         {
             "sub": "user-1",
             "iss": issuer,
+            "aud": audience,
             "exp": now - 10,
             "iat": now - 100,
             "realm_access": {"roles": ["ANALISTA_PJ"]},
         },
     )
     settings = Settings(
+        showcase_mode=False,
         oidc_enabled=True,
         oidc_issuer_uri=issuer,
         oidc_jwk_set_uri="https://example.invalid/jwks",
+        oidc_audience=audience,
     )
     signing = MagicMock()
     signing.key = public
@@ -134,19 +141,37 @@ def _app_with_roles(*roles: str) -> FastAPI:
 
 def test_http_oidc_off_allows() -> None:
     app = _app_with_roles("ANALISTA_PJ")
-    app.dependency_overrides[get_settings] = lambda: Settings(oidc_enabled=False)
+    app.dependency_overrides[get_settings] = lambda: Settings(
+        showcase_mode=False,
+        environment="local",
+        oidc_enabled=False,
+    )
     r = TestClient(app).get("/secure")
     assert r.status_code == 200
     assert r.json()["bypass"] == "True"
     assert r.json()["sub"] == "lab-anonymous"
 
 
+def test_http_oidc_off_outside_local_503() -> None:
+    app = _app_with_roles("ANALISTA_PJ")
+    app.dependency_overrides[get_settings] = lambda: Settings(
+        showcase_mode=False,
+        environment="staging",
+        oidc_enabled=False,
+    )
+    r = TestClient(app).get("/secure")
+    assert r.status_code == 503
+    assert "OIDC" in r.json()["detail"]
+
+
 def test_http_oidc_on_401_without_token() -> None:
     app = _app_with_roles("ANALISTA_PJ", "PLATFORM")
     app.dependency_overrides[get_settings] = lambda: Settings(
+        showcase_mode=False,
         oidc_enabled=True,
         oidc_jwk_set_uri="https://example.invalid/jwks",
         oidc_issuer_uri="http://test/realms/prisma",
+        oidc_audience="prisma-backend",
     )
     r = TestClient(app).get("/secure")
     assert r.status_code == 401
@@ -155,12 +180,14 @@ def test_http_oidc_on_401_without_token() -> None:
 def test_http_oidc_on_403_wrong_role(rsa_pair: tuple[Any, Any]) -> None:
     private, public = rsa_pair
     issuer = "http://test/realms/prisma"
+    audience = "prisma-backend"
     now = int(time.time())
     token = _sign(
         private,
         {
             "sub": "user-ml",
             "iss": issuer,
+            "aud": audience,
             "exp": now + 3600,
             "iat": now,
             "realm_access": {"roles": ["ML"]},
@@ -168,10 +195,11 @@ def test_http_oidc_on_403_wrong_role(rsa_pair: tuple[Any, Any]) -> None:
     )
     app = _app_with_roles("ANALISTA_PJ", "PLATFORM")
     app.dependency_overrides[get_settings] = lambda: Settings(
+        showcase_mode=False,
         oidc_enabled=True,
         oidc_issuer_uri=issuer,
         oidc_jwk_set_uri="https://example.invalid/jwks",
-        oidc_audience="",
+        oidc_audience=audience,
     )
     signing = MagicMock()
     signing.key = public
@@ -186,12 +214,14 @@ def test_http_oidc_on_403_wrong_role(rsa_pair: tuple[Any, Any]) -> None:
 def test_http_oidc_on_200_analista(rsa_pair: tuple[Any, Any]) -> None:
     private, public = rsa_pair
     issuer = "http://test/realms/prisma"
+    audience = "prisma-backend"
     now = int(time.time())
     token = _sign(
         private,
         {
             "sub": "analista-1",
             "iss": issuer,
+            "aud": audience,
             "exp": now + 3600,
             "iat": now,
             "realm_access": {"roles": ["ANALISTA_PJ"]},
@@ -199,10 +229,11 @@ def test_http_oidc_on_200_analista(rsa_pair: tuple[Any, Any]) -> None:
     )
     app = _app_with_roles("ANALISTA_PJ", "PLATFORM")
     app.dependency_overrides[get_settings] = lambda: Settings(
+        showcase_mode=False,
         oidc_enabled=True,
         oidc_issuer_uri=issuer,
         oidc_jwk_set_uri="https://example.invalid/jwks",
-        oidc_audience="",
+        oidc_audience=audience,
     )
     signing = MagicMock()
     signing.key = public

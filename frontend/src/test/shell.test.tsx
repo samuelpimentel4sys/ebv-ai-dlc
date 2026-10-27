@@ -3,16 +3,14 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import axe from 'axe-core';
-import { ThemeProvider } from '@/app/ThemeContext';
-import { ToastProvider } from '@/ds/Toast';
+import { AllProviders } from '@/test/providers';
 import { AppShell } from '@/shell/AppShell';
 import { NAV_ITEMS } from '@/app/navigation';
 
 function mountShell(initial = '/') {
   const home = NAV_ITEMS.find((item) => item.path === '/')!;
   return render(
-    <ThemeProvider>
-      <ToastProvider>
+    <AllProviders>
         <MemoryRouter initialEntries={[initial]}>
           <Routes>
             <Route element={<AppShell />}>
@@ -20,8 +18,7 @@ function mountShell(initial = '/') {
             </Route>
           </Routes>
         </MemoryRouter>
-      </ToastProvider>
-    </ThemeProvider>,
+      </AllProviders>,
   );
 }
 

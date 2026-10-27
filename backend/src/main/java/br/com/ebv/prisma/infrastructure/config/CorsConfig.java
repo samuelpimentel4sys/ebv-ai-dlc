@@ -20,7 +20,7 @@ public class CorsConfig {
 
     @Bean
     WebMvcConfigurer corsWebMvcConfigurer(
-            @Value("${prisma.cors.allowed-origins:http://localhost:5173,http://localhost:3000}") String origins
+            @Value("${prisma.cors.allowed-origins:http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000,http://127.0.0.1:3000}") String origins
     ) {
         List<String> allowed = parseOrigins(origins);
         return new WebMvcConfigurer() {
@@ -30,7 +30,7 @@ public class CorsConfig {
                         .allowedOrigins(allowed.toArray(String[]::new))
                         .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
-                        .exposedHeaders("X-Correlation-ID")
+                        .exposedHeaders("X-Correlation-ID", "X-Prisma-Lab")
                         .allowCredentials(true)
                         .maxAge(3600);
             }
@@ -39,13 +39,13 @@ public class CorsConfig {
 
     @Bean
     CorsConfigurationSource corsConfigurationSource(
-            @Value("${prisma.cors.allowed-origins:http://localhost:5173,http://localhost:3000}") String origins
+            @Value("${prisma.cors.allowed-origins:http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000,http://127.0.0.1:3000}") String origins
     ) {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(parseOrigins(origins));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
-        config.setExposedHeaders(List.of("X-Correlation-ID"));
+        config.setExposedHeaders(List.of("X-Correlation-ID", "X-Prisma-Lab"));
         config.setAllowCredentials(true);
         config.setMaxAge(3600L);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

@@ -8,8 +8,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestClientResponseException;
 
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -19,16 +21,18 @@ import java.util.Map;
 public class HttpGenAiGatewayAdapter implements GenAiGatewayPort {
 
     private final RestClient client;
+    private final String baseUrl;
 
     public HttpGenAiGatewayAdapter(
             @Value("${prisma.genai.base-url:http://localhost:8090}") String baseUrl,
             @Value("${prisma.genai.read-timeout-seconds:180}") int readTimeoutSeconds
     ) {
+        this.baseUrl = baseUrl.replaceAll("/$", "");
         var factory = new SimpleClientHttpRequestFactory();
         factory.setConnectTimeout(Duration.ofSeconds(5));
         factory.setReadTimeout(Duration.ofSeconds(Math.max(30, readTimeoutSeconds)));
         this.client = RestClient.builder()
-                .baseUrl(baseUrl.replaceAll("/$", ""))
+                .baseUrl(this.baseUrl)
                 .requestFactory(factory)
                 .build();
     }
@@ -71,7 +75,30 @@ public class HttpGenAiGatewayAdapter implements GenAiGatewayPort {
                     ct,
                     Map.of()
             );
+        } catch (RestClientException e) {
+            String json = """
+                    {"status":"DOWN","upstream":"emilly","baseUrl":"%s","path":"%s","error":"unavailable","detail":"%s","partial":true,"lab":true}
+                    """.formatted(
+                    escapeJson(baseUrl),
+                    escapeJson(path),
+                    escapeJson(e.getMostSpecificCause() != null
+                            ? e.getMostSpecificCause().getClass().getSimpleName() + ": " + e.getMostSpecificCause().getMessage()
+                            : e.getMessage())
+            );
+            return new UpstreamResponse(
+                    503,
+                    json.getBytes(StandardCharsets.UTF_8),
+                    MediaType.APPLICATION_JSON_VALUE,
+                    Map.of()
+            );
         }
+    }
+
+    private static String escapeJson(String s) {
+        if (s == null) {
+            return "";
+        }
+        return s.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", " ");
     }
 
     private static UpstreamResponse toUpstream(org.springframework.http.ResponseEntity<byte[]> entity) {

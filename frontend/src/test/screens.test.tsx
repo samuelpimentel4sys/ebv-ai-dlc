@@ -1,22 +1,19 @@
 import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { ThemeProvider } from '@/app/ThemeContext';
-import { ToastProvider } from '@/ds/Toast';
+import { AllProviders } from '@/test/providers';
 import { NAV_ITEMS } from '@/app/navigation';
 import { EPICS } from '@/app/epics';
 
 function renderScreen(item: (typeof NAV_ITEMS)[number]) {
   return render(
-    <ThemeProvider>
-      <ToastProvider>
+    <AllProviders>
         <MemoryRouter initialEntries={[item.href]}>
           <Routes>
             <Route path={item.path} element={item.element} />
           </Routes>
         </MemoryRouter>
-      </ToastProvider>
-    </ThemeProvider>,
+      </AllProviders>,
   );
 }
 

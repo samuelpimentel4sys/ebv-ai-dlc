@@ -95,13 +95,15 @@ Test-NetConnection 192.168.31.47 -Port 16686
 
 ## 5. MinIO — bucket WORM lab
 
-Console: `http://<host>:9001`  
-User/pass default compose: `prisma` / `prismaPrisma1` (trocar em prod).
+Console: `http://127.0.0.1:9001`  
+Credenciais: `MINIO_ROOT_USER` / `MINIO_ROOT_PASSWORD` no `.env` (compose **exige** `MINIO_ROOT_PASSWORD`; sem default no git).  
+Portas bind: `127.0.0.1:9000` / `127.0.0.1:9001` apenas.
 
 Criar bucket (UI ou `mc`):
 
 ```bash
-docker run --rm --network host minio/mc alias set local http://127.0.0.1:9000 prisma prismaPrisma1
+# export MINIO_ROOT_PASSWORD=...  (mesmo valor do .env)
+docker run --rm --network host minio/mc alias set local http://127.0.0.1:9000 "${MINIO_ROOT_USER:-prisma}" "$MINIO_ROOT_PASSWORD"
 docker run --rm --network host minio/mc mb --with-lock local/prisma-worm --ignore-existing
 ```
 
@@ -115,14 +117,14 @@ PRISMA_WORM_S3_PREFIX=decisions/
 PRISMA_AUDIT_WORM_BACKEND=s3
 PRISMA_AUDIT_WORM_S3_PREFIX=audit/
 # Credenciais via AWS SDK DefaultCredentialsProvider:
-#   AWS_ACCESS_KEY_ID=prisma
-#   AWS_SECRET_ACCESS_KEY=prismaPrisma1
+#   AWS_ACCESS_KEY_ID=<MINIO_ROOT_USER>
+#   AWS_SECRET_ACCESS_KEY=<MINIO_ROOT_PASSWORD from .env — never commit>
 ```
 
 ### Gap conhecido (fechado no BE)
 
 `WormS3Config` aceita `prisma.worm.s3.endpoint` + `path-style`.  
-Com `PRISMA_WORM_S3_ENDPOINT=http://192.168.31.47:9000` o lab usa MinIO.
+Com `PRISMA_WORM_S3_ENDPOINT=http://127.0.0.1:9000` o lab usa MinIO.
 
 ---
 

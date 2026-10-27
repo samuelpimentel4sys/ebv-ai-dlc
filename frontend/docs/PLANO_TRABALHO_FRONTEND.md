@@ -23,7 +23,7 @@
 | Contratos FE = OpenAPI (sem mapper frouxo) | 🟡 | Mappers compensam gap mock×BE |
 | Auth lab (`OIDC_ENABLED=false`) | ✅ | Sem login — `httpClient` direto (Noah) |
 | Auth demo JWT (`VITE_API_BEARER`) | ✅ pronto | Atalho smoke; não é login de produto |
-| Login OIDC produto (PKCE) | ❌ backlog P6 | Client `prisma-steward-ui` |
+| Login OIDC produto (PKCE) | ✅ P6 | `/login` · `prisma-steward-ui` · callback `/auth/callback` |
 | EP-02…06 live | ✅ 01–06 | EP-03 via Noah `:8080` (HITL + BFF GenAI) |
 
 **Conclusão:** plug live lab **fechado** — FE só Noah `:8080`. Mock só Vitest. Próximo: **P1** hardening Score · Amplify aws · **P6** OIDC PKCE produto.
@@ -107,16 +107,14 @@ Noah lab 9/9 (stubs Neptune/Trino) · handoff 15:40 · **9/9 telas live**
 | **F01 BIO Liveness** (Noah `:8080`) | ✅ BE V51 · ✅ FE (`liveness.ts` + 3 telas) · Amplify fora |
 | GenAI F01–F03/F05–F09 (BFF Noah → Emilly) | ✅ FE (`pjGenai.ts`) · host só `:8080` · `HANDOFF_SOFIA_BFF_GENAI.md` |
 
-### P6 — Login OIDC produto (backlog · desenho Noah 2026-07-28)
+### P6 — Login OIDC produto · **FEITO 2026-09-28** (handoff Noah Keycloak local)
 
-Só quando lab deixar de ser aberto **e** demo precisar de usuário humano no browser.
-
-- [ ] Client Keycloak **`prisma-steward-ui`** (público · PKCE)
-- [ ] Authorization Code + PKCE no browser → guardar `access_token`
-- [ ] Injetar `Authorization: Bearer` em toda chamada (evoluir além de `VITE_API_BEARER` estático)
-- [ ] Tela login / redirect Keycloak · roles `realm_access.roles` alinhadas aos paths BE
-- [ ] **Não** embutir `prisma-backend` + `client_secret` no FE
-- [ ] **Não** inventar `POST /api/v1/login` no Spring
+- [x] Client Keycloak **`prisma-steward-ui`** (público · PKCE)
+- [x] Authorization Code + PKCE · `src/lib/auth/*` · sessão em `sessionStorage`
+- [x] `httpClient` injeta Bearer da sessão (fallback opcional `VITE_API_BEARER`)
+- [x] Tela `/login` + callback `/auth/callback` · guard `RequireAuth` em live
+- [x] Logout Keycloak + badge usuário no TopBar
+- [x] **Não** embutir `client_secret` · **não** inventar `POST /api/v1/login`
 
 ---
 

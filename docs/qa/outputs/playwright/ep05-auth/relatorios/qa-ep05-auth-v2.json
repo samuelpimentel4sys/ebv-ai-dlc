@@ -1,0 +1,990 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\_template\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--headed"
+    ],
+    "configFile": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\_template\\playwright.config.ts",
+    "rootDir": "C:/Users/WalterAraujodeMoura/Documents/AI-DLC/Prisma/docs/qa/outputs/playwright/ep05-auth/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/WalterAraujodeMoura/Documents/AI-DLC/Prisma/docs/qa/outputs/playwright/ep05-auth/screenshots",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/WalterAraujodeMoura/Documents/AI-DLC/Prisma/docs/qa/outputs/playwright/ep05-auth/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 90000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\relatorios",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\relatorios\\qa-ep05-auth-v2.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\relatorios\\qa-ep05-auth-v2.junit.xml"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "ep05-auth-demo-v2.spec.ts",
+      "file": "ep05-auth-demo-v2.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "AUTH-01 [Positivo] Autenticação inicial e emissão de OTP",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6559,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "\n╔══════════════════════════════════════════════════════╗\n"
+                    },
+                    {
+                      "text": "║  🎬 DEMO QA — PRISMA EP-05-AUTH (v2)                 ║\n"
+                    },
+                    {
+                      "text": "╚══════════════════════════════════════════════════════╝\n"
+                    },
+                    {
+                      "text": "\n🧪 TESTANDO: AUTH-01 [Positivo] Autenticação inicial e emissão de OTP\n"
+                    },
+                    {
+                      "text": "   → Abrindo captura biométrica (lab AUTH)...\n"
+                    },
+                    {
+                      "text": "   ✅ Consentimento ACTIVE — sessão disponível\n"
+                    },
+                    {
+                      "text": "🏁 AUTH-01 [Positivo] Autenticação inicial e emissão de OTP CONCLUÍDO\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-20T17:11:45.442Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-01--b34da-ão-inicial-e-emissão-de-OTP-chromium\\test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-01--b34da-ão-inicial-e-emissão-de-OTP-chromium\\video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-01--b34da-ão-inicial-e-emissão-de-OTP-chromium\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66318932dc3c032fa52f-b8ce02d07af7ff1e3c88",
+          "file": "ep05-auth-demo-v2.spec.ts",
+          "line": 75,
+          "column": 5
+        },
+        {
+          "title": "AUTH-02 [Positivo] Validação bem-sucedida do OTP",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7789,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "\n🧪 TESTANDO: AUTH-02 [Positivo] Validação bem-sucedida do OTP\n"
+                    },
+                    {
+                      "text": "   → Indo ao MFA e submetendo OTP válido...\n"
+                    },
+                    {
+                      "text": "   ✅ Identidade verificada (score lab 92)\n"
+                    },
+                    {
+                      "text": "🏁 AUTH-02 [Positivo] Validação bem-sucedida do OTP CONCLUÍDO\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-20T17:11:53.763Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-02--e831a-lidação-bem-sucedida-do-OTP-chromium\\test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-02--e831a-lidação-bem-sucedida-do-OTP-chromium\\video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-02--e831a-lidação-bem-sucedida-do-OTP-chromium\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66318932dc3c032fa52f-81c5e2afc78252ee23a4",
+          "file": "ep05-auth-demo-v2.spec.ts",
+          "line": 86,
+          "column": 5
+        },
+        {
+          "title": "AUTH-03 [Positivo] Validação biométrica facial e prova de vida",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5134,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "\n🧪 TESTANDO: AUTH-03 [Positivo] Validação biométrica facial e prova de vida\n"
+                    },
+                    {
+                      "text": "   → Sessão + guia oval...\n"
+                    },
+                    {
+                      "text": "   ✅ Moldura pronta para captura lab\n"
+                    },
+                    {
+                      "text": "🏁 AUTH-03 [Positivo] Validação biométrica facial e prova de vida CONCLUÍDO\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-20T17:12:02.282Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-03--6d768-rica-facial-e-prova-de-vida-chromium\\test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-03--6d768-rica-facial-e-prova-de-vida-chromium\\video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-03--6d768-rica-facial-e-prova-de-vida-chromium\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66318932dc3c032fa52f-52108fec0c933074670a",
+          "file": "ep05-auth-demo-v2.spec.ts",
+          "line": 97,
+          "column": 5
+        },
+        {
+          "title": "AUTH-04 [Positivo] Reenvio / temporizador (lab TTL)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5508,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "\n🧪 TESTANDO: AUTH-04 [Positivo] Reenvio / temporizador (lab TTL)\n"
+                    },
+                    {
+                      "text": "   → Conferindo temporizador de sessão...\n"
+                    },
+                    {
+                      "text": "   ✅ TTL visível\n"
+                    },
+                    {
+                      "text": "🏁 AUTH-04 [Positivo] Reenvio / temporizador (lab TTL) CONCLUÍDO\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-20T17:12:07.765Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-04--2ea51-envio-temporizador-lab-TTL--chromium\\test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-04--2ea51-envio-temporizador-lab-TTL--chromium\\video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-04--2ea51-envio-temporizador-lab-TTL--chromium\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66318932dc3c032fa52f-6ad6832877db4ca37fe0",
+          "file": "ep05-auth-demo-v2.spec.ts",
+          "line": 107,
+          "column": 5
+        },
+        {
+          "title": "AUTH-05 [Positivo] Ajuste de iluminação / guia oval",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6376,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "\n🧪 TESTANDO: AUTH-05 [Positivo] Ajuste de iluminação / guia oval\n"
+                    },
+                    {
+                      "text": "   → Conferindo instrução de enquadramento...\n"
+                    },
+                    {
+                      "text": "   ✅ Guia de captura visível\n"
+                    },
+                    {
+                      "text": "🏁 AUTH-05 [Positivo] Ajuste de iluminação / guia oval CONCLUÍDO\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-20T17:12:13.886Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-05--b519e-ste-de-iluminação-guia-oval-chromium\\test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-05--b519e-ste-de-iluminação-guia-oval-chromium\\video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-05--b519e-ste-de-iluminação-guia-oval-chromium\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66318932dc3c032fa52f-6306c027fa452a53305d",
+          "file": "ep05-auth-demo-v2.spec.ts",
+          "line": 117,
+          "column": 5
+        },
+        {
+          "title": "AUTH-06 [Positivo] Conclusão MFA e acesso ao portal",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9321,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "\n🧪 TESTANDO: AUTH-06 [Positivo] Conclusão MFA e acesso ao portal\n"
+                    },
+                    {
+                      "text": "   → MFA ok e avanço ao portal do titular...\n"
+                    },
+                    {
+                      "text": "   ✅ Portal do titular\n"
+                    },
+                    {
+                      "text": "🏁 AUTH-06 [Positivo] Conclusão MFA e acesso ao portal CONCLUÍDO\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-20T17:12:21.126Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-06--41d91-usão-MFA-e-acesso-ao-portal-chromium\\test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-06--41d91-usão-MFA-e-acesso-ao-portal-chromium\\video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-06--41d91-usão-MFA-e-acesso-ao-portal-chromium\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66318932dc3c032fa52f-43f4655e40c1a68f0bb1",
+          "file": "ep05-auth-demo-v2.spec.ts",
+          "line": 125,
+          "column": 5
+        },
+        {
+          "title": "AUTH-07 [Negativo] Código de verificação em formato inválido",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8026,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "\n🧪 TESTANDO: AUTH-07 [Negativo] Código de verificação em formato inválido\n"
+                    },
+                    {
+                      "text": "   → OTP incompleto deve bloquear...\n"
+                    },
+                    {
+                      "text": "   ✅ Alerta de código inválido\n"
+                    },
+                    {
+                      "text": "🏁 AUTH-07 [Negativo] Código de verificação em formato inválido CONCLUÍDO\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-20T17:12:31.380Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-07--07de1-ficação-em-formato-inválido-chromium\\test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-07--07de1-ficação-em-formato-inválido-chromium\\video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-07--07de1-ficação-em-formato-inválido-chromium\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66318932dc3c032fa52f-4199920ef9968bbeecb6",
+          "file": "ep05-auth-demo-v2.spec.ts",
+          "line": 138,
+          "column": 5
+        },
+        {
+          "title": "AUTH-08 [Negativo] Falha de vivacidade / bloqueio lab",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7508,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "\n🧪 TESTANDO: AUTH-08 [Negativo] Falha de vivacidade / bloqueio lab\n"
+                    },
+                    {
+                      "text": "   → OTP de falha de vivacidade...\n"
+                    },
+                    {
+                      "text": "   ✅ Vivacidade insuficiente\n"
+                    },
+                    {
+                      "text": "🏁 AUTH-08 [Negativo] Falha de vivacidade / bloqueio lab CONCLUÍDO\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-20T17:12:40.006Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-08--1a19b--de-vivacidade-bloqueio-lab-chromium\\test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-08--1a19b--de-vivacidade-bloqueio-lab-chromium\\video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-08--1a19b--de-vivacidade-bloqueio-lab-chromium\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66318932dc3c032fa52f-06ceb0b7f76798274467",
+          "file": "ep05-auth-demo-v2.spec.ts",
+          "line": 147,
+          "column": 5
+        },
+        {
+          "title": "AUTH-09 [Negativo] Similaridade abaixo do patamar",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6936,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "\n🧪 TESTANDO: AUTH-09 [Negativo] Similaridade abaixo do patamar\n"
+                    },
+                    {
+                      "text": "   → Score lab abaixo do patamar...\n"
+                    },
+                    {
+                      "text": "   ✅ Score 42\n"
+                    },
+                    {
+                      "text": "🏁 AUTH-09 [Negativo] Similaridade abaixo do patamar CONCLUÍDO\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-20T17:12:48.036Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-09--f4e41-ilaridade-abaixo-do-patamar-chromium\\test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-09--f4e41-ilaridade-abaixo-do-patamar-chromium\\video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-09--f4e41-ilaridade-abaixo-do-patamar-chromium\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66318932dc3c032fa52f-d703d7ad4dee647ba9f9",
+          "file": "ep05-auth-demo-v2.spec.ts",
+          "line": 158,
+          "column": 5
+        },
+        {
+          "title": "AUTH-10 [Negativo] Prova de vida lab sem Amplify",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3053,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "\n🧪 TESTANDO: AUTH-10 [Negativo] Prova de vida lab sem Amplify\n"
+                    },
+                    {
+                      "text": "   → Aviso de prova de vida fora do slice...\n"
+                    },
+                    {
+                      "text": "   ✅ Contingência lab visível\n"
+                    },
+                    {
+                      "text": "🏁 AUTH-10 [Negativo] Prova de vida lab sem Amplify CONCLUÍDO\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-20T17:12:55.606Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-10--5fabe-ova-de-vida-lab-sem-Amplify-chromium\\test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-10--5fabe-ova-de-vida-lab-sem-Amplify-chromium\\video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-10--5fabe-ova-de-vida-lab-sem-Amplify-chromium\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66318932dc3c032fa52f-d6ef991dd1b377172363",
+          "file": "ep05-auth-demo-v2.spec.ts",
+          "line": 170,
+          "column": 5
+        },
+        {
+          "title": "AUTH-11 [Negativo] Recusa de permissão da câmera",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6217,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "\n🧪 TESTANDO: AUTH-11 [Negativo] Recusa de permissão da câmera\n"
+                    },
+                    {
+                      "text": "   → Câmera recusada...\n"
+                    },
+                    {
+                      "text": "   ✅ Orientação de câmera\n"
+                    },
+                    {
+                      "text": "🏁 AUTH-11 [Negativo] Recusa de permissão da câmera CONCLUÍDO\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-20T17:12:59.487Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-11--a3a9c-cusa-de-permissão-da-câmera-chromium\\test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-11--a3a9c-cusa-de-permissão-da-câmera-chromium\\video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-11--a3a9c-cusa-de-permissão-da-câmera-chromium\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66318932dc3c032fa52f-8799dad0278c89124ba0",
+          "file": "ep05-auth-demo-v2.spec.ts",
+          "line": 178,
+          "column": 5
+        },
+        {
+          "title": "AUTH-12 [Regressivo] Sessão expirada (TTL)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7105,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "\n🧪 TESTANDO: AUTH-12 [Regressivo] Sessão expirada (TTL)\n"
+                    },
+                    {
+                      "text": "   → Injetando sessão vencida...\n"
+                    },
+                    {
+                      "text": "   ✅ Sessão expirada\n"
+                    },
+                    {
+                      "text": "🏁 AUTH-12 [Regressivo] Sessão expirada (TTL) CONCLUÍDO\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-20T17:13:06.248Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-12-Regressivo-Sessão-expirada-TTL--chromium\\test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-12-Regressivo-Sessão-expirada-TTL--chromium\\video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-12-Regressivo-Sessão-expirada-TTL--chromium\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66318932dc3c032fa52f-e3e2b613e51a7daf7f0d",
+          "file": "ep05-auth-demo-v2.spec.ts",
+          "line": 188,
+          "column": 5
+        },
+        {
+          "title": "AUTH-13 [Regressivo] Termo e purga LGPD (consentimento)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5198,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "\n🧪 TESTANDO: AUTH-13 [Regressivo] Termo e purga LGPD (consentimento)\n"
+                    },
+                    {
+                      "text": "   → Termo biométrico...\n"
+                    },
+                    {
+                      "text": "   ✅ Termo v1.0 / RN006\n"
+                    },
+                    {
+                      "text": "🏁 AUTH-13 [Regressivo] Termo e purga LGPD (consentimento) CONCLUÍDO\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-20T17:13:14.019Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-13--1ca47-e-purga-LGPD-consentimento--chromium\\test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-13--1ca47-e-purga-LGPD-consentimento--chromium\\video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-13--1ca47-e-purga-LGPD-consentimento--chromium\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66318932dc3c032fa52f-e14868314afdf1e9b2fb",
+          "file": "ep05-auth-demo-v2.spec.ts",
+          "line": 215,
+          "column": 5
+        },
+        {
+          "title": "AUTH-14 [Regressivo] Contingência do serviço biométrico",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4147,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "\n🧪 TESTANDO: AUTH-14 [Regressivo] Contingência do serviço biométrico\n"
+                    },
+                    {
+                      "text": "   → Notice de contingência lab...\n"
+                    },
+                    {
+                      "text": "   ✅ Indisponibilidade lab sem detalhe interno\n"
+                    },
+                    {
+                      "text": "🏁 AUTH-14 [Regressivo] Contingência do serviço biométrico CONCLUÍDO\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-20T17:13:19.776Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-14--95f36-ência-do-serviço-biométrico-chromium\\test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-14--95f36-ência-do-serviço-biométrico-chromium\\video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\WalterAraujodeMoura\\Documents\\AI-DLC\\Prisma\\docs\\qa\\outputs\\playwright\\ep05-auth\\screenshots\\ep05-auth-demo-v2-AUTH-14--95f36-ência-do-serviço-biométrico-chromium\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66318932dc3c032fa52f-f41f24b7ad98f633f489",
+          "file": "ep05-auth-demo-v2.spec.ts",
+          "line": 224,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-08-20T17:11:44.232Z",
+    "duration": 101058.88,
+    "expected": 14,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

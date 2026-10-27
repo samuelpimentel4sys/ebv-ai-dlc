@@ -6,6 +6,7 @@ import br.com.ebv.prisma.domain.identity.port.in.GetIdentityUseCase;
 import br.com.ebv.prisma.domain.identity.port.in.ListCandidatesUseCase;
 import br.com.ebv.prisma.domain.identity.port.in.MergeIdentityUseCase;
 import br.com.ebv.prisma.domain.identity.port.in.UndoMergeUseCase;
+import br.com.ebv.prisma.infrastructure.config.LabActorResolver;
 import br.com.ebv.prisma.infrastructure.config.SecurityConfig;
 import br.com.ebv.prisma.presentation.controller.IdentityController;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,6 +46,9 @@ class OidcSecurityWebMvcTest {
 
     @MockBean
     JwtDecoder jwtDecoder;
+
+    @MockBean
+    LabActorResolver labActorResolver;
 
     @MockBean
     GetIdentityUseCase getIdentityUseCase;

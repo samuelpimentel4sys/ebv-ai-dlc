@@ -22,6 +22,11 @@ export default defineConfig({
         target: 'http://localhost:8080',
         changeOrigin: true,
       },
+      // Login form Prisma → Keycloak (password grant) sem CORS
+      '/realms': {
+        target: 'http://localhost:8180',
+        changeOrigin: true,
+      },
     },
   },
   test: {
@@ -31,6 +36,7 @@ export default defineConfig({
     // Testes de UI usam mocks locais; live exige BE Noah e quebra a suíte offline.
     env: {
       VITE_DATA_MODE: 'mock',
+      VITE_OIDC_ENABLED: 'false',
     },
   },
 });

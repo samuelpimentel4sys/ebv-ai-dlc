@@ -29,6 +29,7 @@ export function DisputeTrackingPage() {
   const params = useParams();
   const navigate = useNavigate();
   const routeProtocol = params.protocolo ?? MARIA.disputeProtocol;
+  // (seed lab: DSP-2026-0001001 — CT-* era showcase mock)
   // Chegar pela URL (trilha ou link do portal) já é autenticação suficiente
   // para a demo: o gate de CPF só aparece quando a pessoa digita a rota raiz
   // sem protocolo, como um titular faria no dia a dia.
@@ -86,7 +87,7 @@ export function DisputeTrackingPage() {
   function consult() {
     const found: Record<string, string> = {};
     if (protocol.trim().length < 6) {
-      found.protocol = 'Informe o protocolo completo, no formato CT-2026-000000.';
+      found.protocol = 'Informe o protocolo completo (ex.: DSP-2026-0001001 ou CT-2026-000000).';
     }
     if (documento.replace(/\D/g, '').length !== 11) {
       found.documento = 'Informe os 11 números do CPF, sem pontos ou traço.';

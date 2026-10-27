@@ -19,33 +19,21 @@ import { isLiveMode } from '@/lib/config';
 import { formatDateTime } from '@/lib/format';
 import { decisionPair, type AttributeDiff, type DecisionMeta } from '@/epics/score-vivo/data';
 import { fetchDecisionCompareLive, verifyDecisionLive } from '@/api/scorePlatform';
-import { HttpError } from '@/lib/httpClient';
+import { LAB_DECISIONS } from '@/app/story';
+import { isUuid } from '@/api/explainability';
 
-function loadDecisionIdsFromSession(): [string, string] {
+/** Playground session, senão par canónico do seed lab. */
+function loadDecisionIdsForCompare(): [string, string] {
   try {
     const raw = sessionStorage.getItem('prisma.decisionIds');
-    const ids = raw ? (JSON.parse(raw) as string[]) : [];
-    if (ids.length < 2) {
-      throw new HttpError({
-        status: 404,
-        error: 'Not Found',
-        message:
-          'Gere pelo menos 2 decisões no Playground (F05) antes de comparar snapshots WORM.',
-        path: '/api/v1/decisions',
-        correlationId: 'local-session',
-      });
+    const ids = (raw ? (JSON.parse(raw) as string[]) : []).filter(isUuid);
+    if (ids.length >= 2) {
+      return [ids[ids.length - 2], ids[ids.length - 1]];
     }
-    return [ids[ids.length - 2], ids[ids.length - 1]];
-  } catch (error) {
-    if (error instanceof HttpError) throw error;
-    throw new HttpError({
-      status: 404,
-      error: 'Not Found',
-      message: 'Não foi possível ler decisionIds da sessão.',
-      path: '/api/v1/decisions',
-      correlationId: 'local-session',
-    });
+  } catch {
+    /* ignore */
   }
+  return [LAB_DECISIONS.primary, LAB_DECISIONS.tertiary];
 }
 
 const outcomeTone = {
@@ -82,7 +70,7 @@ export function SnapshotComparePage() {
   const query = useDataQuery(
     decisionPair,
     async () => {
-      const [leftId, rightId] = loadDecisionIdsFromSession();
+      const [leftId, rightId] = loadDecisionIdsForCompare();
       return fetchDecisionCompareLive(leftId, rightId);
     },
     { latency: 400 },

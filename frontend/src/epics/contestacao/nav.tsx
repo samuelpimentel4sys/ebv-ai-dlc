@@ -51,7 +51,7 @@ export const contestacaoNav: NavItem[] = [
   },
   {
     path: '/titular/contestacoes/:protocolo',
-    href: '/titular/contestacoes/CT-2026-448120',
+    href: '/titular/contestacoes/DSP-2026-0001001',
     label: 'Acompanhar contestação',
     epic: 'EP-05',
     usId: 'PRISMA-EP-05-F01-US-FE-01',
@@ -128,7 +128,7 @@ export const contestacaoNav: NavItem[] = [
   },
   {
     path: '/disputas/:protocolo/evidencias',
-    href: '/disputas/CT-2026-448120/evidencias',
+    href: '/disputas/DSP-2026-0001001/evidencias?disputeId=e1000000-0000-4000-8000-000000000001',
     label: 'Evidências do caso',
     epic: 'EP-05',
     usId: 'PRISMA-EP-05-F08-US-FE-01',

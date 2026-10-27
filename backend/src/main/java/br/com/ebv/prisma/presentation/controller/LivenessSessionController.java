@@ -61,7 +61,7 @@ public class LivenessSessionController {
             Authentication authentication,
             HttpServletRequest http
     ) {
-        UUID actor = resolveActor(authentication, req.actor_customer_id());
+        UUID actor = resolveActor(authentication, req.actor_customer_id(), req.customer_id());
         String platform = req.device_info() != null ? req.device_info().platform() : null;
         String appVersion = req.device_info() != null ? req.device_info().app_version() : null;
         String ip = req.device_info() != null && req.device_info().ip_address() != null
@@ -93,7 +93,15 @@ public class LivenessSessionController {
                 .body(body);
     }
 
-    private static UUID resolveActor(Authentication authentication, UUID labActor) {
+    /**
+     * Titular: actor = JWT {@code sub} (deve coincidir com {@code customer_id}).
+     * Operador lab (PLATFORM / contestação): actor = null → não aplica ownership check
+     * (FE usa {@code LAB_CUSTOMER_ID} fixo, não o sub do Keycloak).
+     */
+    private static UUID resolveActor(Authentication authentication, UUID labActor, UUID customerId) {
+        if (authentication != null && isOperator(authentication)) {
+            return null;
+        }
         if (authentication != null && authentication.getPrincipal() instanceof Jwt jwt) {
             String sub = jwt.getSubject();
             if (sub != null && !sub.isBlank()) {
@@ -104,7 +112,21 @@ public class LivenessSessionController {
                 }
             }
         }
-        return labActor;
+        if (labActor != null) {
+            return labActor;
+        }
+        return customerId;
+    }
+
+    private static boolean isOperator(Authentication authentication) {
+        return authentication.getAuthorities().stream().anyMatch(a -> {
+            String r = a.getAuthority();
+            return "ROLE_PLATFORM".equals(r)
+                    || "ROLE_ANALISTA_CONTESTACAO".equals(r)
+                    || "ROLE_SUPERVISOR_CONTESTACAO".equals(r)
+                    || "ROLE_JURIDICO".equals(r)
+                    || "ROLE_ANALISTA".equals(r);
+        });
     }
 
     private static String sha256(String raw) {

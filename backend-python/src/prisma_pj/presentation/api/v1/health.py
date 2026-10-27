@@ -16,7 +16,10 @@ router = APIRouter(tags=["health"])
 
 @router.get("/health")
 async def health(settings: Annotated[Settings, Depends(get_settings)]) -> dict[str, str]:
-    return {"status": "ok", "service": settings.app_name, "env": settings.environment}
+    payload = {"status": "ok", "service": settings.app_name, "env": settings.environment}
+    if settings.showcase_mode:
+        payload["mode"] = "showcase"
+    return payload
 
 
 @router.get("/ready")
@@ -32,6 +35,7 @@ async def ready(
     status = "ready" if (llm_ok and db_ok) else "degraded"
     return {
         "status": status,
+        "mode": "showcase" if settings.showcase_mode else "full",
         "provider": settings.inference_provider,
         "database": {"ok": db_ok},
         "llm": {"ok": llm_ok, "model": llm.model_name},

@@ -19,10 +19,12 @@ import { isLiveMode } from '@/lib/config';
 import { formatDateTime, formatSigned } from '@/lib/format';
 import { explain, type DecisionFactor } from '@/epics/explicabilidade/data';
 import { fetchExplainLive, lastDecisionId } from '@/api/explainability';
+import { LAB_DECISIONS, MARIA } from '@/app/story';
 
 export function FactorsPage() {
   const params = useParams();
-  const fallback = lastDecisionId() ?? 'dec-2026-07-27-1104';
+  const fallback =
+    lastDecisionId() ?? (isLiveMode() ? LAB_DECISIONS.primary : MARIA.decisionId);
   const decisionId = params.decisionId ?? fallback;
   const [factor, setFactor] = useState<DecisionFactor | null>(null);
   const query = useDataQuery(
